@@ -29,7 +29,8 @@ use VegGuide::Config;
 __PACKAGE__->config( VegGuide::Config->MasonConfig() );
 
 
-sub new {
+sub new
+{
     my $class = shift;
 
     my $self = $class->SUPER::new(@_);
