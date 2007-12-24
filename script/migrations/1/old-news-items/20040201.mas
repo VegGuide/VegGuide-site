@@ -1,0 +1,23 @@
+<%method title>
+
+New layout
+
+</%method>
+
+<%method body>
+
+<p>
+Hopefully this is obvious, but RegVeg has a new layout.  The changes
+are largely cosmetic, though one new addition is a box on the left
+side for each region that lists the top rated entries for just that
+region.
+</p>
+
+<p>
+Also, reviews now have their own separate page, rather than being on
+the main info page for the entry.  We also combined the two image
+upload pages into one page, which we hope will make things a little
+saner.
+</p>
+
+</%method>

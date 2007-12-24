@@ -1,0 +1,84 @@
+  <div id="body-and-boxes-container">
+
+   <div id="right-container-20">
+    <div id="google-maps-directions-text"></div>
+   </div>
+
+   <div id="body">
+
+% if ( defined $vendor->latitude() && defined $vendor->longitude() ) {
+    <div id="large-entry-google-map" style="display: none">
+       
+    </div>
+
+    <p>
+     <a href="<% $vendor->map_uri() | h %>" title="Go to Google Maps">See this entry at Google Maps</a>
+    </p>
+
+<script type="text/javascript">
+DOM.Ready.onDOMDone( function () {
+    DOM.Element.show("large-entry-google-map");
+    map = new VegGuide.GoogleMap( "large-entry-google-map", false );
+
+    map.addMarkers(
+<% VegGuide::JSON->Encode( [ $marker ] ) %>
+    );
+
+    map.showFirstInfoWindow();
+} );
+</script>
+
+<div class="map-info" id="map-entry-info" style="display: none">
+ <h3><% $vendor->name() | h %></h3>
+ <address>
+% for my $piece (@address_pieces) {
+  <% $piece | h %>
+%   if ( $piece ne $address_pieces[-1] ) {
+  <br />
+%   }
+% }
+ </address>
+
+<%doc>
+It seems that with a Google map, it's not possible to use modern event
+listeners, since it seems that the map or the info window or something
+ends up eating the event.
+</%doc>
+
+
+ <form action="#" method="post" id="directions-form" onsubmit="map.showDirectionsFromForm(this); return false">
+  <label for="from">Directions from:</label>
+  <input type="text" class="text short" name="from" id="from" />
+  <input type="hidden" name="to" value="<% $address_for_directions | h %>" />
+
+  <input type="submit" class="submit" value="Get Directions" />
+ </form>
+</div>
+% } else {
+    We can't map this entry. Sorry.
+% }
+
+  </div>
+
+<%args>
+$vendor
+</%args>
+
+<%init>
+my $marker = { latitude    => $vendor->latitude(),
+               longitude   => $vendor->longitude(),
+               title       => $vendor->name(),
+               category_id => $vendor->primary_category()->category_id(),
+               veg_level   => $vendor->veg_level(),
+               info_div    => 'map-entry-info',
+             };
+
+my @address_pieces = $vendor->address_pieces();
+
+my $address_for_directions = $vendor->canonical_address();
+$address_for_directions ||= join ', ', @address_pieces;
+</%init>
+
+<%attr>
+load_google_maps => 1
+</%attr>

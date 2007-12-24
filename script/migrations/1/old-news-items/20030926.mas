@@ -1,0 +1,19 @@
+<%method title>
+
+Skins!
+
+</%method>
+
+<%method body>
+
+<p>
+
+RegVeg can now support different "skins" via different hostnames.
+This means that other veg*n/AR groups can create their own customized
+look and feel for regveg.  For an (ugly) example of this, see <a
+href="http://skintest.vegguide.org/">skintest.vegguide.org</a>.  Want
+to have your own skin?  <a href="/contact.html">Let us know</a>.
+
+</p>
+
+</%method>

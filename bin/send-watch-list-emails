@@ -1,0 +1,25 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use Getopt::Long;
+use VegGuide::User;
+
+
+my %opts;
+GetOptions( 'user-id:i' => \$opts{user_id} );
+
+
+if ( $opts{user_id} )
+{
+    my $user = VegGuide::User->new( user_id => $opts{user_id} );
+    die "No such user_id $opts{user_id}\n"
+        unless $user;
+
+    $user->send_subscription_email();
+}
+else
+{
+    VegGuide::User->SendSubscriptionEmails();
+}

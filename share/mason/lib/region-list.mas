@@ -1,0 +1,48 @@
+   <div id="region-lists">
+
+    <ul class="right-list">
+% foreach my $location (@l2) {
+%   my $count = $location->descendants_vendor_count();
+     <li>
+      <& /lib/link/location.mas, location => $location &>
+      (<% $count %>)
+     </li>
+% }
+    </ul>
+
+    <ul class="left-list">
+% foreach my $location (@l1) {
+%   my $count = $location->descendants_vendor_count();
+     <li>
+      <& /lib/link/location.mas, location => $location &>
+      (<% $count %>)
+     </li>
+% }
+    </ul>
+
+   </div>
+
+<%args>
+$location => undef
+@locations
+$columns => 2
+</%args>
+
+<%init>
+@locations = sort { $a->name cmp $b->name } @locations;
+
+my @l1;
+my @l2;
+if ( $columns == 2 )
+{
+    my $mid = int( @locations / 2 );
+    $mid++ if int( @locations / 2 ) != @locations / 2;
+
+    @l1 = @locations[ 0 .. $mid - 1 ];
+    @l2 = @locations[ $mid .. $#locations ];
+}
+else
+{
+    @l1 = @locations;
+}
+</%init>

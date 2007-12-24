@@ -1,0 +1,41 @@
+#!/usr/bin/perl -w
+
+use strict;
+use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../../../lib";
+
+use VegGuide::Schema;
+
+system( 'script/vegguide_sync_db.pl', )
+    and die $!;
+
+my $dbh = VegGuide::Schema->Connect()->driver()->handle();
+
+
+for my $code ( qw( ar el he ja km ko ms th vi zh  ) )
+{
+    $dbh->do( 'UPDATE Locale SET requires_localized_addresses = 1 WHERE locale_code LIKE ?', {}, $code . '%' );
+}
+
+require VegGuide::Location;
+
+my $location_ids =
+    join ', ',
+    map { $_->location_id() }
+    map { ( $_, $_->descendants() ) }
+    map { VegGuide::Location->new( location_id => $_ ) }
+    @{ $dbh->selectcol_arrayref( 'SELECT L.location_id FROM Location AS L, Locale AS E WHERE L.locale_id = E.locale_id AND E.requires_localized_addresses = 0' ) };
+
+my $sql = <<"EOF";
+UPDATE Vendor
+   SET localized_address1 = NULL,
+       localized_address2 = NULL,
+       localized_neighborhood = NULL,
+       localized_city = NULL,
+       localized_region = NULL
+ WHERE location_id IN ($location_ids)
+EOF
+
+$dbh->do($sql);

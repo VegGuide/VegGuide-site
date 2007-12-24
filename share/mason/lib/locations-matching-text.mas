@@ -1,0 +1,32 @@
+<ul>
+% for my $l (@locations) {
+<& .location_list_item, location => $l, text => $text &>
+% }
+</ul>
+
+<%args>
+$text
+@locations
+</%args>
+
+<%def .location_list_item>
+ <li><& /lib/link/location-and-parent.mas, location => $location &>
+     (<% $entry_count %> <% PL( 'entry', $entry_count ) | h %>)
+% if (@cities) {
+     - has entries in <% @cities > 1 ? '' : 'a' %>
+       <% PL( 'city', scalar @cities ) %> named
+       <% list_to_english(@cities) %>
+% }
+ </li>
+<%args>
+$location
+$text
+</%args>
+<%init>
+my $entry_count = $location->descendants_vendor_count();
+
+my @cities;
+@cities = $location->cities_matching_text($text)
+    unless $location->name_matches_text($text);
+</%init>
+</%def>

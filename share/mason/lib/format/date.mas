@@ -1,0 +1,12 @@
+% if ( $compact && $dt->year() == DateTime->now->year ) {
+<% $dt->strftime( '%b %e' ) %>\
+% } else {
+<% $dt->strftime( '%b %e %y' ) %>\
+% }
+<%args>
+$date
+$compact => 1
+</%args>
+<%init>
+my $dt = ref $date ? $date : DateTime::Format::MySQL->parse_datetime($date);
+</%init>

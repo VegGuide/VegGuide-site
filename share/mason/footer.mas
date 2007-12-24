@@ -1,0 +1,70 @@
+  <div class="force-clear">&nbsp;</div>
+
+  <div id="footer">
+
+   <div id="footer-nav">
+
+% if ( $c->vg_user()->skin_count() || $c->vg_user()->viewable_suggestion_count() || $c->vg_user()->is_admin() ) {
+    <ul>
+%   if ( $c->vg_user()->skin_count() ) {
+     <li class="first">
+      <a href="<% user_uri( user => $c->vg_user(), path => 'skins' ) | h %>" title="Skins"
+         >Skins</a>
+     </li>
+%   }
+%   if ( $c->vg_user()->viewable_suggestion_count() ) {
+     <li class="<% $c->vg_user()->skin_count() ? '' : 'first' %>">
+      <a href="<% user_uri( user => $c->vg_user(), path => 'suggestions' ) | h %>" title="Suggestions"
+         >Suggestions</a>
+     </li>
+%   }
+%   if ( $c->vg_user()->is_admin() ) {
+     <li class="last"><a href="/site/admin/menu" title="Admin">Admin</a></li>
+%   }
+    </ul>
+% }
+
+    <ul>
+     <li class="first"><a href="/site/about" title="About VegGuide.Org">About/Contact</a></li>
+     <li><a href="/site/news" title="VegGuide.Org News">News</a></li>
+     <li><a href="/stats/site" title="Site Statistics">Statistics</a></li>
+     <li><a href="/user" title="User Listings">Users</a></li>
+     <li><a href="/site/feeds" title="Feeds">Feeds</a></li>
+     <li><a href="/site/source" title="Source Code">Source Code</a></li>
+     <li class="last"><a href="/site/privacy" title="Privacy Policy">Privacy</a></li>
+    </ul>
+
+   </div>
+
+   <p>
+    <&| /lib/link/license.mas &><img id="cc-logo" src="http://i.creativecommons.org/l/by-nc-sa/3.0/us/88x31.png" alt="Creative Commons License" /></&>
+
+    <a href="http://www.vegguide.org/" title="Home">VegGuide.Org</a>
+    and its contents are Copyright &copy;
+    2003-<% DateTime->now()->year() %> <a href="http://www.exploreveg.org/"
+    title="Compassionate Action for Animals">Compassionate Action for
+    Animals</a>.  All rights reserved.
+   </p>
+
+   <p>
+    You can support VegGuide.Org by making
+    a <a href="http://www.exploreveg.org/donate">tax-deductible
+    donation to Compassionate Action for Animals</a>.
+   </p>
+
+   <p>
+    All content on this website (including text and images), unless
+    otherwise noted, is licensed under a <&| /lib/link/license.mas &>Creative
+    Commons Attribution-Noncommercial-Share Alike 3.0
+    United States License</&>. The
+    site's <a href="/site/source">source code</a> is licensed under
+    the same terms as Perl.
+   </p>
+
+   <p>
+    Logo images displayed in the upper left corner of the page on hosts
+    besides www.vegguide.org are copyright by the user responsible for
+    that host, and should not be reproduced without permission.
+   </p>
+
+ </div>

@@ -1,0 +1,14 @@
+<%method title>
+
+List of most recent reviews added to stats
+
+</%method>
+
+<%method body>
+
+<p>
+The statistics on the front page now include the ten most recently
+added or updated reviews.
+</p>
+
+</%method>

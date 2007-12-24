@@ -1,0 +1,5 @@
+<% VegGuide::Util::text_to_html( text => $comment->comment() ) %>
+
+<%args>
+$comment
+</%args>

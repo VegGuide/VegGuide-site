@@ -1,0 +1,13 @@
+<%method title>
+
+New fields for entries: neighborhood and description
+
+</%method>
+
+<%method body>
+
+<p>
+These two new fields have been requested by various users.
+</p>
+
+</%method>

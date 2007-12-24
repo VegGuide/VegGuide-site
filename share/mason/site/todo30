@@ -1,0 +1,19 @@
+<p>
+This is my working todo list of what's left to be done before launch.
+</p>
+
+<% VegGuide::Util::text_to_html( text => <<'EOF' )
+
+= Icons =
+
+Icons that need to be made/improved.
+
+    * watch/unwatch region
+    * external website icon
+
+EOF
+%>
+
+<%method page_title>
+Todo for 3.0 Launch
+</%method>

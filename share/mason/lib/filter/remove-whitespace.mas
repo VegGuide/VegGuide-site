@@ -1,0 +1,11 @@
+<%init>
+my $c = $m->content;
+
+$c =~ s{^\s+|\s+$}{}sg;
+$c =~ s{>\s+<}{><}sg;
+
+$m->print($c);
+
+return;
+</%init>
+

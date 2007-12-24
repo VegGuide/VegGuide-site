@@ -1,0 +1,18 @@
+<%method title>
+
+RSS Feeds for listings
+
+</%method>
+
+<%method body>
+
+<p>
+
+RSS feeds are now available for all regions with entries.  Logged-in
+users should now see an "RSS Feed" link when browsing by region.
+Please see the <a href="/rss/">RSS help</a> pages for details.
+
+</p>
+
+</%method>
+  

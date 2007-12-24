@@ -1,0 +1,15 @@
+<%args>
+$regex
+</%args>
+
+<%init>
+# XXX - maybe reimplement with a check against an XPath expression or something.
+
+my $content = $m->content();
+
+return unless $content =~ /$regex/;
+
+$m->print($content);
+
+return;
+</%init>

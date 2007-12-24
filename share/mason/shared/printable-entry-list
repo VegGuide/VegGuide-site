@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+
+ <title><% $search->title() | h %></title>
+
+ <link rel="stylesheet" type="text/css" href="/css/printable.css" />
+
+</head>
+
+<body>
+
+<h1><% $search->title() %></h1>
+
+% while ( my $vendor = $vendors->next() ) {
+<& .vendor, vendor => $vendor &>
+% }
+
+</body>
+</html>
+
+<%args>
+$search
+</%args>
+
+<%init>
+my $vendors = $search->vendors();
+</%init>
+
+<%def .vendor>
+<div class="entry">
+ <div>
+  <span class="name"><& /lib/l10n/vendor-name.mas, vendor => $vendor &></span>
+% if ( $vendor->categories > 1 || ! $vendor->is_restaurant ) {
+  <span class="categories">(<% join ', ', map { $_->name() } $vendor->categories() | h %>)</span>
+% }
+  - <span class="veg-level"><% $vendor->veg_description() | h %></span>
+% if ( $rating_count) {
+  - <span class="rating"><% $average_rating %> / <% $rating_count %></span>
+% }
+ </div>
+
+ <div class="summary"><% $vendor->short_description() | h %></div>
+
+% if ( @address || $phone ) {
+ <div class="address-phone">
+  <span class="address"><% join ', ', @address %></span>
+%   if ( $phone ) {
+  <span class="phone"><% $phone | h %></span>
+%   }
+ </div>
+% }
+
+% if ( $c->client()->show_localized_content() && $vendor->has_localized_address() ) {
+ <div class="address"><% join ', ', $vendor->localized_address_pieces() %></div>
+% }
+
+ <div class="hours">
+% foreach my $desc (@hours) {
+  <span class="day-name"><% $desc->{days} | h %>:</span> <span class="day-hours"><% $desc->{hours}[0] | h %>\
+%   if ( $desc->{hours}[1] ) {
+, <% $desc->{hours}[1] | h %>\
+%   }
+</span>
+% }
+ </div>
+
+ 
+<%args>
+$vendor
+</%args>
+
+<%init>
+my @address = $vendor->address_pieces();
+my $phone = $vendor->phone();
+
+my ( $average_rating, $rating_count ) = $vendor->weighted_rating_and_count();
+
+my @hours = $vendor->hours_as_descriptions;
+</%init>
+</%def>
+
+<%flags>
+inherit => undef
+</%flags>

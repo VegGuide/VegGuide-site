@@ -1,0 +1,18 @@
+ <ul>
+  <li>
+   <input class="radio" type="radio" name="<% $name | h %>" value="<% $reverse_values ? 0 : 1 %>" id="<% $name | h %>-yes" />
+   <label for="<% $name | h %>-yes">Yes</label>
+  </li>
+  <li>
+   <input class="radio" type="radio" name="<% $name | h %>" value="<% $reverse_values ? 1 : 0 %>" id="<% $name | h %>-no" />
+   <label for="<% $name | h %>-no">No</label>
+  </li>
+  <li>
+   <input class="radio" type="radio" name="<% $name | h %>" value="" checked="checked" id="<% $name | h %>-unknown"/>
+   <label for="<% $name | h %>-unknown" id="<% $name | h %>-longest">Don't know</label>
+  </li>
+ </ul>
+<%args>
+$name
+$reverse_values => 0
+</%args>

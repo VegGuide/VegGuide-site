@@ -1,0 +1,143 @@
+<p>
+VegGuide.Org is a project
+of <a href="http://www.exploreveg.org/">Compassionate Action for
+Animals</a>, a Twin Cities, Minnesota animal rights organization.  The
+site was designed by <a href="http://www.houseabsolute.com/">Dave
+Rolsky</a>.  Dave also did the programming for the site, so you can
+blame him for all the bugs you find.
+</p>
+
+<p>
+Want to help promote the guide?  Check out our <a
+href="/site/promo_cards">promo cards</a>.
+</p>
+
+<p>
+You can help this guide by keeping it up to date.
+% if ( $c->vg_user()->is_guest() ) {
+<a href="/user/registration_form">Sign up</a> for an account, and you
+% } else {
+You
+% }
+can add new entries, ratings, and reviews.
+</p>
+
+<p>
+If you are interested in discussing this site and hearing about site
+updates, sign up on the <a href="/mailman/listinfo/community">VegGuide
+community email list</a>.
+</p>
+
+<p>
+Our goal for this site is to build a community of users, so everyone's
+input is welcome.  Please take a look at our <a href="/site/todo">todo
+list</a> first, though.
+</p>
+
+<p>
+If you want to read a lot more, you can check out
+the <a href="/site/philosophy">philosophy of VegGuide.Org</a>.
+</p>
+
+<h2>History</h2>
+
+<p>
+The first version of VegGuide.Org went live in October of 2002 on
+either waste.org or ca4a.org (I just can't remember). However, at this
+time we didn't really announce the guide outside of a small circle of
+users in order to give it some beta testing.
+</p>
+
+<p>
+In March of 2003, the site moved to its own domain, regveg.org
+(Regional Vegetarian Guide) and we started promoted it
+publically. Check out
+the <a
+href="http://web.archive.org/web/20030407173402/www.regveg.org/">site's
+early look</a> (thank you, Wayback Machine).
+</p>
+
+<p>
+The design of the site saw various revisions until February of 2004
+brought us what I consider to be VegGuide 1.0. Look at that
+lovely <a
+href="http://web.archive.org/web/20040323040129/www.vegguide.org/">three-column
+design in purple, white, and black</a>. Needless to say, this was a
+look that only a geek (like me) could love.
+</p>
+
+<p>
+In March of 2004, the site moved to the vegguide.org domain, which we
+thought was more easily pronouncable and rememberable.
+</p>
+
+<p>
+In April of 2004, we released what I consider to be VegGuide 2.0. This
+was
+a <a
+href="http://web.archive.org/web/20050419075716/http://www.vegguide.org/">new
+color scheme and layout</a> intended to be easier to use and easier on
+the eyes. Unfortunately, at the time I didn't really know a much of
+anything about UI design or usability, so it was still not the most
+intuitive or friendly UI.
+</p>
+
+<p>
+In ... of 2007, we released VegGuide 3.0, the layout you're looking at
+now. Besides the new UI, there are various new features, and there was
+a lot of reworking of the underlying code that drives the site. I hope
+that this UI is more usable and intuitive.
+</p>
+
+
+<h2>Thanks</h2>
+
+<p>
+<a href="http://www.xmission.com/">XMission</a> provides co-location and bandwidth.
+</p>
+
+<p>
+Eric Waters provided our server.
+</p>
+
+<p>
+S4 created the icons used for listings.
+</p>
+
+<p>
+John Eckman contributed code for the Google Maps view of a listing,
+and Jo Tyler created the icons we use on the maps. John also
+contributed the rating star icons.
+</p>
+
+<h2>Support Us</h2>
+
+<p>
+ <strong><a href="http://www.exploreveg.org/donate">Make a tax-deductible donation to VegGuide.Org</a>.</strong>
+</p>
+
+<p>
+Donations go to Compassionate Action for Animals, a 501c3 nonprofit.
+</p>
+
+<h2>Contact Us</h2>
+
+<p>
+If you want to ask for some sort of link exchange, please
+don't. Instead, just add your site to the
+<a href="<% region_uri( location => $internet ) | h %>">Internet "region"</a>
+listings.
+</p>
+
+<p>
+Otherwise, email us
+at <a href="mailto:guide@vegguide.org">guide@vegguide.org</a>.
+</p>
+
+<%init>
+my $internet = VegGuide::Location->new( name => 'Internet' );
+</%init>
+
+<%method page_title>
+About VegGuide.Org
+</%method>

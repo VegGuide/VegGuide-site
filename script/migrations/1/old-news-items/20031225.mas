@@ -1,0 +1,20 @@
+<%method title>
+
+Wiki formatting
+
+</%method>
+
+<%method body>
+
+<p>
+
+An entry's long description field, as well as user-supplied reviews
+and location comments, are now formatted with standard Wiki
+formatting.  This allows you to add links, headings, bold and
+italicized text, and lists.  See the <a
+href="/faq.html#wiki_formatting">FAQ</a> for details.
+
+</p>
+
+</%method>
+  

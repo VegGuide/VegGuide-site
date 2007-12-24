@@ -1,0 +1,370 @@
+    <p>
+    If you haven't entered something into the VegGuide before please
+    read <&| /lib/link/help.mas, name => 'entry-guidelines' &>our guidelines</&>
+    first.
+    </p>
+
+    <ul>
+     <li><strong>One address per entry</strong>.  If a vendor has multiple
+     locations, use the <&| /lib/link/help.mas, name => 'clone' &>cloning feature</&>
+     <li><strong>Please use correct grammar and capitalization.  Never use ALL CAPS!</strong></li>
+     <li><strong>If you don't know something, leave that field blank, don't put "n/a" or any other text.</strong></li>
+     <li><strong>Only enter what is being asked. Please don't put something like "many locations" in the city field or add "(maybe)" in the address field.</strong></li>
+    </ul>
+
+    <&| /lib/filter/fill-in-form.mas, data => \%form_data, objects => [ $vendor ] &>
+    <form action="<% $uri %>" method="post" id="entry-form">
+% if ( $vendor->is_live() ) {
+     <input type="hidden" name="x-tunneled-method" value="PUT" />
+% }
+
+% if ( $cloned_vendor && $cloned_vendor->vendor_id() ) {
+     <input type="hidden" name="cloned_vendor_id" value="<% $cloned_vendor->vendor_id() %>" />
+% }
+
+     <& /lib/form/errors.mas &>
+
+     <fieldset>
+      <legend>Basic Info</legend>
+
+      <div class="form-item">
+       <label for="name">Name:</label>
+       <input id="name" type="text" class="text medium" name="name" value="" />
+      </div>
+
+      <div class="form-item">
+       <label for="short_description">Summary:</label>
+       <input id="short_description" type="text" class="text long" name="short_description" value="" />
+      </div>
+
+      <div class="form-item">
+       <label for="long_description">Description:</label>
+       <textarea id="long_description" class="text long high" rows="" cols="" name="long_description"></textarea>
+       <p>
+        <strong>Please don't editorialize here.</strong> Please do use
+        complete sentences. You can add
+        <&| /lib/link/help.mas, name => 'wiki-formatting' &>simple formatting</&>
+        to the description.
+       </p>
+      </div>
+
+      <div class="form-item">
+       <& .categories &>
+      </div>
+
+      <div class="form-item" id="how-veg">
+       <label>How Veg?</label>
+
+       <& /lib/form/entry/how-veg.mas &>
+
+      </div>
+
+     </fieldset>
+
+% if ( $c->client()->localize_for_location($location) ) {
+     <fieldset>
+      <legend>Basic Info in <% $location->locale()->language_name() | h %></legend>
+
+      <div class="form-item">
+       <label for="localized_name">Name:</label>
+       <input id="localized_name" type="text" class="text medium" name="localized_name" value="" />
+      </div>
+
+      <div class="form-item">
+       <label for="localized_short_description">Summary:</label>
+       <input id="localized_short_description" type="text" class="text long" name="localized_short_description" value="" />
+      </div>
+
+      <div class="form-item">
+       <label for="localized_long_description">Description:</label>
+       <textarea id="localized_long_description" class="text long high" rows="" cols="" name="localized_long_description"></textarea>
+      </div>
+
+     </fieldset>
+% }
+
+     <fieldset>
+      <legend>Address</legend>
+
+      <div class="form-item">
+       <label for="address1">Address line 1:</label>
+       <input id="address1" type="text" class="text medium" name="address1" value="" />
+       <p>
+        Street address or PO Box.  Please use a real street address,
+        not an intersection or directions.
+       </p>
+      </div>
+
+      <div class="form-item">
+       <label for="address2">Address line 2:</label>
+       <input id="address2" type="text" class="text medium" name="address2" value="" />
+       <p>
+        Suite, floor, etc.
+       </p>
+      </div>
+
+      <div class="form-item">
+       <label for="city">City:</label>
+       <input id="city" type="text" class="text short" name="city" value="" />
+      </div>
+
+      <div class="form-item">
+       <label for="region">State/Province:</label>
+       <input id="region" type="text" class="text short" name="region" value="" />
+      </div>
+
+      <div class="form-item">
+       <label for="postal_code">Postal code:</label>
+       <input id="postal_code" type="text" class="text short" name="postal_code" value="" />
+      </div>
+
+      <div class="form-item">
+       <label for="neighborhood">Neighborhood:</label>
+% if ( my @hoods = $location->current_neighborhoods() ) {
+       <select id="neighborhood" name="neighborhood">
+        <option value="">Other</option>
+%    for my $hood (@hoods) {
+        <option value="<% $hood | h %>"><% $hood | h %></option>
+%    }
+       </select>
+% }
+       <p>Not listed above? Enter a new neighborhood here</p>
+       <input id="new_neighborhood" type="text" class="text short" name="new_neighborhood" value="" />
+      </div>
+
+      <div class="form-item">
+       <label for="directions">Directions:</label>
+       <textarea id="directions" class="text long" rows="" cols="" name="directions"></textarea>
+       <p>
+        &quot;Between 1st and 2nd.&quot;, nearby bus or subway lines, etc.
+       </p>
+      </div>
+
+     </fieldset>
+
+% if ( $c->client()->localize_for_location($location) && $location->locale()->requires_localized_addresses() ) {
+     <fieldset>
+      <legend><% $location->locale()->language_name() | h %> Address</legend>
+
+      <div class="form-item">
+       <label for="localized_address1">Address line 1:</label>
+       <input id="localized_address1" type="text" class="text medium" name="localized_address1" value="" />
+       <p>
+        Street address or PO Box.  Please use a real street address,
+        not an intersection or directions.
+       </p>
+      </div>
+
+      <div class="form-item">
+       <label for="localized_address2">Address line 2:</label>
+       <input id="localized_address2" type="text" class="text medium" name="localized_address2" value="" />
+       <p>
+        Suite, floor, etc.
+       </p>
+      </div>
+
+      <div class="form-item">
+       <label for="localized_city">City:</label>
+       <input id="localized_city" type="text" class="text short" name="localized_city" value="" />
+      </div>
+
+      <div class="form-item">
+       <label for="localized_region">Region:</label>
+       <input id="localized_region" type="text" class="text short" name="localized_region" value="" />
+      </div>
+
+      <div class="form-item">
+       <label for="localized_neighborhood">Neighborhood:</label>
+%   if ( my @hoods = $location->current_localized_neighborhoods() ) {
+       <select id="localized_neighborhood" name="localized_neighborhood">
+        <option value="">Other</option>
+%      for my $hood (@hoods) {
+        <option value="<% $hood | h %>"><% $hood | h %></option>
+%      }
+       </select>
+%   }
+       <input id="localized_new_neighborhood" type="text" class="text short" name="localized_new_neighborhood" value="" />
+      </div>
+
+     </fieldset>
+% }
+
+     <fieldset>
+      <legend>Phone &amp; Website</legend>
+ 
+      <div class="form-item">
+       <label for="phone">Phone number:</label>
+       <input id="phone" type="text" class="text short" name="phone" value="" />
+      </div>
+
+      <div class="form-item">
+       <label for="home_page">Website:</label>
+       <input id="home_page" type="text" class="text short" name="home_page" value="" />
+      </div>
+     </fieldset>
+
+     <fieldset>
+      <legend>Prices &amp; Payment Options</legend>
+
+      <div class="form-item">
+       <label for="price_range_id">Prices are:</label>
+
+       <& /lib/form/entry/prices.mas &>
+      </div>
+
+      <div class="form-item" id="is_cash_only">
+       <label id="is_cash_only-label">Cash only?</label>
+
+       <ul>
+        <li>
+         <input class="radio" type="radio" name="is_cash_only" value="1" id="is_cash_only-yes" />
+         <label for="is_cash_only-yes" id="is_cash_only-longest" >Yes</label>
+        </li>
+        <li>
+        <input class="radio" type="radio" name="is_cash_only" value="0" checked="checked" id="is_cash_only-no" />
+         <label for="is_cash_only-no">No</label>
+        </li>
+       </ul>
+      </div>
+
+      <div class="form-item">
+       <& .payment_options &>
+      </div>
+     </fieldset>
+
+     <fieldset>
+      <legend>Other Info</legend>
+
+      <div class="form-item">
+       <& .cuisines &>
+
+       <p>
+        If you find yourself selecting more than 5 or so options here,
+        just pick &quot;Eclectic (Varied)&quot; instead.
+       </p>
+      </div>
+
+      <div class="form-item" id="smoke_free">
+       <label id="smoke_free-label">Smoke-free?</label>
+       <& /lib/form/entry/troolean.mas, name => 'allows_smoking', reverse_values => 1 &>
+      </div>
+
+      <div class="form-item" id="accepts_reservations">
+       <label id="accepts_reservations-label">Accepts reservations?</label>
+       <& /lib/form/entry/troolean.mas, name => 'accepts_reservations' &>
+      </div>
+
+      <div class="form-item" id="wheelchair_accessible">
+       <label id="wheelchair_accessible-label">Wheelchair accessible?</label>
+       <& /lib/form/entry/troolean.mas, name => 'is_wheelchair_accessible' &>
+      </div>
+
+      <div class="form-item">
+       <label for="attribute_id">Features:</label>
+
+       <& /lib/form/entry/attribute.mas &>
+      </div>
+
+     </fieldset>
+
+% if ( $c->vg_user()->is_admin() && $vendor->location_id() ) {
+     <fieldset>
+      <legend>Admin</legend>
+
+      <div class="form-item">
+       <label for="close_date">Mark as closed (YYYY-MM-DD or "open"):</label>
+       <input id="close_date" type="text" class="text short" name="close_date" value="" />
+      </div>
+
+      <& /lib/form/region-search.mas, label => 'Move to new location:' &>
+
+     </fieldset>
+% }
+
+% if ($is_suggestion) {
+     <& /lib/form/suggestion-fieldset.mas &>
+% }
+
+     <div class="form-item">
+      <input class="submit" type="submit" value="Submit" />
+     </div>
+
+    </form>
+    </&>
+
+    <& /lib/form/copyright.mas &>
+
+<%once>
+my @Ranges = VegGuide::PriceRange->All();
+</%once>
+
+<%args>
+$vendor => VegGuide::Vendor->potential()
+$location => $vendor->location()
+$cloned_vendor => undef
+$is_suggestion => 0
+</%args>
+
+<%init>
+my %form_data;
+%form_data = $cloned_vendor->cloneable_data()
+    if $cloned_vendor;
+
+my $uri;
+if ( $vendor->is_live() )
+{
+    $uri = entry_uri( vendor => $vendor );
+}
+else
+{
+    $uri = region_uri( location => $location );
+}
+</%init>
+
+<%def .categories>
+  <label for="category_id">Categories:</label>
+
+  <div id="category_id-wpms">
+ 
+   <& /lib/form/entry/category.mas &>
+
+  </div>
+
+  <p>
+   You must pick at least one option.<br />
+
+   Use the "General Store" category for stores that sell non-food
+   merchandise. Use the "Other" category for entries that don't fit
+   elsewhere, such as a cruelty-free salon or cleaning service. See
+   the <a href="/help">help page</a> for more details.
+  </p>
+</%def>
+
+<%def .cuisines>
+  <label for="cuisine_id">Cuisines:</label>
+
+  <div id="cuisine_id-wpms">
+
+   <& /lib/form/entry/cuisine.mas &>
+ 
+  </div>
+</%def>
+
+<%def .payment_options>
+  <label for="payment_option_id">Accepts:</label>
+
+  <div id="payment_option_id-wpms">
+
+   <select id="possible_payment_option_id" name="possible_payment_option_id" multiple="multiple" size="<% scalar @options + 1 %>">
+   </select>
+
+   <select id="payment_option_id" name="payment_option_id" multiple="multiple" size="<% scalar @options + 1 %>">
+% for my $option (@options) {
+    <option value="<% $option->payment_option_id %>"><% $option->name | h %></option>
+% }
+   </select>
+  </div>
+<%init>
+my @options = VegGuide::Vendor->available_payment_options()->all();
+</%init>
+</%def>

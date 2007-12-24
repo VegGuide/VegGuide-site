@@ -1,0 +1,31 @@
+<%method title>
+New "Watch List" Feature, Stats, and Bug Fixes
+</%method>
+
+<%method body>
+
+<p>
+Our new <a href="/faq.html#watch_list">watch list</a> feature allows you
+to sign up for notifications as new entries are added to locations.
+</p>
+
+<p>
+We've expanded the <a href="/stats/">Site Stats</a> page quite a
+bit, and it is now linked from the page footer.
+</p>
+
+<p>
+We've also expanded the <a href="/faq.html">help page</a> a bit.
+</p>
+
+<p>
+<b>December 25, 2003 update:</b> The help page has been replaced by the FAQ.
+</p>
+
+<p>
+Finally, we fixed a bug in the <a
+href="/noauth/forgot_password.html">"I forgot my password"</a>
+feature.  If you tried to use this recently and the link you received
+did not work, please try it again.
+</p>
+</%method>

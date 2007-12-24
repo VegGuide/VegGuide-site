@@ -1,0 +1,9 @@
+<& /lib/form/news-item.mas, item => $item &>
+
+<%args>
+$item
+</%args>
+
+<%method page_title>
+Edit <% $m->caller_args(-1)->{item}->title() %>
+</%method>

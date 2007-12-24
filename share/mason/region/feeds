@@ -1,0 +1,21 @@
+  <div id="body-container">
+   
+   <h2>Available feeds for <& /lib/l10n/location-name.mas, location => $location &></h2>
+
+   <p>
+    If you want to keep up with what's new in this region, you can
+    subscribe to one of its feeds.
+   </p>
+
+   <& /lib/feeds-list.mas, base_uri => region_uri( location => $location ),
+      thing => 'this region' &>
+
+  </div>
+
+<%args>
+$location
+</%args>
+
+<%attr>
+is_one_column => 1
+</%attr>

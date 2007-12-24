@@ -1,0 +1,24 @@
+Your suggestion to change the <% $type %> for <% $vendor->name() %> in \
+<% $vendor->location()->name() %>\
+%   if ( $vendor->location()->parent() ) {
+, <% $vendor->location()->parent()->name() %>\
+%   }
+was <% $accepted ? '' : 'not ' %>accepted.
+
+This suggestion was reviewed by <% $user->real_name() %>.
+
+% unless ( string_is_empty($comment) ) {
+<% $user->real_name() | h %> said:
+
+"<% $comment | h %>"
+% }
+
+Thanks for your contribution to VegGuide.Org.
+
+<%args>
+$vendor
+$user
+$type
+$accepted
+$comment
+</%args>

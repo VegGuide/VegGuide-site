@@ -1,0 +1,17 @@
+<%method title>
+
+Get email when a suggestion is processed
+
+</%method>
+
+<%method body>
+
+<p>
+
+There is now an option to have an email sent when a suggestion is
+accepted or rejected.
+
+</p>
+
+</%method>
+  

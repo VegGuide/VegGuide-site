@@ -1,0 +1,9 @@
+<& location.mas, location => $location, with_host => $with_host, english_only => $english_only &>\
+%   if ( my $parent = $location->parent ) {
+, <& location.mas, location => $parent, with_host => $with_host, english_only => $english_only &>\
+%   }
+<%args>
+$location
+$with_host => 0
+$english_only => 0,
+</%args>

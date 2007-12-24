@@ -1,0 +1,9 @@
+       <select id="price_range_id" name="price_range_id">
+% for my $range (@Ranges) {
+        <option value="<% $range->price_range_id() %>"><% $range->description() | h %></option>
+% }
+       </select>
+
+<%once>
+my @Ranges = VegGuide::PriceRange->All();
+</%once>

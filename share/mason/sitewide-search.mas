@@ -1,0 +1,27 @@
+  <div id="sitewide-search-container">
+   <div id="text-and-form">
+    <form id="sitewide-search" action="/site/search">
+     <input id="sitewide-search-input" class="text" type="text" name="search_text" value="<% $search_text | h %>" />
+     <button class="action-button" type="submit">Search</button>
+    </form>
+   </div>
+  </div>
+
+  <div id="sitewide-search-help" style="display: none">
+   <a href="#" id="sitewide-search-help-close" title="Hide this help box"><img src="/images/close-button.png" height="15" width="15" /></a>
+    Search by name, address, or city.
+
+   <ul>
+    <li>Addresses can be a street address, an intersection, or a zip code.</li>
+    <li>You may need to a <&| /lib/link/help.mas, name => 'address-search-countries' &>country name</&> to the address to search outside the US.
+     <ul>
+      <li>Addresses in Japan and Taiwan must be given in the native language, not English</li>
+     </ul>
+    </li>
+   </ul>
+
+  </div>
+
+<%args>
+$search_text => ''
+</%args>

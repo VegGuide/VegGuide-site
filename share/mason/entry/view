@@ -1,0 +1,157 @@
+  <div id="body-and-boxes-container">
+
+<& /entry/profile-and-hours.mas, vendor => $vendor &>
+
+   <div id="body">
+
+    <& /entry/map-and-images.mas, vendor => $vendor &>
+
+    <div id="description-and-reviews">
+
+% unless ( $vendor->is_organization() ) {
+     <div id="info-band">
+      <span class="how-veg veg-level-<% $vendor->veg_level() %>"><% $vendor->veg_description | h %></span>
+
+%   if ( $vendor->is_restaurant() ) {
+      <br />
+      <label>Prices:</label> <span class="price-range"><% $vendor->price_range()->description() | h %></span>
+%   }
+
+%   if ( my @cuisines = $vendor->cuisines() ) {
+      <br />
+      <label>Cuisines:</label> <span class="cuisines"><% join ', ', map { $_->name() } @cuisines | h %></span>
+%   }
+     </div>
+% }
+
+     <p id="summary"><% $vendor->short_description() | h %>
+% if ( $c->client()->show_localized_content() && defined $vendor->localized_short_description() ) {
+      - <% $c->client()->encode( $vendor->localized_short_description() ) | h %>
+% }
+     </p>
+
+% if ( defined $description && length $description ) {
+     <% $description %>
+% }
+
+% if ( defined $localized_description && length $localized_description ) {
+     <% $localized_description %>
+% }
+
+% if ( ! defined $description && ! defined $localized_description ) {
+     <p class="first">
+      <em>No description yet. Click on the Edit button to add one.</em>
+     </p>
+% }
+
+     <p>
+      <a href="<% entry_uri( vendor => $vendor, path => 'edit_form' ) | h %>" class="content-button" title="Edit this entry">Edit</a><& /lib/link/help.mas, name => 'editing' &>
+      <a href="/site/clone_entry_form?vendor_id=<% $vendor->vendor_id() %>" class="content-button" title="Make a new entry based on this one">Clone</a><& /lib/link/help.mas, name => 'cloning' &>
+% if ( $c->vg_user()->can_delete_vendor($vendor) ) {
+      <a href="<% entry_uri( vendor => $vendor, path => 'deletion_confirmation_form' ) | h %>" class="action-button" title="Delete this entry">Delete</a>
+% }
+     </p>
+
+% if ( defined $vendor->directions() ) {
+     <div id="directions">
+      <strong>Directions:</strong> <% VegGuide::Util::text_to_html( text => $vendor->directions(), class => 'compact' ) %>
+     </div>
+% }
+
+% if (@attributes) {
+     <div id="features-container">
+      <& /lib/rounded-corners-top.mas &>
+
+      <div id="features">
+
+       <ul>
+%   for my $att (@attributes) {
+        <li><% $att->name() | h %></li>
+%   }
+       </ul>
+
+      </div>
+
+      <& /lib/rounded-corners-bottom.mas &>
+     </div>
+% }
+
+     <p id="entry-attribution">
+      Added by
+      <& /lib/link/user.mas, user => $vendor->user() &>
+      on <& /lib/format/date.mas, date => $vendor->creation_datetime() &>
+% if ( $vendor->creation_datetime() ne $vendor->last_modified_datetime() ) {
+      (updated <& /lib/format/date.mas, date => $vendor->last_modified_datetime() &>)
+% }
+     </p>
+
+     <p>
+      <a href="<% entry_uri( vendor => $vendor, path => 'review_form' ) | h %>"
+         class="content-button">Write your review</a><& /lib/link/help.mas, name => 'reviews' &>
+     </p>
+
+% if ($comments || $ratings) {
+     <hr />
+% }
+
+% if ($comments) {
+     <h2>Reviews</h2>
+
+     <& /lib/comments.mas, comments => $comments, vendor => $vendor &>
+
+     <p>
+      <a href="<% entry_uri( vendor => $vendor, path => 'review_form' ) | h %>"
+         class="content-button">Write your review</a><& /lib/link/help.mas, name => 'reviews' &>
+     </p>
+% }
+
+% if ($ratings) {
+     <h3>Ratings Without Reviews</h3>
+
+     <ul id="ratings-list">
+%   while ( my ( $rating, $user ) = $ratings->next() ) {
+      <li><a name="user-id-<% $user->user_id() %>"></a>
+          <& /lib/link/user.mas, user => $user &>:
+          <& /lib/stars-for-rating.mas, rating => $rating->rating(), color => 'green' &>
+      </li>
+%   }
+     </ul>
+% }
+
+    </div>
+
+   </div>
+  </div>
+
+<%args>
+$vendor
+$comments => undef
+$ratings => undef
+</%args>
+
+<%init>
+my $description =
+      VegGuide::Util::text_to_html( text        => $vendor->long_description(),
+                                    first_class => 'first',
+                                    class       => 'description',
+                                  );
+
+my $localized_description;
+if ( $c->client()->show_localized_content() )
+{
+    $localized_description =
+        VegGuide::Util::text_to_html( text        => $vendor->localized_long_description(),
+                                      first_class => $description ? '' : 'first',
+                                    );
+}
+
+my @attributes = $vendor->attributes();
+</%init>
+
+<%attr>
+show_all_info => 1
+</%attr>
+
+<%attr>
+load_google_maps => 1
+</%attr>

@@ -1,0 +1,14 @@
+<%method title>
+
+Contest!
+
+</%method>
+
+<%method body>
+
+<p>
+We're having a <a href="/contest.html">contest</a>.  Add info to the
+guide, win cool stuff.
+</p>
+
+</%method>

@@ -1,0 +1,28 @@
+<img src="<% $uri %>"
+     width="<% $sizes{$name}[0] %>" height="<% $sizes{$name}[1] %>"
+% if ($title) {
+     title="<% $title | h %>"
+% }
+     alt="<% $title || $name | h %>"
+/>\
+<%args>
+$name
+$title => ''
+</%args>
+<%once>
+my %sizes;
+</%once>
+<%init>
+my $uri = "/images/icons/$name.png";
+
+unless ( exists $sizes{$name} )
+{
+    my ($x, $y) = Image::Size::imgsize( VegGuide::Config->ShareDir() . $uri );
+
+    my $scale = 1;
+    $x *= $scale;
+    $y *= $scale;
+
+    $sizes{$name} = [ $x, $y ];
+}
+</%init>

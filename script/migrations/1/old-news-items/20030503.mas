@@ -1,0 +1,15 @@
+<%method title>
+
+Site source now available
+
+</%method>
+
+<%method body>
+
+<p>
+The source code for this website is now available as free software.
+The "download source" link in the page footer will download a tarball
+containing this site's code.
+</p>
+
+</%method>

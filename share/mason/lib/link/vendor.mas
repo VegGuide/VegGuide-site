@@ -1,0 +1,24 @@
+<a href="<% entry_uri( vendor => $vendor, @path, with_host => $with_host ) | h %>" class="entry" title="<% $title | h %>">\
+% if ($text) {
+<% $text %>\
+% } elsif ($english_only) {
+<% $vendor->name() | h %>\
+% } else {
+<& /lib/l10n/vendor-name.mas, vendor => $vendor &>\
+% }
+</a>\
+<%args>
+$vendor
+$english_only => 0
+$text => $m->content()
+$path => undef
+$title_prefix => ''
+$with_host => 0
+</%args>
+<%init>
+my @path = $path ? ( path => $path ) : ();
+
+my $title = $title_prefix;
+$title .= ' ' if $title;
+$title .= $vendor->name();
+</%init>

@@ -1,0 +1,60 @@
+% if (@locations) {
+<p>
+You have the following regions on your watch list:
+</p>
+
+<ul id="watch-list-regions">
+%   for my $location (@locations) {
+ <li>
+  <& /lib/link/location-and-parent.mas, location => $location &>
+  <form action="<% user_uri( user => $user, path => 'watch_list/' . $location->location_id() ) |h %>"
+        method="post">
+   <input type="hidden" name="x-tunneled-method" value="DELETE" />
+   <input type="hidden" name="return_to" value="<% $c->request()->uri() %>" />
+
+   <input class="submit-small" type="submit" value="X" />
+  </form>
+ </li>
+%   }
+</ul>
+% } else {
+<p>
+Your watch list is empty. <&| /lib/link/help.mas, name => 'watch-list' &>What is a watch list?</&>
+</p>
+% }
+
+% if ( $c->vg_user()->is_admin() ) {
+<& .email_bodies, %ARGS &>
+% }
+
+<%args>
+$user
+$locations
+</%args>
+
+<%init>
+my @locations = $locations->all();
+</%init>
+
+<%def .email_bodies>
+
+<% VegGuide::Email::_HTMLBody(%p1) %>
+
+<pre>
+<% VegGuide::Email::_TextBody(%p2) | h %>
+</pre>
+
+<%args>
+$user
+$locations
+</%args>
+
+<%init>
+my $new_vendors = $user->new_entries_for_subscription();
+
+return unless $new_vendors;
+
+my %p1 = ( template => 'watch-list', params => { user => $user, vendors1 => $new_vendors } );
+my %p2 = ( template => 'watch-list', params => { user => $user, vendors2 => $user->new_entries_for_subscription() } );
+</%init>
+</%def>

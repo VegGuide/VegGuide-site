@@ -1,0 +1,117 @@
+  <div id="body-container">
+
+   <div id="body" class="one-column">
+    <h2>\
+% if ( $is_suggestion ) {
+Edit hours for\
+% } else {
+Suggest a change in hours for\
+% }
+ <& /lib/l10n/vendor-name.mas, vendor => $vendor &></h2>
+
+    <&| /lib/filter/fill-in-form.mas, data => \%form &>
+    <form id="hours-form" action="/entry/<% $vendor->vendor_id() %>/hours" method="post">
+
+     <& /lib/form/errors.mas &>
+
+     <fieldset>
+      <legend>Hours</legend>
+
+      <p>
+       You can specify one or two sets of open/close times per
+       day. Use the checkbox to indicate that a place is closed for
+       the day.
+      </p>
+
+% for my $day ( 0..$#{$days} ) {
+      <div class="form-item">
+
+       <label for="hours-<% $day %>-0"><% $days->[$day] | h %></label>
+
+       <label class="sub-label" for="is-closed-<% $day %>">closed?</label>
+       <input id="is-closed-<% $day %>" type="checkbox" name="is-closed-<% $day %>" value="1" />
+
+       or
+
+       <input id="hours-<% $day %>-0" type="text" name="hours-<% $day %>-0" class="text hours" />
+
+       <a id="and-<% $day %>" href="#" title="Add another set of hours for this day">and</a>
+
+       <div id="secondary-hours-<% $day %>" class="secondary-hours" style="display:none">
+        <input id="hours-<% $day %>-1" type="text" name="hours-<% $day %>-1" class="text hours" />
+       </div>
+
+       <p id="error-<% $day %>" class="error" style="display:none"></p>
+
+      </div>
+% }
+
+      <p>
+       Examples of valid times include:
+      </p>
+
+      <ul>
+       <li><em>9 - 3</em> - assumes AM for open, PM for close</li>
+       <li><em>9am - 11am</em>, <em>9pm - 3am</em>, <em>9:30am - 3:30pm</em> - also AM, a.m., PM, p.m.</li>
+       <li><em>10 - 21:30</em> - military time</li>
+       <li><em>noon</em>, <em>midnight</em></li>
+       <li><em>24 hours</em> - open all day</li>
+       <li><em>same</em> - same as the previous day</li>
+      </ul>
+
+     </fieldset>
+
+% if ($is_suggestion) {
+     <& /lib/form/suggestion-fieldset.mas &>
+% }
+
+     <div class="form-item">
+      <input class="submit" type="submit" value="Submit" />
+     </div>
+
+    </form>
+    </&>
+
+    <& /lib/form/copyright.mas &>
+
+   </div>
+
+  </div>
+
+<%once>
+use List::MoreUtils qw( all pairwise );
+
+my $days = DateTime::Locale->load('en_US')->day_names();
+</%once>
+
+<%args>
+$vendor
+</%args>
+
+<%init>
+my $is_suggestion = $c->vg_user()->can_edit_vendor($vendor) ? 0 : 1;
+
+my @sets = $vendor->hour_sets_by_day_as_time_ranges();
+
+my %form;
+for my $day ( 0..$#sets )
+{
+    if ( $sets[$day][0]{is_closed} )
+    {
+        $form{"is-closed-$day"} = 1;
+        next;
+    }
+
+    my $part = 0;
+    for my $oc ( @{ $sets[$day] } )
+    {
+        $form{"hours-$day-$part"} = $oc->{hours};
+
+        $part++;
+    }
+}
+</%init>
+
+<%attr>
+requires_js => 1
+</%attr>

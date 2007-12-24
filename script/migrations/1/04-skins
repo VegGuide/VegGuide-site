@@ -1,0 +1,36 @@
+#!/usr/bin/perl -w
+
+use strict;
+use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../../../lib";
+
+use VegGuide::Schema;
+
+my $dbh = VegGuide::Schema->Connect()->driver()->handle();
+
+$dbh->do( 'DELETE FROM Skin' );
+
+my %skins =
+    ( athens  =>
+      { tagline => 'Speak Out Species', owner => 3571, home => 111 },
+
+      uchicago =>
+      { tagline => 'Welcome to the Vegan Society Dining Guide!', owner => 78, home => 93 },
+
+      veganworldorder =>
+      { tagline => 'Your guide to vegetarian food and shopping', owner => 267 },
+
+      www => { tagline => 'Your guide to vegetarian food and shopping', owner => 1 },
+    );
+
+for my $hostname ( keys %skins )
+{
+    my $skin = $skins{$hostname};
+
+    $dbh->do( 'INSERT INTO Skin ( hostname, tagline, owner_user_id, home_location_id ) VALUES ( ?, ?, ?, ? )',
+              {},
+              $hostname, @{ $skin }{ qw( tagline owner home ) },
+            );
+}

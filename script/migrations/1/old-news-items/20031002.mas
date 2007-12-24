@@ -1,0 +1,16 @@
+<%method title>
+
+Search by rating
+
+</%method>
+
+<%method body>
+
+<p>
+
+Entry lists can now be filtered based on ratings, for our
+distinguishing users.
+
+</p>
+
+</%method>

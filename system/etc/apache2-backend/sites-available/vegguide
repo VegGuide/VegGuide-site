@@ -1,0 +1,14 @@
+# modules needed:
+#   auth_basic
+#   authz_default
+#   authz_host  (order, deny)
+#   perl
+
+Listen localhost:8088
+
+PerlOptions +Autoload
+
+<Location />
+    SetHandler modperl
+    PerlResponseHandler VegGuide
+</Location>

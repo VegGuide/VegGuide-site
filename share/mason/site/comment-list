@@ -1,0 +1,9 @@
+<& /lib/comments.mas, comments => $comments, show_location => 1 &>
+
+<%args>
+$comments
+</%args>
+
+<%method page_title>
+All Region Comments
+</%method>

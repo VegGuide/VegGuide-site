@@ -1,0 +1,32 @@
+    <div id="recent-reviews" class="info-box-container front-page-stats">
+     <h2>Recent reviews</h2>
+
+% while ( my ( $vendor, $review, $user ) = $reviews->next() ) {
+%   if ( $last_date ne $review->last_modified_date() ) {
+%     if ($last_date) {
+     </ul>
+%     }
+
+     <h3><& /lib/format/date.mas, date => $review->last_modified_datetime_object(), compact => 1 &></h3>
+%       $last_date = $review->last_modified_date();
+
+     <ul>
+%   }
+
+      <li>
+       <& /lib/link/vendor-review.mas, vendor => $vendor, user => $user &>, 
+       <& /lib/link/location.mas, location => $vendor->location &>
+       (<& /lib/link/user.mas, user => $user &>)
+      </li>
+% }
+% if ( $reviews->count() ) {
+     </ul>
+% }
+
+    </div>
+
+<%init>
+my $reviews = VegGuide::Vendor->RecentlyReviewed( limit => 10 );
+
+my $last_date = '';
+</%init>

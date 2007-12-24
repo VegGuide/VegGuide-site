@@ -1,0 +1,24 @@
+  <div id="body-container">
+
+   <div id="body" class="one-column">
+    <h2>\
+% if ($is_suggestion) {
+Suggest a change for\
+% } else {
+Edit\
+% }
+ <& /lib/l10n/vendor-name.mas, vendor => $vendor &></h2>
+
+    <& /lib/form/entry.mas, %ARGS, is_suggestion => $is_suggestion &>
+
+   </div>
+
+  </div>
+
+<%args>
+$vendor
+</%args>
+
+<%init>
+my $is_suggestion = $c->vg_user()->can_edit_vendor($vendor) ? 0 : 1;
+</%init>

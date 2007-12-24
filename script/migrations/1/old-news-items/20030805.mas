@@ -1,0 +1,14 @@
+<%method title>
+
+Front page layout
+
+</%method>
+
+<%method body>
+
+<p>
+As you can probably see, we've changed the front page layout so that
+it's more compact.
+</p>
+
+</%method>

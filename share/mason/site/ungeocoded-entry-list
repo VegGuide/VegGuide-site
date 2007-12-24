@@ -1,0 +1,28 @@
+<table class="standard-table">
+
+ <thead>
+  <tr>
+   <th class="first">Name</th>
+   <th>Region</th>
+   <th class="last">Created</th>
+  </tr>
+ </thead>
+
+ <tbody>
+% while ( my $vendor = $vendors->next() ) {
+  <tr class="<% $vendors->count() % 2 ? 'odd' : 'even' %>">
+   <td class="first"><& /lib/link/vendor.mas, vendor => $vendor &></td>
+   <td><& /lib/link/location-and-parent.mas, location => $vendor->location() &></td>
+   <td class="last"><& /lib/format/date.mas, date => $vendor->creation_datetime_object() &></td>
+  </tr>
+% }
+ </tbody>
+</table>
+
+<%args>
+$vendors
+</%args>
+
+<%method page_title>
+Entries that are not geocoded, but could be
+</%method>

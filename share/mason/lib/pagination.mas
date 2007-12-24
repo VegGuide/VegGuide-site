@@ -1,0 +1,59 @@
+        <div class="pagination">
+% if ( $pager->total_entries() > $pager->entries_per_page() ) {
+         <ul>
+%   if ( $pager->previous_set() ) {
+          <li class="previous-set"><a href="<% $search->uri( $pager->previous_set() ) | h %>"
+                                      title="Jump to page <% $pager->previous_set() %>">...</a></li>
+%   }
+%   if ( $pager->previous_page() ) {
+          <li><a href="<% $search->uri( $pager->previous_page() ) | h %>"
+                 title="Previous page">&laquo;</a></li>
+%   }
+%   for my $page ( @{ $pager->pages_in_set() } ) {
+          <li<% $pager->is_current_page($page) ? q| class="current"| : ''%>>
+%     unless ( $pager->is_current_page($page) ) {
+<a href="<% $search->uri($page) | h %>" title="Jump to page <% $page %>">\
+%     }
+<% $page %>\
+%     unless ( $pager->is_current_page($page) ) {
+</a>
+%     }
+          </li>
+%   }
+%   if ( $pager->next_page() ) {
+          <li><a href="<% $search->uri( $pager->next_page() ) | h %>"
+                 title="Next page">&raquo;</a></li>
+%   }
+%   if ( $pager->next_set() ) {
+          <li class="next-set"><a href="<% $search->uri( $pager->next_set() ) | h %>"
+                                  title="Jump to page <% $pager->next_set() %>">...</a></li>
+%   }
+         </ul>
+
+         Showing <% $pager->first() %> - <% $pager->last() %> of <% $pager->total_entries() %>
+% } elsif ( $pager->total_entries() ) {
+         Showing all <% $things | h %> (<% $pager->total_entries() %>)
+% } else {
+         No <% $things | h %>
+% }
+
+% if ( $c->vg_user()->is_logged_in() ) {
+         <&| /lib/filter/fill-in-form.mas, objects => [ $c->vg_user() ] &>
+         <form action="<% user_uri( user => $c->vg_user() ) | h %>" method="post" style="display: none">
+          <input type="hidden" name="x-tunneled-method" value="PUT" />
+          <input type="hidden" name="return_to" value="<% $search->base_uri() | h %>" />
+
+          <select name="entries_per_page" class="entries-per-page">
+%   for my $val ( 10, 20, 50, 100 ) {
+           <option value="<% $val %>"><% $val %> rows per page</option>
+%   }
+          </select>
+         </form>
+         </&>
+% }
+        </div>
+<%args>
+$pager
+$search
+$things
+</%args>

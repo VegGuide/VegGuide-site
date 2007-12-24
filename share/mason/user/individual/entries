@@ -1,0 +1,21 @@
+   <div id="body" class="one-column">
+
+    <h2>Entries created by <% $user->real_name() | h %></h2>
+
+% if ($vendors) {
+    <ul>
+%   while ( my $vendor = $vendors->next() ) {
+     <li><& /lib/link/vendor.mas, vendor => $vendor &>
+         in <& /lib/link/location-and-parent.mas, location => $vendor->location() &>
+     </li>
+%   }
+    </ul>
+% } else {
+    This user has not created any entries.
+% }
+   </div>
+
+<%args>
+$user
+$vendors => undef
+</%args>

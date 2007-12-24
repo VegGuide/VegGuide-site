@@ -1,0 +1,15 @@
+  <div id="attribute_id-wpms">
+ 
+   <select id="possible_attribute_id" name="possible_attribute_id" multiple="multiple" size="<% scalar @Attributes + 1 %>">
+   </select>
+
+   <select id="attribute_id" name="attribute_id" multiple="multiple" size="<% scalar @Attributes + 1 %>">
+% foreach my $attribute (@Attributes) {
+    <option value="<% $attribute->attribute_id() %>"><% $attribute->name() | h %></option>
+% }
+   </select>
+  </div>
+
+<%once>
+my @Attributes = VegGuide::Attribute->All();
+</%once>

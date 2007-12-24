@@ -1,0 +1,17 @@
+<%method title>
+
+Quick search by name
+
+</%method>
+
+<%method body>
+
+<p>
+
+There is now a quick "search by name" box in the header right next to
+the "search by zip" option.  This searches the entire system for an
+entry with a name like the one you give it.
+
+</p>
+
+</%method>

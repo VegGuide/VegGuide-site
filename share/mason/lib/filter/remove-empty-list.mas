@@ -1,0 +1,7 @@
+<%init>
+my $content = $m->content();
+
+return unless $content =~ /<li>/;
+
+$m->print($content);
+</%init>

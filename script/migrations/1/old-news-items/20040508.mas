@@ -1,0 +1,16 @@
+<%method title>
+
+Announcements email list
+
+</%method>
+
+<%method body>
+
+<p>
+We now have an email list for those interested in hearing about
+changes and updates to the Guide.  <strong>Update:</strong> this list
+was removed in favor of the <a
+href="/mailman/listinfo/community">VegGuide community list</a>.
+</p>
+
+</%method>

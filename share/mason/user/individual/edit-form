@@ -1,0 +1,11 @@
+  <div id="body" class="one-column">
+
+   <h2>Edit <% $c->vg_user()->user_id() == $user->user_id() ? 'your profile' : $user->real_name() | h %></h2>
+
+   <& /lib/form/user.mas, user => $user &>
+
+  </div>
+
+<%args>
+$user
+</%args>

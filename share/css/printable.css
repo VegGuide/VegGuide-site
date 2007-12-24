@@ -1,0 +1,24 @@
+h1 {
+  font-size: 150%;
+}
+
+div.entry {
+  margin-top: 0.4em;
+  margin-bottom: 0.1em;
+}
+
+div.entry .name {
+  font-weight: bold;
+}
+
+div.entry .veg-level {
+  font-variant: small-caps;
+}
+
+div.entry .day-name {
+  font-style: italic;
+}
+
+div.entry .day-hours {
+  margin-right: 0.4em;
+}

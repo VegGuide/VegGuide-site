@@ -1,0 +1,15 @@
+<%method title>
+
+"Features"
+
+</%method>
+
+<%method body>
+
+<p>
+We now can associate arbitrary "features" with an entry, like
+"Brunch", "Happy Hour", etc.  If you want a new "feature" made
+available, please <a href="/contact.html">let us know</a>.
+</p>
+
+</%method>

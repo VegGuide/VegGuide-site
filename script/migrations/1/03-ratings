@@ -1,0 +1,19 @@
+#!/usr/bin/perl -w
+
+use strict;
+use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../../../lib";
+
+use VegGuide::Schema;
+
+
+system( 'script/vegguide_sync_db.pl' )
+    and die $!;
+
+my $dbh = VegGuide::Schema->Connect()->driver()->handle();
+
+$dbh->do( 'UPDATE VendorRating SET rating = FLOOR( rating / 2 )' );
+$dbh->do( 'UPDATE VendorRating SET rating = 1 WHERE rating = 0' );
+$dbh->do( 'UPDATE VendorRating SET rating_datetime = 2007-01-01' );

@@ -1,0 +1,195 @@
+<p>
+The items here are lised in some sort of vague order based on
+importance and feasibility.
+</p>
+
+<ul class="todo">
+
+ <li>
+  Redo the local navigation "tabs" so they look like real tabs.
+ </li>
+
+ <li>
+  There are a bunch of spots where a "loading" image would improve the
+  UI. Entry image slideshows, filters, etc.
+ </li>
+
+ <li>
+  Pull relevant event data from sites like Meetup.com and associate it
+  with regions.
+ </li>
+
+ <li>
+  Sort of related to the above. It might be useful to allow a set of
+  links to be associated with a region, especially travel guides,
+  local veg groups, etc. The question is how much this overlaps the
+  existing listings, and if it just makes a mess. Of course, lists of
+  links also invite spam.
+ </li>
+
+ <li>
+  "Personal lists" - the ability to create lists of entries with
+  arbitrary names ("Favorites in Phoenix", "Best Chinese Ever"). These
+  lists could be public or private.
+ </li>
+
+ <li>
+  Per-entry review feeds.
+ </li>
+
+ <li>
+  If a user rates an entry they've rated previously, then the stars
+  shown at the top of the page are updated, but the stars by their
+  review (or name in the ratings list) are not updated.
+ </li>
+
+ <li>
+  When sorting by entry name, ignore "The" and "A" prefixes. Maybe
+  also do something similar for other languages ("Der", "Le", etc)?
+ </li>
+
+ <li>
+  The left side listing key for the Google Maps view of an entry list
+  could be improved with more useful info.
+ </li>
+
+ <li>
+  The info box for the per-entry Google map sucks. Improve it
+  (smaller, more useful).
+ </li>
+
+ <li>
+  Allow region maintainers to edit regions they maintain. Also allow
+  them to move entries between their regions.
+ </li>
+
+ <li>
+  Log failed searches so we can tune the search engine.
+ </li>
+
+ <li>
+  Accent-insensitive searching, so "cafe" matches "café".
+ </li>
+
+ <li>
+  The default search radius for geographic searches is 1
+  mile/km. Automatically default to a larger radius if the number of
+  entries found is very small.
+ </li>
+
+ <li>
+  Indicate relative "completeness" of an entry somehow (weighting each
+  field, hours, etc) and indicate this in listings so as to show people
+  which ones could use suggestions/editing.
+ </li>
+
+ <li>
+  Add a feature to allow the creation of PDF versions of this content,
+  in a format suitable for printing and distribution.  Ideally, this
+  would be somewhat customizable, so it could say something like "The
+  Guam Vegetarian Society Dining Guide" as a title.  Also consider
+  providing other formats which are more easily editable, like Tex or
+  DocBook. <em>This has been on the todo list forever, because it's a
+  great idea, but really hard</em>.
+ </li>
+
+ <li>
+  Add a "friends" system.  If you add another user to your friends
+  list, you should be able to do things like filter listings to only show
+  entries that you or your friends liked, or only show the average
+  rating you and your friends gave entries.
+ </li>
+
+ <li>
+  Consider storing a date with ratings and giving newer ratings more
+  weight than old ones
+ </li>
+
+ <li>
+  Investigate how well the site works on mobile devices and improve it
+  necessary.
+ </li>
+
+ <li>
+  "Was this review helpful?"  The most helpful reviews could be
+  featured on the site, given a higher weighting in rating averages,
+  etc. This also provides a way to flag inappropriate reviews for
+  review/deletion (<em>though in practice these are incredibly rare,
+  and therefore basically a non-issue</em>).
+ </li>
+
+ <li>
+  Allow people to upload scanned menus, OCR them, and make the text
+  searchable.
+ </li>
+
+</ul>
+
+<p>
+If you have a suggestion, please <a
+href="mailto:guide@vegguide.org">let us know</a>.
+</p>
+
+<h3>Internals Todo</h3>
+
+<p>
+These items are things to improve the code, but aren't features. Feel
+free to ignore this, it's just for our reference.
+</p>
+
+<ul class="todo">
+
+ <li>
+  The user & location inline search bits do not work in IE. Fix this
+  before exposing this to non-admins.
+ </li>
+
+ <li>
+  Switch to Fey! The goal here is to reduce the number of queries sent
+  to the DBMS, and just have a nicer model in general. This requires
+  making Fey::Class first ;)
+ </li>
+
+ <li>
+  Give categories attributes, including "is_rateable",
+  "prices_are_relevant", "smoking_is_relevant",
+  "reservations_are_relevant", and possibly others. Use this to
+  determine if some given feature applies to a vendor.
+ </li>
+
+ <li>
+  Similar per-location attributes, "has_addresses" and
+  "has_hours". Right now this is hard-coded in VegGuide::Location, but
+  could be expanded (for Airports, Cruise Lines, etc).
+ </li>
+
+ <li>
+  Implement some form of admin tool for cuisines & entry
+  features. These change rarely enough that this could be a simple CLI
+  tool.
+ </li>
+
+ <li>
+  Provide a non-JS version listing filter form?
+ </li>
+
+ <li>
+  The search uri methods are kind of a jumble of overlapping code
+  (map, printable, base, etc) and could probably be cleaned up, in
+  particular the way lots of code has ternary ops to decide which
+  method to call.
+ </li>
+
+ <li>
+  Various bits of code need cleanup.
+  <ul>
+   <li>Map URI generation & its interaction with geocoding.</li>
+   <li>Parsing/formatting of hours</li>
+  </ul>
+ </li>
+
+</ul>
+
+<%method page_title>
+Todo List
+</%method>

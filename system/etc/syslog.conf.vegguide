@@ -1,0 +1,3 @@
+# Just append to this to the end of /etc/syslog.conf
+
+local0.warn                     /var/log/vegguide.log

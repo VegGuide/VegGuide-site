@@ -1,0 +1,8 @@
+<%init>
+my $rows = $m->content();
+
+my $x = 1;
+$rows =~ s{<tr>}{'<tr class="' . ( $x++ % 2 ? 'odd' : 'even' ) . '">'}eg;
+
+$m->print($rows);
+</%init>

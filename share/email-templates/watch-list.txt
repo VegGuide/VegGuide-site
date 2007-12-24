@@ -1,0 +1,23 @@
+There <% PL_V( 'was', $count ) %> <% $count %> new <% PL( 'entry', $count ) %> in the regions on your watch list over the past seven days.
+
+% for my $vendor (@vendors) {
+* <% $vendor->name() %> - <& /lib/format/date.mas, date => $vendor->creation_datetime_object() &>
+  <% entry_uri( vendor => $vendor, with_host => 1 ) %>
+  in <% $vendor->location()->name() %>\
+%   if ( $vendor->location()->parent() ) {
+, <% $vendor->location()->parent()->name() %>\
+%   }
+
+
+% }
+If you want to remove regions from your watch list, you can edit it at <% user_uri( user => $user, path => 'watch_list', with_host => 1 ) %>.
+
+<%args>
+$vendors2
+$user
+</%args>
+
+<%init>
+my @vendors = $vendors2->all();
+my $count = scalar @vendors;
+</%init>

@@ -1,0 +1,93 @@
+#!/usr/bin/perl -w
+
+use strict;
+use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../../../lib";
+
+use File::Basename qw( basename );
+use File::chdir;
+use File::Find::Rule;
+use File::Temp qw( tempdir );
+use VegGuide::User;
+use VegGuide::Vendor;
+use VegGuide::VendorImage;
+
+
+my $admin = VegGuide::User->new( user_id => 1 );
+my $dir = tempdir( CLEANUP => 1 );
+
+extract_tarball();
+import_images();
+
+
+sub extract_tarball
+{
+    my $tarball = "$FindBin::Bin/../../../data/entry-images.tar.gz";
+
+    unless ( -f $tarball )
+    {
+        warn "\n *** No entry-images.tar.gz in the data dir.\n\n";
+        exit;
+    }
+
+    local $CWD = $dir;
+
+    system( 'tar', 'xzf', $tarball )
+        and die "Cannot extract tarball: $!";
+}
+
+sub import_images
+{
+    my %vendor_images;
+
+    my $ext = qr/\.(?:gif|png|jpeg)$/;
+
+    for my $image ( File::Find::Rule
+                        ->new()
+                        ->name($ext)
+                        ->in($dir) )
+    {
+        next if $image =~ m{extra/\d+_thumb};
+
+        my $id;
+        if ( $image =~ /(\d+)$ext/ )
+        {
+            $id = $1 + 0;
+        }
+        elsif ( $image =~ /(\d+)-extra/ )
+        {
+            $id = $1;
+        }
+        else
+        {
+            die "Bad image file name: $image\n";
+        }
+
+        push @{ $vendor_images{$id} }, $image;
+    }
+
+    for my $vendor_id ( sort keys %vendor_images )
+    {
+        for my $image ( sort _by_path @{ $vendor_images{$vendor_id} } )
+        {
+            my $vendor = VegGuide::Vendor->new( vendor_id => $vendor_id );
+            next unless $vendor;
+
+            VegGuide::VendorImage->create_from_file
+                ( file => $image, user => $admin, vendor => $vendor );
+        }
+    }
+}
+
+sub _by_path
+{
+    my ($a_num) = $a =~ m{extra/(\d+)};
+    $a_num ||= 0;
+
+    my ($b_num) = $b =~ m{extra/(\d+)};
+    $b_num ||= 0;
+
+    return $a_num <=> $b_num;
+}

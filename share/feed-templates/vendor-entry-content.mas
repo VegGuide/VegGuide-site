@@ -1,0 +1,35 @@
+% if ( $vendor->long_description() ) {
+<% VegGuide::Util::text_to_html( text => $vendor->long_description() ) %>
+% } else {
+<p>
+<% $vendor->short_description() | h %>
+</p>
+% }
+
+<p>
+ <strong><% uc $vendor->veg_description() | h %></strong>
+</p>
+
+% if ( $vendor->address1() || $vendor->city_region_postal_code() ) {
+<address>
+%   if ( $vendor->address1() ) {
+ <% $vendor->address1() | h %>
+%   }
+%   if ( $vendor->address1() && $vendor->address2() ) {
+ <br />
+%   }
+%   if ( $vendor->address2() ) {
+ <% $vendor->address2() | h %>
+%   }
+%   if ( $vendor->address1() && $vendor->address2() ) {
+ <br />
+%   }
+%   if ( my $crpc = $vendor->city_region_postal_code() )  {
+ <% $crpc | h %>
+%   }
+</address> 
+% }
+
+<%args>
+$vendor
+</%args>

@@ -1,0 +1,17 @@
+<%method title>
+
+Layout Changes
+
+</%method>
+
+<%method body>
+
+<p>
+In order to encourage people to get involved as contributors, we've
+made some layout changes<!-- TRUNCATE --> which hopefully make the add and edit links
+more intuitive.  This involved removing all of the links in the
+left-side boxes, which you probably already noticed.  We're using the
+space freed up by that to display a "random tip" box instead.
+</p>
+
+</%method>

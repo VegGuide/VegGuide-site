@@ -1,0 +1,14 @@
+<% $vendor->name | h %>\
+% if ( $c && defined $vendor->localized_name ) {
+%   if ( $c->client->show_localized_content ) {
+ - <% $c->client->encode( $vendor->localized_name ) | h %>\
+%   } elsif ( $c->client->show_utf8 && $c->client->accepts_language( $vendor->location->locale->language_code ) ) {
+ - <% $vendor->localized_name | h %>
+%   }
+% }
+<%args>
+$vendor
+</%args>
+<%init>
+return if $m->cache_self( expire_in => '1m', key => "$c-" . $vendor->vendor_id );
+</%init>

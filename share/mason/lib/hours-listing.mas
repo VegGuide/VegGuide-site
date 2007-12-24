@@ -1,0 +1,16 @@
+%   foreach my $desc (@descriptions) {
+      <div>
+       <h3><% $desc->{days} | h %>
+       </h3>
+       <ul>
+        <li><% $desc->{hours}[0] | h %></li>
+%     if ( $desc->{hours}[1] ) {
+        <li><% $desc->{hours}[1] | h %></li>
+%     }
+       </ul>
+      </div>
+%   }
+
+<%args>
+@descriptions
+</%args>

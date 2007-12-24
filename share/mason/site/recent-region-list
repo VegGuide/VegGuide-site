@@ -1,0 +1,50 @@
+<&| /lib/filter/fill-in-form.mas, data => { days => $days } &>
+<form action="/region/recent" method="get">
+
+ <div class="form-item">
+  <label for="days">Days:</label>
+  <select id="days" name="days">
+% for my $val ( 7, 14, 30, 90 ) {
+   <option value="<% $val %>"><% $val %></option>
+% }
+  </select>
+ </div>
+
+ <div class="form-item">
+  <input class="submit" type="submit" value="Change" />
+ </div>
+
+</form>
+</&>
+
+<ul>
+% while ( my $location = $locations->next() ) {
+ <li>
+  <& /lib/link/location-and-parent.mas, location => $location &>
+  - created by <& /lib/link/user.mas, user => $location->creator() &>
+  on <& /lib/format/date.mas, date => $location->creation_datetime_object() &>
+  (<% $location->descendants_vendor_count() %> entries)
+
+%   if ( $c->vg_user()->can_edit_location($location) ) {
+  <a class="content-button-small"
+     href="<% region_uri( location => $location, path => 'edit_form' ) | h %>"
+     title="Edit this region">Edit</a>
+%   }
+
+%   if ( $c->vg_user()->can_delete_location($location) ) {
+  <a class="action-button-small"
+     href="<% region_uri( location => $location, path => 'deletion_confirmation_form' ) | h %>"
+     title="Delete this region">Delete</a>
+%   }
+ </li>
+% }
+</ul>
+
+<%args>
+$locations
+$days
+</%args>
+
+<%method page_title>
+Regions added in the last  <% $m->caller_args(-1)->{days} | h %> days
+</%method>

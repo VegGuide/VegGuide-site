@@ -1,0 +1,20 @@
+<%method title>
+
+Spell Checking
+
+</%method>
+
+<%method body>
+
+<p>
+I love you, users, but you cannot spell<!-- TRUNCATE -->.  So now
+submissions will be spell checked and you'll be given a chance to make
+corrections before the final submission.
+</p>
+
+<p>
+My personal favorite misspelling so far, seen from more than one user,
+was "vegitarian" instead of "vegetarian"!
+</p>
+
+</%method>

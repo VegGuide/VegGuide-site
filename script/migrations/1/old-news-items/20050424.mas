@@ -1,0 +1,19 @@
+<%method title>
+
+Search by Address, not Just Zip!
+
+</%method>
+
+<%method body>
+
+<p>
+You can now search for entries in the US by proximity to a given
+address or intersection, in addition to search for entries near a
+given zip code<!-- TRUNCATE -->.
+</p>
+
+<p>
+Just use the "Search" link at the top of the page to check it out.
+</p>
+
+</%method>

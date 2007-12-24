@@ -1,0 +1,10 @@
+<%method title>
+Review and Rate an Entry Together
+</%method>
+
+<%method body>
+<p>
+The form for reviewing entries now lets you give it a rating at the
+same time.
+</p>
+</%method>

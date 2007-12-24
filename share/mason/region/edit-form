@@ -1,0 +1,20 @@
+  <div id="body-container">
+
+   <div id="body" class="one-column">
+    <h2>
+     Edit <% $location->name() | h %>
+    </h2>
+
+    <& /lib/form/region.mas, location => $location &>
+
+   </div>
+
+  </div>
+
+<%args>
+$location
+</%args>
+
+<%attr>
+is_one_column => 1
+</%attr>

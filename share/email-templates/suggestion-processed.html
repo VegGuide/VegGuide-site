@@ -1,0 +1,34 @@
+<p>
+Your suggestion to change the <% $type %> for
+<& /lib/link/vendor.mas, vendor => $vendor, with_host => 1, english_only => 1 &>
+in <& /lib/link/location-and-parent.mas, location => $vendor->location(), with_host => 1, english_only => 1 &>
+was <% $accepted ? '' : 'not ' %>accepted.
+</p>
+
+<p>
+This suggestion was reviewed by <& /lib/link/user.mas, user => $user, with_host => 1 &>.
+</p>
+
+% unless ( string_is_empty($comment) ) {
+<p>
+<% $user->real_name() | h %> said:
+</p>
+
+<p>
+<quote>
+"<% $comment | h %>"
+</quote>
+</p>
+% }
+
+<p>
+Thanks for your contribution to VegGuide.Org.
+</p>
+
+<%args>
+$vendor
+$user
+$type
+$accepted
+$comment
+</%args>

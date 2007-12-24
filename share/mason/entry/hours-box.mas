@@ -1,0 +1,30 @@
+    <div id="hours" class="info-box-container">
+
+     <h2 id="hours-title">Hours</h2>
+
+     <div class="info-box">
+
+% if ( $vendor->has_hours_info() ) {
+      <& /lib/hours-listing.mas, descriptions => [ $vendor->hours_as_descriptions() ], mark_today => 1 &>
+% } else {
+      <p>
+       We don't have any info on this entry's hours. Please add them if you know.
+      </p>
+% }
+
+      <div>
+       <a href="<% entry_uri( vendor => $vendor, path => 'edit_hours_form' ) | h %>"
+          class="content-button">Edit</a><& /lib/link/help.mas, name => 'editing' &>
+      </div>
+
+     </div>
+
+    </div>
+
+<%args>
+$vendor
+</%args>
+
+<%init>
+return unless $vendor->location()->has_hours();
+</%init>

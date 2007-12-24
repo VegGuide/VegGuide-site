@@ -1,0 +1,28 @@
+    <div id="site-news" class="info-box-container front-page-stats">
+     <h2>Site News</h2>
+
+% while ( my $item = $news->next() ) {
+%   if ( $last_date ne $item->creation_datetime_object()->date() ) {
+%     if ($last_date) {
+     </ul>
+%     }
+     <h3><& /lib/format/date.mas, date => $item->creation_datetime_object(), compact => 1 &></h3>
+
+     <ul>
+%   }
+
+      <li><a href="/site/news#item-<% $item->item_id() %>" title="Read the site news"><% $item->title() | h %></a></li>
+
+%   $last_date = $item->creation_datetime_object()->date();
+% }
+
+% if ( $news->count() ) {
+     </ul>
+% }
+
+    </div>
+
+<%init>
+my $news = VegGuide::NewsItem->All( limit => 2 );
+my $last_date = '';
+</%init>

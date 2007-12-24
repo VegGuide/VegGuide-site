@@ -1,0 +1,15 @@
+<%method title>
+
+Welcome, Canada
+
+</%method>
+
+<%method body>
+
+<p>
+<a
+href="/location/view.html?location_id=19&amp;new_query=1">Canada</a>
+is now open for new entries.  Go to it!
+</p>
+
+</%method>

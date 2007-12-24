@@ -1,0 +1,19 @@
+<a href="<% region_uri( location => $location, @path, with_host => $with_host ) | h %>" class="region" title="<% $location->name() | h %>">\
+% if ($text) {
+<% $text %>\
+% } elsif ($english_only) {
+<% $location->name | h %>\
+% } else {
+<& /lib/l10n/location-name.mas, location => $location &>\
+% }
+</a>\
+<%args>
+$location
+$english_only => 0
+$path => undef
+$text => $m->content()
+$with_host => 0
+</%args>
+<%init>
+my @path = $path ? ( path => $path ) : ();
+</%init>

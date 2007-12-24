@@ -1,0 +1,15 @@
+<%method title>
+
+New Server!
+
+</%method>
+
+<%method body>
+
+<p>
+We've moved to a new, faster server with more bandwidth.  Thanks to
+Eric Waters for the server and <a
+href="http://www.xmission.com/">XMission</a> for the colocation.
+</p>
+
+</%method>

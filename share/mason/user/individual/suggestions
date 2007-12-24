@@ -1,0 +1,273 @@
+   <div id="body" class="one-column" id="suggestions">
+
+    <h2>Suggestions you can review</h2>
+
+% while ( my $suggestion = $suggestions->next() ) {
+    <h3><& /lib/link/vendor.mas, vendor => $suggestion->vendor() &></h3>
+
+    <div class="suggestion-attribution">
+     Suggested by <& /lib/link/user.mas, user => $suggestion->user() &>
+     on <& /lib/format/datetime.mas, datetime => $suggestion->creation_datetime_object() &>
+    </div>
+
+%   if ( my $comment = $suggestion->comment() ) {
+    <div class="suggestion-comment">
+     <% $suggestion->user()->real_name() | h %> said: <% $comment | h %>
+    </div>
+%   }
+
+%   my $comp = '.display_' . $suggestion->type() . '_changes';
+    <& $comp, suggestion => $suggestion &>
+
+    <hr />
+% }
+
+   </div>
+
+<%args>
+$user
+$suggestions
+</%args>
+
+<%def .display_core_changes>
+<table class="standard-table suggestion">
+
+ <thead>
+  <tr>
+   <th class="label first"></th>
+   <th class="current">Current</th>
+   <th class="suggested last">Suggested</th>
+  </tr>
+ </thead>
+
+ <tbody>
+
+ <&| /lib/filter/odd-even-rows.mas &>
+% foreach my $k (@cols_to_show) {
+ <tr>
+  <td class="first"><label><% VegGuide::Schema->ColumnNameAsLabel($k) | h %></label></td>
+  <td>
+%   my $current = $vendor->$k();
+%   if ( string_is_empty( $current ) ) {
+   <em>none</em>
+%   } else {
+   <% $current | h %>
+%   }
+  </td>
+  <td class="last">
+%   if ( string_is_empty( $text->{$k} ) ) {
+   <strong>delete</strong>
+%   } else {
+   <% $text->{$k} | h %>
+%   }
+  </td>
+ </tr>
+% }
+
+% if ( my $desc = $suggestion->veg_description() ) {
+ <tr>
+  <td class="first"><label>Veg friendliness</label></td>
+  <td><% $vendor->veg_description | h %></td>
+  <td class="last"><% $desc | h %></td>
+ </tr>
+% }
+
+% if ( my $range = $suggestion->price_range() ) {
+ <tr>
+  <td class="first"><label>Price range</label></td>
+  <td><% $vendor->price_range()->description() | h %></td>
+  <td class="last"><% $range->description() | h %></td>
+ </div>
+% }
+
+% if ( $suggestion->change_exists('allows_smoking') ) {
+ <tr>
+  <td class="first"><label>Is smoke free</label></td>
+  <td><% $vendor->is_smoke_free_description() %></td>
+  <td class="last"><% $suggestion->is_smoke_free_description() %></span>
+ </tr>
+% }
+
+% foreach my $col ( qw( is_wheelchair_accessible accepts_reservations ) ) {
+%   next unless $suggestion->change_exists($col);
+ <tr>
+  <td class="first"><label><% VegGuide::Schema->ColumnNameAsLabel($col) | h %>:</label></td>
+%   my $desc_meth = $col . '_description';
+  <td><% $vendor->$desc_meth() %></td>
+  <td class="last"><% $suggestion->$desc_meth() %></span>
+ </tr>
+% }
+
+% if ( my %cat_changes = $suggestion->category_changes() ) {
+ <tr>
+  <td class="first"><label>Categories</label></td>
+  <td><% join ', ', map { $_->name() } $suggestion->vendor()->categories() | h %></td>
+  <td class="last">
+%   for my $k ( 'add', 'remove' ) {
+%     if ( @{ $cat_changes{$k} } ) {
+    <label><% ucfirst $k %>:</label>
+    <% join ', ', map { $_->name() } @{ $cat_changes{$k} } | h %>
+    <br />
+%     }
+%   }
+  </td>
+ </tr>
+% }
+
+% if ( my %cuisine_changes = $suggestion->cuisine_changes() ) {
+ <tr>
+  <td class="first"><label>Cuisines</label></td>
+  <td><% join ', ', map { $_->name() } $suggestion->vendor()->cuisines() | h %></td>
+  <td class="last">
+%   for my $k ( 'add', 'remove' ) {
+%     if ( @{ $cuisine_changes{$k} } ) {
+    <label><% ucfirst $k %>:</label>
+    <% join ', ', map { $_->name() } @{ $cuisine_changes{$k} } | h %>
+    <br />
+%     }
+%   }
+  </td>
+ </tr>
+% }
+
+% if ( $suggestion->change_exists('is_cash_only') ) {
+ <tr>
+  <td class="first"><label>Is cash only</label></td>
+  <td><% $vendor->is_cash_only() ? 'yes' : 'no' %></td>
+  <td class="last"><% $suggestion->is_cash_only() ? 'yes' : 'no' %></td>
+ </tr>
+% }
+
+% if ( my %payment_option_changes = $suggestion->payment_option_changes() ) {
+ <tr>
+  <td class="first"><label>Payment options</label></td>
+  <td><% join ', ', map { $_->name() } $suggestion->vendor()->payment_options() | h %></td>
+  <td class="last">
+%   for my $k ( 'add', 'remove' ) {
+%     if ( @{ $payment_option_changes{$k} } ) {
+    <label><% ucfirst $k %>:</label>
+    <% join ', ', map { $_->name() } @{ $payment_option_changes{$k} } | h %>
+    <br />
+%     }
+%   }
+  </td>
+ </tr>
+% }
+
+% if ( my %attribute_changes = $suggestion->attribute_changes() ) {
+ <tr>
+  <td class="first"><label>Features</label></td>
+  <td><% join ', ', map { $_->name() } $suggestion->vendor()->attributes() | h %></td>
+  <td class="last">
+%   for my $k ( 'add', 'remove' ) {
+%     if ( @{ $attribute_changes{$k} } ) {
+    <label><% ucfirst $k %>:</label>
+    <% join ', ', map { $_->name() } @{ $attribute_changes{$k} } | h %>
+    <br />
+%     }
+%   }
+  </td>
+ </tr>
+% }
+
+ </&>
+
+ </tbody>
+
+ <tfoot>
+  <tr>
+   <td colspan="3">
+    <& .buttons, suggestion => $suggestion &>
+   </td>
+  </tr>
+ </tfoot>
+
+</table>
+
+<%args>
+$suggestion
+</%args>
+
+<%init>
+my $text = $suggestion->text_changes();
+
+my @cols_to_show =
+    ( sort
+      grep { exists $text->{$_} }
+      map { $_->name() } grep { $_->is_character() || $_->is_blob() }
+      VegGuide::Vendor->table()->columns()
+    );
+
+my $vendor = $suggestion->vendor();
+</%init>
+
+</%def>
+
+<%def .buttons>
+    <form class="inline" action="/suggestion/<% $suggestion->vendor_suggestion_id() %>" method="POST">
+     <input type="hidden" name="x-tunneled-method" value="PUT" />
+     <input type="hidden" name="accepted" value="1" />
+
+% if ( $suggestion->user_wants_notification() ) {
+     <div>
+      The user who made this suggestion will receive an email when it
+      is accepted or rejected. If you are rejecting this suggestion,
+      please include a polite note explaining why. If you are accepting
+      it, feel free to include a note of thanks.
+     </div>
+
+     <textarea name="comment" rows="4" cols="50"></textarea>
+% }
+
+     <div class="suggestion-buttons">
+      <input type="submit" class="submit" name="accept" value="Accept" />
+      <input type="submit" class="submit" name="reject" value="Reject" disabled="disabled" />
+     </div>
+    </form>
+
+<%args>
+$suggestion
+</%args>
+</%def>
+
+<%def .display_hours_changes>
+<table class="standard-table suggestion">
+
+ <thead>
+  <tr>
+   <th class="label"></th>
+   <th class="current">Current</th>
+   <th class="suggested">Suggested</th>
+  </tr>
+ </thead>
+
+ <tbody>
+  <tr>
+   <td><label>Hours</label></td>
+   <td class="hours">
+    <& /lib/hours-listing.mas, descriptions => [ $suggestion->vendor()->hours_as_descriptions() ] &>
+   </td>
+   <td class="hours">
+    <& /lib/hours-listing.mas, descriptions => [ $suggestion->new_hours_descriptions() ] &>
+   </td>
+  </tr>
+ </tbody>
+
+ <tfoot>
+  <tr>
+   <td colspan="3">
+    <& .buttons, suggestion => $suggestion &>
+   </td>
+  </tr>
+ </tfoot>
+
+</table>
+
+<%args>
+$suggestion
+</%args>
+</%def>
+
+<%attr>
+requires_js => 1
+</%attr>

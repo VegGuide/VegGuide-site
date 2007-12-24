@@ -1,0 +1,15 @@
+<%method title>
+
+Google Maps!
+
+</%method>
+
+<%method body>
+
+<p>
+Map links for entries in the US now go to Google Maps<!-- TRUNCATE -->,
+which has a much nicer UI than MapQuest.  Canada still uses MapQuest,
+as Google's coverage for Canada is currently incomplete.
+</p>
+
+</%method>

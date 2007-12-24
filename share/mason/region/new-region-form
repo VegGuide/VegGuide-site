@@ -1,0 +1,29 @@
+  <div id="body-container">
+
+   <div id="body" class="one-column">
+    <h2>
+% if ($location) {
+     Add a new region in <& /lib/l10n/location-name.mas, location => $location &></h2>
+% } else {
+     Add a new root region
+% }
+    </h2>
+
+    <& /lib/form/region.mas, location => $new_location &>
+
+   </div>
+
+  </div>
+
+<%args>
+$location => undef
+</%args>
+
+<%init>
+my %p = $location ? ( parent_location_id => $location->location_id() ) : ();
+my $new_location = VegGuide::Location->potential(%p);
+</%init>
+
+<%attr>
+is_one_column => 1
+</%attr>

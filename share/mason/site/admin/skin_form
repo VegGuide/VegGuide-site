@@ -1,0 +1,5 @@
+<& /lib/form/skin.mas, skin => VegGuide::Skin->potential() &>
+
+<%method page_title>
+Make a new skin
+</%method>

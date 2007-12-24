@@ -1,0 +1,30 @@
+<div id="slideshow-lightbox" class="slideshow-for-<% $vendor->vendor_id() %>" style="display: none">
+
+ <a href="#" class="lightbox2-close" title="close"
+    ><img src="/images/close-button.png" alt="close button" /></a>
+
+ <h3>Images of <% $vendor->name () | h %></h3>
+
+ <div id="slideshow-controls-container">
+
+  <div id="slideshow-next-container">
+  </div>
+
+  <div id="slideshow-prev-container">
+  </div>
+
+  <div class="force-clear">&nbsp;</div>
+
+ </div>
+
+ <div id="slideshow-image-container">
+ </div>
+
+ <div id="slideshow-caption-container">
+ </div>
+
+</div>
+
+<%args>
+$vendor
+</%args>

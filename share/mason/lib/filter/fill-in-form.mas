@@ -1,0 +1,38 @@
+<%once>
+my $fif = HTML::FillInForm->new();
+</%once>
+
+<%args>
+$data    => undef
+@objects => ()
+$fill_password => 0
+</%args>
+
+<%init>
+my $args = $c->session()->{saved_params};
+
+my @data_sources;
+push @data_sources, $args if keys %$args;
+push @data_sources, $data if defined $data;
+push @data_sources, grep { defined } @objects;
+
+if (@data_sources)
+{
+    my $form = $m->content();
+
+    my $bridge = VegGuide::FillInFormBridge->new(@data_sources);
+
+    my $filled = $fif->fill( scalarref     => \$form,
+                             fobject       => $bridge,
+                             fill_password => $fill_password,
+                           );
+
+    $m->print($filled);
+}
+else
+{
+    $m->print( $m->content );
+}
+
+return;
+</%init>

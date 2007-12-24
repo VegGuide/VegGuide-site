@@ -1,0 +1,17 @@
+      <img src="/images/ratings/<% $image_uri %>"
+           class="png-filter <% $vendor_id ? "rate-$vendor_id" : '' %>"
+           height="18" width="90" />
+
+<%args>
+$rating
+$color
+$vendor_id => undef
+</%args>
+
+<%init>
+my $rounded  = nearest( 0.25, $rating );
+my $int      = int $rounded;
+my $fraction = $rounded - $int;
+
+my $image_uri = sprintf( '%s-%d-%02d.png', $color, $int, ( $fraction * 100 ) );
+</%init>

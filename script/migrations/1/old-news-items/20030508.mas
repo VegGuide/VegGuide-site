@@ -1,0 +1,14 @@
+<%method title>
+
+Search by zip code feature added
+
+</%method>
+
+<%method body>
+
+<p>
+You can now search for entries within a certain distance from a given
+zipcode, instead of just looking at a specific location.
+</p>
+
+</%method>

@@ -1,0 +1,13 @@
+<%method title>
+
+User list is publically available.
+
+</%method>
+
+<%method body>
+
+<p>
+The <a href="/user/">user list</a> is now publically available.
+</p>
+
+</%method>

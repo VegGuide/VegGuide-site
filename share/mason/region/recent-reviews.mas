@@ -1,0 +1,37 @@
+    <div class="info-box-container">
+     <h2>Recent reviews</h2>
+
+     <div id="recent-reviews" class="info-box">
+
+% while ( my ( $vendor, $review, $user ) = $reviews->next() ) {
+%   if ( $last_date ne $review->last_modified_date() ) {
+%     if ($last_date) {
+     </ul>
+%     }
+
+     <h3><& /lib/format/date.mas, date => $review->last_modified_datetime_object(), compact => 1 &></h3>
+%       $last_date = $review->last_modified_date();
+
+     <ul>
+%   }
+
+      <li>
+       <& /lib/link/vendor-review.mas, vendor => $vendor, user => $user &>
+       by 
+       <& /lib/link/user.mas, user => $user &>
+      </li>
+% }
+      </ul>
+     </div>
+    </div>
+
+<%args>
+$location
+</%args>
+
+<%init>
+my $reviews = $location->most_recent_reviews( limit => 5 );
+
+my $last_date = '';
+</%init>
+

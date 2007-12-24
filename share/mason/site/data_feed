@@ -1,0 +1,287 @@
+<p>
+Our RSS feeds are in <a href="http://purl.org/rss/1.0/">RSS version
+1.0</a> format. Our intention is to eventually move everyone over to
+using our <a href="/site/rest_api">REST API</a> rather than using
+these feeds, but they are not going away any time soon.
+</p>
+
+<p>
+Most of the interesting content is provided via our custom RSS module,
+<strong>mod_regveg</strong>.  When we talk about an "entry" in
+describing the elements this module defines, we are referring to a
+single database entry such as a restaurant, grocery, cofee shop, etc.
+</p>
+
+<p>
+If you retrieve a location that contains other locations, then the
+feed will contain all the entries for that location and the locations
+it contains.  For example, the feed for <a href="/region/4">New York
+City</a> contains all the entries
+for <a href="/region/5">Manhattan</a>,
+<a href="/region/7">Brooklyn</a>, etc.
+</p>
+
+<p>
+Feeds with more than
+<strong><% VegGuide::Location->DataFeedDynamicLimit() %></strong>
+entries are too large to generate dynamically, so these feeds are
+generated once per day.
+</p>
+
+<p>
+Each <strong>&lt;item&gt;</strong> element will represent a single
+entry.  The item's <strong>rdf:about</strong> attribute (and
+it's <strong>link</strong> element) will be a link to the main page
+for that item.  The item's <strong>title</strong> element will be the
+entry's name.  The item's <strong>description</strong> element will
+contain a short description for the entry (no more than 255
+characters).
+</p>
+
+<p>
+The <strong>mod_regveg</strong> module defines the following &lt;item&gt;
+elements:
+</p>
+
+<ul>
+
+ <li><strong>&lt;regveg:long-description&gt;</strong> (#CDATA) - A long
+ description for the entry.  This may contain HTML.</li>
+
+ <li><strong>&lt;regveg:phone&gt;</strong> (#PCDATA) - Entry's phone number.  The exact
+ format of this phone number varies by region.</li>
+
+ <li><strong>&lt;regveg:address1&gt;</strong>  (#PCDATA) - Entry's address.</li>
+
+ <li><strong>&lt;regveg:address2&gt;</strong> (#PCDATA) - Additional address info for
+ the entry.</li>
+
+ <li><strong>&lt;regveg:neighborhood&gt;</strong> (#PCDATA) - Entry's neighborhood.</li>
+
+ <li><strong>&lt;regveg:directions&gt;</strong> (#PCDATA) - Directions to the entry.</li>
+
+ <li><strong>&lt;regveg:city&gt;</strong> (#PCDATA) - Entry's city.</li>
+
+ <li><strong>&lt;regveg:region&gt;</strong> (#PCDATA) - Entry's state/province/region.</li>
+
+ <li><strong>&lt;regveg:postal-code&gt;</strong> (#PCDATA) - Entry's postal (zip) code.</li>
+
+ <li><strong>&lt;regveg:country&gt;</strong> (#PCDATA) - Entry's country.</li>
+
+ <li><strong>&lt;regveg:latitude&gt;</strong> (#PCDATA) - Entry's latitude.</li>
+
+ <li><strong>&lt;regveg:longitude&gt;</strong> (#PCDATA) - Entry's longitude.</li>
+
+ <li><strong>&lt;regveg:home-page&gt;</strong> (#PCDATA) - An external link for
+ the entry, which will usually be that entry's website.</li>
+
+ <li><strong>&lt;regveg:average-rating&gt;</strong> float - Average rating for
+ the entry.  This may not be included if the entry has not yet been
+ rated.</li>
+
+ <li><strong>&lt;regveg:rating-count&gt;</strong> integer - Number of ratings
+ for the entry.  This may not be included if the entry has not yet
+ been rated.</li>
+
+ <li><strong>&lt;regveg:price-range&gt;</strong> (#PCDATA) - The price range for
+ the entry.  This will be given as a string like "12-18".  The numbers
+ are in the local currency for the entry.</li>
+
+ <li><strong>&lt;regveg:price-range-number&gt;</strong> integer (1-5) - The
+ price range expressed a integer from 1 to 5, with 1 being the least
+ expensive and 5 being the most expensive.</li>
+
+ <li><strong>&lt;regveg:veg-level&gt;</strong> (#PCDATA) - How veg*n the entry
+ is.  This can be one of "vegetarian-friendly", "vegan-friendly",
+ "vegetarian" (which by itself implies <strong>not</strong> vegan-friendly),
+ "vegetarian/vegan-friendly", or "vegan".  This element may be empty,
+ in which case the entry is either none of the above, <strong>or</strong> it is
+ an organization.</li>
+
+ <li><strong>&lt;regveg:veg-level-number&gt;</strong> integer (0-5) - How veg*n
+ the entry is, as a number from 0-5.  These numbers mean the
+ following:
+
+  <ol>
+   <li>vegetarian-friendly</li>
+   <li>vegan-friendly</li>
+   <li>vegetarian</li>
+   <li>vegetarian/vegan-friendly</li>
+   <li>vegan</li>
+  </ol>
+
+ 0 means none of the above.  If an entry is for an organization (like
+ an activist or social group), then this value is always 0.</li>
+
+ <li><strong>&lt;regveg:allows-smoking&gt;</strong> (#PCDATA) - This will be one
+ of "yes", "no", or "unknown".</li>
+
+ <li><strong>&lt;regveg:accepts-reservations&gt;</strong> (#PCDATA) - This will
+ be one of "yes", "no", or "unknown".</li>
+
+ <li><strong>&lt;regveg:is-wheelchair-accesible&gt;</strong> (#PCDATA) - This
+ will be one of "yes", "no", or "unknown".</li>
+
+ <li><strong>&lt;regveg:creation-datetime&gt;</strong> (#PCDATA) - A datetime in
+ <a href="http://www.w3.org/TR/NOTE-datetime">W3CDTF</a> format.  This
+ will always be given as a UTC datetime (a time zone offset of
+ 0:00).</li>
+
+ <li><strong>&lt;regveg:last-modified-datetime&gt;</strong> (#PCDATA) - A datetime
+ in <a href="http://www.w3.org/TR/NOTE-datetime">W3CDTF</a> format.
+ This will always be given as a UTC datetime (a time zone offset of
+ 0:00).</li>
+
+ <li><strong>&lt;regveg:edit-link&gt;</strong> (#PCDATA) - Contains a URL for
+ the form which allows users to edit the entry.</li>
+
+ <li><strong>&lt;regveg:edit-hours-link&gt;</strong> (#PCDATA) - Contains a URL
+ for the form which allows users to edit the entry's hours.</li>
+
+ <li><strong>&lt;regveg:read-reviews-link&gt;</strong> (#PCDATA) - Contains a
+ URL for the page which contains the entry's reviews and ratings.
+ Currently, this is the main info page for the entry, but this may
+ change in the future.</li>
+
+ <li><strong>&lt;regveg:write-review-link&gt;</strong> (#PCDATA) - Contains a
+ URL for the form which allows a user to write a review for the
+ entry.</li>
+
+ <li><strong>&lt;regveg:region-link&gt;</strong> (#PCDATA) - Contains a URL for
+ the region in which this entry is located.</li>
+
+ <li><strong>&lt;regveg:map-link&gt;</strong> (#PCDATA) - Contains a URL that
+ links to a map for the entry.  Note that this will be to a site like
+ MapQuest or MultiMap.  These sites may restrict how the links may be
+ used.  Please see their Terms of Service before using these
+ links.</li>
+
+ <li><strong>&lt;regveg:image-link&gt;</strong> (#PCDATA) - Contains a URL for
+ the entry's image.</li>
+
+ <li><strong>&lt;regveg:image-x&gt;</strong> (#PCDATA) - Contains the width of
+ the entry's image.</li>
+
+ <li><strong>&lt;regveg:image-y&gt;</strong> (#PCDATA) - Contains the height of
+ the entry's image.</li>
+
+ <li><strong>&lt;regveg:categories&gt;</strong> - This element will consist of
+ one or more <strong>&lt;regveg:category&gt;</strong> elements, each of which
+ contains #PCDATA, such as "Restaurant", "Bar", "General Store",
+ etc.</li>
+
+ <li><strong>&lt;regveg:cuisines&gt;</strong> - This element will consist of one
+ or more <strong>&lt;regveg:cuisine&gt;</strong> elements, each of which
+ contains #PCDATA like "Chinese", "Indian", etc.</li>
+
+ <li><strong>&lt;regveg:payment-options&gt;</strong> - This element
+ will consist of one or more <strong>&lt;regveg:payment-option&gt;</strong>
+ elements, each of which contains #PCDATA like "American Express",
+ "Check", etc.  Note that it is assumed that all entries accept cash
+ as a payment option.</li>
+
+ <li><strong>&lt;regveg:is-cash-only&gt;</strong> - If this element exists, it
+ will be set to "yes".</li>
+
+ <li><strong>&lt;regveg:features&gt;</strong> - This element will consist of one
+ or more <strong>&lt;regveg:feature&gt;</strong> elements, each of which
+ contains #PCDATA like "Brunch", "Happy Hour", "Macrobiotic",
+ etc.</li>
+
+ <li>
+ <p><strong>&lt;regveg:hours&gt;</strong> - This element will consist of a
+ structure of one or more <strong>&lt;regveg:open-close&gt;</strong> elements.
+ Every <strong>&lt;regveg:open-close&gt;</strong> element will always contain a
+ <strong>day</strong> attribute.  This attribute is an integer from 0 to 6, with
+ Sunday as 0 and Saturday as 6.
+ </p>
+
+ <p>
+ This element may contain the following two attributes:
+ </p>
+
+ <ul>
+  <li><strong>open</strong> (#PCDATA) - A time in hours and minutes, such as
+  "08:30".  The time will always be given in 24 hour (military)
+  time.</li>
+
+  <li><strong>close</strong> (#PCDATA) - A time in hours and minutes, such as
+  "13:45".  The time will always be given in 24 hour (military)
+  time.</li>
+
+ </ul>
+
+ <p>
+ Times may range from "00:00" to "23:59".  The closing time may be
+ <i>earlier</i> than the opening time.  If this is the case, then it
+ means that the closing time occurs on the next day.  It is also
+ possible that the opening and closing time will both be "00:00", in
+ which case that indicates that it is open all day (24 hours) on that
+ particular day of the week.
+ </p>
+
+ <p>
+  If it does not contain <strong>open</strong> and <strong>close</strong> attributes, then
+  the <strong>&lt;regveg:open-close&gt;</strong> element must contain <i>one
+  of</i> the following attributes:
+ </p>
+
+ <ul>
+  <li><strong>closed</strong> true - If given, this attribute is always true,
+  and it indicates that the entry is closed for that day of the
+  week.</li>
+
+  <li><strong>unknown</strong> true - If given, this attribute is always true,
+  and it indicates that the we don't know when the entry opens or
+  closes for that day of the week.  It is possible that some days
+  will be listed as unknown, while others are known.</li>
+
+ </ul>
+
+ <p>
+ Note that a given day may have multiple opening and closing times, as
+ restaurants frequently close between lunch and dinner.
+ </p>
+
+</ul>
+
+<p>
+A single item will probably not contain all of these elements.  The
+only elements which are guaranteed to be present are the standard RSS
+1.0 elements "title", "link", and "description".
+</p>
+
+<h5>Retrieving the Feeds</h5>
+
+<p>
+Each region has an "RSS Feed" link.  If you want a feed of all the
+regions, then check out the <a href="/site/feeds">site feeds</a>.
+</p>
+
+<h5>Sample Code</h5>
+
+<p>
+Some sample code for retrieving and parsing the data feeds is available:
+</p>
+
+<ul>
+ <li><strong>get-vegguide-rss-feed-pl</strong> - Retrieves an RSS data feed
+ from this site.  Written in Perl.  <a
+ href="/static/rss-code/get-vegguide-rss-feed-pl">Download</a>.</li>
+
+ <li><strong>get-and-parse-vegguide-rss-feed-php</strong> - Retrieves an RSS
+ data feed from this site and parses it.  Written in PHP.
+ Contributed by Dac Chartrand.  <a
+ href="/static/rss-code/get-and-parse-vegguide-rss-feed-php">Download</a>.</li>
+
+</ul>
+
+<h5>Example</h5>
+
+<p>
+Here is a <a href="/static/sample.rss">sample data feed</a>.
+</p>
+
+<%method page_title>
+RSS Data Feeds
+</%method>

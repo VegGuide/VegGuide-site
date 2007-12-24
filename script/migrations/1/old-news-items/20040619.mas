@@ -1,0 +1,16 @@
+<%method title>
+
+RSS Feed Changes
+
+</%method>
+
+<%method body>
+
+<p>
+The "all locations" feed is no longer available as a dynamically
+generated feed.  Instead, we will generate it once per night.  This
+feed has gotten too large to regenerate for each request.  See the <a
+href="/rss/">RSS page</a> for more details.
+</p>
+
+</%method>

@@ -1,0 +1,41 @@
+% if (@locations) {
+<h2>Regions matching "<% $search_text | h %>"</h2>
+
+<& /lib/locations-matching-text.mas, locations => \@locations, text => $search_text &>
+% }
+
+% if ($vendor_count) {
+<h2>Entries matching "<% $search_text | h %>"</h2>
+
+<ul>
+%   while ( my $vendor = $vendors->next() ) {
+ <li><& /lib/link/vendor.mas, vendor => $vendor &>
+     in <& /lib/link/location-and-parent.mas, location => $vendor->location() &>
+ </li>
+%   }
+</ul>
+
+%   if ( $vendor_count > 5 ) {
+%     $vendor_search->set_cursor_params( limit => $c->vg_user()->entries_per_page() );
+<a href="<% $vendor_search->uri() | h %>" title="All matching entries"
+   >Browse all matching entries (<% $vendor_count %> total)</a>.
+%   }
+% }
+
+% unless ( @locations || $vendor_count ) {
+<p>
+There were no regions or entries that matched your search. Sorry.
+</p>
+% }
+
+<%args>
+$search_text
+@locations
+$vendor_search
+$vendors
+$vendor_count
+</%args>
+
+<%method page_title>
+Search Results for "<% $m->caller_args(-2)->{search_text} | h %>"
+</%method>

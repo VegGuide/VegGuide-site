@@ -1,0 +1,12 @@
+<% $dt->strftime($format) %>\
+<%args>
+$datetime
+$long => 1
+</%args>
+<%init>
+my $dt = ref $datetime ? $datetime : DateTime::Format::MySQL->parse_datetime($datetime);
+
+$dt->set_time_zone('local');
+
+my $format = $long ? '%D at %I:%M %p %Z' : '%Y-%m-%d %H:%M';
+</%init>

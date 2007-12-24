@@ -1,0 +1,35 @@
+% while ( my $locale = $locales->next() ) {
+<div>
+ <h3><% $locale->locale_code() | h %></h3>
+ <% $locale->name() | h %> (<% $locale->localized_name() | h %>)
+
+ <a class="content-button-small locale-edit-toggle"
+    href="#<% $locale->locale_id() %>" title="Edit <% $locale->name() | h %>">Edit</a>
+
+ <& /lib/form/locale.mas, locale => $locale &>
+
+</div>
+% }
+
+<hr />
+
+<div id="new-locale">
+ <h3>Make a new locale</h3>
+ <& /lib/form/locale.mas, locale => $potential_locale &>
+</div>
+
+<%args>
+$locales
+</%args>
+
+<%init>
+my $potential_locale =
+    VegGuide::Locale->potential( requires_localized_addresses => 0,
+                                 address_format_id =>
+                                 VegGuide::AddressFormat->Standard()->address_format_id(),
+                               );
+</%init>
+
+<%method page_title>
+Locales
+</%method>

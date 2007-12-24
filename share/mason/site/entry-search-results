@@ -1,0 +1,14 @@
+<& /lib/radius-change.mas, search => $search &>
+
+<& /lib/filter-div.mas, search => $search &>
+
+<& /lib/entries-table.mas, search => $search, pager => $pager &>
+
+<%args>
+$search
+$pager
+</%args>
+
+<%method page_title>
+<% $m->caller_args(-1)->{search}->title() | h %>
+</%method>

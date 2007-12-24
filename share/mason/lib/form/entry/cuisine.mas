@@ -1,0 +1,31 @@
+   <select id="possible_cuisine_id" name="possible_cuisine_id"
+           multiple="multiple" size="10" style="display: none">
+   </select>
+
+   <select id="cuisine_id" name="cuisine_id" multiple="multiple" size="10">
+% foreach my $cuisine (@Cuisines) {
+    <& .cuisine_option, cuisine => $cuisine, depth => 0 &>
+% }
+   </select>
+
+<%once>
+my @Cuisines = VegGuide::Cuisine->root_cuisines();
+</%once>
+
+<%def .cuisine_option>
+    <option value="<% $cuisine->cuisine_id() %>">\
+% if ($depth) {
+<% '&nbsp;' x $depth %>- \
+% }
+<% $cuisine->name() | h %></option>
+% for my $cuisine (@children) {
+    <& .cuisine_option, cuisine => $cuisine, depth => $depth + 1 &>
+% }
+<%args>
+$cuisine
+$depth
+</%args>
+<%init>
+my @children = $cuisine->children();
+</%init>
+</%def>

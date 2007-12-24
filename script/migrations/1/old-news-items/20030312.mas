@@ -1,0 +1,17 @@
+<%method title>
+New "is it open?" Feature
+</%method>
+
+<%method body>
+<p>
+It is now possible to filter a location's listing so that it only
+shows entries that are open for the next hour from the current time.
+Additionally, when viewing an entry, the details box on the right says
+"open for the next hour" if this is the case.
+</p>
+
+<p>
+Of course, this only works with entries for which we have hours, so
+please make sure to enter them when creating new entries.
+</p>
+</%method>

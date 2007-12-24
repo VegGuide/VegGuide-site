@@ -1,0 +1,63 @@
+ <div id="main">
+
+  <div id="title-and-info-container" class="no-nav one-column">
+   <& /lib/rounded-corners-top.mas &>
+
+   <div id="page-title-and-info">
+    <h1 id="page-title">Log In</h1>
+   </div>
+
+  </div>
+
+ </div>
+
+ <div id="body-container">
+
+  <div id="body" class="one-column">
+
+   <&| /lib/filter/fill-in-form.mas &>
+   <form action="/user/authentication" method="post">
+    <input type="hidden" name="return_to" value="<% $return_to | h %>" />
+
+    <& /lib/form/errors.mas &>
+    <fieldset>
+     <legend>Your credentials</legend>
+
+     <div class="form-item">
+      <label for="email_address">Email:</label>
+      <input id="email_address" class="text" type="text" name="email_address" value="" size="40" />
+     </div>
+
+     <div class="form-item">
+      <label for="password">Password:</label>
+      <input id="password" class="text" type="password" name="password" />
+     </div>
+
+     <div class="form-item">
+      <label for="remember">Remember me:</label>
+      <input id="remember" class="checkbox" type="checkbox" name="remember" />
+     </div>
+    </fieldset>
+
+    <div class="form-item">
+     <input class="submit" type="submit" value="Log In" />
+    </div>
+
+   </form>
+   </&>
+
+   <p>
+    <a href="/user/forgot_password_form?return_to=<% $return_to | uh %>">Forgot your password</a>?
+   </p>
+
+   <p>
+    <a href="/user/new_user_form?return_to=<% $return_to | uh %>">Make a new account</a>.
+   </p>
+
+  </div>
+
+ </div>
+
+<%init>
+my $return_to = $c->request()->param('return_to') || $c->session()->{saved_params}{return_to} || '/';
+</%init>

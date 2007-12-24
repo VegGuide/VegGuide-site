@@ -1,0 +1,43 @@
+#!/usr/bin/perl -w
+
+use strict;
+use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../../../lib";
+
+use DateTime;
+use DateTime::Format::MySQL;
+use File::Basename qw( basename );
+use File::Slurp qw( read_file );
+use VegGuide::NewsItem;
+
+
+for my $file ( glob "$FindBin::Bin/old-news-items/*" )
+{
+    my ( $y, $m, $d, $hour ) = basename($file) =~ /^(\d\d\d\d)(\d\d)(\d\d)(?:-(\d))?/;
+
+    $hour ||= 0;
+
+    my $dt = DateTime->new( year => $y, month => $m, day => $d, hour => $hour );
+
+    my $content = read_file($file);
+
+    my ( $title, $body ) =
+        $content =~ m{<%method\s+title>\n
+                      (.+)
+                      </%method>
+                      \s+
+                      <%method\s+body>\n
+                      (.+)
+                      </%method>}xism;
+
+    chomp $title;
+    chomp $body;
+
+    VegGuide::NewsItem->create
+        ( title => $title,
+          body  => $body,
+          creation_datetime => DateTime::Format::MySQL->format_datetime($dt),
+        );
+}

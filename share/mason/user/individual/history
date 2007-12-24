@@ -1,0 +1,46 @@
+   <div id="body" class="one-column">
+
+    <h2>History for <% $user->real_name() | h %></h2>
+
+% if ($logs) {
+    <table id="users-table" class="standard-table">
+
+     <thead>
+      <tr class="table-heading">
+       <th id="date-time-header first">Date &amp; time</th>
+       <th id="action-header">Action</th>
+       <th id="entry-name-header">Entry or Region</th>
+       <th id="comment-header last">Comment</th>
+      </tr>
+     </thead>
+
+     <tbody>
+%   while ( my $log = $logs->next() ) {
+      <tr class="<% $logs->count() % 2 ? 'odd' : 'even' %>">
+       <td class="first"><& /lib/format/datetime.mas, datetime => $log->datetime(), long => 0 &></td>
+       <td><% $log->type() | h %></td>
+       <td>
+%     if ( my $vendor = $log->vendor() ) {
+        <& /lib/link/vendor.mas, vendor => $vendor &>
+%     } elsif ( my $location = $log->location() ) {
+        <& /lib/link/location-and-parent.mas, location => $location &>
+%     } else {
+        <strong>deleted entry</strong>
+%     }
+       </td>
+       <td class="last"><% $log->comment() || '' | h %></td>
+      </tr>
+%   }
+     </tbody>
+
+    </table>
+% } else {
+    This user has no activity history.
+% }
+
+   </div>
+
+<%args>
+$user
+$logs => undef
+</%args>

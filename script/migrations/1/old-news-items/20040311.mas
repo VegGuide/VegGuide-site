@@ -1,0 +1,15 @@
+<%method title>
+
+Major code overhaul
+
+</%method>
+
+<%method body>
+
+<p>
+Much of the code driving this site has been revised.  If you notice a
+bug, please <a href="/contact.html">let us know</a>.  But hopefully,
+there are none.
+</p>
+
+</%method>

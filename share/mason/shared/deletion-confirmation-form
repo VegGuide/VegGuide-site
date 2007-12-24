@@ -1,0 +1,36 @@
+ <div id="main">
+
+  <div id="title-and-info-container" class="no-nav one-column">
+   <& /lib/rounded-corners-top.mas &>
+
+   <div id="page-title-and-info">
+    <h1 id="page-title">Really delete this <% $thing | h %>?</h1>
+   </div>
+
+  </div>
+
+ </div>
+
+ <div id="body-container">
+
+  <div id="body" class="one-column">
+
+   <p>
+    <strong>Once you delete <% $name | h %>, this <% $thing | h %> will be gone forever!</strong>
+   </p>
+
+   <form action="<% $uri | h %>" method="post">
+    <input type="hidden" name="x-tunneled-method" value="DELETE" />
+
+    <input class="submit" type="submit" value="Yes, delete this <% $thing | h %>" />
+   </form>
+
+  </div>
+
+ </div>
+
+<%args>
+$thing
+$name
+$uri
+</%args>

@@ -1,0 +1,35 @@
+ <div id="main">
+
+  <div id="title-and-info-container" class="one-column">
+   <& /lib/rounded-corners-top.mas &>
+
+   <div id="page-title-and-info">
+    <h1 id="page-title"><& SELF:page_title &></h1>
+   </div>
+
+  </div>
+
+  <div id="local-nav">
+%# whitespace between end of one list item and start of another shows up as gaps between menu items
+<&| /lib/filter/set-current-local-nav.mas &>
+<&| /lib/filter/remove-whitespace.mas &>
+   <ul>
+    <li><a href="/stats/site">Site stats</a></li>
+    <li><a href="/stats/top20">Top 20 Lists</a></li>
+    <li><a href="/stats/charts">Charts</a></li>
+   </ul>
+</&>
+</&>
+  </div>
+
+ </div>
+
+ <div id="body-container">
+
+  <div id="body" class="one-column">
+
+% $m->call_next();
+
+  </div>
+
+ </div>

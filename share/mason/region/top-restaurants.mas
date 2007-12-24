@@ -1,0 +1,35 @@
+   <div class="info-box-container">
+    <h2>Top Restaurants</h2>
+
+    <div id="top-restaurants" class="info-box">
+
+% if (@vendors) {
+     <ul>
+%   for my $vendor (@vendors) {
+%     my ( $rating, $count ) = $vendor->weighted_rating_and_count();
+      <li><span class="rating"><% $rating %> (<% $count %>)</span>
+          <br />
+          <span class="name"><& /lib/link/vendor.mas, vendor => $vendor&></span>
+      </li>
+%   }
+     </ul>
+
+     Only includes restaurants with at least six ratings.
+% } else {
+     <p>
+      There are no restaurants with at least six ratings. Why not rate some?
+     </p>
+% }
+    </div>
+
+   </div>
+
+<%args>
+$location
+</%args>
+
+<%init>
+return unless $location->can_have_vendors();
+
+my @vendors = $location->top_restaurants( limit => 10 )->all();
+</%init>

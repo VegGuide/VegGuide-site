@@ -1,0 +1,37 @@
+<p>
+There <% $verb | h %> location<% @locations > 1 ? 's' : '' %> which
+might match the name you provided.
+</p>
+
+<& /lib/locations-matching-text.mas, locations => \@locations, text => $params{name} &>
+
+<form action="/region" method="post">
+% while ( my ( $k, $v ) = each %params ) {
+%   next if string_is_empty($v);
+ <input type="hidden" name="<% $k | h %>" value="<% $v | h %>" />
+% }
+
+ <div class="form-item">
+  <label for="skip_duplicate_check">I mean it!</label>
+  <input id="skip_duplicate_check" type="checkbox" name="skip_duplicate_check" value="1" />
+  <p>Check this if your new region isn't the same as any of the regions listed above.</p>
+ </div>
+
+ <div class="form-item">
+  <input class="submit" type="submit" value="Submit" />
+ </div>
+
+</form>
+
+<%args>
+@locations
+%params
+</%args>
+
+<%init>
+my $verb = @locations > 1 ? 'are several' : 'is one';
+</%init>
+
+<%method page_title>
+Found other regions like <% $m->caller_args(-2)->{params}{name} | h %>
+</%method>

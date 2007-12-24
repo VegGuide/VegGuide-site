@@ -1,0 +1,17 @@
+<p>
+Your search, "<% $search_text | h %>", looked like an address or
+postal code, but doesn't seem to actually be a valid address.
+</p>
+
+<p>
+Maybe you meant to
+<a href="<% uri( path => '/site/search', query => { search_text => $search_text, name_only => 1 } ) | h %>"
+   title="Search by name only">search by name</a>, not address?
+</p>
+<%args>
+$search_text
+</%args>
+
+<%method page_title>
+Search by Address Failed
+</%method>

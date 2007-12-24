@@ -1,0 +1,26 @@
+#!/usr/bin/perl -w
+
+use strict;
+use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../../../lib";
+
+use VegGuide::Vendor;
+
+
+$| = 1;
+
+my $verbose = grep { $_ eq '-v' } @ARGV;
+my $new_only = grep { $_ eq '-n' } @ARGV;
+
+my $vendors = VegGuide::Vendor->All();
+
+while ( my $vendor = $vendors->next() )
+{
+    next if $new_only && defined $vendor->latitude();
+
+    print $vendor->name(), "\n" if $verbose;
+    $vendor->update_geocode_info();
+}
+

@@ -1,0 +1,38 @@
+  <div id="body-container">
+
+   <div id="body" class="one-column">
+    <h2>Write a review of <& /lib/l10n/vendor-name.mas, vendor => $vendor &></h2>
+
+    <p>
+    Please see our <&| /lib/link/help.mas, name => 'review-guidelines' &>review guidelines</&> if this is your first time writing a review
+    here</a>.
+    </p>
+
+    <p>
+    Here's a quick summary:
+    </p>
+
+    <ul>
+     <li><b>No personal attacks</b>.  Don't trash anyone else in your review.</li>
+     <li><b>Don't mention non-vegetarian food in your review</b>.</li>
+    </ul>
+
+    <& /lib/form/comment.mas, action_uri => $uri, comment => $comment, type => 'review' &>
+
+   </div>
+
+  </div>
+
+<%args>
+$vendor
+$comment
+</%args>
+
+<%init>
+my $uri = entry_uri( vendor => $vendor, path => 'review' );
+</%init>
+
+<%attr>
+show_left_side => 0
+</%attr>
+

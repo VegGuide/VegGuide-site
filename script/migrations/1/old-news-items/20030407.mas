@@ -1,0 +1,14 @@
+<%method title>
+
+Users can now review suggested changes for entries they created.
+
+</%method>
+
+<%method body>
+
+<p>
+If someone else suggests a change to an entry you created, you will
+now be able view that suggestion, and accept or reject it.
+</p>
+
+</%method>

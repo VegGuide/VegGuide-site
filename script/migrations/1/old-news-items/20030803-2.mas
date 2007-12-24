@@ -1,0 +1,18 @@
+<%method title>
+
+New logo, layout tweaks, guests see same links as everyone else.
+
+</%method>
+
+<%method body>
+
+<p>
+You may have noticed our spiffy new logo, which Matt recently created,
+and there have been some minor layout changes at the top of each page.
+Also, guests now see the same "add entry", "review", etc. links that a
+logged-in user sees.  If a guest clicks on a link that requires a
+login, they are taken to the login page.  After logging in or creating
+an account, they're taken back to where they wanted to go originally.
+</p>
+
+</%method>

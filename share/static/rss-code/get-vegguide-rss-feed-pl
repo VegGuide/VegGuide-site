@@ -1,0 +1,101 @@
+#!/usr/bin/perl -w
+#
+# Copyright (c) 2003-2004 Compassionate Action for Animals.  All
+# rights reserved.  This program is free software; you can
+# redistribute it and/or modify it under the same terms as Perl
+# itself.
+
+use strict;
+
+use File::Basename qw( basename );
+use Getopt::Long;
+use LWP;
+use URI;
+
+my %opts;
+
+GetOptions( 'feed:s'     => \$opts{feed},
+            'hostname:s' => \$opts{hostname},
+            'output:s'   => \$opts{output},
+            'help'       => \$opts{help},
+          );
+
+if ( $opts{help} )
+{
+    usage();
+    exit;
+}
+
+unless ( defined $opts{feed} )
+{
+    warn "\nYou must specify a feed to be retrieved.\n";
+
+    usage();
+    exit;
+}
+
+my @query;
+if ( $opts{feed} =~ /^\d+$/i )
+{
+    push @query, "location_id=$opts{feed}";
+}
+else
+{
+    warn "\nInvalid feed option ($opts{feed}).\n";
+
+    usage();
+    exit;
+}
+
+my $output = \*STDOUT;
+if ( defined $opts{output} )
+{
+    open $output, '>', $opts{output}
+        or die "Cannot open $opts{output}: $!";
+}
+
+my $ua = LWP::UserAgent->new;
+
+$ua->agent( "VegGuide RSS script 0.3" );
+
+{
+    my $uri = URI->new();
+    $uri->scheme('http');
+
+    $uri->host( $opts{hostname} || 'www.vegguide.org' );
+    $uri->path( '/region/' . $opts{feed} . '.rss' );
+
+    my $response = $ua->get($uri);
+
+    unless ( $response->is_success )
+    {
+        warn "Error getting RSS feed.\n";
+        warn $response->message, "\n";
+        exit;
+    }
+
+    print $output $response->content;
+}
+
+
+sub usage
+{
+    my $name = basename($0);
+
+    print <<"EOF";
+$name
+
+This script gets the specified RSS feed from VegGuide.org.
+
+Options:
+
+  --feed       A location id.
+
+  --hostname   A hostname for the feed. Defaults to www.vegguide.org.
+
+  --output     A filename to which the feed should be saved.
+               If not given, the feed is output to STDOUT.
+
+EOF
+
+}

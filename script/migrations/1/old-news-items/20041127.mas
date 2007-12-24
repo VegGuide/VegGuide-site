@@ -1,0 +1,20 @@
+<%method title>
+
+Events
+
+</%method>
+
+<%method body>
+
+<p>
+The guide now supports events<!-- TRUNCATE -->.
+An event can be added to either a location or a specific entry.  Use
+this to list things like sales, dine-outs, veg festivals, etc.
+</p>
+
+<p>
+Later, we will be adding support for private events, invitations, and
+RSVP lists.
+</p>
+
+</%method>

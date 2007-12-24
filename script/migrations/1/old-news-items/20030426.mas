@@ -1,0 +1,30 @@
+<%method title>
+
+Smoking/Smoke-free and wheelchair-accessibility available in searches; Search "memory"; New "Internet" region
+
+</%method>
+
+<%method body>
+
+<p>
+It is now possible to narrow a location's listing based on whether an
+entry allows smoking or is smoke-free.  You can also specify that only
+wheelchair-accessible entries be shown.
+</p>
+
+<p>
+Several users have noted that it would be convenient if your last
+search could be recalled when you return to a location after viewing
+one of its entries.  This has been implemented.  Now, when you return
+to a location after viewing (and possibly editing) one of its entries,
+your filters remain in place, and you return to the results page you
+were previously viewing.
+</p>
+
+<p>
+Finally, you might have noticed that we added a new region called
+"Internet" to our locations.  This new "location" is for things like
+online stores, which don't really have a location at all.
+</p>
+
+</%method>

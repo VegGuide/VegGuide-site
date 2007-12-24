@@ -1,0 +1,60 @@
+    <&| /lib/filter/fill-in-form.mas, data => \%form_data, objects => [ $comment ] &>
+    <form action="<% $action_uri | h %>" method="post" id="comment-form">
+     <input type="hidden" name="user_id" value="<% $comment->user_id() || $c->vg_user()->user_id() %>" />
+
+     <fieldset>
+      <legend>Share Your Thoughts</legend>
+
+% if ($show_rating_input) {
+      <div class="form-item">
+       <label>Rating:</label>
+%   for my $val ( 1..5 ) {
+       <input id="rating-<% $val %>" name="rating" type="radio" value="<% $val %>">
+       <label class="sub-label" for="rating-<% $val %>"><% VegGuide::Vendor->RatingDescription($val) %></label>
+%   }
+% }
+
+      <div class="form-item">
+       <label for="comment"><% ucfirst $type | h %>:</label>
+       <textarea id="comment" class="text long high" rows="" cols="" name="comment"></textarea>
+
+       <p>
+        You can add <&| /lib/link/help.mas, name => 'wiki-formatting' &>simple formatting</&>
+        to your <% $type %>s.
+       </p>
+
+      </div>
+
+     </fieldset>
+
+     <div class="form-item">
+      <input class="submit" type="submit" value="Submit" />
+     </div>
+
+    </form>
+    </&>
+
+    <& /lib/form/copyright.mas &>
+
+<%args>
+$action_uri
+$comment
+$type => 'comment'
+</%args>
+
+<%init>
+my %form_data;
+
+my $show_rating_input =
+        $type eq 'review'
+        && ( ! $comment->is_live()
+             || $comment->user_id() == $c->vg_user()->user_id()
+             || $c->vg_user()->is_admin()
+           );
+
+if ($show_rating_input) {
+    my $vendor = $comment->vendor();
+    $form_data{rating} = $vendor->rating_from_user( $comment->user() );
+    $form_data{rating} ||= 3;
+}
+</%init>

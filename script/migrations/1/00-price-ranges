@@ -1,0 +1,21 @@
+#!/usr/bin/perl -w
+
+use strict;
+use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../../../lib";
+
+use VegGuide::Schema;
+
+my $dbh = VegGuide::Schema->Connect()->driver()->handle();
+
+# The price_range_ids are hardcoded in the vegguide_sync_db script so this works.
+$dbh->do( 'UPDATE Vendor SET price_range_id = 1 WHERE price_range_id IN ( 1, 2 )' );
+$dbh->do( 'UPDATE Vendor SET price_range_id = 2 WHERE price_range_id = 3' );
+$dbh->do( 'UPDATE Vendor SET price_range_id = 3 WHERE price_range_id IN ( 4, 5 )' );
+
+$dbh->do( 'DELETE FROM PriceRange' );
+
+system( 'script/vegguide_sync_db.pl', '--data' )
+    and die $!;

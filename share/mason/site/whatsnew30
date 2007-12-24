@@ -1,0 +1,102 @@
+<p>
+There are a lot of changes in VegGuide 3.0. The first, and most
+obvious, was a major overhaul of the look and feel of the site. The
+old version was a bit too programmerish. Out UI goal for VG3 is to
+make the site easier to use. Specifically, we've tried to reduce the
+number of links on each page, as well as using consistent link and
+button styles for similar actions.
+</p>
+
+<p>
+Hopefully these changes will make the site more approachable for
+newcomers, and we suspect even repeat visitors may discover features
+they didn't notice before.
+</p>
+
+<h2>New Stuff</h2>
+
+<h3>Google Maps</h3>
+
+<p>
+One of the major new features in this version of VegGuide is our
+deeper Google Maps integration. You can now map any listing of
+entries. Thanks to John Eckman, who also worked on this feature and
+provided the icons we use on map listings.
+</p>
+
+<p>
+We also provide a Google Map embedded in each entry's page whenever
+possible.
+</p>
+
+<p>
+One of the things we're really excited about is that this feature
+works in many locations all around the world. The countries included
+so far are <% list_to_english( sort VegGuide::Geocoder->Countries() ) | h %>.
+</p>
+
+<h3>Listing filters</h3>
+
+<p>
+We've done a major overhaul on the filtering feature. Besides the UI
+changes, you can now filter any type of listing (by region, name, or
+proximity to an address).
+</p>
+
+<h3>Improved Search</h3>
+
+<p>
+Searching has been much improved. In particular, if you search by name
+and your search matches both regions and entries, you'll see both
+things in the results.
+</p>
+
+<h3>Ratings</h3>
+
+<p>
+Ratings in VegGuide 3.0 are now on a scale of 1 to 5, rather than 1 to
+10. We also use a
+<&| /lib/link/help.mas, name => 'weighted-ratings' &>weighted rating system</&>
+which should make sorting a list by
+rating more useful.
+</p>
+
+<h3>Everything is Bookmarkable</h3>
+
+<p>
+The URI scheme for VegGuide 3.0 has been totally redone. This means
+that everything is bookmarkable, including search results, even after
+applying filters, sorting, etc.
+</p>
+
+<h2>Things which are gone</h2>
+
+<h3>Events</h3>
+
+<p>
+We removed the events feature. At one point, we had a vague idea that
+VegGuide could provide an experience similar to what meetup provides,
+but that would be a huge amount of work. As it stood, the events
+feature was not featureful enough to be really useful, and my informal
+polling suggested most people didn't use it.
+</p>
+
+<p>
+Instead, VegGuide will pull the calendar feeds offered by Meetup (and
+any other relevant site) to display local veg-related meetups. In
+general, the site should be a better job of finding things you search
+for.
+</p>
+
+<h3>Home Regions</h3>
+
+<p>
+This fairly minor feature is gone, but may return in a more robust
+form in the future.
+</p>
+
+
+
+<%method page_title>
+What's New in VegGuide 3.0?
+</%method>

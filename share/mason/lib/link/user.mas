@@ -1,0 +1,10 @@
+<a href="<% user_uri( user => $user, @path, with_host => $with_host ) %>" class="user" title="<% $user->real_name() | h %>">\
+<% $user->real_name() | h %></a>\
+<%args>
+$user
+$path => undef
+$with_host => 0
+</%args>
+<%init>
+my @path = $path ? ( path => $path ) : ();
+</%init>

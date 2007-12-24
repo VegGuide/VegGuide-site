@@ -1,0 +1,13 @@
+as observed under apache2/mp2 under VMWare - 11-20
+
+Starts off with just under 100MB shared
+
+After a few requests gets to around 75MB shared, 25MB private
+
+Add 10MB to be conservative
+
+75MB + ( 12 * 35MB ) = 495MB
+
+front ends use almost nothing (1.5MB shared, 1.5MB private)
+
+50 front end procs max = 75MB

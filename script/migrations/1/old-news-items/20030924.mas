@@ -1,0 +1,14 @@
+<%method title>
+
+Extra images for vendors
+
+</%method>
+
+<%method body>
+
+<p>
+Users can now upload extra images for vendors.  We added this feature
+so people could upload things like pictures of food and scanned menus.
+</p>
+
+</%method>

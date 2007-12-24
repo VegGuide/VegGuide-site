@@ -1,0 +1,19 @@
+<%method title>
+
+Welcome, Singapore!
+
+</%method>
+
+<%method body>
+
+<p>
+
+We've opened up the Singapore portion of the guide, and we already
+have a few entries thanks to Winson Yap.  In the future, we plan to
+open up more areas around the world, once we've worked out some
+localization features.
+
+</p>
+
+</%method>
+  

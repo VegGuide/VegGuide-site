@@ -1,0 +1,13 @@
+ <ul class="radio-boolean">
+  <li>
+   <input class="radio" type="radio" name="<% $name | h %>" value="1" id="<% $name | h %>-yes" />
+   <label for="<% $name | h %>-yes">Yes</label>
+  </li>
+  <li>
+   <input class="radio" type="radio" name="<% $name | h %>" value="0" id="<% $name | h %>-no" />
+   <label for="<% $name | h %>-no">No</label>
+  </li>
+ </ul>
+<%args>
+$name
+</%args>

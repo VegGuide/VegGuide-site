@@ -1,0 +1,14 @@
+<%method title>
+
+Login is no longer required for any RSS feeds
+
+</%method>
+
+<%method body>
+
+<p>
+The "data" RSS feeds used to require a login, but I got rid of this<!-- TRUNCATE -->.
+It's too annoying if you're trying to automate things.
+</p>
+
+</%method>

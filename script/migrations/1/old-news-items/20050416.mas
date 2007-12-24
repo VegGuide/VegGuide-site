@@ -1,0 +1,49 @@
+<%method title>
+
+New Look, CSS layout, and More
+
+</%method>
+
+<%method body>
+
+<p>
+As you can probably see, VegGuide.Org is sporting an entirely new
+look.  There are also some new features<!-- TRUNCATE -->.
+</p>
+
+<p>
+First, the site's layout is now done entirely through CSS.  The upside
+is that this makes it possible to customize the layout for different
+<a href="/faq.html#skins">skins</a>.  The downside is that this
+layout only works in IE6, Mozilla (Firefox), Opera 7, and Safari.  If
+you're using an older version of IE, we recommend that you <a
+href="http://www.getfirefox.com/">upgrade to Firefox</a>, or at least
+upgrade to IE6.
+</p>
+
+<p>
+Second, we're starting to experiment with some Javascript-based
+features.  The "Search" link at the top of the page to is one such
+experiment.  The "Refine your search" link on the listings page is
+another even fancier one.  If you don't have Javascript turned on, the
+site will continue to function, just without some of the flashy bits.
+</p>
+
+<p>
+Registered users can now create a <a
+href="/logged-in/personal_skin.html">personal skin</a>.  This lets
+you play around with redesigning the Guide however you want.  Feel
+free to publish your skin's URL.
+</p>
+
+<p>
+There are also many smaller changes, like some graphs on the <a
+href="/stats/">stats page</a>.
+</p>
+
+<p>
+If you experience any layout bugs, please <a href="/contact.html">let
+us know</a>.
+</p>
+
+</%method>

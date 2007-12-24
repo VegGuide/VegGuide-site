@@ -1,0 +1,11 @@
+  <div id="body" class="one-column">
+
+   <h2>Make a new account</h1>
+
+   <& /lib/form/user.mas, user => $user, %ARGS &>
+
+  </div>
+
+<%init>
+my $user = VegGuide::User->potential();
+</%init>

@@ -1,0 +1,92 @@
+#body-and-boxes-container #body.large-boxes {
+  width: 69%;
+  margin-right: 30%;
+}
+
+ul.left-list {
+  width: 45%;
+}
+
+ul.right-list {
+  width: 45%;
+}
+
+#body-and-boxes-container #body {
+  width: 77%;
+  margin-right: 22%;
+  min-width: 700px;
+}
+
+#rating-info {
+  width: 38%;
+}
+
+/* see http://www.mattheerema.com/archive/getting-fieldset-backgrounds-and-legends-to-behave-in-ie */
+form fieldset {
+  margin-top: 2em;
+  padding: 2em 0.5em 0.5em 0.5em;
+  position: relative;
+}
+
+form fieldset legend {
+  position: absolute;
+  top: -1em;
+  left: .5em;
+}
+
+#title-and-info-container {
+  padding-bottom: 0;
+}
+
+#local-nav {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+#local-nav ul {
+  margin-bottom: -0.38em;
+}
+
+#local-nav ul li {
+  display: block;
+  float: left;
+}
+
+form select optgroup {
+  display: block;
+}
+
+.info-box-container {
+  margin-top: 0.5em;
+}
+
+#top-restaurants ul li {
+  list-style-position: outside;
+  padding-left: 0;
+  margin-left: 0;
+}
+
+#left-container ul li, #right-container ul li {
+  padding: 0 0 0 0;
+  margin: 0 0 0 12px;
+}
+
+/* IE does not allow border on tr elements, and it's dotted border
+   look terrible. */
+
+table.standard-table tr th.first, table.standard-table tr td.first {
+  border-left: 1px solid #08B000;
+}
+
+table.standard-table tr td.last, table.standard-table tr th.last {
+  border-right: 1px solid #08B000;
+}
+
+table.standard-table tr td, table.standard-table tr td {
+  border-top: 1px solid #08B000;
+}
+
+table.standard-table tfoot tr td {
+  border-top: 1px solid #08B000;
+  border-bottom: 1px solid #08B000;
+}

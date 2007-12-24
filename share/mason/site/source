@@ -1,0 +1,13 @@
+<p>
+The source for this site is in a Subversion repository
+at <a href="https://svn.urth.org/svn/RegVeg">https://svn.urth.org/svn/RegVeg</a>.
+</p>
+
+<p>
+The VegGuide source code is distributed under the same terms as Perl
+itself. Please see the LICENSE file in repository for details.
+</p>
+
+<%method page_title>
+VegGuide.Org Source Code
+</%method>

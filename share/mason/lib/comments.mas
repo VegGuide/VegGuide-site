@@ -1,0 +1,64 @@
+% while ( my ( $comment, $user, @extra ) = $comments->next() ) {
+%   $vendor = shift @extra if @extra;
+     <a name="user-id-<% $user->user_id() %>"></a>
+     <div class="comment <% $comments->count % 2 ? 'odd' : 'even' %>">
+%   if ($show_location) {
+      <div class="region">
+       <& /lib/link/location-and-parent.mas, location => $comment->location() &>
+      </div>
+%   }
+      <div class="attribution-and-rating">
+
+       <div class="attribution">
+        <& /lib/link/user.mas, user => $user &> -
+        <& /lib/format/date.mas, date => $comment->last_modified_datetime() &>
+       </div>
+
+%   if ($vendor) {
+<& .rating, vendor => $vendor, user => $user &>
+%   }
+      </div>
+
+      <% VegGuide::Util::text_to_html( text => $comment->comment(), first_class => 'first', class => 'comment' ) %>
+
+%   if ( $c->vg_user()->can_edit_comment($comment) ) {
+      <div class="review-buttons">
+       <a href="<% $comment->can('vendor')
+                   ? entry_uri( vendor => $comment->vendor(), path => 'review_form/' . $user->user_id() )
+                   : region_uri( location => $comment->location(), path => 'comment_form/' . $user->user_id() ) | h %>"
+          class="content-button">Edit</a>
+%     if ( $c->vg_user()->can_delete_comment($comment) ) {
+        <a href="<% $comment->can('vendor')
+                        ? entry_uri( vendor => $comment->vendor(),
+                                     path   => 'review/' . $user->user_id() . 'deletion_confirmation_form' )
+                        : region_uri( location => $comment->location(),
+                                      path  => 'comment/' . $user->user_id() . 'deletion_confirmation_form' ) | h %>"
+           class="action-button">Delete</a>
+%     }
+      </div>
+%   }
+
+     </div>
+% }
+
+<%args>
+$comments
+$vendor => undef
+$show_location => 0
+</%args>
+
+<%def .rating>
+       <div class="rating">
+        <& /lib/stars-for-rating.mas, rating => $rating, color => 'green' &>
+       </div>
+
+<%args>
+$vendor
+$user
+</%args>
+
+<%init>
+my $rating = $vendor->rating_from_user($user);
+return unless defined $rating;
+</%init>
+</%def>

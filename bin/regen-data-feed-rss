@@ -1,0 +1,17 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use VegGuide::Location;
+
+
+VegGuide::Location->DataFeedRSSFile();
+
+for my $location ( VegGuide::Location->All() )
+{
+    next unless $location->descendants_vendor_count() > 500;
+
+    $location->data_feed_rss_file();
+}
+

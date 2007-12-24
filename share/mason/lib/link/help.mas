@@ -1,0 +1,8 @@
+<a class="<% $text eq '?' ? 'inline-help-link' : '' %>" title="learn about <% $title_text | h %>" href="/site/help#<% $name | h %>"><% $text %></a>\
+<%args>
+$name => lc ( $m->content() || '' )
+$text => $m->content() || '?'
+</%args>
+<%init>
+( my $title_text = $name ) =~ s/-/ /g;
+</%init>

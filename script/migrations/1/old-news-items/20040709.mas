@@ -1,0 +1,18 @@
+<%method title>
+
+More RSS Feed Changes
+
+</%method>
+
+<%method body>
+
+<p>
+The data feeds have changed their structure a bit.  Please see the <a
+href="/rss/data_feed.html">data feed page</a> for details.  In
+addition, it's now possible to get a combined "recent entries/reviews"
+feed for a location.  Finally, you can get feeds for parent locations,
+so you can get a feed for New York City that will include updates to
+Manhattan, Queens, Brooklyn, etc.
+</p>
+
+</%method>

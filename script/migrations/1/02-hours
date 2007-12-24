@@ -1,0 +1,16 @@
+#!/usr/bin/perl -w
+
+use strict;
+use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../../../lib";
+
+use VegGuide::Schema;
+
+
+my $dbh = VegGuide::Schema->Connect()->driver()->handle();
+
+$dbh->do( 'UPDATE VendorHours SET day = 7 WHERE day = 0' );
+$dbh->do( 'UPDATE VendorHours SET day = day - 1' );
+

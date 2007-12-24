@@ -1,0 +1,826 @@
+<ul>
+% foreach my $item (@ordered_items) {
+ <li><a href="#<% $item->{anchor} | h %>"><% $item->{title} | h %></a></li>
+% }
+</ul>
+
+% foreach my $item (@ordered_items) {
+ <a name="<% $item->{anchor} | h %>"></a>
+ <& '.' . $item->{name} &>
+% }
+
+<%once>
+my @ordered_items;
+my %items;
+</%once>
+
+<%init>
+unless (@ordered_items)
+{
+    my $comp = $m->current_comp();
+
+    # It'd be simpler to just loop over $comp->methods() but that
+    # would not preserve their order.
+    my $file = $comp->source_file();
+
+    open my $fh, '<', $file
+        or die "Cannot read $file: $!";
+
+    my ( $title, $name );
+    while (<$fh>)
+    {
+        if ( /<%def \.(\w+)/ )
+        {
+            $name = $1;
+        }
+        elsif ( /<h3>([^<]+?)<\/h3>/ )
+        {
+            die "Found a title ($1) outside a <%def> block"
+                unless $name;
+
+            my $title = $1;
+
+            ( my $anchor = $name ) =~ s/_/-/g;
+
+            push @ordered_items, { title => $title, name => $name, anchor => $anchor };
+            $items{$name} = $ordered_items[-1];
+
+            undef $name;
+        }
+    }
+
+    close $fh;
+}
+</%init>
+
+<%def .editing>
+<h3>How do I add or edit an entry?</h3>
+
+<p>
+Anyone can add new entries and reviews. You can also suggest changes
+to existing entries. Simply click on any of the edit buttons on the
+page to start.
+</p>
+
+<p>
+To add new entries or edit existing data, you must be a <a
+href="/user/new_user_form">registered user</a>. Once you have an
+account, you will be able to add new entries, comments/reviews, and
+suggest changes to existing entries.
+</p>
+
+<p>
+Adding an entry is done via the <strong>Add entry</strong> button,
+which is visible as you browse regions.  This link is only offered for
+regions which don't contain other regions, so you won't be able to add
+a new entry to Europe, instead you'll have to find the specific city.
+</p>
+
+<p>
+Note that the add entry link will not be visible when you are looking
+at a list of entries that is a result of searching by address or name.
+</p>
+
+<p>
+To edit an existing entry, simply go to that entry's page, and use the
+appropriate "Edit" button.  The editing links are located near the
+thing you're editing, so the <strong>"Edit"</strong> link right under
+the hours listing lets you edit the hours.
+</p>
+
+<p>
+To add a review, simply click on the
+<strong>Write your review</strong> button for an entry.
+</p>
+
+<p>
+You can also add comments to a region, via the <strong>Add
+comment</strong> button.  If you have something useful to say about a
+region as a whole, as opposed to a specific entry, that's the place to
+do it.
+</p>
+</%def>
+
+<%def .entry_guidelines>
+<h3>What are the guidelines for new entries?</h3>
+
+<p>
+<strong>If a vendor has more than one location, please enter each location
+individually.</strong>
+</p>
+
+<p>
+If you don't do this, we can't record phone numbers, hours, and so on
+for each entry.  Additionally, the map links will not work unless each
+entry has one address.  This is really important.
+</p>
+
+<p>
+Also, please add the neighborhood or street to the entry's name.  For
+example, in the <a href="/region/13">Twin Cities</a> region, we have
+the following listings:
+</p>
+
+<ul>
+ <li>Breadsmith - Edina</li>
+ <li>Breadsmith - Minnetonka</li>
+ <li>Breadsmith - St. Paul</li>
+</ul>
+
+<a name="clone"></a>
+<h5>Cloning</h5>
+
+<p>
+In order to make handling of vendors with multiple locations easier,
+we have a "clone" feature.  Cloning an entry lets you easily copy data
+from an existing entry into a new entry.  The cloned entry starts off
+identical to the original, except that you must enter new address and
+phone information and hours.
+</p>
+
+<a name="grammar"></a>
+<h5>Grammar, punctuation, spelling, etc.</h5>
+
+<p>
+Please use <strong>correct capitalization, grammar, and punctuation</strong>
+when entering names, addresses, and descriptions, etc.  Please <strong>do
+not type in ALL CAPS</strong>!  TEXT THAT IS ALL CAPITALIZED IS REALLY HARD
+TO READ ;)
+</p>
+
+<a name="required_data"></a>
+<h5>Required data</h5>
+
+<p>
+When entering a new entry, the following data is required:
+</p>
+
+<ul>
+ <li>Category - restaurant, grocer, coffee shop, etc.</li>
+ <li>Name</li>
+ <li>Short description - a quick blurb about the entry</li>
+ <li>Level of veg friendliness - vegan, vegetarian, etc.</li>
+</ul>
+
+<p>
+<strong>If you don't know the information for a particular field, please
+leave it blank</strong>. Don't put in "unknown" or "I don't know" or
+anything like that.
+</p>
+
+<p>
+For all other data fields, you can simply accept the defaults.
+However, there are good reasons to fill in more data.  Since the guide
+can filter listings based on things like non-smoking, wheelchair
+accessibility, and so on, adding more info increases the quality of
+search results.  Similarly, the guide can search for entries that are
+currently open, but only if you enter the hours for an entry.  Adding
+address info for entries allows us to generate map links.
+</p>
+
+<p>
+<strong>Do not use the same text in both the long and short description
+fields.</strong> If you cannot think of something for the "Long
+Description" field, it is okay to just leave it blank.
+</p>
+
+<h5>Is a given entry appropriate?</h5>
+
+<p>
+We're pretty flexible.  If an entry is likely to be of interest to
+other vegetarians or vegans, you should add it.  The one thing we do
+not want to see is entries added for the sole purpose of saying
+they're not veg-friendly.  If everyone did that, the system would
+consist almost entirely of entries telling you not to go somewhere,
+which wouldn't be very useful to anyone.
+</p>
+
+</%def>
+
+<%def .review_guidelines>
+<h3>What are the guidelines for reviews?</h3>
+
+<p>
+There are only a few things that are unacceptable in reviews.  First
+of all, don't insult other reviewers.  It's fine to reference another
+review in your own, and to specifically disagree with it, but don't
+get personal.  Similarly, no personal attacks against anyone at the
+place you are reviewing.  It's okay to say a server was rude or weird,
+but keep it above the belt.
+</p>
+
+<p>
+Second, even if you are not 100% vegetarian, you're still very welcome
+to write a review, but please only talk about the vegetarian items you
+had.  If you really liked some non-vegetarian food you had, don't
+mention it here.
+</p>
+
+<p>
+Reviews that don't follow these guidelines may be edited or deleted.
+</p>
+</%def>
+
+<%def .categories>
+<h3>What do the categories for entries mean?</h3>
+
+<p>
+The categories which can be assigned are detailed below.  Remember, an
+entry can have more than one category, so please choose all the ones
+that are appropriate.  The categories are primarily distinguished by
+what things the vendor sells.
+</p>
+
+<ul>
+
+ <li><strong>Restaurant</strong> - any vendor that focuses on serving food (fast food
+ included) and has its own tables is considered a restaurant.</li>
+
+ <li><strong>Coffee/Tea/Juice</strong> - a vendor that focuses on serving
+ non-alcoholic drinks.</li>
+
+ <li><strong>Bar</strong> - a vendor that focuses on serving alcoholic drinks.</li>
+
+ <li><strong>Food Court or Street Vendor</strong> - a vendor at a food court or
+ on a street.  The difference between this and a restaurant is that a
+ food court vendor probably doesn't have their own tables or any sort
+ of table service.  Obviously, there's some overlap between this and a
+ restaurant.  Use your best judgement.</li>
+
+ <li><strong>Grocery/Bakery/Deli</strong> - a vendor that focuses on selling food
+ <strong>ingredients</strong> for people to prepare themselves.</li>
+
+ <li><strong>Caterer</strong> - a vendor that provides complete meals for people
+ or groups of people.  Note that a "personal chef" service would be
+ considered a caterer as well.</li>
+
+ <li><strong>General Store</strong> - use this category for vendors that sell
+ non-food products, like clothing, shoes, household products,
+ etc.</li>
+
+ <li><strong>Organization</strong> - use this for activist and social
+ groups.</li>
+
+ <li><strong>Other</strong> - use this category for vendors that don't fit
+ elsewhere.  In particular, this is intended for services like salons,
+ cleaning services, nutritionists, etc.</li>
+
+</ul>
+</%def>
+
+<%def .add_region>
+<h3>How do I add a new region?</h3>
+
+<p>
+There is an <strong>"Add Region"</strong> button on most
+regions. Click on this to add a new region under the region you're
+in. In other words, to add a new city in Arkansas, go the Arkansas
+region and click on "Add Region".
+</p>
+
+</%def>
+
+<%def .address_search_countries>
+<h3>What countries are supported for address searches?</h3>
+
+<p>
+The following countries are supported:
+</p>
+
+<ul>
+% for my $c ( sort VegGuide::Geocoder->Countries() ) {
+ <li><% $c | h %></li>
+% }
+</ul>
+
+<p>
+Note that for searches in Japan and Taiwan, the address must be in the
+native language, not a romanized version.
+</p>
+</%def>
+
+<%def .weighted_ratings>
+<h3>How do weighted ratings work?</h3>
+
+<p>
+When we say that ratings are weighted we mean that the average rating
+displayed for an entry reflects more than the "simple" average of all
+its ratings. In this case, we also incorporate the number of ratings
+it has received into the average which is displayed.
+</p>
+
+<p>
+In practice, this means that entries with few ratings have less
+"extreme" averages. Or in other words, the less ratings an entry has,
+the close its weighted rating is to the average of <em>all</em>
+ratings in the system (currently <% VegGuide::Vendor->AverageRating() %>).
+</p>
+
+<p>
+Here's a few simple examples. If an entry receives just one rating of 5
+stars, its weighted rating is 
+<% VegGuide::Vendor->WeightedRating( 5.0, 1 ) %>. If an entry has ten
+ratings, nine 5 star ratings and one 1 star (averaging 4.9), then its
+weighted rating is <% VegGuide::Vendor->WeightedRating( 4.9, 10 ) %>.
+</p>
+
+<p>
+If an entry receives just one rating of 1
+star, its weighted rating is 
+<% VegGuide::Vendor->WeightedRating( 1.0, 1 ) %>. If an entry has ten
+ratings, nine 1 star ratings and one 5 star (averaging 1.4), then its
+weighted rating is <% VegGuide::Vendor->WeightedRating( 1.4, 10 ) %>.
+</p>
+
+<p>
+This means that entries with more ratings tend to end up with
+both <em>higher</em> and <em>lower</em> weighted ratings, while
+entries with few ratings end nearer the system-wide average rating.
+</p>
+
+<p>
+The rationale behind this is that more ratings means more accuracy. If
+many people love or hate a place, it's probably really good or really
+bad. But if just one or two people feel strongly about a place, that's
+probably no reason to think it's exceptional.
+</p>
+
+<p>
+For the mathematically minded, the algorithm used for weighting is the
+same one used by <a href="http://www.imdb.com/">IMDB</a> (as of
+October, 2007):
+
+<pre>
+weighted rating (WR) = (v ÷ (v+m)) × R + (m ÷ (v+m)) × C
+
+ where:
+  R = average for the entry (mean) = (Rating)
+  v = number of ratings for the entry = (votes)
+  m = an arbitrary number of ratings (currently <% VegGuide::Vendor->WeightedRatingMinCount() %>)
+  C = the mean vote across the whole system (currently <% VegGuide::Vendor->AverageRating() %>)
+</pre>
+
+<p>
+Ok, <code>m</code> isn't really an arbitrary number. IMDB uses a
+system where a movie needs a minimum number of votes to have a
+weighted rating at all. With the guide, this isn't really practical,
+so we just picked a pretty low number, which means that the amount of
+weighting applied isn't all that much
+</p>
+
+</%def>
+
+<%def .data_localization>
+<h3>How does the guide handle entries for regions that use non-English languages?</h3>
+
+<p>
+When adding or editing an entry in some locations, the guide also
+allows you to enter information in other writing systems.  This is
+used for things like Chinese, where we want to have both a Romanized
+name (like "Hao Fan") and a name in Chinese characters.  Similarly,
+having the address in both forms is quite useful.
+</p>
+
+<p>
+In the future, the guide may implement a more complete localization
+system that allows all the data to be stored in multiple languages,
+but this is a far more complex problem to solve.
+</p>
+</%def>
+
+<%def .wiki_formatting>
+<h3>How do I add formatted text (headers, bold, lists, etc.) to my entries and reviews?</h3>
+
+<p>
+An entry's long description, as well as user reviews and location
+comments, are all formatted with standard Wiki formatting.  Please
+use this sparingly, as too much formatting looks ridiculous.
+</p>
+
+<p>
+This formatting works as follows:
+</p>
+
+<p>
+A regular plain old paragraph.
+</p>
+
+<p>
+'''Triple-quoted text is bold.'''
+</p>
+
+<p>
+''Double-quoted text is italicized.''
+</p>
+
+<p>The quotes are <strong>single quotes</strong>(').</p>
+
+<p>
+[http://www.vegguide.org/] - a bare link
+</p>
+
+<p>
+[http://www.vegguide.org/|VegGuide] - a link with a title.  The link and
+title are separated by a vertical bar (|).
+</p>
+
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;* An unordered list item<br />
+&nbsp;&nbsp;&nbsp;&nbsp;* Another unordered list item
+</p>
+
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;1. An ordered list item<br />
+&nbsp;&nbsp;&nbsp;&nbsp;2. Another ordered list item
+</p>
+
+<p>Note that list items must indented at least 4 spaces.</p>
+
+<p>
+----<br />
+Four or more hyphens make a line
+</p>
+
+<p>
+Here's what it looks like when formatted:
+</p>
+
+<% VegGuide::Util::text_to_html( text => q{
+A regular plain old paragraph.
+
+'''Triple-quoted text is bold.'''
+
+''Double-quoted text is italicized.''
+
+[http://www.vegguide.org/] - a bare link
+
+[http://www.vegguide.org/|VegGuide] - a link with a title
+
+    * An unordered list item
+    * Another unordered list item
+
+    1. An ordered list item
+    2. Another ordered list item
+
+Note that list items must indented at least 4 spaces.
+
+----
+
+Four or more hyphens make a line
+} ) %>
+
+</%def>
+
+<%def .suggestions>
+<h3>How are suggestions handled?</h3>
+
+<p>
+When a user makes a suggestion for an entry, that suggestion is saved
+in the system.  It is reviewed by the system admins and/or the region
+maintainer(s).  They can approve or reject the suggestion.
+</p>
+
+<p>
+When you make a suggestion, you have the option to ask for an email
+notifying you when the selection has been accepted or rejected.  By
+default, no email is sent.
+</p>
+</%def>
+
+<%def .bad_entries>
+<h3>Your entries for [region X] stinks, what are you going to do about it?</h3>
+
+<p>
+Nothing.  But you should feel free to add new entries and suggest
+changes to existing ones.  Also, if you're really motivated, you can
+become a powerful and awe-inspiring <a href="#access">region
+maintainer</a>.  If that interests you, <a href="/site/about">let
+us know</a>.
+</p>
+</%def>
+
+<%def .love_hate>
+<h3>I love/hate the guide.  Where can I discuss that with other users?</h3>
+
+<p>
+The place for this is the <a
+href="/mailman/listinfo/community">VegGuide community email list</a>.
+</p>
+</%def>
+
+<%def .syndicate>
+<h3>Can I use your database content for my website/leaflet/etc.?</h3>
+
+<p>
+Yes, that's why we offer a <a href="/site/rest_api/">REST API</a> for
+our database.  Please respect <&| /lib/link/license.mas &>our
+license</&>, and note that the license <strong>does not allow
+commercial use</strong> of this data.
+</p>
+
+<p>
+We're very interested in finding partners who want to use our data in
+interesting ways.  If you have a cool idea, but need some help from
+us, <a href="/site/about">please contact us</a>.
+</p>
+
+</%def>
+
+<%doc>
+
+<%def X.promo_cards>
+<h3X>How can I help promote the guide?</h3>
+
+<p>
+Tell all your friends and family about it, and encourage them to add
+reviews and entries.  If you can, order some of our <a
+href="/site/promo_cards">promo cards</a> and distribute them in your
+area.
+</p>
+</%def>
+
+</%doc>
+
+<%def .link_images>
+<h3>Do you have any nice images to use when linking?</h3>
+
+<p>
+Here are some:
+</p>
+
+<p>
+<a href="/images/link-100-75.jpg"><img class="link-to-us"
+                                       src="/images/link-100-75.jpg" border="0" alt="big link image" /></a><br />
+100 x 75
+</p>
+
+<p>
+<a href="/images/link-60-45.jpg"><img class="link-to-us"
+                                     s rc="/images/link-60-45.jpg" border="0" alt="small link image" /></a><br />
+60 x 45
+</p>
+</%def>
+
+<%def .admin_add>
+<h3>Will you add [some restaurant, store, whatever]?</h3>
+
+<p>
+No.  We're very, very lazy, and creating the site itself has
+completely exhausted us.  That's why we've made it possible for anyone
+to <a href="/user/new_user_form">sign up</a> and start <a
+href="#add_or_edit">adding new entries</a> immediately.
+</p>
+</%def>
+
+<%def .feature_request>
+<h3>Will you add feature X?</h3>
+
+<p>
+Probably.  Please see our <a href="/site/todo">todo list</a> first.
+If you want to discuss potential features with other users please join
+the <a href="/mailman/listinfo/community">VegGuide community email
+list</a>.
+</p>
+</%def>
+
+<%def .access>
+<h3>Who can edit what?</h3>
+
+<p>
+There are three levels of access to the Guide:
+</p>
+
+<ul>
+ <li>System admin</li>
+ <li>Region maintainers</li>
+ <li>Regular users</li>
+</ul>
+
+<p>
+System admins can edit or delete anything on the system.  Regular
+users are able to add new entries, edit entries which they submitted
+originally, and edit or delete their own comments and reviews.
+</p>
+
+<p>
+Finally, region maintainers are given extra privileges to administer
+certain regions in the guide.  For those regions, they are able to
+edit or delete any entry, comment or review.  They can also approve or
+reject changes suggested by regular users.
+</p>
+
+<p>
+If you are interested in being a region maintainer for an area, please
+<a href="/site/about">let us know</a>.
+</p>
+</%def>
+
+<%def .watch_list>
+<h3>What is the "watch list" feature?</h3>
+
+<p>
+You can add regions to your personal watch list by clicking on the
+"watch list" icon (an eye) when you are looking at a region.  Once a
+week, you'll receive an email telling you what new entries have been
+created for all the regions on your watch list.
+</p>
+
+<p>
+If you add a region that contains other regions to your list, for
+example Minnesota, then you will be notified of additions for
+<i>all</i> of the regions contained in Minnesota.
+</p>
+
+% if ( $c->vg_user()->is_logged_in() ) {
+<p>
+You can remove regions from your watch list on your <a
+href="<% user_uri( user => $c->vg_user(), path => 'watch_list' ) | h %>">watch list</a> page.
+</p>
+% }
+</%def>
+
+<%def .definitions>
+<h3>How are "vegan", "vegetarian", etc. defined on this site?</h3>
+
+<p>
+The definitions are as follows ...
+</p>
+
+<a name="vegan"></a>
+<h4>Vegan</h4>
+<p>
+For the purposes of VegGuide.Org, a restaurant is considered vegan if
+it is possible to randomly order anything on the menu and still have
+it be vegan.  For example, if everything on the menu is vegan but the
+restaurant offers cheese for pasta dishes on request, then it should
+still be considered a vegan restaurant.  Honey is <strong>not</strong>
+considered vegan.
+</p>
+
+<p>
+The point of defining a restaurant as vegan is to assure any vegan
+that they can go in and order anything they want without asking
+questions about the ingredients.
+</p>
+
+<p>
+If you're not sure, use your best judgement.  Remember, the purpose of
+this guide is to make the lives of vegetarians and vegans easier and
+more pleasant, not to enforce strict standards of vegan purity on
+restaurants.
+</p>
+
+<a name="vegetarian"></a>
+<h4>Vegetarian</h4>
+<p>
+For the purposes of this web guide, a restaurant is considered
+vegetarian if it does not serve animal flesh in any form.
+</p>
+
+<a name="vegan-friendly"></a>
+<h4>Vegan-friendly</h4>
+<p>
+This categorization is far more flexible than the others, and should
+be influenced by the restaurants's locale.  For example, in places
+like New York City or San Francisco, which have many vegan and
+vegetarian restaurants, a restaurant offering a single vegan entree
+would not be considered vegan-friendly.  On the other hand, in a small
+town vegan-friendly may mean a restaurant that is willing to make
+pasta with marinara sauce.
+</p>
+
+<p>
+Particularly in regions with limited selections for vegans, even
+minimal vegan-friendliness is worth noting.
+</p>
+
+<a name="vegetarian-friendly"></a>
+<h4>Vegetarian-friendly</h4>
+<p>
+Like vegan-friendly, the definition of this term varies by locale.  A
+restaurant need not be vegetarian-friendly to be added to the guide,
+though there should be some other compelling reason for adding it if
+it isn't vegetarian-friendly. For example, if a restaurant has a few
+veg options <strong>and</strong> serves a cuisine unique for its area,
+feel free to add it.
+</p>
+</%def>
+
+<%def .who_pays>
+<h3>Who pays for this site?</h3>
+
+<p>
+This site has pretty low expenses at the moment.  XMission provides
+our Internet connectivity, and Eric Waters provided our server.  If
+you want to help out, feel free
+to <a href="http://www.exploreveg.org/donate">make a donation</a> to
+Compassionate Action for Animals.
+</p>
+
+</%def>
+
+<%def .browser_support>
+<h3>Why does this site look terrible in my browser?</h3>
+
+<p>
+This site was primarily designed to look good in Mozilla/Firefox and
+Internet Explorer 6.0+. It should also look okay in Safari, Konqueror,
+and Opera 7+. Because the site is standards-compliant, it should also
+be usable in text-only browsers.
+</p>
+
+<p>
+If you are using an older version of Internet Explorer or Mozilla, the
+site layout may look pretty strange.  We recommend upgrading to the
+latest version of <a href="http://www.getfirefox.com/">Firefox</a>
+available, or at least to IE7 if you cannot use Firefox.
+</p>
+</%def>
+
+</%def>
+
+<%def .browser_localization>
+<h3>You said you have localized content, so why don't I see any?</h3>
+
+<p>
+You have to have your browser set to accept the language for the
+localized content.  For example, if you look at the Singapore entries,
+you'll need to have your browser set to accept Chinese to see the
+localized data.
+</p>
+
+<p>
+For Firefox, go to <code>Edit -&gt; Preferences -&gt; Advanced -&gt;
+Languages</code> and click on <code>"Choose"</code>.
+</p>
+
+<p>
+If you're stuck using that horrid thing Microsoft pretends is a web
+browser, then we suggest upgrading to <a
+href="http://www.getfirefox.com/">Firefox</a>.  If you don't want to
+upgrade, then Windows users of Internet Explorer should go to <code>Tools
+or View or Extras -> Internet Options -> (General) Languages</code>, and Mac
+users should go to <code>Edit -> Preferences -> Web Browser ->
+Language/Fonts</code>.
+</p>
+
+<p>
+Opera users, all three of you, should go to <code>File -> Preferences
+-> Languages</code>.
+</p>
+
+<p>
+And finally, for the Safari users, language settings are determined by
+your overall system settings, so go to <code>System preferences ->
+International -> Language</code>.
+</p>
+
+<p>
+Of course, if you don't have the proper fonts installed for the locale
+in question, you'll probably just see funny box-shaped characters
+everywhere.
+</p>
+</%def>
+
+<%def .competition>
+<h3>Why are you competing with [site X]?</h3>
+
+<p>
+There's a number of answers to this question.  Some of our reasons for
+starting this site include:
+</p>
+
+<p>
+We wanted a site that was easily maintained by a large group of
+contributors. Many other sites make it ridiculously hard to add new
+entries, suggest changes, or write reviews.
+</p>
+
+<p>
+We wanted a guide that helped people become and stay veg. Some other
+sites place restrictions on what can be entered.
+</p>
+
+<p>
+We wanted to offer a completely non-commercial site. We wanted to
+offer really cool features.
+</p>
+
+<p>
+We believe in <a href="http://www.gnu.org/">free software</a> and free
+content (free as in freedom). The source for this site is available
+via the <a href="/site/source">Source Code</a> link in the page
+footer. Our content is <&| /lib/link/license.mas &>freely reusable and
+re-distributable</&>.
+</p>
+
+<p>
+For an even longer explanation, you can read about
+the <a href="/site/philosophy">philosophy of VegGuide.Org</a>.
+</p>
+
+</%def>
+
+<%method page_title>
+VegGuide.Org Help
+</%method>

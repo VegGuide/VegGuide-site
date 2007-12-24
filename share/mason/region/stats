@@ -1,0 +1,83 @@
+  <div id="body-container">
+
+<&| /lib/filter/remove-empty-list.mas &>
+   <h2>Favorite Places</h2>
+
+   <p>
+    This list includes entries in all categories with 6 or more ratings.
+   </p>
+
+   <ol>
+% while ( my $vendor = $best_rated->next() ) {
+    <li>
+     <& /lib/link/vendor.mas, vendor => $vendor &>,
+     in <% $vendor->city() | h %>
+     - <% $vendor->weighted_rating() %> / <% $vendor->rating_count() %>
+    </li>
+% }
+   </ol>
+</&>
+
+   <h2>Top Entry Adders</h2>
+
+   <ol>
+% while ( my $user = $top_adders->next() ) {
+    <li><& /lib/link/user.mas, user => $user &> - <% $user->vendor_count( location => $location ) %></li>
+% }
+   </ol>
+
+<&| /lib/filter/remove-empty-list.mas &>
+   <h2>Top Reviewers</h2>
+
+   <ol>
+% while ( my $user = $top_reviewers->next() ) {
+    <li><& /lib/link/user.mas, user => $user &> - <% $user->review_count( location => $location ) %></li>
+% }
+   </ol>
+</&>
+
+<&| /lib/filter/remove-empty-list.mas &>
+   <h2>Most Reviewed Entries</h2>
+
+   <ol>
+% while ( my $vendor = $most_reviewed->next() ) {
+    <li>
+     <& /lib/link/vendor.mas, vendor => $vendor &>,
+     in <% $vendor->city() | h %>
+     - <% $vendor->review_count() %> <% PL( 'review', $vendor->review_count() ) %>
+    </li>
+% }
+   </ol>
+</&>
+
+<&| /lib/filter/remove-empty-list.mas &>
+   <h2>Most Rated Entries</h2>
+
+   <ol>
+% while ( my $vendor = $most_rated->next() ) {
+    <li>
+     <& /lib/link/vendor.mas, vendor => $vendor &>,
+     in <% $vendor->city() | h %>
+     - <% $vendor->weighted_rating() %> / <% $vendor->rating_count() %>
+    </li>
+% }
+   </ol>
+</&>
+
+  </div>
+
+<%args>
+$location
+</%args>
+
+<%init>
+my $best_rated    = $location->top_vendors( limit => 10 );
+my $top_adders    = $location->users_by_entry_count( limit => 10 );
+my $top_reviewers = $location->users_by_review_count( limit => 10 );
+my $most_reviewed = $location->vendors_by_review_count( limit => 10 );
+my $most_rated    = $location->vendors_by_rating_count( limit => 10 );
+</%init>
+
+<%attr>
+is_one_column => 1
+</%attr>

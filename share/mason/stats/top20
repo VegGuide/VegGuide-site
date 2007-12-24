@@ -1,0 +1,80 @@
+<h2>Top Entry Adders</h2>
+
+<ol>
+% while ( my $user = $top_adders->next() ) {
+ <li><& /lib/link/user.mas, user => $user &> - <% $user->vendor_count() %></li>
+% }
+</ol>
+
+<h2>Top Reviewers</h2>
+
+<ol>
+% while ( my $user = $top_reviewers->next() ) {
+ <li><& /lib/link/user.mas, user => $user &> - <% $user->review_count() %></li>
+% }
+</ol>
+
+<h2>Most Reviewed Entries</h2>
+
+<ol>
+% while ( my $vendor = $most_reviewed->next() ) {
+ <li>
+  <& /lib/link/vendor.mas, vendor => $vendor &>,
+  in <& /lib/link/location-and-parent.mas, location => $vendor->location() &>
+  - <% $vendor->review_count() %>
+ </li>
+% }
+</ol>
+
+<h2>Most Rated Entries</h2>
+
+<ol>
+% while ( my $vendor = $most_rated->next() ) {
+ <li>
+  <& /lib/link/vendor.mas, vendor => $vendor &>,
+  in <& /lib/link/location-and-parent.mas, location => $vendor->location() &>
+  - <% $vendor->weighted_rating() %> / <% $vendor->rating_count() %>
+ </li>
+% }
+</ol>
+
+<h2>Worldwide Favorites</h2>
+
+<p>
+Only includes entries with 6 or more ratings.
+</p>
+
+<ol>
+% while ( my $vendor = $best_rated->next() ) {
+ <li>
+  <& /lib/link/vendor.mas, vendor => $vendor &>,
+  in <& /lib/link/location-and-parent.mas, location => $vendor->location() &>
+  - <% $vendor->weighted_rating() %> / <% $vendor->rating_count() %>
+ </li>
+% }
+</ol>
+
+<h2>Regions with the Most Entries</h2>
+
+<ol>
+% while ( my $location = $most_populous->next() ) {
+ <li>
+  <& /lib/link/location-and-parent.mas, location => $location &>
+  - <% $location->open_vendor_count() %>
+ </li>
+% }
+</ol>
+
+
+<%init>
+my $top_adders = VegGuide::User->ByVendorCount( limit => 20 );
+my $top_reviewers = VegGuide::User->ByReviewCount( limit => 20 );
+my $most_reviewed = VegGuide::Vendor->ByReviewCount( limit => 20 );
+my $most_rated = VegGuide::Vendor->ByRatingCount( limit => 20 );
+my $best_rated = VegGuide::Vendor->ByRating( limit => 20 );
+my $most_populous = VegGuide::Location->ByVendorCount( limit => 20 );
+</%init>
+
+<%method page_title>
+VegGuide.Org Top 20 Lists
+</%method>

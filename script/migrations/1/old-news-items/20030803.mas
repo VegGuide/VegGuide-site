@@ -1,0 +1,17 @@
+<%method title>
+
+Cloning feature added
+
+</%method>
+
+<%method body>
+
+<p>
+When you are logged in and viewing an entry's detail page, the menu
+now contains a "clone" option.  This lets you create a new entry with
+the same name and description but different address and phone number.
+This is very handy if you want to enter a restaurant or store with
+multiple locations.
+</p>
+
+</%method>

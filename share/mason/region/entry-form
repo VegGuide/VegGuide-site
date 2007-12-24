@@ -1,0 +1,19 @@
+  <div id="body-container">
+
+   <div id="body" class="one-column">
+    <h2>Add a new entry to <& /lib/l10n/location-name.mas, location => $location, cloned_vendor => $cloned_vendor &></h2>
+
+    <& /lib/form/entry.mas, %ARGS &>
+
+   </div>
+
+  </div>
+
+<%args>
+$location
+$cloned_vendor => undef
+</%args>
+
+<%attr>
+is_one_column => 1
+</%attr>

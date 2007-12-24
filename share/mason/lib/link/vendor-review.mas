@@ -1,0 +1,21 @@
+<a href="<% entry_review_uri( vendor => $vendor, user => $user ) | h %>" class="entry-review" title="<% $title | h %>">\
+% if ($text) {
+<% $text %>\
+% } elsif ($english_only) {
+<% $vendor->name() | h %>\
+% } else {
+<& /lib/l10n/vendor-name.mas, vendor => $vendor &>\
+% }
+</a>\
+<%args>
+$vendor
+$user
+$english_only => 0
+$text => $m->content()
+$title_prefix => ''
+</%args>
+<%init>
+my $title = $title_prefix;
+$title .= ' ' if $title;
+$title .= $vendor->name();
+</%init>

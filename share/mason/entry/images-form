@@ -1,0 +1,93 @@
+  <div id="body-container">
+
+   <div id="body" class="one-column">
+    <h2>Images for <& /lib/l10n/vendor-name.mas, vendor => $vendor &></h2>
+
+% for my $image (@images) {
+%   if ( $image->display_order() > 1 ) {
+    <hr />
+%   }
+
+    <& .image_form, vendor => $vendor, image => $image &>
+% }
+
+% if (@images) {
+    <hr />
+% }
+
+    <form action="<% entry_uri( vendor => $vendor, path => 'image' ) %>"
+          method="post" enctype="multipart/form-data">
+
+     <& /lib/form/errors.mas &>
+
+     <div class="form-item">
+      <label for="image">Pick a file:</label>
+      <input id="image" name="image" class="file" type="file" />
+     </div>
+
+     <div class="form-item">
+      <label for="caption">Caption:</label>
+      <textarea id="caption" name="caption" class="text medium"></textarea>
+     </div>
+
+     <div class="form-item">
+      <input type="submit" class="submit" value="Add an image" />
+     </div>
+
+    </form>
+
+   </div>
+
+  </div>
+
+<%args>
+$vendor
+@images
+</%args>
+
+<%def .image_form>
+
+<img src="<% $image->small_uri() | h %>"
+     height="<% $image->small_height() %>" width="<% $image->small_width() %>" />
+
+% if ( $c->vg_user()->can_edit_vendor_image($image) ) {
+<form action="<% entry_image_uri( image => $image ) %>" method="post">
+ <input type="hidden" name="x-tunneled-method" value="PUT" />
+
+ <div class="form-item">
+  <label for="caption">Caption:</label>
+  <textarea id="caption" name="caption" class="text medium"><% $image->caption() || '' | h %></textarea>
+ </div>
+
+ <div class="form-item">
+  <input type="submit" class="submit-small" value="Set caption" />
+ </div>
+
+</form>
+% }
+
+% if ( $image->display_order() != 1 && $c->vg_user()->can_edit_vendor($vendor) ) {
+<form action="<% entry_image_uri( image => $image ) %>" method="post">
+ <input type="hidden" name="x-tunneled-method" value="PUT" />
+ <input type="hidden" name="display_order" value="1" />
+
+ <div class="form-item">
+  <input type="submit" class="submit-small" value="Make this the main image" />
+ </div>
+
+</form>
+% }
+
+% if (  $c->vg_user()->can_delete_vendor_image($image) ) {
+<p>
+ <a class="action-button-small"
+    href="<% entry_image_uri( image => $image, path => 'deletion_confirmation_form' ) %>"
+    >Delete this image</a>
+</p>
+% }
+
+<%args>
+$vendor
+$image
+</%args>
+</%def>

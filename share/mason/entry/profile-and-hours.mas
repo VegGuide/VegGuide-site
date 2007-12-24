@@ -1,0 +1,7 @@
+   <div id="right-container-20">
+
+<& /entry/info-box.mas, %ARGS &>
+
+<& /entry/hours-box.mas, %ARGS &>
+
+   </div>

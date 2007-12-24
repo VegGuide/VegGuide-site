@@ -1,0 +1,30 @@
+      <div class="form-item">
+       <label for="location-name"><% $label | h %></label>
+       <input id="location-name" type="text" class="text medium" name="location_name"
+              value="<% $location ? $location->name() : '' %>" />
+       <button id="location-search-submit" class="submit" type="button">Search</button>
+       <p>
+        Type a location name and click search to find matching locations.
+       </p>
+      </div>
+
+      <div id="location-search-results" class="form-item">
+% if ($location) {
+       <ul>
+        <li><input id="location_id-<% $location->location_id() %>"
+                   type="radio" name="location_id" value="<% $location->location_id() %>"
+                   checked="checked" />
+            <label for="location_id-<% $location->location_id() %>"><% $location->name() | h %>\
+%   if ( $location->parent() ) {
+, <% $location->parent()->name() | h %>\
+%   }
+</label>
+        </li>
+       </ul>
+% }
+      </div>
+
+<%args>
+$label
+$location => undef
+</%args>

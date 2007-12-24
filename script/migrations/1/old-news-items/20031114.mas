@@ -1,0 +1,20 @@
+<%method title>
+
+New Localization Features
+
+</%method>
+
+<%method body>
+
+<p>
+
+RegVeg now has some limited support for entering localized data.  For
+now, the only location which has this turned on is Singapore, so that
+information can be entered in both English and Chinese.  Please see
+the new <a href="faq.html#data_localization">documentation</a> on this
+feature for details.
+
+</p>
+
+</%method>
+  

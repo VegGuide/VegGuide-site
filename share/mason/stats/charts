@@ -1,0 +1,28 @@
+<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+        codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0"
+        width="400" height="300" id="graph-2">
+ <param name="allowScriptAccess" value="sameDomain" />
+ <param name="movie" value="open-flash-chart.swf?width=<% $width %>&height=<% $height %>&data=<% $uri %>" />
+ <param name="quality" value="high" />
+ <param name="bgcolor" value="#FFFFFF" />
+ <embed src="/static/open-flash-chart.swf?width=<% $width %>&height=<% $height %>&data=<% $uri %>"
+        quality="high" bgcolor="#FFFFFF" width="<% $width %>" height="<% $height %>"
+        name="open-flash-chart" allowScriptAccess="sameDomain"
+        type="application/x-shockwave-flash"
+        pluginspage="http://www.macromedia.com/go/getflashplayer" />
+</object>
+
+<p>
+Charts are created using <a href="/static/open-flash-chart-1.9.5.tgz">Open Flash Chart</a>
+</p>
+
+<%init>
+my $uri = site_uri( path => '/stats/chart_data', with_host => 1 );
+my $width = 700;
+my $height = 400;
+</%init>
+
+<%method page_title>
+Charts
+</%method>
+

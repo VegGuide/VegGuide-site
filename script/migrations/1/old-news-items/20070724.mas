@@ -1,0 +1,17 @@
+<%method title>
+
+Is this good news?
+
+</%method>
+
+<%method body>
+
+<p>
+No news, that is. Sorry for the lack of news. I've been working on
+VegGuide 3.0 for a long time now, and it's starting to coalesce into
+something pretty cool. In non-vaporware news, we're on track to hit
+4,000 entries and 4,000 reviews by the end of the year. Thanks to
+everyone who's contributed so far.
+</p>
+
+</%method>

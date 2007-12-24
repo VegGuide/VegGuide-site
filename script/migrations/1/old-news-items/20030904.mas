@@ -1,0 +1,14 @@
+<%method title>
+
+Reservations?
+
+</%method>
+
+<%method body>
+
+<p>
+It is now possible to record whether or not an entry accepts
+reservations.  You can now also limit search results based on this.
+</p>
+
+</%method>

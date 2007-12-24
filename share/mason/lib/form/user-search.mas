@@ -1,0 +1,30 @@
+      <div class="form-item">
+       <label for="user-name"><% $label | h %></label>
+       <input id="user-name" type="text" class="text medium" name="user_name"
+              value="<% $user ? $user->name() : '' %>" />
+       <button id="user-search-submit" class="submit" type="button">Search</button>
+       <p>
+        Type a user name and click search to find matching users.
+       </p>
+      </div>
+
+      <div id="user-search-results" class="form-item">
+% if ($user) {
+       <ul>
+        <li><input id="user_id-<% $user->user_id() %>"
+                   type="radio" name="user_id" value="<% $user->user_id() %>"
+                   checked="checked" />
+            <label for="user_id-<% $user->user_id() %>"><% $user->name() | h %>\
+%   if ( $user->parent() ) {
+, <% $user->parent()->name() | h %>\
+%   }
+</label>
+        </li>
+       </ul>
+% }
+      </div>
+
+<%args>
+$label
+$user => undef
+</%args>

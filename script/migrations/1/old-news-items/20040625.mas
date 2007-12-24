@@ -1,0 +1,17 @@
+<%method title>
+
+New Types of RSS Feeds
+
+</%method>
+
+<%method body>
+
+<p>
+We now offer several RSS feeds which are better suited for syndication
+on other web sites.  These are accessible via the "RSS Feeds" link in
+the left nav box for a region.  Check out the <a
+href="/location/rss.html?location_id=13">Twin Cities feeds</a> for an
+example.
+</p>
+
+</%method>

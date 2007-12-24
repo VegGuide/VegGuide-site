@@ -1,0 +1,44 @@
+<p>
+Cloning an entry leys you create a new entry based on an existing one,
+which is handy for restaurants and stores with multiple locations.
+</p>
+
+<p>
+You need to choose a region for this new entry.
+</p>
+
+<form id="clone-location" action="/region/entry_form" method="get">
+ <input type="hidden" name="cloned_vendor_id" value="<% $vendor->vendor_id() %>" />
+
+ <& /lib/form/errors.mas &>
+
+ <fieldset>
+  <legend>Pick a Region</legend>
+
+  <a class="content-button-medium"
+     href="<% region_uri( location => $vendor->location(),
+                          path     => 'entry_form',
+                          query    => { cloned_vendor_id => $vendor->vendor_id() } ) | h %>"
+     >Same as original - <% $vendor->location()->name() | h %>\
+% if ( $vendor->location()->parent() ) {
+, <% $vendor->location()->parent()->name() | h %>\
+% }
+</a>
+
+  <& /lib/form/region-search.mas, label => 'New region:' &>
+
+  <div class="form-item">
+   <input class="submit" type="submit" value="Submit" />
+  </div>
+
+ </fieldset>
+
+</form>
+
+<%args>
+$vendor
+</%args>
+
+<%method page_title>
+Clone <% $m->caller_args(-1)->{vendor}->name() %>
+</%method>

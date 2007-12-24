@@ -1,0 +1,18 @@
+<p>
+If you're not an admin we have a serious bug.
+</p>
+
+<ul>
+ <li><a href="/site/admin/news_form">Add a news item</a></li>
+ <li><a href="/region/recent">Recent regions</a></li>
+ <li><a href="/region/comment">All region comments</a></li>
+ <li><a href="/site/admin/locale_list">Locales</a></li>
+ <li><a href="/entry/ungeocoded">Entries that are not geocoded (but could be)</a></li>
+ <li><a href="/site/admin/skin_form">Add a skin</a></li>
+ <li><a href="/site/admin/cuisines">Cuisines</a></li>
+ <li><a href="/site/admin/attributes">Entry features</a></li>
+</ul>
+
+<%method page_title>
+Admin Menu
+</%method>

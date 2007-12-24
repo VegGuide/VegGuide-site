@@ -1,0 +1,15 @@
+      <fieldset id="errors">
+       <legend>Errors</legend>
+
+       <ul>
+%   for my $e (@errors) {
+        <li><% $e | h %></li>
+%   }
+       </ul>
+
+      </fieldset>
+
+<%init>
+my @errors = @{ $c->session()->{errors} || [] };
+return unless @errors;
+</%init>

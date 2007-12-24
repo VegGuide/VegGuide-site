@@ -1,0 +1,69 @@
+ <&| /lib/filter/fill-in-form.mas, objects => [ $locale ] &>
+ <form id="locale-form-<% $locale->locale_id() || 'new' %>"
+       action="<% $action %>" method="post"
+       <% $locale->locale_id() ? 'style="display: none"' : '' %>>
+% if ( $locale->locale_id() ) {
+  <input type="hidden" name="x-tunneled-method" value="PUT" />
+% }
+
+  <fieldset>
+
+% unless ( $locale->locale_code() ) {
+   <div class="form-item">
+    <label for="locale_code">Locale code</label>
+    <select id="locale_code" name="locale_code">
+%   for my $code ( sort DateTime::Locale->ids() ) {
+     <option value="<% $code %>"><% $code %></option>
+%   }
+    </select>
+   </div>
+% }
+
+   <div class="form-item">
+    <label>Requires localized addresses?</label>
+    <& /lib/form/boolean.mas, name => 'requires_localized_addresses' &>
+   </div>
+
+   <div class="form-item">
+    <label>Address format:</label>
+    <ul>
+% for my $format (@Formats) {
+     <li>
+      <input class="radio" type="radio" name="address_format_id" value="<% $format->address_format_id() %>"
+             id="address_format_id-<% $format->address_format_id() %>" />
+      <label for="address_format_id-<% $format->address_format_id() %>"><% $format->format() | h %></label>
+     </li>
+% }
+    </ul>
+   </div>
+
+   <div class="form-item">
+    <label for="encodings">Encodings:</label>
+    <select id="encodings" name="encodings" multiple="1" size="7">
+% for my $encoding (@Encodings) {
+     <option value="<% $encoding | h %>"><% $encoding | h %></option>
+% }
+    </select>
+   </div>
+
+   <div class="form-item">
+    <input class="submit" type="submit" value="Submit" />
+   </div>
+
+  </fieldset>
+
+ </form>
+ </&>
+
+<%once>
+my @Formats = VegGuide::AddressFormat->All()->all();
+my @Encodings = VegGuide::Locale->Encodings();
+</%once>
+
+<%args>
+$locale
+</%args>
+
+<%init>
+my $action = $locale->locale_id() ? '/locale/' . $locale->locale_id() : '/locales';
+</%init>

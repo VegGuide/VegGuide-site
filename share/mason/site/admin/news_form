@@ -1,0 +1,5 @@
+<& /lib/form/news-item.mas &>
+
+<%method page_title>
+Make Some News
+</%method>

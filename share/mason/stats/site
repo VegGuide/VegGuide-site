@@ -1,0 +1,138 @@
+<p>
+Numbers, lots of numbers ...
+</p>
+
+<& .site_stats &>
+<& .region_stats &>
+<& .user_stats &>
+
+<%def .site_stats>
+<h2>Overall Statistics</h2>
+
+<ul>
+
+ <li>
+  We have <strong><% $vendor_count %> <% PL( 'entry', $vendor_count ) %></strong>
+  in the system, of which <% $closed_count %>
+  (<% sprintf( '%.1f', ( $closed_count / $vendor_count ) * 100 ) %>%)
+  are marked closed.
+ </li>
+
+ <li>
+  There have been <strong><% $recently_added_count %> new
+  <% PL( 'entry', $recently_added_count ) %></strong> added in the last seven days.
+ </li>
+
+ <li>
+  There have been <strong><% $recently_updated_count %> 
+  <% PL( 'entry', $recently_added_count ) %></strong> changed in the last seven days.
+ </li>
+
+ <li>
+  We have <strong><% $review_count %> <% PL( 'review', $review_count ) %></strong>
+  and <strong><% $rating_count %> <% PL( 'rating', $rating_count ) %></strong>
+ </li>
+
+</ul>
+
+<%init>
+my $vendor_count = VegGuide::Vendor->Count();
+my $closed_count = VegGuide::Vendor->ClosedCount();
+
+my $recently_added_count = VegGuide::Vendor->RecentlyAddedCount();
+my $recently_updated_count = VegGuide::Vendor->RecentlyChangedCount();
+
+my $review_count = VegGuide::Vendor->ReviewCount();
+my $rating_count = VegGuide::Vendor->RatingCount();
+</%init>
+</%def>
+
+<%def .region_stats>
+<h2>Region Statistics</h2>
+
+<ul>
+
+ <li>
+  We have <strong><% $location_count %> <% PL( 'region', $location_count ) %></strong> in the system.
+  Of these, <% $branch_location_count %> <% PL( 'region', $branch_location_count ) %>
+  contain other regions (like "United States" contains "Minnesota")
+  and <% $leaf_location_count %> <% PL( 'region', $leaf_location_count ) %>
+  do not.
+  We have <strong><% $active_location_count %> <% PL( 'region', $active_location_count ) %>
+  with entries</strong>
+ </li>
+
+ <li>
+  These regions are spread throughout
+  <strong><% $country_count %> <% PL( 'country', $country_count ) %></strong>.
+ </li>
+
+ <li>
+  Of the <% $active_location_count %>  <% PL( 'region', $active_location_count ) %>
+  with entries, each one has an average (mean) of
+  <strong><% $average_vendor_count %>
+  <% PL( 'entry', $average_vendor_count ) %></strong> each. 
+  The median number of entries per
+  region is <% $median_vendor_count %>.
+ </li>
+
+</ul>
+
+<%init>
+my $location_count = VegGuide::Location->Count();
+my $branch_location_count = VegGuide::Location->BranchLocationCount();
+my $leaf_location_count = VegGuide::Location->LeafLocationCount();
+my $active_location_count = VegGuide::Location->LocationsWithVendorsCount();
+
+my $average_vendor_count = sprintf( '%.1f', VegGuide::Location->AverageVendorCount() );
+my $median_vendor_count = VegGuide::Location->MedianVendorCount();
+
+my $country_count = VegGuide::Location->CountryCount();
+</%init>
+</%def>
+
+<%def .user_stats>
+<h2>User Statistics</h2>
+
+<ul>
+
+ <li>
+  We have <strong><% $user_count %> <% PL( 'user', $user_count ) %></strong>.
+  Of these, <strong><% $active_user_count %>
+  (<% sprintf( '%.1f', ( $active_user_count / $user_count ) * 100 ) %>%)</strong>
+  have contributed to the site by adding/editing an entry, writing
+  a review/comment, or rating an entry.  (This leaves out users who
+  suggested changes to existing entries before March of 2004).
+ </li>
+
+ <li>
+  Of the <strong><% $users_with_entries_count %> <% PL( 'user', $users_with_entries_count ) %>
+  who <% PL( 'has', $users_with_entries_count ) %> added entries</strong>,
+  they've entered an average (mean) of
+  <strong><% $average_vendor_count %> <% PL( 'entry', $average_vendor_count ) %></strong> each.
+  The median number of entries per user is <% $median_vendor_count %>.
+ </li>
+
+ <li>
+  The <strong>average (mean) rating</strong> for an entry across all users
+  is <strong><% $average_rating %></strong>
+ </li>
+
+</ul>
+
+
+<%init>
+my $user_count = VegGuide::User->Count();
+my $active_user_count = VegGuide::User->ActiveUserCount();
+
+my $users_with_entries_count = VegGuide::User->UsersWithEntriesCount();
+my $average_vendor_count = sprintf( '%.1f', VegGuide::User->AverageVendorCount() );
+my $median_vendor_count = VegGuide::User->MedianVendorCount();
+
+my $average_rating = sprintf( '%.2f', VegGuide::Vendor->AverageRating() );
+</%init>
+</%def>
+
+<%method page_title>
+VegGuide.Org Statistics
+</%method>

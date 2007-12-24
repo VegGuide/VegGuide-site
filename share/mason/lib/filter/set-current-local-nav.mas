@@ -1,0 +1,14 @@
+<%init>
+my ($uri) = $c->request()->uri()->path();
+
+my $c = $m->content();
+$c =~ s{<li
+        (?:\s+class="(\w+)")?
+        >
+        (?=<a[^>]+href="\Q$uri\E"[^>]*>)
+       }{
+        '<li class="' . ( $1 ? "$1 current" : 'current' ) . '">'
+       }exsm;
+
+$m->print($c);
+</%init>

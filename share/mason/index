@@ -1,0 +1,75 @@
+ <div id="main" class="main-front-page">
+
+  <div id="body-and-boxes-container">
+
+   <div id="right-container">
+
+    <& /recent-entries.mas &>
+    
+    <& /recent-reviews.mas &>
+
+    <& /site-news.mas &>
+   </div>
+
+   <div id="body" class="large-boxes">
+
+    <h1 id="page-title">Welcome to VegGuide.Org!</h1>
+
+    <p>
+     To start browsing, just click on a region in the list below. Or
+     search for entries by location or name using the search form above.
+    </p>
+
+    <& /lib/region-list.mas, locations => \@locations, columns => 2 &>
+
+    <p>
+     VegGuide.Org is a community-maintained, world-wide guide to
+     vegetarian and vegan restaurants, grocers, and more.
+    </p>
+
+% if ($news_item) {
+    <h2>News</h2>
+
+    <h3><& /lib/format/date.mas, date => $news_item->creation_datetime_object() &> - <% $news_item->title() | h %></h3>
+
+    <% $news_item->body() %>
+% }
+
+% if ( VegGuide::Config->IsTest() ) {
+    <div style="border: 2px solid red; padding: 0 0.4em; margin-bottom: 0.5em;">
+    <p>
+     <strong>WARNING:</strong> this is a test server,
+     so data stored here may be wiped out without any notice. Don't
+     do any work here you are not prepared to lose.
+    </p>
+
+    <p>
+     Also, lots of things are probably broken. If you find a feature
+     that is missing, please don't tell us, we know. If you find one
+     that is present but broken, please email
+     the <a href="https://www.vegguide.org/mailman/listinfo/community">VegGuide
+     community email list</a>. If you're having trouble distinguishing
+     between the two, it might help to look at the list
+     of <a href="/site/todo30">things to do before launching 3.0</a>.
+    </p>
+    </div>
+% }
+
+% if ($featured_vendor) {
+    <& /featured-entry.mas, vendor => $featured_vendor &>
+% }
+
+   </div>
+
+  </div>
+
+ </div>
+
+<%args>
+$featured_vendor
+$news_item
+</%args>
+
+<%init>
+my @locations = VegGuide::Location->RootLocations();
+</%init>

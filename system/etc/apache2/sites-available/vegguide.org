@@ -1,0 +1,119 @@
+# modules needed:
+#   alias
+#   auth_basic
+#   authn_file ?
+#   authz_default (order, deny)
+#   authz_groupfile ?
+#   authz_host ?
+#   authz_user ?
+#   cgi (for mailman?)
+#   deflate
+#   env (for ssl?)
+#   headers
+#   mime
+#   proxy
+#   proxy_http
+#   rewrite
+#   setenvif (for ssl?)
+#   ssl
+#   status ?
+
+# proxy.conf
+#
+#        <Proxy http://localhost:*/*>
+#                Order deny,allow
+#                Allow from all
+#        </Proxy>
+
+<VirtualHost _default_:80>
+    CustomLog /var/log/apache2/access.log combined
+    ServerSignature On
+
+    RewriteEngine On
+
+    AddType text/javascript .js
+
+    Header append P3P "policyref=\"http://www.vegguide.org/w3c/p3p.xml\", CP=\"ALL DSP COR CURa ADMa \DEVa TAIa PSAa PSDa OUR IND PHY ONL COM NAV DEM STA\""
+
+    RewriteEngine On
+
+    #RewriteRule   !^/down.html$  -  [C]
+    #RewriteRule   .*  /down.html  [R,L]
+
+    # This dates back to much older versions of the site, when most pages
+    # had a .mhtml extension.
+    RewriteRule   (.+)\.mhtml$   $1.html  [R=permanent,L]
+
+    # This next group is for backwards compatibility with the version of site immediately before 3.0
+    RewriteCond   %{QUERY_STRING}         location_id=(\d+)
+    RewriteRule   ^/location/view\.html                       /region/%1?                             [R=permanent,L]
+    RewriteCond   %{QUERY_STRING}         location_id=(\d+)
+    RewriteRule   ^/location/data\.rss                        /region/%1.rss?                         [R=permanent,L]
+    RewriteCond   %{QUERY_STRING}         location_id=(\d+)
+    RewriteRule   ^/location/most_recent.rss                  /region/%1/recent.rss?                  [R=permanent,L]
+    RewriteCond   %{QUERY_STRING}         location_id=(\d+)
+    RewriteRule   ^/location/most_recent_vendors\.rss         /region/%1/recent.rss?entries_only=1    [R=permanent,L]
+    RewriteCond   %{QUERY_STRING}         location_id=(\d+)
+    RewriteRule   ^/location/most_recent_reviews\.rss         /region/%1/recent.rss?reviews_only=1    [R=permanent,L]
+
+    RewriteCond   %{QUERY_STRING}         vendor_id=(\d+)
+    RewriteRule   ^/vendor/view\.html                         /entry/%1?                              [R=permanent,L]
+    RewriteCond   %{QUERY_STRING}         vendor_id=(\d+)
+    RewriteRule   ^/vendor/reviews\.html                      /entry/%1/review?                       [R=permanent,L]
+
+    RewriteCond   %{QUERY_STRING}         user_id=(\d+)
+    RewriteRule   ^/user/view\.html                           /user/%1?                               [R=permanent,L]
+
+    RewriteRule   /rss/static/all\w+\.rss                     /site.rss                               [R=permanent,L]
+
+
+    RewriteRule   ^(/mailman|/pipermail)(.*)  https://%{HTTP_HOST}$1$2 [R=permanent,L]
+
+    RewriteRule   !^/css               - [C]
+    RewriteRule   !^/entry-images      - [C]
+    RewriteRule   !^/images            - [C]
+    RewriteRule   !^/js                - [C]
+    RewriteRule   !^/skin-images       - [C]
+    RewriteRule   !^/static            - [C]
+    RewriteRule   !^/w3c               - [C]
+    RewriteRule   !^/robots\.txt$      - [C]
+    RewriteRule   !^/favicon\.ico$     - [C]
+    RewriteRule   ^(.*)                http://localhost:8088$1 [P,L]
+
+    <Location />
+        SetOutputFilter DEFLATE
+    </Location>
+
+    Alias   /css            /usr/local/share/vegguide/css
+    Alias   /images         /usr/local/share/vegguide/images
+    Alias   /static/rss     /var/cache/vegguide/rss
+    Alias   /static         /usr/local/share/vegguide/static
+    Alias   /w3c            /usr/local/share/vegguide/w3c
+
+    Alias   /entry-images   /var/lib/vegguide/entry-images
+    Alias   /js             /var/lib/vegguide/js
+    Alias   /skin-images    /var/lib/vegguide/skin-images
+
+    ErrorDocument 503  /static/503.html
+</VirtualHost>
+
+<VirtualHost _default_:443>
+    SSLEngine on
+    SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
+
+    SSLCertificateFile    /etc/ssl/certs/www.vegguide.org.crt
+    SSLCertificateKeyFile /etc/ssl/private/www.vegguide.org.key
+
+    SSLOptions +StdEnvVars
+
+    SetEnvIf User-Agent ".*MSIE.*" \
+         nokeepalive ssl-unclean-shutdown \
+         downgrade-1.0 force-response-1.0
+
+    ScriptAlias   /mailman/          /usr/lib/cgi-bin/mailman/
+    Alias         /pipermail/        /var/lib/mailman/archives/public/
+    Alias         /images/mailman/   /usr/share/images/mailman/
+
+    RewriteEngine On
+    RewriteRule   ^/mailman/?$         /mailman/listinfo/  [R,L]
+</VirtualHost>

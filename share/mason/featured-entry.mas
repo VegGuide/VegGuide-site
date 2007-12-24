@@ -1,0 +1,51 @@
+  <div id="featured-entry-container">
+   <& /lib/rounded-corners-top.mas &>
+
+   <div id="featured-entry">
+    <h2><& /lib/link/vendor.mas, vendor => $vendor &></h2>
+
+    <& .image, vendor => $vendor &>
+
+    <h3><& /lib/link/location-and-parent.mas, location => $vendor->location() &></h3>
+
+    <& /lib/ratings-div.mas, vendor => $vendor &>
+
+    <p>
+     <% $first_para %>
+    </p>
+
+    <p>
+     <&| /lib/link/vendor.mas, vendor => $vendor &>More about <% $vendor->name | h %></&>.
+    </p>
+
+   </div>
+   <!-- needed to make the b tags inserted by Effect.RoundedCorners come after the floating image -->
+   <div class="force-clear"></div>
+
+   <& /lib/rounded-corners-bottom.mas &>
+  </div>
+
+<%args>
+$vendor
+</%args>
+
+<%init>
+my $description =
+      VegGuide::Util::text_to_html( text => $vendor->long_description() );
+
+my ($first_para) = $description =~ m{\s*<p>\s*(.+?)\s*</p>}s;
+</%init>
+
+<%def .image>
+    <&| /lib/link/vendor.mas, vendor => $vendor &><img id="entry-image" src="<% $image->small_uri() %>" alt="image for <% $vendor->name() | h %>" /></&>
+
+<%args>
+$vendor
+</%args>
+
+<%init>
+my $image = $vendor->first_image();
+
+return unless $image;
+</%init>
+</%def>

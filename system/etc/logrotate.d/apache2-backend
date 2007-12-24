@@ -1,0 +1,17 @@
+# Stick this in /etc/logrotate.d/apache2-backend
+
+/var/log/apache2-backend/*.log, /var/log/vegguide.log {
+        weekly
+        missingok
+        rotate 52
+        compress
+        delaycompress
+        notifempty
+        create 640 root adm
+        sharedscripts
+        postrotate
+                if [ -f /var/run/apache2.pid ]; then
+                        /etc/init.d/apache2 reload > /dev/null
+                fi
+        endscript
+}

@@ -1,0 +1,18 @@
+<%method title>
+
+Australia has maps too
+
+</%method>
+
+<%method body>
+
+<p>
+
+Now that we have some entries for Australia, we tweaked the code to
+generate map links for Australian entries.  No entry shall go
+unmapped!
+
+</p>
+
+</%method>
+  

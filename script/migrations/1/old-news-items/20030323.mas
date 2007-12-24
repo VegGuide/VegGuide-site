@@ -1,0 +1,25 @@
+<%method title>
+
+New "Home Location", wheelchair accessibility and printable search
+results features
+
+</%method>
+
+<%method body>
+
+<p>
+The new <a href="/faq.html#home_region">home location</a> feature
+allows you to set a location as your home.  If you have a home
+location, you will always be taken there after logging in.
+</p>
+
+<p>
+We now can record whether or not an entry is wheelchair accessible.
+</p>
+
+<p>
+On the entry listing pages for locations, there is now a link to a
+page which shows all the results for a search in a printable format.
+</p>
+
+</%method>

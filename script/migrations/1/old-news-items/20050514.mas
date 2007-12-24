@@ -1,0 +1,15 @@
+<%method title>
+
+Donate Via PayPal
+
+</%method>
+
+<%method body>
+
+<p>
+If you look at the footer of the page you'll see a little form you can
+use to donate to the VegGuide.  Donations are tax-deductible (in the
+US).
+</p>
+
+</%method>

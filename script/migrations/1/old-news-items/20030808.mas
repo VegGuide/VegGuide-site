@@ -1,0 +1,15 @@
+<%method title>
+
+Random featured entry
+
+</%method>
+
+<%method body>
+
+<p>
+We now feature a new entry randomly each day.  Only entries with a
+photo and a long description are used.  So if you want to see your
+entry here, add a long description and a photo.
+</p>
+
+</%method>

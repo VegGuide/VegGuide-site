@@ -1,0 +1,27 @@
+<% $header | h %> <a class="sort-link" href="<% $new_search->uri() | h %>" title="sort by <% $header | h %> in <% $sort_order eq 'ASC' ? 'ascending' : 'descending' %> order"><img src="/images/sort-<% $image %>.gif" alt="" /></a>
+<%args>
+$search
+</%args>
+<%init>
+my $header = $m->content();
+
+my $order_by = VegGuide::Search->ColumnNameToOrderBy($header);
+
+my $sort_order =
+    $search->order_by() eq $order_by
+    ? $search->opposite_sort_order()
+    : $search->DefaultSortOrder($order_by);
+
+my $new_search = $search->clone();
+$new_search->set_cursor_params( order_by   => $order_by,
+                                sort_order => $sort_order,
+                                limit      => $new_search->limit(),
+                                page       => 1,
+                              );
+
+my $image = 'none';
+if ( $search->order_by() eq $order_by )
+{
+    $image = $sort_order eq 'ASC' ? 'down' : 'up';
+}
+</%init>

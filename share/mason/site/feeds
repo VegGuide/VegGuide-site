@@ -1,0 +1,17 @@
+  <div id="body-container">
+
+   <div id="body" class="one-column">
+
+    <p>
+     If you want to keep up with what's new on the site, you can
+     subscribe to one of its feeds.
+    </p>
+
+    <& /lib/feeds-list.mas, base_uri => '/site', thing => 'the entire site' &>
+   </div>
+
+  </div>
+
+<%method page_title>
+VegGuide.Org Site Feeds
+</%method>

@@ -1,0 +1,13 @@
+<%method title>
+
+Image Suggestions
+
+</%method>
+
+<%method body>
+
+<p>
+Users can now suggest changes to an entry's image.
+</p>
+
+</%method>

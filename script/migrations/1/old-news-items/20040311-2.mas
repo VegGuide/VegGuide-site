@@ -1,0 +1,15 @@
+<%method title>
+
+User activity logs
+
+</%method>
+
+<%method body>
+
+<p>
+We now keep track of some of your activity on the site (like when you
+add entries, add a review, submit a suggestion, etc.).  This is being
+done to facilitate our soon-to-be-announced contest.
+</p>
+
+</%method>
