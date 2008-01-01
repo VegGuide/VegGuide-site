@@ -108,9 +108,8 @@ sub SkinForHostname
 {
     my $class = shift;
     my $hostname = shift;
-    warn "HN1: $hostname\n";
+
     $hostname =~ s/\.vegguide\.org$//;
-    warn "HN2: $hostname\n";
 
     my $skin;
     $skin = $class->new( hostname => $hostname );
