@@ -31,11 +31,11 @@ There were no regions or entries that matched your search. Sorry.
 <%args>
 $search_text
 @locations
-$vendor_search
-$vendors
-$vendor_count
+$vendor_search => undef
+$vendors => undef
+$vendor_count => 0
 </%args>
 
 <%method page_title>
-Search Results for "<% $m->caller_args(-2)->{search_text} | h %>"
+Search Results for "<% $m->caller_args(-1)->{search_text} | h %>"
 </%method>

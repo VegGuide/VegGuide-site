@@ -161,26 +161,27 @@ sub clone_entry_form : Local
 
 sub _search_by_name
 {
-    my $self = shift;
-    my $c    = shift;
-    my $name = shift;
+    my $self        = shift;
+    my $c           = shift;
+    my $search_text = shift;
 
+    my $name;
     my $parent;
     # Could be something like "Portland, OR" in which case we want
     # to find the appropriate region (if one exists).
-    if ( $name =~ /^([^,\d]+)\s*,\s*([^,\d]+)$/ )
+    if ( $search_text =~ /^([^,\d]+)\s*,\s*([^,\d]+)$/ )
     {
         $name   = $1;
         $parent = $2;
     }
 
-    my %p = ( name => $name );
+    my %p = ( name => $name || $search_text );
     $p{parent} = $parent if defined $parent;
 
     my @locations = VegGuide::Location->ByNameOrCityName(%p)->all();
 
     my $search;
-    my $vendor_count;
+    my $vendor_count = 0;
 
     unless ($parent)
     {
@@ -202,7 +203,7 @@ sub _search_by_name
         $c->response()->redirect( $search->uri() );
     }
 
-    $c->stash()->{search_text} = $name;
+    $c->stash()->{search_text} = $search_text;
     $c->stash()->{locations} = \@locations;
 
     if ($search)
