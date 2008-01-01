@@ -1,9 +1,3 @@
-Set up for new system
-
-* apt-get install build-essential libperl-dev perl-doc apache2 libapache2-mod-perl2 mysql-server libmysqlclient15-dev tenshi perlmagick mailman apache2-mpm-prefork libapache2-request-perl postfix subversion emacs21-nox libxml2-dev ca-certificates
-* install File::Find::Rule
-* Perl modules
-
 Migration
 
 U change dns to point to urth w/ down for maintenance page
@@ -22,6 +16,12 @@ H copy rv.sql, entry-images.tar.gz, skin-images-tar.gz, /usr/local/share/vegguid
 H copy /etc/apache/ssl.crt/www.vegguide.org.crt /etc/apache/ssl.key/www.vegguide.org.key
 
 H transfer all old data to new system
+
+N apt-get install build-essential libperl-dev perl-doc apache2 libapache2-mod-perl2 mysql-server libmysqlclient15-dev tenshi perlmagick mailman apache2-mpm-prefork libapache2-request-perl postfix subversion emacs21-nox libxml2-dev ca-certificates
+N install File::Find::Rule
+N Perl modules
+nn perl Build.PL
+nn ./Build modules
 
 N mysql -u root -e 'create database RegVeg'
 N mysql -u root RegVeg < rv.sql
