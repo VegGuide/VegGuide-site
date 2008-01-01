@@ -1,0 +1,2 @@
+30 4 * * * www-data  /usr/local/bin/regen-data-feed-rss
+38 2 * * 7 www-data  /usr/local/bin/send-watch-list-emails
