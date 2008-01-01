@@ -198,12 +198,12 @@ BEGIN
         my $height_method = sub { $_[0]->$dimensions_meth_name()->[1] };
 
         no strict 'refs';
-        *{ $filename_meth_name }  = $filename_method;
-        *{ $path_meth_name }      = $path_method;
-        *{ $size . '_uri' }       = $uri_method;
-        *{ $dimensions_meth_name} = $dimensions_method;
-        *{ $size . '_height' }    = $height_method;
-        *{ $size . '_width' }     = $width_method;
+        *{ $filename_meth_name }   = $filename_method;
+        *{ $path_meth_name }       = $path_method;
+        *{ $size . '_uri' }        = $uri_method;
+        *{ $dimensions_meth_name } = $dimensions_method;
+        *{ $size . '_height' }     = $height_method;
+        *{ $size . '_width' }      = $width_method;
     }
 }
 

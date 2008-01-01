@@ -238,7 +238,8 @@ sub add_vendor_for_data_feed
     if ( my $image = $p{vendor}->first_image() )
     {
         $rv{'image-link'} = $image->small_uri();
-        @rv{ 'image-x', 'image-y' } = imgsize( $image->small_file() );
+        $rv{'image-x'} = $image->small_width();
+        $rv{'image-y'} = $image->small_height();
     }
 
     $rv{hours} = [ $p{vendor}->hour_sets_by_day ];

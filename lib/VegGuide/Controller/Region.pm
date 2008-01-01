@@ -489,15 +489,17 @@ sub data_feed : LocalRegex('^(\d+).rss')
     my $self = shift;
     my $c    = shift;
 
+    my $location = eval { VegGuide::Location->new( location_id => $c->request()->captures()->[0] ) };
+
     $c->redirect('/')
-        unless $c->stash()->{location};
+        unless $location;
 
     my $cache_only =
-        $c->stash()->{location}->descendants_vendor_count() > VegGuide::Location->DataFeedDynamicLimit() ? 1 : 0;
+        $location->descendants_vendor_count() > VegGuide::Location->DataFeedDynamicLimit() ? 1 : 0;
 
     $self->_serve_rss_data_file
         ( $c,
-          $c->stash()->{location}->data_feed_rss_file( cache_only => $cache_only )
+          $location->data_feed_rss_file( cache_only => $cache_only )
         );
 }
 
