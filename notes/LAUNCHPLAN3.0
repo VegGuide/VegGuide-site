@@ -12,8 +12,12 @@ O tar -czf skin-images.tar.gz /var/www/images/skin
 O shut down mailman
 O sudo tar -czf mailman.tar.gz /var/lib/mailman/lists /var/lib/mailman/archives
 
-H copy rv.sql, entry-images.tar.gz, skin-images-tar.gz, /usr/local/share/vegguide/recaptcha-key
-H copy /etc/apache/ssl.crt/www.vegguide.org.crt /etc/apache/ssl.key/www.vegguide.org.key
+H copy rv.sql
+       entry-images.tar.gz
+       skin-images-tar.gz
+       /usr/local/share/vegguide/recaptcha-key
+       /etc/apache/ssl.crt/www.vegguide.org.crt
+       /etc/apache/ssl.key/www.vegguide.org.key
 
 H transfer all old data to new system
 
