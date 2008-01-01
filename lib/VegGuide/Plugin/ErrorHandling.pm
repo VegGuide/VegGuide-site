@@ -18,6 +18,8 @@ sub finalize_error
 
     my @errors = @{ $self->error() || [] };
 
+    $self->log()->error($_) for @errors;
+
     my $status =
         ( grep { /unknown resource|no default/i } @errors ) ? RC_NOT_FOUND : RC_INTERNAL_SERVER_ERROR;
 
