@@ -59,7 +59,7 @@ sub skin
     }
 
     return $self->{skin} =
-        VegGuide::Skin->SkinForHostname( ( $self->request()->hostname() || '' ) );
+        VegGuide::Skin->SkinForHostname( ( $self->request()->uri()->host() || '' ) );
 }
 
 sub client
