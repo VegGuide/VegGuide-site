@@ -32,5 +32,5 @@ $item => VegGuide::NewsItem->potential()
 </%args>
 
 <%init>
-my $action = $item->item_id() ? '/site/news' : news_item_uri( item => $item );
+my $action = $item->item_id() ? news_item_uri( item => $item ) : '/site/news';
 </%init>
