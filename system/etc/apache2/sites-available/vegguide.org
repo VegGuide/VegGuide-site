@@ -65,11 +65,18 @@
     RewriteRule   ^/user/view\.html                           /user/%1?                               [R=permanent,L]
 
     RewriteRule   ^/plain.*                                   -                                       [G,L]
-    RewriteRule   ^/(events|location|logged-in|noauth|vendor)/*\.html  -                              [G,L]  
+    RewriteRule   ^/(events|location|logged-in|noauth|vendor)/.*\.html  -                             [G,L]
+    RewriteRule   ^/(source|privacy|about|contact_info_key).html        -                             [G,L]
+    RewriteRule   ^/by_(name|geocode).html                    -                                       [G,L]
+    RewriteRule   ^/favicon.gif                               -                                       [G,L]
     RewriteRule   ^/submit.*                                  -                                       [G,L]
+
+    # you are l33t
+    RewriteRule   ^/https://www\.paypal\.com/cgi-bin/webscr   -                                       [F,L]
 
     RewriteRule   /rss/static/all\w+\.rss                     /site.rss                               [R=permanent,L]
 
+    RewriteRule   /maintenance.html                           /                                       [R,L]
 
     RewriteRule   ^(/mailman|/pipermail)(.*)  https://%{HTTP_HOST}$1$2 [R=permanent,L]
 
