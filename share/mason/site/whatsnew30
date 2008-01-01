@@ -61,6 +61,16 @@ which should make sorting a list by
 rating more useful.
 </p>
 
+<h3>Users can add new regions</h3>
+
+<p>
+In the past, adding a new region required that you suggest a new
+region and that a site admin add it. That was really slow, since the
+one guy (uh, me) who added the new regions often didn't get around to
+it. Now users can add new regions on their own. Just look for the "Add
+a new region" button when you're browsing the region tree.
+</p>
+
 <h3>Everything is Bookmarkable</h3>
 
 <p>
