@@ -66,7 +66,7 @@
 
     RewriteRule   ^/plain.*                                   -                                       [G,L]
     RewriteRule   ^/(events|location|logged-in|noauth|vendor)/.*\.html  -                             [G,L]
-    RewriteRule   ^/(source|privacy|about|contact_info_key).html        -                             [G,L]
+    RewriteRule   ^/(source|privacy|about|contact|info_key).html        -                             [G,L]
     RewriteRule   ^/by_(name|geocode).html                    -                                       [G,L]
     RewriteRule   ^/favicon.gif                               -                                       [G,L]
     RewriteRule   ^/submit.*                                  -                                       [G,L]
