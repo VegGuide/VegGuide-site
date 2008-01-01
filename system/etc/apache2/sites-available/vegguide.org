@@ -64,6 +64,10 @@
     RewriteCond   %{QUERY_STRING}         user_id=(\d+)
     RewriteRule   ^/user/view\.html                           /user/%1?                               [R=permanent,L]
 
+    RewriteRule   ^/plain.*                                   -                                       [G,L]
+    RewriteRule   ^/(events|location|logged-in|noauth|vendor)/*\.html  -                              [G,L]  
+    RewriteRule   ^/submit.*                                  -                                       [G,L]
+
     RewriteRule   /rss/static/all\w+\.rss                     /site.rss                               [R=permanent,L]
 
 
