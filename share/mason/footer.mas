@@ -15,7 +15,7 @@
 %   if ( $c->vg_user()->viewable_suggestion_count() ) {
      <li class="<% $c->vg_user()->skin_count() ? '' : 'first' %>">
       <a href="<% user_uri( user => $c->vg_user(), path => 'suggestions' ) | h %>" title="Suggestions"
-         >Suggestions</a>
+         >Suggestions (<% $c->vg_user()->viewable_suggestion_count() %>)</a>
      </li>
 %   }
 %   if ( $c->vg_user()->is_admin() ) {
