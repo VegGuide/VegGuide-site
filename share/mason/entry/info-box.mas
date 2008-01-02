@@ -59,7 +59,7 @@
 %     if ( my @cc = $vendor->accepted_credit_cards() ) {
         <li>
 %       for my $cc ( sort { lc $a->name() cmp lc $b->name() } @cc ) {
-         <img src="<% static_uri( path => "/images/$cc->image_name().png" ) %>"
+         <img src="<% static_uri( path => '/images/' . $cc->image_name() . '.png' ) %>"
               height="25" width="38"
               alt="<% $cc->name() | h %>" title="<% $cc->name() | h %>" />
 %       }
