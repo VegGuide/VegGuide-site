@@ -25,7 +25,7 @@
 % }
 
      <div class="form-item">
-      <label for="is_country">Country?</label>
+      <label for="is_country">Is this region a country?</label>
       <& /lib/form/boolean.mas, name => 'is_country' &>
      </div>
 
