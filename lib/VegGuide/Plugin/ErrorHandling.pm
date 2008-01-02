@@ -66,7 +66,7 @@ sub _log_error
             if $user->user_id();
     }
 
-    $error{error} = $error;
+    $error{error} = $error . '';
 
     $self->log()->error( VegGuide::JSON->Encode( \%error ) );
 }
