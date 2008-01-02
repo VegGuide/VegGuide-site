@@ -8,7 +8,7 @@ use HTTP::Status qw( RC_NOT_FOUND RC_INTERNAL_SERVER_ERROR );
 
 sub finalize_error
 {
-    my $self    = shift;
+    my $self = shift;
 
     if ( $self->debug() )
     {
