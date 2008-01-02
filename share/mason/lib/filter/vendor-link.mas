@@ -1,11 +1,5 @@
-<a href="<% entry_uri( vendor => $vendor, @path ) %>" class="<% $class %>" title="<% $reviews ? 'reviews of ' : '' %><% $vendor->name | h %>"><% $m->content %></a>\
+<a href="<% entry_uri( vendor => $vendor ) %>" class="<% $class %>" title="<% $reviews ? 'reviews of ' : '' %><% $vendor->name | h %>"><% $m->content %></a>\
 <%args>
 $vendor
 $class => 'entry'
-$reviews => 0
 </%args>
-<%init>
-my @path;
-@path = ( path => 'reviews' )
-    if $reviews;
-</%init>

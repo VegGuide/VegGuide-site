@@ -151,7 +151,7 @@ if ( $search->can('latitude') ) {
          <li><a href="<% $map_uri | h %>" title="Map to <& /lib/l10n/vendor-name.mas, vendor => $vendor &>"><& /lib/image/icon.mas, name => 'map' &></a></li>
 % }
 % if ($comment_count) {
-         <li><&| /lib/link/vendor.mas, vendor => $vendor, path => 'reviews', title_prefix => 'Reviews for' &><& /lib/image/icon.mas, name => 'reviews' &></&></li>
+         <li><&| /lib/link/vendor.mas, vendor => $vendor, title_prefix => 'Reviews for' &><& /lib/image/icon.mas, name => 'reviews' &></&></li>
 % }
 % if ($is_open) {
          <li><& /lib/image/icon.mas, name => 'open', title => 'Open for the next hour' &></li>
