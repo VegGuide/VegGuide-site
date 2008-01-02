@@ -28,7 +28,7 @@
 
  <ul class="left-list">
 %   for my $icon (@I1) {
-  <li><img src="/<% static_uri( path => "/images/map-icons/$icon->[1].png" ) %>" height="40" width="29" />
+  <li><img src="<% static_uri( path => "/images/map-icons/$icon->[1].png" ) %>" height="40" width="29" />
       <% $icon->[2] | h %>
   </li>
 %   }
