@@ -12,7 +12,7 @@ use Sys::Hostname qw( hostname );
 {
     my $Hostname = hostname();
     my $IsProd = $Hostname =~ /(?:vegguide|vegcrew|satyr)/ ? 1 : 0;
-    my $IsTest = $Hostname =~ /next\.vegguide|test-install/;
+    my $IsTest = $Hostname =~ /test\.vegguide|test-install/;
 
     sub Hostname { return $Hostname }
 
@@ -314,9 +314,9 @@ sub reCAPTCHAPublicKey
                              'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBQJbrWfLEAEyqTG'
                              . 'EuLojCrBX82DARRenHsFYS69EyIksb1Zp6vMyATaFw',
                            },
-          next          => { api  =>
-                             'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBTu9GDiS5PXa0OWI'
-                             . 'F23aAjqVS8eNRQuTCjnO6udaEeRZs4vdkkt02cDcg'
+          test          => { api  =>
+                             'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBQFhTS8R6luU5KHR'
+                             . '0NmLWmiFo6Z6RTyYdsJX2w7MzzF-Wh74HXvDfC94g'
                            },
           houseabsolute => { api  =>
                              'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBT_1JRxtqVlOCGke'
@@ -367,7 +367,7 @@ sub reCAPTCHAPublicKey
         my $type  = shift;
 
         my $key =
-              hostname() =~ /next/          ? 'next'
+              hostname() =~ /test/          ? 'test'
             : hostname() =~ /houseabsolute/ ? 'houseabsolute'
             : hostname() =~ /quasar/        ? 'quasar'
 	    : hostname() =~ /ubuntu/        ? 'ubuntu'
