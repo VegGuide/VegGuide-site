@@ -236,6 +236,17 @@ sub CanonicalWebHostname
     return $hostname;
 }
 
+sub StaticPrefix
+{
+    my $class = shift;
+
+    return unless $class->IsProduction();
+
+    my ($revision) = q$Id:$ =~ /Id: \S+ (\d+)/;
+
+    return $revision;
+}
+
 {
     my $Secret;
     sub ForgotPWSecret

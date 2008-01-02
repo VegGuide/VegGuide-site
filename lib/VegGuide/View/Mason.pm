@@ -15,7 +15,8 @@ use base 'Catalyst::View::Mason';
     use VegGuide::Geocoder;
     use VegGuide::JSON;
     use VegGuide::SiteURI qw( entry_uri entry_image_uri entry_review_uri
-                              news_item_uri region_uri user_uri site_uri );
+                              news_item_uri region_uri user_uri site_uri
+                              static_uri );
     use VegGuide::Util qw( list_to_english string_is_empty );
 }
 

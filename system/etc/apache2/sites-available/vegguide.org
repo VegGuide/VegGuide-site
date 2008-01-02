@@ -102,14 +102,22 @@
     </Location>
 
     Alias   /css            /usr/local/share/vegguide/css
+    Alias   /\d+css         /usr/local/share/vegguide/css
     Alias   /images         /usr/local/share/vegguide/images
+    Alias   /\d+/images     /usr/local/share/vegguide/images
     Alias   /static/rss     /var/cache/vegguide/rss
     Alias   /static         /usr/local/share/vegguide/static
     Alias   /w3c            /usr/local/share/vegguide/w3c
 
     Alias   /entry-images   /var/lib/vegguide/entry-images
     Alias   /js             /var/lib/vegguide/js
+    Alias   /\d+/js         /var/lib/vegguide/js
     Alias   /skin-images    /var/lib/vegguide/skin-images
+
+    <LocationMatch "^/\d+/(css|images|js)">
+        ExpiresActive On
+        ExpiresDefault "now plus 10 years"
+    </LocationMatch>
 
     ErrorDocument 503  /static/503.html
 </VirtualHost>

@@ -1,4 +1,4 @@
-<% $header | h %> <a class="sort-link" href="<% $new_search->uri() | h %>" title="sort by <% $header | h %> in <% $sort_order eq 'ASC' ? 'ascending' : 'descending' %> order"><img src="/images/sort-<% $image %>.gif" alt="" /></a>
+<% $header | h %> <a class="sort-link" href="<% $new_search->uri() | h %>" title="sort by <% $header | h %> in <% $sort_order eq 'ASC' ? 'ascending' : 'descending' %> order"><img src="<% static_uri( path => "/images/sort-$image.gif" ) %>" alt="" /></a>
 <%args>
 $search
 </%args>

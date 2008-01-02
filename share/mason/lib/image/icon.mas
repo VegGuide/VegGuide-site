@@ -13,7 +13,7 @@ $title => ''
 my %sizes;
 </%once>
 <%init>
-my $uri = "/images/icons/$name.png";
+my $uri = static_uri( path => "/images/icons/$name.png" );
 
 unless ( exists $sizes{$name} )
 {

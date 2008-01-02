@@ -10,7 +10,8 @@ use VegGuide::Validate qw( validate VENDOR_TYPE LOCATION_TYPE USER_TYPE
                            SCALAR_TYPE HASHREF_TYPE BOOLEAN_TYPE );
 
 our @EXPORT_OK = qw( entry_uri entry_image_uri entry_review_uri
-                     news_item_uri region_uri user_uri site_uri );
+                     news_item_uri region_uri user_uri site_uri
+                     static_uri );
 
 
 {
@@ -166,6 +167,24 @@ sub site_uri
     }
 
     return uri(%p);
+}
+
+{
+    my $Prefix = VegGuide::Config->StaticPrefix();
+    sub static_uri
+    {
+        my %p = @_;
+
+        if ( delete $p{with_host} )
+        {
+            %p = ( %p, _with_host(1) );
+        }
+
+        $p{path} = q{/} . $Prefix . $p{path}
+            if $Prefix;
+
+        return uri(%p);
+    }
 }
 
 sub _with_host
