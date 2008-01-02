@@ -8,6 +8,8 @@
 % if ($show_rating_input) {
       <div class="form-item">
        <label>Rating:</label>
+       <input id="rating-none" name="rating" type="radio" value="">
+       <label class="sub-label" for="rating-none">no rating</label>
 %   for my $val ( 1..5 ) {
        <input id="rating-<% $val %>" name="rating" type="radio" value="<% $val %>">
        <label class="sub-label" for="rating-<% $val %>"><% VegGuide::Vendor->RatingDescription($val) %></label>
