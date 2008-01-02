@@ -119,7 +119,7 @@ sub _install_extra
     $self->dispatch('copy_system_files');
     $self->dispatch('make_entry_images_dir');
     $self->dispatch('make_skin_images_dir');
-    $self->dispatch('make_etc_dir';)
+    $self->dispatch('make_etc_dir');
     $self->dispatch('write_revision_file');
     $self->dispatch('make_cache_dir');
     $self->dispatch('generate_combined_js');
