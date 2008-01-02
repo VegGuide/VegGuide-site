@@ -236,15 +236,16 @@ sub CanonicalWebHostname
     return $hostname;
 }
 
-sub StaticPrefix
 {
-    my $class = shift;
+    my $Revision;
+    sub StaticPrefix
+    {
+        my $class = shift;
 
-    return unless $class->IsProduction();
+        return unless $class->IsProduction();
 
-    my ($revision) = q$Id:$ =~ /Id: \S+ (\d+)/;
-
-    return $revision;
+        return $Revision ||= read_file( File::Spec->catfile( $class->EtcDir(), 'revision' ) );
+    }
 }
 
 {

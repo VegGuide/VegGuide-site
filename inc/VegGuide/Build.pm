@@ -119,7 +119,8 @@ sub _install_extra
     $self->dispatch('copy_system_files');
     $self->dispatch('make_entry_images_dir');
     $self->dispatch('make_skin_images_dir');
-    $self->dispatch('make_etc_dir');
+    $self->dispatch('make_etc_dir';)
+    $self->dispatch('write_revision_file');
     $self->dispatch('make_cache_dir');
     $self->dispatch('generate_combined_js');
     $self->dispatch('copy_alzabo_schema');
@@ -331,6 +332,25 @@ sub ACTION_make_etc_dir
     require VegGuide::Config;
 
     mkpath( VegGuide::Config->EtcDir(), 1, 0755 );
+}
+
+sub ACTION_write_revision_file
+{
+    my $self = shift;
+
+    return if $FAKE;
+
+    require VegGuide::Config;
+
+    my ($revision) = `svn info` =~ /Revision: (\d+)/;
+
+    my $file = File::Spec->catdir( VegGuide::Config->EtcDir(), 'revision' );
+
+    open my $fh, '>', $file
+        or die "Cannot write to $file: $!";
+    print $fh $revision
+        or die "Cannot write to $file: $!";
+    close $fh;
 }
 
 sub ACTION_make_cache_dir
