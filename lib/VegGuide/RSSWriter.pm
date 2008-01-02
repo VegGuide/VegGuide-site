@@ -75,6 +75,18 @@ sub add_location_for_data_feed
         $self->add_vendor_for_data_feed( vendor => $vendor, %p );
     }
 
+    unless ( $vendors->count() )
+    {
+        $self->{g}->item( title => 'No entries in this region',
+                          link  => region_uri( location => $location, with_host => 1 ),
+                          dc =>
+                          { date =>
+                            DateTime::Format::W3CDTF->format_datetime( DateTime->now() ),
+                          },
+
+                        );
+    }
+
     my $description = 'Data feed of entries for ' . $location->name;
     $description .= ', ' . $location->parent->name if $location->parent;
     $description .= '.';
