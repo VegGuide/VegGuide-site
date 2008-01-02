@@ -1,7 +1,7 @@
 <p>
 There are a lot of changes in VegGuide 3.0. The first, and most
 obvious, was a major overhaul of the look and feel of the site. The
-old version was a bit too programmerish. Out UI goal for VG3 is to
+old version was a bit too programmerish. Our UI goal for VG3 is to
 make the site easier to use. Specifically, we've tried to reduce the
 number of links on each page, as well as using consistent link and
 button styles for similar actions.
