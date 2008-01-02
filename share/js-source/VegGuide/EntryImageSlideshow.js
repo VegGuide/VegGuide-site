@@ -49,11 +49,14 @@ VegGuide.EntryImageSlideshow.instrumentPage = function () {
         show_func
     );
 
-    DOM.Events.addListener(
-        $( "show-slideshow" ),
-        "click",
-        show_func
-    );
+    var show_link = $( "show-slideshow" );
+    if (show_link) {
+        DOM.Events.addListener(
+            show_link,
+            "click",
+            show_func
+        );
+    }
 };
 
 VegGuide.EntryImageSlideshow.prototype._init = function (lb) {
