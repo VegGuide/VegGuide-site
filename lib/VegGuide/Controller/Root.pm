@@ -118,7 +118,7 @@ sub home : Path('/home')
 
             my $hours1 = $c->request()->param("hours-$d-1");
 
-            if ( defined $hours1 )
+            if ( ! string_is_empty($hours1) )
             {
                 $descs[$d]{s1} =
                     eval { VegGuide::Vendor->CanonicalHoursRangeDescription( $hours1, 'assume pm' ) };
