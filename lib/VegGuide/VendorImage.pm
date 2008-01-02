@@ -12,7 +12,7 @@ use VegGuide::Validate qw( validate validate_with SCALAR_TYPE
                            USER_TYPE VENDOR_TYPE FILE_TYPE POS_INTEGER_TYPE );
 
 use File::Copy qw( copy );
-use File::MMagic;
+use File::LibMagic;
 use File::Path qw( mkpath );
 use File::Spec;
 use Image::Magick;
@@ -53,7 +53,7 @@ use VegGuide::Vendor;
                  vendor  => VENDOR_TYPE,
                };
 
-    my $Magic = File::MMagic->new();
+    my $Magic = File::LibMagic->new();
 
     my %SupportedTypes = map { $_ => 1 } qw( image/gif image/png image/jpeg );
     my %Extensions     = ( 'image/gif'  => 'gif',
