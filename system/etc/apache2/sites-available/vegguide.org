@@ -73,7 +73,7 @@
     RewriteRule   ^/(events?|location|logged-in||news|noauth|vendor)/.*\.html  -                      [G,L]
     RewriteRule   ^/(source|privacy|about|contact|info_key|contest|todo).html  -                      [G,L]
     RewriteRule   ^/(search|printable|location_suggestion|promo_cards).html    -                      [G,L]
-    RewriteRule   ^/by_(name|geocode).html                    -                                       [G,L]
+    RewriteRule   ^/by_(name|geocode|zipcode).html            -                                       [G,L]
     RewriteRule   ^/favicon.gif                               -                                       [G,L]
     RewriteRule   ^/submit.*                                  -                                       [G,L]
 
