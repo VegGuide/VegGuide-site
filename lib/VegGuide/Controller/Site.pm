@@ -64,6 +64,7 @@ sub duplicate_resolution_form : Local
                         );
 
     my %data = $c->request()->location_data();
+    $data{parent_location_id} = $c->request()->param('parent_location_id');
 
     $c->stash()->{locations} = [ VegGuide::Location->ByNameOrCityName( name => $data{name} )->all() ];
     $c->stash()->{params}    = \%data;
