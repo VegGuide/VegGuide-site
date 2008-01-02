@@ -18,6 +18,7 @@ use File::Spec;
 use Image::Magick;
 use Image::Size qw( imgsize );
 use VegGuide::Config;
+use VegGuide::Vendor;
 
 
 {
@@ -258,6 +259,13 @@ sub rest_data
              height  => $self->large_height(),
              width   => $self->large_width(),
            );
+}
+
+sub vendor
+{
+    my $self = shift;
+
+    return $self->{vendor} ||= VegGuide::Vendor->new( vendor_id => $self->vendor_id() );
 }
 
 sub AllVendorIds
