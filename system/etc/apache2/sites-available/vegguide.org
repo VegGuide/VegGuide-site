@@ -9,6 +9,7 @@
 #   cgi (for mailman?)
 #   deflate
 #   env (for ssl?)
+#   expires
 #   headers
 #   mime
 #   proxy
