@@ -108,6 +108,8 @@ sub localize_for_location
     my $locale = $location->locale
         or return;
 
+    return if $locale->language_code() =~ /^en/i;
+
     return 1
         if $self->show_utf8 && $self->accepts_language( $locale->language_code );
 }
