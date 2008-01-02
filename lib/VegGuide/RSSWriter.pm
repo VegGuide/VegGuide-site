@@ -355,7 +355,7 @@ sub _vendor_reviews_link
     }
     else
     {
-        return entry_uri( vendor => $vendor, path => 'reviews', with_host => 1 );
+        return entry_uri( vendor => $vendor, with_host => 1 );
     }
 }
 
