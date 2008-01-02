@@ -67,7 +67,7 @@ use VegGuide::Config;
 
         my $type = $Magic->checktype_filename( $p{file} );
 
-        data_validation_error 'Invalid file type: ' . $type->type()
+        data_validation_error 'Invalid file type: ' . $type
             unless $SupportedTypes{ $type || '' };
 
         my $image =
