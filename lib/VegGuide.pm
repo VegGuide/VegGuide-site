@@ -42,6 +42,8 @@ sub vg_user
 {
     my $self = shift;
 
+    return unless $self->user();
+
     return $self->{vg_user} ||= $self->user()->get_object();
 }
 

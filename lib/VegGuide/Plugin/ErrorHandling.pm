@@ -59,9 +59,12 @@ sub _log_error
 
     my %error = ( uri => $self->request()->uri() . '' );
 
-    $error{user} = $self->vg_user()->real_name();
-    $error{user} .= q{ - } . $self->vg_user()->user_id()
-        if $self->vg_user()->user_id();
+    if ( my $user = $self->vg_user() )
+    {
+        $error{user} = $user->real_name();
+        $error{user} .= q{ - } . $user->user_id()
+            if $user->user_id();
+    }
 
     $error{error} = $error;
 
