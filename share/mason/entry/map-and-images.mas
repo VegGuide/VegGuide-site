@@ -28,7 +28,10 @@ DOM.Ready.onDOMDone( function () {
         <img id="main-image" src="<% $first_image->small_uri() | h %>" alt="main image"
              height="<% $first_image->small_height() %>" width="<% $first_image->small_width() %>" />
 %   if ($image_count) {
-        <div id="image-count">This entry has <% $image_count %> more <% PL( 'image', $image_count ) %>.</div>
+        <div id="image-count">
+         This entry has <a id="show-slideshow" href="#"><% $image_count %>
+         more <% PL( 'image', $image_count ) %></a>.
+        </div>
 %   }
 % } else {
         <a href="<% entry_uri( vendor => $vendor, path => 'images_form' ) | h %>"

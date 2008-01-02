@@ -34,17 +34,25 @@ VegGuide.EntryImageSlideshow.instrumentPage = function () {
 
     var show = new VegGuide.EntryImageSlideshow (lb);
 
+    var show_func = function (e) {
+        show.start();
+
+        e.preventDefault();
+        if ( e.stopPropogation ) {
+            e.stopPropagation();
+        }
+    };
+
     DOM.Events.addListener(
         slideshow_link,
         "click",
-        function (e) {
-            show.start();
+        show_func
+    );
 
-            e.preventDefault();
-            if ( e.stopPropogation ) {
-                e.stopPropagation();
-            }
-        }
+    DOM.Events.addListener(
+        $( "show-slideshow" ),
+        "click",
+        show_func
     );
 };
 
