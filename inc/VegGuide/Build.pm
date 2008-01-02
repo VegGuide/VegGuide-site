@@ -344,6 +344,8 @@ sub ACTION_write_revision_file
 
     my ($revision) = `svn info` =~ /Revision: (\d+)/;
 
+    return unless $revision;
+
     my $file = File::Spec->catdir( VegGuide::Config->EtcDir(), 'revision' );
 
     open my $fh, '>', $file
