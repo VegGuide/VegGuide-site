@@ -86,10 +86,10 @@
 
     RewriteRule   ^(/mailman|/pipermail)(.*)  https://%{HTTP_HOST}$1$2 [R=permanent,L]
 
-    RewriteRule   !^/css               - [C]
+    RewriteRule   !^/(?:\d+/)?css      - [C]
     RewriteRule   !^/entry-images      - [C]
-    RewriteRule   !^/images            - [C]
-    RewriteRule   !^/js                - [C]
+    RewriteRule   !^/(?:\d+/)?images   - [C]
+    RewriteRule   !^/(?:\d+/)?js       - [C]
     RewriteRule   !^/skin-images       - [C]
     RewriteRule   !^/static            - [C]
     RewriteRule   !^/w3c               - [C]
@@ -101,18 +101,15 @@
         SetOutputFilter DEFLATE
     </Location>
 
-    Alias   /css            /usr/local/share/vegguide/css
-    Alias   /\d+css         /usr/local/share/vegguide/css
-    Alias   /images         /usr/local/share/vegguide/images
-    Alias   /\d+/images     /usr/local/share/vegguide/images
-    Alias   /static/rss     /var/cache/vegguide/rss
-    Alias   /static         /usr/local/share/vegguide/static
-    Alias   /w3c            /usr/local/share/vegguide/w3c
+    AliasMatch   (?:/\d+)?/css         /usr/local/share/vegguide/css
+    AliasMatch   (?:/\d+)?/images      /usr/local/share/vegguide/images
+    Alias        /static/rss           /var/cache/vegguide/rss
+    Alias        /static               /usr/local/share/vegguide/static
+    Alias        /w3c                  /usr/local/share/vegguide/w3c
 
-    Alias   /entry-images   /var/lib/vegguide/entry-images
-    Alias   /js             /var/lib/vegguide/js
-    Alias   /\d+/js         /var/lib/vegguide/js
-    Alias   /skin-images    /var/lib/vegguide/skin-images
+    Alias        /entry-images         /var/lib/vegguide/entry-images
+    AliasMatch   (?:/\d+)?/js          /var/lib/vegguide/js
+    Alias        /skin-images          /var/lib/vegguide/skin-images
 
     <LocationMatch "^/\d+/(css|images|js)">
         ExpiresActive On
