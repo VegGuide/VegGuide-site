@@ -185,7 +185,7 @@ sub _search_by_name
 
     unless ($parent)
     {
-        $search = VegGuide::Search::Vendor::ByName->new( name => $name );
+        $search = VegGuide::Search::Vendor::ByName->new( name => $name || $search_text );
         $vendor_count = $search->count();
     }
 
