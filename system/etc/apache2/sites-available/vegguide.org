@@ -65,11 +65,14 @@
     RewriteRule   ^/user/view\.html                           /user/%1?                               [R=permanent,L]
 
     RewriteRule   ^/index\.html                               /                                       [R=permanent,L]
+    RewriteRule   ^/faq\.html                                 /site/help                              [R=permanent,L]
+    RewriteRule   ^/rss                                       /site/feeds                             [R=permanent,L]
+    RewriteRule   ^/rss/data_feed.html                        /site/data_feed                         [R=permanent,L]
 
     RewriteRule   ^/plain.*                                   -                                       [G,L]
     RewriteRule   ^/(events?|location|logged-in||news|noauth|vendor)/.*\.html  -                      [G,L]
     RewriteRule   ^/(source|privacy|about|contact|info_key|contest|todo).html  -                      [G,L]
-    RewriteRule   ^/search.html                               -                                       [G,L]
+    RewriteRule   ^/(search|printable|location_suggestion|promo_cards).html    -                      [G,L]
     RewriteRule   ^/by_(name|geocode).html                    -                                       [G,L]
     RewriteRule   ^/favicon.gif                               -                                       [G,L]
     RewriteRule   ^/submit.*                                  -                                       [G,L]
