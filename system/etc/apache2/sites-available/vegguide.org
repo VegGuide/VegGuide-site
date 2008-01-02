@@ -86,10 +86,10 @@
 
     RewriteRule   ^(/mailman|/pipermail)(.*)  https://%{HTTP_HOST}$1$2 [R=permanent,L]
 
-    RewriteRule   !^/(?:\d+/)?css      - [C]
+    RewriteRule   !^(?:/\d+)?/css      - [C]
     RewriteRule   !^/entry-images      - [C]
-    RewriteRule   !^/(?:\d+/)?images   - [C]
-    RewriteRule   !^/(?:\d+/)?js       - [C]
+    RewriteRule   !^(?:/\d+)?/images   - [C]
+    RewriteRule   !^(?:/\d+)?/js       - [C]
     RewriteRule   !^/skin-images       - [C]
     RewriteRule   !^/static            - [C]
     RewriteRule   !^/w3c               - [C]
