@@ -44,8 +44,15 @@ sub default : Private
     my $c    = shift;
 
     my $path = $c->request()->uri()->path();
-    $c->stash()->{template} = $path
-        if $c->view()->has_template_for_path($path);
+
+    if ( $c->view()->has_template_for_path($path) )
+    {
+        $c->stash()->{template} = $path;
+    }
+    else
+    {
+        $c->response()->redirect('/');
+    }
 
     return 1;
 }
