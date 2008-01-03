@@ -97,14 +97,14 @@ sub authentication_POST
             ( error  => \@errors,
               uri    => '/user/login_form',
               params => { email_address => $email,
-                          return_to     => $c->request()->param('return_to'),
+                          return_to     => $c->request()->parameters()->{return_to},
                         },
             );
     }
 
     $c->add_message( 'Welcome to the site, ' . $c->vg_user()->real_name() );
 
-    $c->redirect( $c->request()->param('return_to') || '/' );
+    $c->redirect( $c->request()->parameters()->{return_to} || '/' );
 }
 
 sub authentication_DELETE
@@ -116,7 +116,7 @@ sub authentication_DELETE
 
     $c->add_message( 'You have been logged out.' );
 
-    $c->redirect( $c->request()->param('return_to') || '/' );
+    $c->redirect( $c->request()->parameters()->{return_to} || '/' );
 }
 
 sub forgot_password_form : Local
@@ -156,7 +156,7 @@ sub password_reminder_POST
             ( error  => \@errors,
               uri    => '/user/forgot_password_form',
               params => { email_address => $email,
-                          return_to     => $c->request()->param('return_to'),
+                          return_to     => $c->request()->parameters()->{return_to},
                         },
             );
     }
@@ -166,7 +166,7 @@ sub password_reminder_POST
     $c->add_message( "A message telling you how to change your password has been sent to $email." );
 
     $c->redirect( uri( path => '/user/login_form',
-                       query => { return_to => $c->request()->param('return_to') },
+                       query => { return_to => $c->request()->parameters()->{return_to} },
                      )
                 );
 }
@@ -292,7 +292,7 @@ sub _update_user
 
     my $subject = $c->vg_user()->user_id() == $user->user_id() ? 'Your' : $user->real_name() . q{'s};
 
-    my $redirect = $c->request()->param('return_to') || user_uri( user => $user );
+    my $redirect = $c->request()->parameters()->{return_to} || user_uri( user => $user );
 
     unless ( keys %user_data == 1 && $user_data{entries_per_page} )
     {
@@ -358,7 +358,7 @@ sub users_GET
     my $self = shift;
     my $c    = shift;
 
-    my $search = VegGuide::Search::User->new( real_name => ( $c->request()->param('name') || '' ) );
+    my $search = VegGuide::Search::User->new( real_name => ( $c->request()->parameters('name') || '' ) );
     $search->set_cursor_params( page  => 1,
                                 limit => 0,
                               );
@@ -471,7 +471,7 @@ sub users_POST
 
     $c->add_message( 'Your account has been created.' );
 
-    $c->redirect( $c->request()->param('return_to') || '/' );
+    $c->redirect( $c->request()->parameters()->{return_to} || '/' );
 
 }
 
@@ -581,7 +581,7 @@ sub watch_list_region_DELETE : Private
 
     $user->unsubscribe_from_location( location => $location );
 
-    $c->redirect( $c->request()->param('return_to') || '/' );
+    $c->redirect( $c->request()->parameters()->{return_to} || '/' );
 }
 
 sub suggestions : Chained('_set_user') : PathPart('suggestions') : Args(0)
