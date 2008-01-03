@@ -583,14 +583,17 @@ sub category_ids
 
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        $schema->function
-            ( select => $schema->VendorCategory_t()->category_id_c(),
-              join   => [ $schema->tables( 'VendorCategory', 'Category' ) ],
-              where  =>
-              [ $schema->VendorCategory_t()->vendor_id_c(), '=', $self->vendor_id() ],
-              order_by => [ $schema->Category_t()->display_order_c(), 'ASC' ],
-            );
+    $self->{category_ids} ||=
+            [ $schema->function
+              ( select => $schema->VendorCategory_t()->category_id_c(),
+                    join   => [ $schema->tables( 'VendorCategory', 'Category' ) ],
+                    where  =>
+                    [ $schema->VendorCategory_t()->vendor_id_c(), '=', $self->vendor_id() ],
+                    order_by => [ $schema->Category_t()->display_order_c(), 'ASC' ],
+                  )
+            ];
+
+    return @{ $self->{category_ids} };
 }
 # for fill in form
 sub category_id { [ $_[0]->category_ids ] }
@@ -1133,18 +1136,30 @@ sub weighted_rating_and_count
 {
     my $self = shift;
 
+    $self->{weighted_rating_and_count} ||= $self->_weighted_rating_and_count();
+
+    return @{ $self->{weighted_rating_and_count} };
+}
+
+sub _weighted_rating_and_count
+{
+    my $self = shift;
+
     my $schema = VegGuide::Schema->Connect();
 
     my $count = $self->rating_count();
 
-    return ( 0, 0 ) unless $count;
+    return [ 0, 0 ] unless $count;
 
-    return ( $self->weighted_rating(), $count );
+    return [ $self->weighted_rating(), $count ];
 }
 
 sub weighted_rating
 {
     my $self = shift;
+
+    return $self->{weighted_rating}
+        if defined $self->{weighted_rating};
 
     my $schema = VegGuide::Schema->Connect();
 
@@ -1158,10 +1173,11 @@ sub weighted_rating
               1 );
 
     return
-        $schema->Vendor_t()->function
-            ( select => $rating,
-              where  => [ $schema->Vendor_t()->vendor_id_c(), '=', $self->vendor_id() ],
-            );
+        $self->{weighted_rating} =
+            $schema->Vendor_t()->function
+                ( select => $rating,
+                  where  => [ $schema->Vendor_t()->vendor_id_c(), '=', $self->vendor_id() ],
+                );
 }
 
 sub WeightedRating
@@ -2056,13 +2072,18 @@ sub image_count
 
 sub image_ids
 {
+    my $self = shift;
+
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        shift->_id_list
-            ( $schema->VendorImage_t(),
-              $schema->VendorImage_t()->vendor_image_id_c(),
-            );
+    $self->{image_ids} ||=
+        [ $self->_id_list
+              ( $schema->VendorImage_t(),
+                $schema->VendorImage_t()->vendor_image_id_c(),
+              )
+        ];
+
+    return @{ $self->{image_ids} };
 }
 
 my $OrganizationCategoryID =
