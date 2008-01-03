@@ -12,6 +12,8 @@ use VegGuide::JSON;
 sub finalize {
     my $self = shift;
 
+    $self->NEXT::finalize(@_);
+
     for my $error ( @{ $self->error } ) {
         $self->_log_error($error);
     }
