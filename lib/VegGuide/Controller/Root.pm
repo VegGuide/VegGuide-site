@@ -26,6 +26,18 @@ sub index : Path('/') : Args(0)
     $c->stash()->{template} = '/index';
 }
 
+# Used to exit gracefully for the benefit of profilers like FastProf
+sub exit : Path('/exit') : Args(0)
+{
+    my $self = shift;
+    my $c    = shift;
+
+    die 'Naughty attempt to kill VegGuide server'
+        if VegGuide::Config->IsProduction();
+
+    exit 0;
+}
+
 {
     my $CacheKey = 'featured-vendor';
     sub _featured_vendor
