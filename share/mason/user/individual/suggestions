@@ -221,7 +221,7 @@ my $vendor = $suggestion->vendor();
 
      <div class="suggestion-buttons">
       <input type="submit" class="submit" name="accept" value="Accept" />
-      <input type="submit" class="submit" name="reject" value="Reject" disabled="disabled" />
+      <input type="submit" class="submit" name="reject" value="Reject" />
      </div>
     </form>
 
