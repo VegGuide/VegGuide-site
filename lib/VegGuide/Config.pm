@@ -39,32 +39,38 @@ use Sys::Hostname qw( hostname );
             Log::Dispatch
             SubRequest
           );
+
+    my @Imports;
+
     sub CatalystImports
     {
-        my $class = shift;
+        return @Imports if @Imports;
 
-        return @StandardImports
-            if $class->IsProduction() || $class->Profiling();
+        @Imports = @StandardImports;
+        push @Imports, 'Static::Simple'
+            unless $ENV{MOD_PERL} || __PACKAGE__->Profiling();
 
-        return ( @StandardImports,
-                 qw( StackTrace
-                     Static::Simple
-                   )
-               );
+        push @Imports, 'StackTrace'
+            unless __PACKAGE__->IsProduction() || __PACKAGE__->Profiling();
+
+        return @Imports;
     }
 }
 
 {
     my @Profilers =
         qw( Devel/DProf.pm
+            Devel/FastProf.pm
             Devel/Profile.pm
             Devel/Profiler.pm
             Devel/SmallProf.pm
           );
 
+    my $Profiling = grep { $INC{$_} } @Profilers;
+
     sub Profiling
     {
-        return grep { $INC{$_} } @Profilers;
+        return $Profiling;
     }
 }
 
