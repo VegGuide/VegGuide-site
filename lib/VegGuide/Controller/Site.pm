@@ -21,7 +21,7 @@ sub feed : LocalRegex('^recent.(atom|rss)')
 {
     my $self = shift;
     my $c    = shift;
-    my $type = $c->request()->captures()->[1];
+    my $type = $c->request()->captures()->[0];
 
     my $method =
           $c->request()->param('reviews_only') ? 'NewReviewsFeed'
