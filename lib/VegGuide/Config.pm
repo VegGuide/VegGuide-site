@@ -4,9 +4,11 @@ use strict;
 use warnings;
 
 use Cwd ();
+use DateTime;
 use File::Basename qw( dirname );
 use File::Slurp qw( read_file );
 use File::Spec;
+use Log::Dispatch::FileShared;
 use Sys::Hostname qw( hostname );
 
 {
@@ -180,11 +182,15 @@ sub AlzaboRootDir
         my @loggers;
         if ( $class->IsProduction() )
         {
-            push @loggers, { class     => 'Syslog',
-                             name      => 'Syslog',
+            push @loggers, { class     => 'FileShared',
+                             name      => 'FileShared',
                              min_level => 'warning',
-                             ident     => 'vegguide',
-                             facility  => 'local0',
+                             filename  => '/var/log/vegguide.log',
+                             close_after_modperl_request => 1,
+                             callbacks =>
+                             sub { my %m = @_;
+                                   return DateTime->now()->iso8601() . q{ - }
+                                          . $m{message} },
                            };
         }
         else

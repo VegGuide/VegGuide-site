@@ -64,6 +64,7 @@ my %Requires =
       'List::MoreUtils'                          => 0,
       'List::Util'                               => 0,
       'LockFile::Simple'                         => 0,
+      'Log::Dispatch::FileShared'                => 0,
       'Math::Round'                              => 0,
       'Params::Validate'                         => 0,
       'Sys::Hostname'                            => 0,
