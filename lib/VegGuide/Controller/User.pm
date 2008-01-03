@@ -358,7 +358,7 @@ sub users_GET
     my $self = shift;
     my $c    = shift;
 
-    my $search = VegGuide::Search::User->new( real_name => ( $c->request()->parameters('name') || '' ) );
+    my $search = VegGuide::Search::User->new( real_name => ( $c->request()->parameters()->{name} || '' ) );
     $search->set_cursor_params( page  => 1,
                                 limit => 0,
                               );
