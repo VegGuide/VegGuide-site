@@ -179,7 +179,7 @@ sub AlzaboRootDir
         my $class = shift;
 
         my @loggers;
-        if ( $class->IsProduction() )
+        if ( $class->IsProduction() && $ENV{MOD_PERL} )
         {
             require Apache2::ServerUtil;
 
