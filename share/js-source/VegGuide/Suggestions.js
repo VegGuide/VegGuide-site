@@ -8,9 +8,9 @@ if ( typeof VegGuide == "undefined" ) {
 VegGuide.Suggestions = {};
 
 VegGuide.Suggestions.instrumentPage = function () {
-    var div = $("suggestions");
+    var div = $("body");
 
-    if ( ! div ) {
+    if ( ! ( div && div.className.match( /suggestions/ ) ) ) {
         return;
     }
 
