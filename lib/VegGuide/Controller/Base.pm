@@ -48,7 +48,7 @@ sub begin : Private
     return unless $c->request()->looks_like_browser();
 
     VegGuide::Javascript->CreateSingleFile()
-        unless $c->config()->{is_production};
+        unless VegGuide::Config->IsProduction() || VegGuide::Config->Profiling();
 
     my $response = $c->response();
     $response->breadcrumbs()->add( uri  => '/',
