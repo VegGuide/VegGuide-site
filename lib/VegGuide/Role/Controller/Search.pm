@@ -142,6 +142,8 @@ sub _set_search_cursor_params
 
     my $limit = $params->{limit} || $c->vg_user()->entries_per_page();
 
+    $limit = 100 if $limit > 100;
+
     my %p = ( page  => $page,
               limit => $limit,
             );
@@ -156,7 +158,7 @@ sub _set_search_cursor_params
 
     if ( ( $page - 1 ) * $limit > $search->count() )
     {
-        $c->redirect( $search->uri_for_page(1) );
+        $c->redirect( $search->uri(1) );
     }
 
     return 1;
