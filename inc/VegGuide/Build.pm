@@ -222,6 +222,12 @@ sub ACTION_copy_system_files
                                  to   => $to,
                                  flatten => 1,
                                );
+
+        if ( -f $file && -x _ )
+        {
+            chmod 0554, $to
+                or die "Cannot chmod 0554 $file: $!";
+        }
     }
 
     for my $file ( File::Find::Rule->new()->file()->in( '/etc/apache2/mods-available' ) )
