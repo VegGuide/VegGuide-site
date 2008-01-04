@@ -12,6 +12,8 @@ use JSON::XS;
     $json->utf8(1);
 
     sub Encode { $json->encode( $_[1] ) }
+
+    sub Decode { $json->decode( $_[1] ) }
 }
 
 
