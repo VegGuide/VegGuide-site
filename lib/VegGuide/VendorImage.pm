@@ -254,10 +254,11 @@ sub rest_data
 {
     my $self = shift;
 
-    return ( uri     => $self->large_uri(),
-             caption => $self->caption(),
-             height  => $self->large_height(),
-             width   => $self->large_width(),
+    return ( uri          => $self->large_uri(),
+             caption      => $self->caption(),
+             height       => $self->large_height(),
+             width        => $self->large_width(),
+             original_uri => $self->original_uri(),
            );
 }
 

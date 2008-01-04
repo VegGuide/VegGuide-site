@@ -103,7 +103,14 @@ VegGuide.EntryImageSlideshow.prototype._showImage = function (imageNumber) {
 
     this._emptyElt( this.imageContainer );
 
-    this.imageContainer.appendChild(img);
+    var link = document.createElement("a");
+    link.title  = "View the full size image";
+    link.href   = image.original_uri;
+    link.target = "_new";
+
+    link.appendChild(img);
+
+    this.imageContainer.appendChild(link);
 
     this._emptyElt( this.captionContainer );
     if ( image.caption ) {
