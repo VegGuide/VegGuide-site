@@ -38,6 +38,16 @@ sub exit : Path('/exit') : Args(0)
     exit 0;
 }
 
+sub warn : Path('/warn') : Args(0)
+{
+    my $self = shift;
+    my $c    = shift;
+
+    warn "A warning in the logs\n";
+
+    $c->detach('index');
+}
+
 {
     my $CacheKey = 'featured-vendor';
     sub _featured_vendor
