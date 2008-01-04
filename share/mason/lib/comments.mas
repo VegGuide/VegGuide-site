@@ -30,9 +30,9 @@
 %     if ( $c->vg_user()->can_delete_comment($comment) ) {
         <a href="<% $comment->can('vendor')
                         ? entry_uri( vendor => $comment->vendor(),
-                                     path   => 'review/' . $user->user_id() . 'deletion_confirmation_form' )
+                                     path   => 'review/' . $user->user_id() . '/deletion_confirmation_form' )
                         : region_uri( location => $comment->location(),
-                                      path  => 'comment/' . $user->user_id() . 'deletion_confirmation_form' ) | h %>"
+                                      path  => 'comment/' . $user->user_id() . '/deletion_confirmation_form' ) | h %>"
            class="action-button">Delete</a>
 %     }
       </div>
