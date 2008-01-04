@@ -32,7 +32,7 @@ sub exit : Path('/exit') : Args(0)
     my $self = shift;
     my $c    = shift;
 
-    die 'Naughty attempt to kill VegGuide server'
+    VegGuide::Exception->throw( 'Naughty attempt to kill VegGuide server' )
         if VegGuide::Config->IsProduction();
 
     exit 0;
