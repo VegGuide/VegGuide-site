@@ -5,6 +5,7 @@ use warnings;
 
 use DateTime;
 use DateTime::Format::HTTP;
+use DateTime::TimeZone;
 use Email::MessageID;
 use Email::Send;
 use Email::Simple;
@@ -16,14 +17,16 @@ use VegGuide::JSON;
 
 my $file = '/var/log/apache2-backend/error.log';
 
-my $interval = 5;# * 60;
-my $sleep = 2;
+my $interval = 5 * 60;
+my $sleep = 60;
 
 my $hostname = VegGuide::Config->Hostname();
 my $from = 'log-monitor@' . $hostname;
 my $sender = Email::Send->new( { mailer => 'Sendmail' } );
 my $last_sent = 0;
 my @messages;
+
+my $local_tz = DateTime::TimeZone->new( name => 'local' );
 
 my $tail = _make_tail();
 
@@ -47,13 +50,13 @@ sub process_line
 
     if ( $line =~ /^([^[].*)/ )
     {
-        $message{date}  = DateTime->now( time_zone => 'America/Chicago' );
+        $message{date}  = DateTime->now( time_zone => $local_tz );
         $message{level} = 'warning';
         $message{text}  = $1;
     }
     elsif ( $line =~ /^\[([^]]+)\] \[(error|warning)] vegguide: (.+)$/ )
     {
-        $message{date}  = DateTime::Format::HTTP->parse_datetime( $1, 'local' );
+        $message{date}  = DateTime::Format::HTTP->parse_datetime( $1, $local_tz );
         $message{level} = $2;
 
         my $text = $3;
@@ -80,6 +83,7 @@ sub process_line
 
     next unless $message{text};
 
+    $message{date}->set_time_zone('America/Chicago');
     $message{text} =~ s/^\s*/    /gm;
 
     push @messages, \%message;

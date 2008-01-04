@@ -1,0 +1,26 @@
+#!/bin/bash
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/local/bin/vg-log-monitor
+PIDFILE=/var/run/vg-log-monitor.pid
+
+test -x $DAEMON || exit 0
+
+case "$1" in
+  start)
+	echo -n "Starting log monitor: vg-log-monitor"
+	start-stop-daemon --start -c www-data:adm --pidfile $PIDFILE --make-pidfile --background --startas $DAEMON
+	echo "."
+	;;
+  stop)
+	echo -n "Stopping log monitor: vg-log-monitor"
+	start-stop-daemon --stop --pidfile $PIDFILE 
+	echo "."
+	;;
+  *)
+	echo "Usage: /etc/init.d/vg-log-monitor {start|stop}" >&2
+	exit 1
+	;;
+esac
+
+exit 0
