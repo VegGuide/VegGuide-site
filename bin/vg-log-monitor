@@ -5,18 +5,44 @@ use warnings;
 
 use DateTime;
 use DateTime::Format::HTTP;
+use Email::MessageID;
+use Email::Send;
+use Email::Simple;
 use Email::Simple::Creator;
 use File::Tail;
+use VegGuide::Config;
 use VegGuide::JSON;
 
 
 my $file = '/var/log/apache2-backend/error.log';
 
-my $tail = _make_tail();
+my $interval = 5;# * 60;
+my $sleep = 2;
+
+my $hostname = VegGuide::Config->Hostname();
+my $from = 'log-monitor@' . $hostname;
+my $sender = Email::Send->new( { mailer => 'Sendmail' } );
+my $last_sent = 0;
 my @messages;
+
+my $tail = _make_tail();
 
 while ( defined ( my $line = $tail->read() ) )
 {
+    # Process all the messages that are pending if there's something
+    # in the logs.
+    next if process_line($line);
+
+    send_if_pending();
+    sleep $sleep;
+}
+
+sub process_line
+{
+    my $line = shift;
+
+    return if $line eq '';
+
     my %message;
 
     if ( $line =~ /^([^[].*)/ )
@@ -25,30 +51,28 @@ while ( defined ( my $line = $tail->read() ) )
         $message{level} = 'warning';
         $message{text}  = $1;
     }
-    elsif ( $line =~ /^\[([^]]+)\] \[(error|warning)] vegguide: (.+) / )
+    elsif ( $line =~ /^\[([^]]+)\] \[(error|warning)] vegguide: (.+)$/ )
     {
         $message{date}  = DateTime::Format::HTTP->parse_datetime( $1, 'local' );
         $message{level} = $2;
 
         my $text = $3;
+
         if ( $text =~ /^{.+}$/ )
         {
-            $text =~ s/(\\.)/eval $1/eg;
+            $text =~ s/(\\.)/eval qq{"$1"}/eg;
 
-            my $error = VegGuide::JSON->decode($text);
+            my $error = VegGuide::JSON->Decode($text);
 
-            $text  = '    URI: ' . $error->{uri};
+            $text  = 'URI: ' . $error->{uri};
             if ( $error->{user} )
             {
                 $text .= "\n";
-                $text .= '    User: ' . $error->{user}
+                $text .= 'User: ' . $error->{user}
             }
 
-            my $msg = $error->{error};
-            $msg =~ s/^\s*/    /gm;
-
             $text .= "\n";
-            $text .= $msg;
+            $text .= $error->{error};
         }
 
         $message{text} = $text;
@@ -56,7 +80,48 @@ while ( defined ( my $line = $tail->read() ) )
 
     next unless $message{text};
 
+    $message{text} =~ s/^\s*/    /gm;
+
     push @messages, \%message;
+
+    return 1;
+}
+
+sub send_if_pending
+{
+    return unless @messages;
+
+    my $now = time;
+
+    return if $now - $last_sent < $interval;
+
+    my $body = '';
+
+    for my $msg (@messages)
+    {
+        $body .= "\n\n" if $body;
+
+        $body .= $msg->{date}->strftime( '%Y-%m-%d %H:%M:%S' ) . q{ - } . $msg->{level};
+        $body .= "\n";
+        $body .= $msg->{text};
+    }
+
+    my $email =
+        Email::Simple->create
+            ( header =>
+              [ From => $from,
+                To   => 'autarch@urth.org',
+                Subject => "VegGuide ($hostname) log errors",
+                'Message-ID' => Email::MessageID->new(),
+              ],
+              body => $body,
+            );
+
+    $sender->send($email);
+
+    $last_sent = $now;
+
+    @messages = ();
 }
 
 sub _make_tail
@@ -64,5 +129,6 @@ sub _make_tail
     return
         File::Tail->new( name       => $file,
                          resetafter => 3600 * 8,
+                         nowait     => 1,
                        );
 }
