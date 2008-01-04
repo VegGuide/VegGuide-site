@@ -8,7 +8,14 @@ use VegGuide::JSON;
 
 
 # I'd really rather _not_ copy this whole thing in here, but it's the
-# only way to override how errors are logged.
+# only way to override how errors are logged. I have to monkey-patch
+# rather than subclassing or else NEXT::finalize() ends up calling the
+# finalize in Catalyst itself before calling finalize() for other
+# plugins (a mess!).
+{
+    package Catalyst;
+
+    no warnings 'redefine';
 sub finalize {
     my $self = shift;
 
@@ -50,7 +57,7 @@ sub finalize {
 
     return $self->response->status;
 }
-
+}
 sub _log_error
 {
     my $self  = shift;
