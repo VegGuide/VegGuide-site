@@ -457,7 +457,7 @@ sub vendors
     my %p = $self->cursor_params();
 
     my $page = delete $p{page} || 1;
-    $p{start} = ( $page - 1 ) * $p{limit};
+    $p{start} = ( $page - 1 ) * ( $p{limit} || 20 );
 
     return $self->_cursor(%p);
 }
