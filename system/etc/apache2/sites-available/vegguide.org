@@ -69,6 +69,7 @@
     RewriteRule   ^/faq\.html                                 /site/help                              [R=permanent,L]
     RewriteRule   ^/rss/data_feed.html                        /site/data_feed                         [R=permanent,L]
     RewriteRule   ^/rss                                       /site/feeds                             [R=permanent,L]
+    RewriteRule   ^/news                                      /site/news                              [R=permanent,L]
 
     RewriteRule   ^/plain.*                                   -                                       [G,L]
     RewriteRule   ^/(events?|location|logged-in||news|noauth|vendor)/.*\.html  -                      [G,L]
