@@ -35,7 +35,9 @@ my $vendors = $search->vendors();
 % if ( $vendor->categories > 1 || ! $vendor->is_restaurant ) {
   <span class="categories">(<% join ', ', map { $_->name() } $vendor->categories() | h %>)</span>
 % }
+% unless ( $vendor->is_organization() ) {
   - <span class="veg-level"><% $vendor->veg_description() | h %></span>
+% }
 % if ( $rating_count) {
   - <span class="rating"><% $average_rating %> / <% $rating_count %></span>
 % }
