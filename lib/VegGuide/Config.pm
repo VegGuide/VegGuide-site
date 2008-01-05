@@ -321,35 +321,48 @@ sub reCAPTCHAPublicKey
 
 {
     my %GoogleKeys =
-        ( prod          => { api  =>
-                             'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBQJbrWfLEAEyqTG'
-                             . 'EuLojCrBX82DARRenHsFYS69EyIksb1Zp6vMyATaFw',
-                           },
-          test          => { api  =>
-                             'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBQFhTS8R6luU5KHR'
-                             . '0NmLWmiFo6Z6RTyYdsJX2w7MzzF-Wh74HXvDfC94g'
-                           },
-          houseabsolute => { api  =>
-                             'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBT_1JRxtqVlOCGke'
-                             . 'WJdUu0IrTARLxSV7BZGDD_9EMRSI9hpiwTNN7SGnw',
-                             maps =>
-                             'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBSw9P60N-rQ5lcgR'
-                             . 'tnIXxrdsScYtBRPfFhhVza6LvWO1BLzbkJgflMmJw',
-                           },
-          quasar        => { api =>
-                             'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBQFhFhoNZhGufL3u'
-                             . '1KMn-Gribk6CxQfkWDMlOmW4DDVW6rx39BPNlXXCg',
-                             maps =>
-                             'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBQEo6hVy4-bEjn28'
-                             . 'puWiBmyTXGfmhQbdEayETtkVC4lkm8RGbQWyVvclg'
-                           },
+        ( prod            => { api  =>
+                               'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBQJbrWfLEAEyqTG'
+                               . 'EuLojCrBX82DARRenHsFYS69EyIksb1Zp6vMyATaFw',
+                             },
+          test            => { api  =>
+                               'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBQFhTS8R6luU5KHR'
+                               . '0NmLWmiFo6Z6RTyYdsJX2w7MzzF-Wh74HXvDfC94g'
+                             },
+          houseabsolute   => { api  =>
+                               'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBT_1JRxtqVlOCGke'
+                               . 'WJdUu0IrTARLxSV7BZGDD_9EMRSI9hpiwTNN7SGnw',
+                               maps =>
+                               'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBSw9P60N-rQ5lcgR'
+                               . 'tnIXxrdsScYtBRPfFhhVza6LvWO1BLzbkJgflMmJw',
+                             },
+          quasar          => { api =>
+                               'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBQFhFhoNZhGufL3u'
+                               . '1KMn-Gribk6CxQfkWDMlOmW4DDVW6rx39BPNlXXCg',
+                              maps =>
+                               'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBQEo6hVy4-bEjn28'
+                               . 'puWiBmyTXGfmhQbdEayETtkVC4lkm8RGbQWyVvclg'
+                             },
+          athens          => { maps =>
+                               'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBTcQmQQ2mZt-02hL'
+                               . 'kjX_NOaznUqVBTEBoKSqS0KH_qgwa1om3-rA5iKXw'
+                             },
+          uchicago        => { maps =>
+                               'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBT7qJHrd'
+                               . 'Rp3VQtBO0K3HbGqdeu-GRSNdyAw1rvumVrqPsnkEtHnFtItEQ'
+                             },
+          veganworldorder => { maps =>
+                               'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBQHEmXL3Rq-W61Jg'
+                               . '93uM0BMQKISshS2stTq0WK1au4NVBBTqIvbNEUoUg'
+                             },
+
           # XXX - this is probably wrong, since the API key needs to
           # be for the hostname without the port, but whatever (for
           # now).
-	  ubuntu	=> { api =>
-                             'ABQIAAAA3LiNPmeEprK9dgIE--1DFxSI9W9M0qPRGiQ9'
-                             . 'FSoMnIDXidyQDRTk0Uf6B-VrqIHeV-G8sQ0zUxI56g'
-			   },
+          ubuntu          => { api =>
+                               'ABQIAAAA3LiNPmeEprK9dgIE--1DFxSI9W9M0qPRGiQ9'
+                               . 'FSoMnIDXidyQDRTk0Uf6B-VrqIHeV-G8sQ0zUxI56g'
+                             },
         );
 
     for my $k ( keys %GoogleKeys )
@@ -367,25 +380,33 @@ sub reCAPTCHAPublicKey
 
     sub GoogleMapsAPIKey
     {
-        my $class = shift;
+        my $class    = shift;
+        my $hostname = shift;
 
-        return $class->_GoogleKey('maps');
+        return $class->_GoogleKey( 'maps', $hostname );
     }
 
     sub _GoogleKey
     {
-        my $class = shift;
-        my $type  = shift;
+        my $class    = shift;
+        my $type     = shift;
+        my $hostname = shift || VegGuide::Config->Hostname();
 
-        my $key =
-              hostname() =~ /test/          ? 'test'
-            : hostname() =~ /houseabsolute/ ? 'houseabsolute'
-            : hostname() =~ /quasar/        ? 'quasar'
-	    : hostname() =~ /ubuntu/        ? 'ubuntu'
-            : $class->IsProduction()        ? 'prod'
-            :                                 '';
+        my $host;
+        if ( VegGuide::Config->IsTest() )
+        {
+            $host = 'test';
+        }
+        elsif ( VegGuide::Config->IsProduction() )
+        {
+            $host = 'prod';
+        }
+        else
+        {
+            ($host) = $hostname =~ /^([^.]+)(?:\.|$)/;
+        }
 
-        return $GoogleKeys{$key}{$type} || 'none';
+        return $GoogleKeys{$host}{$type} || 'none';
     }
 }
 
