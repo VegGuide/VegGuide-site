@@ -250,6 +250,28 @@ EOF
                            bind => [ $order, $self->vendor_id(), $order ] );
 }
 
+sub delete
+{
+    my $self = shift;
+
+    my $order = $self->display_order();
+    my $vendor_id = $self->vendor_id();
+
+    $self->SUPER::delete();
+
+    my $schema = VegGuide::Schema->Connect();
+
+    my $sql = <<'EOF';
+UPDATE VendorImage
+   SET display_order = display_order - 1
+ WHERE vendor_id = ?
+   AND display_order > ?
+EOF
+
+    $schema->driver()->do( sql => $sql,
+                           bind => [ $vendor_id, $order ] );
+}
+
 sub rest_data
 {
     my $self = shift;
