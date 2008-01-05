@@ -136,7 +136,7 @@
    <div>
     <select id="open_minutes" name="open_for">
 %  for my $min ( 30, 60, 90, 120 ) {
-    <option value="<% $min + $round_min %>"><% $local_now->clone()->add( minutes => $min )->strftime( '%I:%M %P' ) | h %></option>
+    <option value="<% $min %>"><% $local_now->clone()->add( minutes => $min )->strftime( '%I:%M %P' ) | h %></option>
 %  }
     </select>
    </div>

@@ -54,13 +54,12 @@ sub _open_for
           [ VegGuide::Schema->Schema()->Vendor_t, $vh2 ],
         );
 
-    my $dt = DateTime->now;
-
-    $dt->set_time_zone( $self->{location}->time_zone );
+    my $dt = DateTime->now( time_zone => $self->{location}->time_zone );
 
     push @{ $self->{where} }, VegGuide::Vendor->is_open_where_clause($dt, $vh1);
 
-    $dt->add( minutes => $self->{open_for} );
+    my $round_min = 15 - ( $dt->minute() % 15 );
+    $dt->add( minutes => $self->{open_for} + $round_min );
 
     push @{ $self->{where} }, VegGuide::Vendor->is_open_where_clause($dt, $vh2);
 
