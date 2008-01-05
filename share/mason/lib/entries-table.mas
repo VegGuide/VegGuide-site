@@ -2,7 +2,7 @@
 
      <thead>
       <tr>
-       <td colspan="7" class="first last">
+       <td colspan="<% $show_add_entry ? $colspan - 2 : $colspan %>" class="first last">
         <div class="entries-links">
 % if ( $search->has_addresses() && $search->has_mappable_vendors() ) {
          <a href="<% $search->map_uri() | h %>" class="map-link" title="An interactive Google map of this entry list">Map this list</a> |
@@ -11,6 +11,13 @@
         </div>
         <% $pagination %>
        </td>
+% if ($show_add_entry) {
+       <td colspan="2">
+        <div class="content-buttons">
+         <a class="content-button" href="<% region_uri( location => $search->location(), path => 'entry_form' ) %>" title="add a new entry to this region">Add Entry</a><& /lib/link/help.mas, name => 'editing' &>
+        </div>
+       </td>
+% }
       </tr>
 
       <tr class="table-heading">
@@ -62,6 +69,14 @@ my $pagination =
                search => $search,
                things => 'entries',
              );
+
+my $colspan = 7;
+
+my $show_add_entry = 0;
+if ( $search->can('location') )
+{
+    $show_add_entry = $c->vg_user()->is_admin() || $search->location()->can_have_vendors() ? 1 : 0;
+}
 </%init>
 
 <%def .one-vendor>

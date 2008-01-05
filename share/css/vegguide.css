@@ -1089,7 +1089,8 @@ table.standard-table {
   line-height: 1.1em;
 }
 
-#entries-table div.entries-links {
+#entries-table div.entries-links,
+#entries-table div.content-buttons {
   margin: 0.2em 0 0.5em 0;
   font-size: 110%;
 }
