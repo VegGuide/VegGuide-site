@@ -510,7 +510,7 @@ sub search_GET
     my $self = shift;
     my $c    = shift;
 
-    my $name = $c->request()->param('name');
+    my $name = $c->request()->param('name') || '';
 
     my $locations = VegGuide::Location->ByNameOrCityName( name => $name );
 
