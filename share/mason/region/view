@@ -21,7 +21,7 @@
 
 % if ( $c->vg_user()->is_admin() || $location->can_have_vendors() ) {
     <div class="content-buttons">
-     <a class="content-button" href="<% region_uri( location => $location, path => 'entry_form' ) %>" title="add a new entry to this region">Add Entry</a><& /lib/link/help.mas, name => 'adding-entries' &>
+     <a class="content-button" href="<% region_uri( location => $location, path => 'entry_form' ) %>" title="add a new entry to this region">Add Entry</a><& /lib/link/help.mas, name => 'editing' &>
     </div>
 % }
 
