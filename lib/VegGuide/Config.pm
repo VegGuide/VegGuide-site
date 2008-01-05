@@ -392,19 +392,9 @@ sub reCAPTCHAPublicKey
         my $type     = shift;
         my $hostname = shift || VegGuide::Config->Hostname();
 
-        my $host;
-        if ( VegGuide::Config->IsTest() )
-        {
-            $host = 'test';
-        }
-        elsif ( VegGuide::Config->IsProduction() )
-        {
-            $host = 'prod';
-        }
-        else
-        {
-            ($host) = $hostname =~ /^([^.]+)(?:\.|$)/;
-        }
+        my ($host) = $hostname =~ /^([^.]+)(?:\.|$)/;
+        $host = 'prod'
+            if ! $GoogleKeys{$host} && VegGuide::Config->IsProduction();
 
         return $GoogleKeys{$host}{$type} || 'none';
     }
