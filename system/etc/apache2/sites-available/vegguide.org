@@ -71,7 +71,7 @@
     RewriteRule   ^/rss                                       /site/feeds                             [R=permanent,L]
     RewriteRule   ^/news                                      /site/news                              [R=permanent,L]
 
-    RewriteRule   ^/(entry|location|region|vendor|noauth)/?$  /                                       [R,L]
+    RewriteRule   ^/(location|vendor|noauth)/?$               /                                       [R,L]
 
     RewriteRule   ^/plain.*                                   -                                       [G,L]
     RewriteRule   ^/(events?|location|logged-in||news|noauth|vendor)/.*\.html  -                      [G,L]
