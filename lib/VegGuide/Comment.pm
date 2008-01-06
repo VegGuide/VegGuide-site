@@ -7,7 +7,28 @@ use base 'VegGuide::AlzaboWrapper';
 
 use DateTime::Format::MySQL;
 use VegGuide::User;
+use VegGuide::Util qw( clean_text );
 
+
+sub create
+{
+    my $self = shift;
+    my %p    = @_;
+
+    clean_text( $p{comment} );
+
+    $self->SUPER::create(%p);
+}
+
+sub update
+{
+    my $self = shift;
+    my %p    = @_;
+
+    clean_text( $p{comment} );
+
+    $self->SUPER::update(%p);
+}
 
 sub user
 {

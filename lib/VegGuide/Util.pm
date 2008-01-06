@@ -5,7 +5,7 @@ use warnings;
 
 use Exporter qw( import );
 
-our @EXPORT_OK = qw( list_to_english string_is_empty troolean );
+our @EXPORT_OK = qw( clean_text list_to_english string_is_empty troolean );
 
 use HTML::Entities qw( encode_entities );
 use Text::WikiFormat;
@@ -126,6 +126,22 @@ sub list_to_english
     $eng .= ', and ' . $last;
 
     return $eng;
+}
+
+sub clean_text (\$)
+{
+    my $text = shift;
+
+    return if string_is_empty( ${ $text } );
+
+    ${ $text } =~ s/^\s+|\s+$//g;
+
+    ${ $text } =~ s/\r\n|\r/\n/g;
+
+    ${ $text } =~ s/[\x{2018}\x{2019}\x{201B}]/'/g;
+    ${ $text } =~ s/[\x{201C}\x{201D}\x{201F}]/"/g;
+
+    return;
 }
 
 {

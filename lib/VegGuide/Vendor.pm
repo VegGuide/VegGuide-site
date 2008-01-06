@@ -31,7 +31,7 @@ use VegGuide::GreatCircle qw( distance_between_points earth_radius );
 use VegGuide::Location;
 use VegGuide::PriceRange;
 use VegGuide::SiteURI qw( entry_uri region_uri );
-use VegGuide::Util qw( string_is_empty troolean );
+use VegGuide::Util qw( string_is_empty troolean clean_text );
 use VegGuide::VendorImage;
 use WebService::StreetMapLink;
 
@@ -99,11 +99,17 @@ sub create
 
     delete $p{new_localized_neighborhood};
 
+    for my $c ( map { $_->name() } grep { $_->is_character() || $_->is_blob() } @Columns )
+    {
+        clean_text( $p{$c} )
+            if exists $p{$c};
+    }
+
     foreach my $c ( map { $_->name } grep { ! $_->nullable } @Columns )
     {
         my $nice = ucfirst join ' ' , split /_/, $c;
         push @errors, "$nice is required"
-            if exists $p{$c} && ! defined $p{$c};
+            if exists $p{$c} && string_is_empty( $p{$c} );
     }
 
     data_validation_error error => "One or more data validation errors", errors => \@errors
@@ -255,6 +261,12 @@ sub create
         my $address1 = exists $p{address1} ? $p{address1} : $self->address1;
         my $city = exists $p{city} ? $p{city} : $self->city;
         my $postal_code = exists $p{postal_code} ? $p{postal_code} : $self->postal_code;
+
+        for my $c ( map { $_->name() } grep { $_->is_character() || $_->is_blob() } @Columns )
+        {
+            clean_text( $p{$c} )
+                if exists $p{$c};
+        }
 
         foreach my $c ( map { $_->name } grep { ! $_->nullable } @Columns )
         {
