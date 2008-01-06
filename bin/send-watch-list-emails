@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Getopt::Long;
+use VegGuide::Config;
 use VegGuide::User;
 
 
