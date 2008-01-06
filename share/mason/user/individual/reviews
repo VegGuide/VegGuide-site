@@ -26,7 +26,7 @@
           class="content-button">Edit</a>
 %       if ( $c->vg_user()->can_delete_comment($comment) ) {
         <a href="<% entry_uri( vendor => $comment->vendor(),
-                               path   => 'review/' . $user->user_id() . '/confirm_deletion_form' ) | h %>"
+                               path   => 'review/' . $user->user_id() . '/deletion_confirmation_form' ) | h %>"
            class="action-button">Delete</a>
 %       }
       </div>
