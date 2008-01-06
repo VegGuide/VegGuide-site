@@ -310,17 +310,11 @@ sub reviews_POST : Private
     $c->redirect( entry_uri( vendor => $vendor ) );
 }
 
-sub review : Chained('_set_vendor') : PathPart('review') : Args(1) : ActionClass('+VegGuide::Action::REST') { }
-
-sub review_DELETE : Private
+sub _set_review : Chained('_set_vendor') : PathPart('review') : CaptureArgs(1)
 {
     my $self    = shift;
     my $c       = shift;
     my $user_id = shift;
-
-    $self->_require_auth( $c,
-                          'You must be logged in to delete a review.',
-                        );
 
     my $vendor = $c->stash()->{vendor};
 
@@ -329,6 +323,54 @@ sub review_DELETE : Private
 
     $c->redirect('/')
         unless $comment;
+
+    $c->stash()->{comment} = $comment;
+}
+
+sub review_confirm_deletion : Chained('_set_review') : PathPart('deletion_confirmation_form') : Args(0)
+{
+    my $self    = shift;
+    my $c       = shift;
+
+    $self->_require_auth( $c,
+                          'You must be logged in to delete a review.',
+                        );
+
+    my $comment = $c->stash()->{comment};
+
+    $c->_redirect_with_error
+        ( error => 'You do not have permission to delete this review.',
+          uri   => '/',
+        )
+            unless $c->vg_user()->can_delete_comment($comment);
+
+    my $subject =
+        $comment->user_id() == $c->vg_user()->user_id()
+        ? 'your review'
+        : 'the review you specified';
+
+    my $vendor = $c->stash()->{vendor};
+
+    $c->stash()->{thing} = 'review';
+    $c->stash()->{name}  = $subject;
+
+    $c->stash()->{uri} = entry_uri( vendor => $vendor, path => 'review/' . $comment->user_id() );
+
+    $c->stash()->{template} = '/shared/deletion-confirmation-form';
+}
+
+sub review : Chained('_set_review') : PathPart('') : Args(0) : ActionClass('+VegGuide::Action::REST') { }
+
+sub review_DELETE : Private
+{
+    my $self    = shift;
+    my $c       = shift;
+
+    $self->_require_auth( $c,
+                          'You must be logged in to delete a review.',
+                        );
+
+    my $comment = $c->stash()->{comment};
 
     $c->_redirect_with_error
         ( error => 'You do not have permission to delete this review.',
@@ -345,7 +387,7 @@ sub review_DELETE : Private
 
     $c->add_message( "$subject has been deleted." );
 
-    $c->redirect( entry_uri( vendor => $vendor ) );
+    $c->redirect( entry_uri( vendor => $c->stash()->{vendor} ) );
 }
 
 sub edit_hours_form : Chained('_set_vendor') : PathPart('edit_hours_form') : Args(0)
