@@ -387,9 +387,9 @@ sub create
                 }
             }
 
-            $self->SUPER::update( %p,
-                                  last_modified_datetime =>
+            $self->SUPER::update( last_modified_datetime =>
                                   $schema->sqlmaker->NOW,
+                                  %p,
                                 );
 
             $self->SUPER::update( veg_level => 0 )
