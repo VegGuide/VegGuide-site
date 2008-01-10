@@ -42,17 +42,6 @@
      so data stored here may be wiped out without any notice. Don't
      do any work here you are not prepared to lose.
     </p>
-
-    <p>
-     Also, lots of things are probably broken. If you find a feature
-     that is missing, please don't tell us, we know. If you find one
-     that is present but broken, please email
-     the <a href="https://www.vegguide.org/mailman/listinfo/community">VegGuide
-     community email list</a>. If you're having trouble distinguishing
-     between the two, it might help to look at the list
-     of <a href="/site/todo30">things to do before launching 3.0</a>.
-    </p>
-    </div>
 % }
 
 % if ($featured_vendor) {
