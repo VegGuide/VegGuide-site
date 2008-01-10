@@ -23,6 +23,9 @@ sub process_feed
     my $self = shift;
 
     my $xml = $self->_get_feed();
+
+    return unless $xml;
+
     $self->_process_xml($xml);
 }
 
@@ -44,6 +47,8 @@ sub _get_feed
         my $xml  = shift;
 
         my $items = eval { $Simple->XMLin($xml)->{item} };
+
+        return unless $items;
 
         $self->_filter_items($items);
 

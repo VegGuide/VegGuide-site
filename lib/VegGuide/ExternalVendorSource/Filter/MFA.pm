@@ -93,7 +93,7 @@ sub _merge_categories
             }
         }
 
-        $item->{veg_level} = delete $item->{'veg-level-number'};
+        $item->{veg_level} = delete $item->{'veg_level_number'};
 
         delete @{ $item }{@UnusedKeys};
     }
