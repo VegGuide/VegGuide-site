@@ -42,6 +42,7 @@
      so data stored here may be wiped out without any notice. Don't
      do any work here you are not prepared to lose.
     </p>
+    </div>
 % }
 
 % if ($featured_vendor) {
