@@ -4,6 +4,8 @@ use strict;
 use warnings;
 
 use VegGuide::Category;
+use VegGuide::Location;
+use VegGuide::User;
 use VegGuide::Util qw( clean_text );
 
 
@@ -64,17 +66,24 @@ sub _merge_categories
 
         $item->{short_description} ||= delete $item->{'long-description'};
 
-        delete @{ $item }{@UnusedKeys};
-
         $item->{name} = delete $item->{title};
 
         $item->{veg_level} = delete $item->{'veg-level-number'};
 
         $item->{external_unique_id} = delete $item->{'foreign-id'};
 
-        $item->{state} = $class->_state_for_id( $item->{external_unique_id} );
+        my $location = $class->_location_for_item( $item, $class->_state_for_id( $item->{external_unique_id} ) );
+
+        if ($location)
+        {
+            $item->{location_id} = $location->location_id();
+            $item->{region} = $location->parent()->name();
+        }
 
         $item->{category_id} = [ map { $class->_category_id_for($_) } @{ delete $item->{category} } ];
+
+        # XXX - hacky
+        $item->{price_range_id} = 2;
 
         for my $k ( keys %{ $item } )
         {
@@ -85,6 +94,8 @@ sub _merge_categories
                 $item->{$k} = delete $item->{$orig};
             }
         }
+
+        delete @{ $item }{@UnusedKeys};
     }
 }
 
@@ -96,6 +107,45 @@ sub _state_for_id
     return $1 if $id =~ /^Veg(\w+)\./;
 
     die "Cannot determine state for $id";
+}
+
+{
+    my $User = VegGuide::User->new( real_name => 'VegGuide.Org' );
+    my $USA = VegGuide::Location->USA();
+
+    sub _location_for_item
+    {
+        my $class = shift;
+        my $item  = shift;
+        my $state = shift;
+
+        my $parent = VegGuide::Location->new( name               => $state,
+                                              parent_location_id => $USA->location_id(),
+                                            );
+
+        unless ($parent)
+        {
+            warn "No location for state: $state\n";
+            return;
+        }
+
+        my $location = VegGuide::Location->new( name               => $item->{region},
+                                                parent_location_id => $parent->location_id(),
+                                              );
+
+        unless ($location)
+        {
+            warn "Making new location $item->{region}, $state\n"
+                if VegGuide::ExternalVendorSource::DEBUG();
+
+            $location = VegGuide::Location->create( name               => $item->{region},
+                                                    parent_location_id => $parent->location_id(),
+                                                    user_id            => $User->user_id(),
+                                                  );
+        }
+
+        return $location;
+    }
 }
 
 {

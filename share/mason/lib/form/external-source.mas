@@ -1,0 +1,59 @@
+ <&| /lib/filter/fill-in-form.mas, objects => [ $source ] &>
+ <form id="source-form-<% $source->external_vendor_source_id() || 'new' %>"
+       action="<% $action %>" method="post">
+% if ( $source->external_vendor_source_id() ) {
+  <input type="hidden" name="x-tunneled-method" value="PUT" />
+% }
+
+  <fieldset>
+
+   <div class="form-item">
+    <label for="name">Name</label>
+    <input id="name" name="name" type="text" class="text" />
+   </div>
+
+   <div class="form-item">
+    <label for="display_uri">Display URI</label>
+    <input id="display_uri" name="display_uri" type="text" class="medium text" />
+   </div>
+
+   <div class="form-item">
+    <label for="feed_uri">Feed URI</label>
+    <input id="feed_uri" name="feed_uri" type="text" class="long text" />
+   </div>
+
+   <div class="form-item">
+    <label for="filter_class">Filter class</label>
+    <select id="filter_class" name="filter_class">
+% for my $class (@FilterClasses) {
+     <option value="<% $class | h %>"><% $class | h %></option>
+% }
+    </select>
+   </div>
+
+% if ( my $dt = $source->last_processed_datetime_object() ) {
+   <div class="form-item">
+    Last processed at <& /lib/format/datetime.mas, datetime => $dt &>.
+   </div>
+% }
+
+   <div class="form-item">
+    <input class="submit" type="submit" value="Submit" />
+   </div>
+
+  </fieldset>
+
+ </form>
+ </&>
+
+<%once>
+my @FilterClasses = VegGuide::ExternalVendorSource->FilterClasses();
+</%once>
+
+<%args>
+$source
+</%args>
+
+<%init>
+my $action = $source->external_vendor_source_id() ? '/source/' . $source->external_vendor_source_id() : '/sources';
+</%init>

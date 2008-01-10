@@ -5,6 +5,7 @@ use warnings;
 
 use base 'VegGuide::Controller::DirectToView';
 
+use VegGuide::ExternalVendorSource;
 use VegGuide::Locale;
 
 
@@ -63,6 +64,50 @@ sub locales_POST
     $c->add_message( $locale->name() . ' has been created.' );
 
     $c->redirect( '/site/admin/locale_list' );
+}
+
+sub source_list : Local
+{
+    my $self = shift;
+    my $c    = shift;
+
+    $c->stash()->{sources} = VegGuide::ExternalVendorSource->All();
+}
+
+sub source : Regex('^source/(\d+)') : ActionClass('+VegGuide::Action::REST') { }
+
+sub source_PUT
+{
+    my $self = shift;
+    my $c    = shift;
+
+    my $source =
+        VegGuide::ExternalVendorSource->new
+            ( external_vendor_source_id => $c->request()->captures()->[0] );
+
+    my %data = $c->request()->external_vendor_source_data();
+
+    $source->update(%data);
+
+    $c->add_message( $source->name() . ' has been updated.' );
+
+    $c->redirect( '/site/admin/source_list' );
+}
+
+sub sources : Global : ActionClass('+VegGuide::Action::REST') { }
+
+sub sources_POST
+{
+    my $self = shift;
+    my $c    = shift;
+
+    my %data = $c->request()->external_vendor_source_data();
+
+    my $source = VegGuide::ExternalVendorSource->create(%data);
+
+    $c->add_message( $source->name() . ' has been created.' );
+
+    $c->redirect( '/site/admin/source_list' );
 }
 
 

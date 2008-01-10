@@ -141,6 +141,13 @@ sub _new_row
 	    [ $schema->sqlmaker->LCASE( $schema->Location_t->name_c ),
               '=', lc $p{name} ];
 
+        if ( $p{parent_location_id} )
+        {
+            push @where,
+                [ $schema->Location_t()->parent_location_id_c(), '=',
+                  $p{parent_location_id} ];
+        }
+
 	return $schema->Location_t->one_row( where => \@where );
     }
 

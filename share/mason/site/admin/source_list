@@ -1,0 +1,18 @@
+% while ( my $source = $sources->next() ) {
+<& /lib/form/external-source.mas, source => $source &>
+% }
+
+<& /lib/form/external-source.mas, source => $potential_source &>
+
+<%args>
+$sources
+</%args>
+
+<%init>
+my $potential_source =
+    VegGuide::ExternalVendorSource->potential();
+</%init>
+
+<%method page_title>
+External Entry Data Feeds
+</%method>
