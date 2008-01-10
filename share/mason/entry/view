@@ -77,7 +77,7 @@
 % }
 
      <p id="entry-attribution">
-% if ( my $source = $vendor->external_vendor_source() ) {
+% if ( my $source = $vendor->vendor_source() ) {
       Data provided by <a href="<% $source->display_uri() | h %>" title="Go to <% $source->name() | h %>"
                           ><% $source->name() | h %></a>.
 % } else {
