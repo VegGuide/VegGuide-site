@@ -68,8 +68,6 @@ sub _merge_categories
 
         $item->{name} = delete $item->{title};
 
-        $item->{veg_level} = delete $item->{'veg-level-number'};
-
         $item->{external_unique_id} = delete $item->{'foreign-id'};
 
         my $location = $class->_location_for_item( $item, $class->_state_for_id( $item->{external_unique_id} ) );
@@ -94,6 +92,8 @@ sub _merge_categories
                 $item->{$k} = delete $item->{$orig};
             }
         }
+
+        $item->{veg_level} = delete $item->{'veg-level-number'};
 
         delete @{ $item }{@UnusedKeys};
     }
