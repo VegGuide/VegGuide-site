@@ -223,7 +223,7 @@ sub MasonConfig
 {
     my $class = shift;
 
-    return
+    my %config =
         ( comp_root  =>
           File::Spec->catdir( $class->ShareDir(), 'mason' ),
           data_dir   =>
@@ -232,6 +232,21 @@ sub MasonConfig
           in_package => 'VegGuide::Mason',
           use_match  => 0,
         );
+
+    if ( $class->IsProduction() )
+    {
+        $config{static_source} = 1;
+        $config{static_source_touch_file} = $class->MasonTouchFile();
+    }
+
+    return %config;
+}
+
+sub MasonTouchFile
+{
+    my $class = shift;
+
+    return File::Spec->catfile( $class->EtcDir(), 'mason-touch' );
 }
 
 sub CanonicalWebHostname

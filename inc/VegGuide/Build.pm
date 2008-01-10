@@ -152,6 +152,7 @@ sub ACTION_copy_share_files
     require VegGuide::Config;
     my $target_dir = VegGuide::Config->ShareDir();
 
+    my $copied = 0;
     foreach my $file ( sort @files )
     {
         my $dir = dirname($file);
@@ -168,11 +169,24 @@ sub ACTION_copy_share_files
 	    next;
 	}
 
-        $self->copy_if_modified( from => $file,
-                                 to   => $to,
-                                 flatten => 1,
-                               );
+        $copied++
+            if $self->copy_if_modified( from => $file,
+                                        to   => $to,
+                                        flatten => 1,
+                                      );
     }
+
+    return unless $copied;
+
+    my $touch_file = VegGuide::Config->MasonTouchFile();
+    open my $fh, '>', $touch_file
+        or die "Cannot write to $touch_file: $!";
+    print $fh time
+        or die "Cannot write to $touch_file: $!";
+    close $fh
+        or die "Cannot close $touch_file: $!";
+
+    return;
 }
 
 sub ACTION_copy_system_files
