@@ -9,7 +9,7 @@ If you're not an admin we have a serious bug.
  <li><a href="/site/admin/locale_list">Locales</a></li>
  <li><a href="/entry/ungeocoded">Entries that are not geocoded (but could be)</a></li>
  <li><a href="/site/admin/skin_form">Add a skin</a></li>
- <li><a href="/site/admin/source_list">External data sources</a></li>
+ <li><a href="/site/admin/source_list">Entry data sources</a></li>
  <li><a href="/site/admin/cuisines">Cuisines</a></li>
  <li><a href="/site/admin/attributes">Entry features</a></li>
 </ul>
