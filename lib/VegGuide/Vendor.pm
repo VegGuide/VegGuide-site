@@ -26,7 +26,7 @@ use VegGuide::Attribute;
 use VegGuide::Category;
 use VegGuide::Config;
 use VegGuide::Cuisine;
-use VegGuide::ExternalVendorSource;
+use VegGuide::VendorSource;
 use VegGuide::Geocoder;
 use VegGuide::GreatCircle qw( distance_between_points earth_radius );
 use VegGuide::Location;
@@ -65,11 +65,11 @@ sub _new_row
               [ $schema->Vendor_t()->location_id_c(), '=', $p{location_id} ],
             );
     }
-    elsif ( defined $p{external_unique_id} && $p{external_vendor_source_id} )
+    elsif ( defined $p{external_unique_id} && $p{vendor_source_id} )
     {
 	push @where,
 	    ( [ $schema->Vendor_t()->external_unique_id_c(), '=', $p{external_unique_id} ],
-              [ $schema->Vendor_t()->external_vendor_source_id_c(), '=', $p{external_vendor_source_id} ],
+              [ $schema->Vendor_t()->vendor_source_id_c(), '=', $p{vendor_source_id} ],
             );
     }
     elsif ( $p{name} && scalar keys %p == 1 )
@@ -2303,15 +2303,15 @@ sub user
     return $self->{user};
 }
 
-sub external_vendor_source
+sub vendor_source
 {
     my $self = shift;
 
-    my $id = $self->external_vendor_source_id();
+    my $id = $self->vendor_source_id();
     return unless $id;
 
-    return $self->{external_vendor_source} ||=
-        VegGuide::ExternalVendorSource->new( external_vendor_source_id => $id );
+    return $self->{vendor_source} ||=
+        VegGuide::VendorSource->new( vendor_source_id => $id );
 }
 
 {

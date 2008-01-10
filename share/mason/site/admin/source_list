@@ -1,10 +1,10 @@
 % if ($sources) {
 %   while ( my $source = $sources->next() ) {
-<& /lib/form/external-source.mas, source => $source &>
+<& /lib/form/vendor-source.mas, source => $source &>
 %   }
 % }
 
-<& /lib/form/external-source.mas, source => $potential_source &>
+<& /lib/form/vendor-source.mas, source => $potential_source &>
 
 <%args>
 $sources => undef
@@ -12,9 +12,9 @@ $sources => undef
 
 <%init>
 my $potential_source =
-    VegGuide::ExternalVendorSource->potential();
+    VegGuide::VendorSource->potential();
 </%init>
 
 <%method page_title>
-External Entry Data Feeds
+Entry Data Feeds
 </%method>

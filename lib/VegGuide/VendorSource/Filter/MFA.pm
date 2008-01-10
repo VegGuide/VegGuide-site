@@ -1,4 +1,4 @@
-package VegGuide::ExternalVendorSource::Filter::MFA;
+package VegGuide::VendorSource::Filter::MFA;
 
 use strict;
 use warnings;
@@ -136,7 +136,7 @@ sub _state_for_id
         unless ($location)
         {
             warn "Making new location $item->{region}, $state\n"
-                if VegGuide::ExternalVendorSource::DEBUG();
+                if VegGuide::VendorSource::DEBUG();
 
             $location = VegGuide::Location->create( name               => $item->{region},
                                                     parent_location_id => $parent->location_id(),

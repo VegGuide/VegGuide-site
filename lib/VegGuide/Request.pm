@@ -136,11 +136,11 @@ sub locale_data
     return $self->_params_for_classes( classes => 'VegGuide::Locale' );
 }
 
-sub external_vendor_source_data
+sub vendor_source_data
 {
     my $self = shift;
 
-    return $self->_params_for_classes( classes => 'VegGuide::ExternalVendorSource' );
+    return $self->_params_for_classes( classes => 'VegGuide::VendorSource' );
 }
 
 sub skin_data

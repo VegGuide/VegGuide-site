@@ -17,11 +17,11 @@ use VegGuide::Engine;
 use VegGuide::Attribute;
 use VegGuide::Comment;
 use VegGuide::Cuisine;
-use VegGuide::ExternalVendorSource;
 use VegGuide::Location;
 use VegGuide::Skin;
 use VegGuide::User;
 use VegGuide::Vendor;
+use VegGuide::VendorSource;
 
 
 BEGIN

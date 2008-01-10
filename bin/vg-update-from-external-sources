@@ -3,10 +3,10 @@
 use strict;
 use warnings;
 
-use VegGuide::ExternalVendorSource;
+use VegGuide::VendorSource;
 
 
-my $sources = VegGuide::ExternalVendorSource->All();
+my $sources = VegGuide::VendorSource->All();
 
 while ( my $source = $sources->next() )
 {

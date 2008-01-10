@@ -1,4 +1,4 @@
-package VegGuide::ExternalVendorSource::Filter;
+package VegGuide::VendorSource::Filter;
 
 use strict;
 use warnings;

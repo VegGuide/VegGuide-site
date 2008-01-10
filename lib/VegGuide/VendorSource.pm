@@ -1,4 +1,4 @@
-package VegGuide::ExternalVendorSource;
+package VegGuide::VendorSource;
 
 use strict;
 use warnings;
@@ -6,14 +6,14 @@ use warnings;
 use DateTime;
 use DateTime::Format::MySQL;
 use LWP::Simple qw( get );
-use VegGuide::ExternalVendorSource::Filter;
+use VegGuide::VendorSource::Filter;
 use VegGuide::User;
 use VegGuide::Vendor;
 use XML::Simple qw( :strict );
 
 use VegGuide::Schema;
 use VegGuide::AlzaboWrapper
-    ( table => VegGuide::Schema->Schema()->ExternalVendorSource_t() );
+    ( table => VegGuide::Schema->Schema()->VendorSource_t() );
 
 use constant DEBUG => 1;
 
@@ -107,8 +107,8 @@ sub _full_filter_class
 
         my $vendor =
             VegGuide::Vendor->new
-                ( external_unique_id        => $item->{external_unique_id},
-                  external_vendor_source_id => $self->external_vendor_source_id(),
+                ( external_unique_id => $item->{external_unique_id},
+                  vendor_source_id   => $self->vendor_source_id(),
                 );
 
         $vendor ||= VegGuide::Vendor->new( name        => $item->{name},
@@ -135,9 +135,9 @@ sub _full_filter_class
                 warn "Updating $id\n"
                     if DEBUG;
                 $vendor->update( %{ $item },
-                                 user                      => $User,
-                                 external_vendor_source_id => $self->external_vendor_source_id(),
-                                 last_modified_datetime    => $processed,
+                                 user                   => $User,
+                                 vendor_source_id       => $self->vendor_source_id(),
+                                 last_modified_datetime => $processed,
                                );
             }
             else
@@ -145,10 +145,10 @@ sub _full_filter_class
                 warn "Creating $id\n"
                     if DEBUG;
                 VegGuide::Vendor->create( %{ $item },
-                                          external_vendor_source_id => $self->external_vendor_source_id(),
-                                          user_id                   => $User->user_id(),
-                                          creation_datetime         => $processed,
-                                          last_modified_datetime    => $processed,
+                                          vendor_source_id       => $self->vendor_source_id(),
+                                          user_id                => $User->user_id(),
+                                          creation_datetime      => $processed,
+                                          last_modified_datetime => $processed,
                                         );
             }
         };
@@ -182,7 +182,7 @@ sub All
 
 sub FilterClasses
 {
-    return map { ( split /::/, $_ )[-1] } VegGuide::ExternalVendorSource::Filter->subclasses();
+    return map { ( split /::/, $_ )[-1] } VegGuide::VendorSource::Filter->subclasses();
 }
 
 1;

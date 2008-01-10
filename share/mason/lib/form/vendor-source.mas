@@ -1,7 +1,7 @@
  <&| /lib/filter/fill-in-form.mas, objects => [ $source ] &>
- <form id="source-form-<% $source->external_vendor_source_id() || 'new' %>"
+ <form id="source-form-<% $source->vendor_source_id() || 'new' %>"
        action="<% $action %>" method="post">
-% if ( $source->external_vendor_source_id() ) {
+% if ( $source->vendor_source_id() ) {
   <input type="hidden" name="x-tunneled-method" value="PUT" />
 % }
 
@@ -47,7 +47,7 @@
  </&>
 
 <%once>
-my @FilterClasses = VegGuide::ExternalVendorSource->FilterClasses();
+my @FilterClasses = VegGuide::VendorSource->FilterClasses();
 </%once>
 
 <%args>
@@ -55,5 +55,5 @@ $source
 </%args>
 
 <%init>
-my $action = $source->external_vendor_source_id() ? '/source/' . $source->external_vendor_source_id() : '/sources';
+my $action = $source->vendor_source_id() ? '/source/' . $source->vendor_source_id() : '/sources';
 </%init>
