@@ -1,11 +1,13 @@
-% while ( my $source = $sources->next() ) {
+% if ($sources) {
+%   while ( my $source = $sources->next() ) {
 <& /lib/form/external-source.mas, source => $source &>
+%   }
 % }
 
 <& /lib/form/external-source.mas, source => $potential_source &>
 
 <%args>
-$sources
+$sources => undef
 </%args>
 
 <%init>
