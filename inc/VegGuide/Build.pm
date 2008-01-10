@@ -66,6 +66,7 @@ my %Requires =
       'List::MoreUtils'                          => 0,
       'List::Util'                               => 0,
       'LockFile::Simple'                         => 0,
+      'LWP::Simple'                              => 0,
       'Math::Round'                              => 0,
       'Params::Validate'                         => 0,
       'Sys::Hostname'                            => 0,
@@ -81,6 +82,7 @@ my %Requires =
       'XML::Generator::RSS10'                    => 0,
       'XML::RSS'                                 => 0,
       'XML::SAX::Writer'                         => 0,
+      'XML::Simple'                              => 0,
     );
 
 sub new
