@@ -145,9 +145,18 @@ free to ignore this, it's just for our reference.
  </li>
 
  <li>
+  Times are stored as (server-)local time. Fix this to use UTC. This
+  is so embarassing.
+ </li>
+
+ <li>
   Switch to Fey! The goal here is to reduce the number of queries sent
   to the DBMS, and just have a nicer model in general. This requires
   making Fey::Class first ;)
+ </li>
+
+ <li>
+  Switch to Postgres. Maybe do this while switching to Fey?
  </li>
 
  <li>
