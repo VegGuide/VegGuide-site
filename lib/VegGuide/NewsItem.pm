@@ -65,6 +65,7 @@ sub MostRecent
             ( where =>
               [ $class->table()->creation_datetime_c(), '>=',
                 DateTime::Format::MySQL->format_datetime($cutoff) ],
+              order_by => [ $class->table()->creation_datetime_c(), 'DESC' ],
             );
 
     return $class->new( object => $row ) if $row;
