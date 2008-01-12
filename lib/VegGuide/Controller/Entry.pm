@@ -441,8 +441,8 @@ sub hours_POST : Private
         {
             $vendor->save_hours_suggestion
                 ( hours                   => $hours,
-                  comment                 => $c->request()->param('comment'),
-                  user_wants_notification => $c->request()->param('user_wants_notification'),
+                  comment                 => ( $c->request()->param('comment') || '' ),
+                  user_wants_notification => ( $c->request()->param('user_wants_notification') || 0 ),
                   user                    => $c->vg_user(),
                 );
             $msg = "Your suggestion to change the hours for $name has been recorded.";
