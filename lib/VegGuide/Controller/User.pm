@@ -62,6 +62,10 @@ sub authentication_GET_html
         $self->authentication_DELETE($c);
         return;
     }
+    else
+    {
+        $c->redirect( '/user/login_form' );
+    }
 }
 
 sub authentication_POST
