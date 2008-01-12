@@ -51,12 +51,12 @@ Suggest a change in hours for\
       </p>
 
       <ul>
-       <li><em>9 - 3</em> - assumes AM for open, PM for close</li>
-       <li><em>9am - 11am</em>, <em>9pm - 3am</em>, <em>9:30am - 3:30pm</em> - also AM, a.m., PM, p.m.</li>
-       <li><em>10 - 21:30</em> - military time</li>
-       <li><em>noon</em>, <em>midnight</em></li>
-       <li><em>24 hours</em> - open all day</li>
-       <li><em>same</em> - same as the previous day</li>
+       <li><strong>9 - 3</strong> - assumes AM for open, PM for close</li>
+       <li><strong>9am - 11am</strong>, <strong>9pm - 3am</strong>, <strong>9:30am - 3:30pm</strong> - also AM, a.m., PM, p.m.</li>
+       <li><strong>10 - 21:30</strong> - military time</li>
+       <li><strong>noon</strong>, <strong>midnight</strong></li>
+       <li><strong>24 hours</strong> - open all day</li>
+       <li><strong>same</strong> - same as the previous day</li>
       </ul>
 
      </fieldset>
