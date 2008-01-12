@@ -1095,6 +1095,33 @@ sub add_or_update_comment
 
         undef $AverageRating;
     }
+
+    sub delete_rating
+    {
+        my $self = shift;
+        my %p = validate( @_,
+                          { user =>
+                            { isa => 'VegGuide::User' },
+                          },
+                        );
+
+        my $schema = VegGuide::Schema->Connect();
+
+        my $rating;
+        if ( $rating =
+             $schema->VendorRating_t->one_row
+                 ( where =>
+                   [ [ $schema->VendorRating_t->user_id_c, '=', $p{user}->user_id ],
+                     [ $schema->VendorRating_t->vendor_id_c, '=', $self->vendor_id ],
+                   ],
+                 )
+           )
+        {
+            $rating->delete();
+        }
+
+        undef $AverageRating;
+    }
 }
 
 sub rating_from_user

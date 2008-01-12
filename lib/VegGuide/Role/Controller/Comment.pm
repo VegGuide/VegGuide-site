@@ -36,6 +36,10 @@ sub _comment_post
                                           rating => $rating,
                                         );
         }
+        elsif ( defined $rating )
+        {
+            $thing->delete_rating( user => $user );
+        }
     };
 
     if ( my $e = $@ )
