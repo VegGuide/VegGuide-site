@@ -66,7 +66,7 @@
     RewriteCond   %{QUERY_STRING}         vendor_id=(\d+)
     RewriteRule   ^/vendor/view\.html                         /entry/%1?                              [R=permanent,L]
     RewriteCond   %{QUERY_STRING}         vendor_id=(\d+)
-    RewriteRule   ^/vendor/reviews\.html                      /entry/%1/review?                       [R=permanent,L]
+    RewriteRule   ^/vendor/reviews\.html                      /entry/%1?                              [R=permanent,L]
 
     RewriteCond   %{QUERY_STRING}         user_id=(\d+)
     RewriteRule   ^/user/view\.html                           /user/%1?                               [R=permanent,L]
