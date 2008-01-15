@@ -45,13 +45,16 @@
     # had a .mhtml extension.
     RewriteRule   (.+)\.mhtml$   $1.html  [R=permanent,L]
 
+    # Some brain-damaged crawler is requesting URIs like this
+    RewriteRule   ^(.+\.rss)%3[Ff](location_id=\d+)%26(include_hours=1)?  $1?$2&$3                    [R=permanent,L]
+
     # This next group is for backwards compatibility with the version of site immediately before 3.0
     RewriteCond   %{QUERY_STRING}         location_id=(\d+)
-    RewriteRule   ^/location/view\.html                       /region/%1?                             [R=permanent,L]
+    RewriteRule   ^/location/view\.html                       /region/%1                              [R=permanent,L]
     RewriteCond   %{QUERY_STRING}         location_id=(\d+)
-    RewriteRule   ^/location/data\.rss                        /region/%1.rss?                         [R=permanent,L]
+    RewriteRule   ^/location/data\.rss                        /region/%1.rss                          [R=permanent,L]
     RewriteCond   %{QUERY_STRING}         location_id=(\d+)
-    RewriteRule   ^/location/most_recent.rss                  /region/%1/recent.rss?                  [R=permanent,L]
+    RewriteRule   ^/location/most_recent.rss                  /region/%1/recent.rss                   [R=permanent,L]
     RewriteCond   %{QUERY_STRING}         location_id=(\d+)
     RewriteRule   ^/location/most_recent_vendors\.rss         /region/%1/recent.rss?entries_only=1    [R=permanent,L]
     RewriteCond   %{QUERY_STRING}         location_id=(\d+)
