@@ -5,6 +5,8 @@ use warnings;
 
 use Class::Trait 'base';
 
+use URI::FromHash qw( uri );
+
 
 sub _set_search_in_stash
 {
@@ -123,13 +125,21 @@ sub _search_from_request
               %{ $extra || {} },
             );
 
+    my @bad_keys = qw( location_id new_query amp );
     # A number of bots seems to be requesting URIs like
     # /region/706?page=1&sort_order=DESC&order_by=Rating&location_id=706
     # and some are still including new_query=1
-    if ( $p{location_id} || $p{new_query} || $p{'amp;new_query'} )
+    if ( grep { exists $p{$_} } @bad_keys )
     {
-        $c->error( 'Unknown resource ' . $c->request()->path() );
-        $c->detach();
+        my $p = $c->request()->parameters();
+
+        delete @{ $p }{ @bad_keys };
+
+        my $path = uri( path  => '/' . $c->request()->path(),
+                        query => $p,
+                      );
+
+        $c->redirect( $path, 301 );
     }
 
     delete $p{$_} for grep { /^possible/ } keys %p;
