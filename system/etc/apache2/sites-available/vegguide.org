@@ -48,13 +48,16 @@
     # Some brain-damaged crawler is requesting URIs like this
     RewriteRule   ^(.+\.rss)%3[Ff]                            /                                       [R=permanent,L]
 
-    # This next group is for backwards compatibility with the version of site immediately before 3.0
+    # This next group is for backwards compatibility with the version
+    # of site immediately before 3.0 The trailing question marks
+    # prevent the rewrite engine from including the query string in
+    # the redirect URI
     RewriteCond   %{QUERY_STRING}         location_id=(\d+)
-    RewriteRule   ^/location/view\.html                       /region/%1                              [R=permanent,L]
+    RewriteRule   ^/location/view\.html                       /region/%1?                             [R=permanent,L]
     RewriteCond   %{QUERY_STRING}         location_id=(\d+)
-    RewriteRule   ^/location/data\.rss                        /region/%1.rss                          [R=permanent,L]
+    RewriteRule   ^/location/data\.rss                        /region/%1.rss?                         [R=permanent,L]
     RewriteCond   %{QUERY_STRING}         location_id=(\d+)
-    RewriteRule   ^/location/most_recent.rss                  /region/%1/recent.rss                   [R=permanent,L]
+    RewriteRule   ^/location/most_recent.rss                  /region/%1/recent.rss?                  [R=permanent,L]
     RewriteCond   %{QUERY_STRING}         location_id=(\d+)
     RewriteRule   ^/location/most_recent_vendors\.rss         /region/%1/recent.rss?entries_only=1    [R=permanent,L]
     RewriteCond   %{QUERY_STRING}         location_id=(\d+)
