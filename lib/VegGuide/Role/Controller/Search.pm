@@ -123,6 +123,12 @@ sub _search_from_request
               %{ $extra || {} },
             );
 
+    # A number of bots seems to be requesting URIs like
+    # /region/706?page=1&sort_order=DESC&order_by=Rating&location_id=706
+    delete $p{location_id} if $class->isa('VegGuide::Search::Vendor');
+    # And some are still including new_query=1
+    delete $p{new_query};
+
     delete $p{$_} for grep { /^possible/ } keys %p;
     delete @p{ qw( order_by sort_order page limit ) };
     delete $p{'ie-hack'};
