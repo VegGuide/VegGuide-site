@@ -18,24 +18,6 @@ sub _set_search_in_stash
     $path ||= $c->request()->captures()->[ $config{captured_path_position} ]
         if exists $config{captured_path_position};
 
-    my @bad_keys = qw( location_id new_query amp );
-    # Some bad redirects pointed bots to these URIs and now they keep
-    # trying them -
-    # /region/706?page=1&sort_order=DESC&order_by=Rating&location_id=706
-    # and some are still including new_query=1
-    if ( grep { exists $p{$_} } @bad_keys )
-    {
-        my $p = $c->request()->parameters();
-
-        delete @{ $p }{ @bad_keys };
-
-        my $path = uri( path  => '/' . $c->request()->path(),
-                        query => $p,
-                      );
-
-        $c->redirect( $path, 301 );
-    }
-
     my $search =
         $self->_search_from_request
             ( $c,
@@ -142,6 +124,24 @@ sub _search_from_request
               %{ $c->request()->parameters() },
               %{ $extra || {} },
             );
+
+    my @bad_keys = qw( location_id new_query amp );
+    # Some bad redirects pointed bots to these URIs and now they keep
+    # trying them -
+    # /region/706?page=1&sort_order=DESC&order_by=Rating&location_id=706
+    # and some are still including new_query=1
+    if ( grep { exists $p{$_} } @bad_keys )
+    {
+        my $p = $c->request()->parameters();
+
+        delete @{ $p }{ @bad_keys };
+
+        my $path = uri( path  => '/' . $c->request()->path(),
+                        query => $p,
+                      );
+
+        $c->redirect( $path, 301 );
+    }
 
     delete $p{$_} for grep { /^possible/ } keys %p;
     delete @p{ qw( order_by sort_order page limit ) };
