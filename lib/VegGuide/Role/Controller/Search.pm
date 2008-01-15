@@ -125,9 +125,12 @@ sub _search_from_request
 
     # A number of bots seems to be requesting URIs like
     # /region/706?page=1&sort_order=DESC&order_by=Rating&location_id=706
-    delete $p{location_id} if $class->isa('VegGuide::Search::Vendor');
-    # And some are still including new_query=1
-    delete $p{new_query};
+    # and some are still including new_query=1
+    if ( $p{location_id} || $p{new_query} || $p{'amp;new_query'} )
+    {
+        $c->error( 'Unknown resource ' . $c->request()->path() );
+        $c->detach();
+    }
 
     delete $p{$_} for grep { /^possible/ } keys %p;
     delete @p{ qw( order_by sort_order page limit ) };
