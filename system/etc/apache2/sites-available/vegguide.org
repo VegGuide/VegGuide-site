@@ -46,7 +46,7 @@
     RewriteRule   (.+)\.mhtml$   $1.html  [R=permanent,L]
 
     # Some brain-damaged crawler is requesting URIs like this
-    RewriteRule   ^(.+\.rss)%3[Ff](location_id=\d+)(?:%26(include_hours=1))?  $1?$2&$3                [R=permanent,L]
+    RewriteRule   ^(.+\.rss)%3[Ff]location_id=(\d+)(?:%26include_hours=1)?  $1?location_id=$2         [R=permanent,L]
 
     # This next group is for backwards compatibility with the version of site immediately before 3.0
     RewriteCond   %{QUERY_STRING}         location_id=(\d+)
