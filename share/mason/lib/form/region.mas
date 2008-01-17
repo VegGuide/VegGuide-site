@@ -33,6 +33,11 @@
      <div class="form-item">
       <label for="time_zone_name">Time zone name:</label>
       <input id="time_zone_name" class="text" type="text" name="time_zone_name" value="" />
+%   if ($ancestor_for_tz) {
+      <p>
+       Ancestor (<% $ancestor_for_tz->name() | h %>) is <% $ancestor_for_tz->time_zone_name() %>.
+      </p>
+%   }
      </div>
 
      <div class="form-item">
@@ -43,6 +48,11 @@
        <option value="<% $locale->locale_id() %>"><% $locale->locale_code() %> (<% $locale->name() | h %>)</option>
 %   }
       </select>
+%   if ($ancestor_for_locale) {
+      <p>
+       Ancestor (<% $ancestor_for_locale->name() | h %>) is <% $ancestor_for_locale->locale()->locale_code() %>.
+      </p>
+%   }
      </div>
 
      <div class="form-item" id="maintainers">
@@ -99,4 +109,16 @@ $locales = VegGuide::Locale->All()
     if $c->vg_user()->is_admin();
 
 my $owners = $location->owners();
+
+my $ancestor_for_tz;
+if ( ! $location->time_zone_name() )
+{
+    $ancestor_for_tz = first { $_->time_zone_name() } $location->ancestors();
+}
+
+my $ancestor_for_locale;
+if ( ! $location->time_zone_name() )
+{
+    $ancestor_for_locale = first { $_->locale() } $location->ancestors();
+}
 </%init>
