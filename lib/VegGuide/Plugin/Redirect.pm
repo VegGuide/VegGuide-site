@@ -6,10 +6,11 @@ use warnings;
 
 sub redirect
 {
-    my $self = shift;
-    my $uri  = shift;
+    my $self   = shift;
+    my $uri    = shift;
+    my $status = shift;
 
-    $self->response()->redirect($uri);
+    $self->response()->redirect( $uri, $status );
 
     $self->detach();
 }
