@@ -11,12 +11,25 @@ sub prepare_action
 {
     my $self = shift;
 
-    if ( $self->request()->path() =~ m{/location/[^/]+.+\.rss} )
+    if ( $self->request()->path() =~ m{location/[^/]+.+\.rss} )
     {
         $self->response()->redirect( $self->request()->uri() );
     }
 
     return $self->NEXT::prepare_action(@_);
 }
+
+sub dispatch
+{
+    my $self = shift;
+
+    if ( $self->response()->redirect() )
+    {
+        $self->detach();
+    }
+
+    return $self->NEXT::dispatch(@_);
+}
+
 
 1;
