@@ -23,10 +23,7 @@ sub dispatch
 {
     my $self = shift;
 
-    if ( $self->response()->redirect() )
-    {
-        $self->redirect( $self->response()->redirect() );
-    }
+    return if $self->response()->redirect();
 
     return $self->NEXT::dispatch(@_);
 }
