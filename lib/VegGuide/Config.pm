@@ -28,6 +28,7 @@ use Sys::Hostname qw( hostname );
             +VegGuide::Plugin::Authentication::Credential::DBMS
             +VegGuide::Plugin::Authentication::Store::DBMS
             +VegGuide::Plugin::ErrorHandling
+            +VegGuide::Plugin::FixupURI
             +VegGuide::Plugin::InOutEncoding
             +VegGuide::Plugin::Redirect
             +VegGuide::Plugin::ResponseAttributes
