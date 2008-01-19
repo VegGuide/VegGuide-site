@@ -25,7 +25,7 @@ sub dispatch
 
     if ( $self->response()->redirect() )
     {
-        $self->detach();
+        $self->redirect( $self->response()->redirect() );
     }
 
     return $self->NEXT::dispatch(@_);
