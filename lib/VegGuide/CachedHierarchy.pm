@@ -220,9 +220,12 @@ sub parent
 
     $class->_check_cache_time unless $Checked;
 
-    my $id = $Meta{$class}{params}{id};
+    my $id_name = $Meta{$class}{params}{id};
 
-    return $Cache{$class}{nodes}{ $self->$id() }{parent};
+    my $id = $self->$id_name();
+    return unless defined $id;
+
+    return $Cache{$class}{nodes}{$id}{parent};
 }
 
 sub children
@@ -239,6 +242,8 @@ sub children_of
 {
     my $class = shift;
     my $id_val = shift;
+
+    return unless defined $id_val;
 
     return $class->_cached_roots unless defined $id_val;
 
