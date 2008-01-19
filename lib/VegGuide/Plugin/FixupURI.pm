@@ -11,7 +11,7 @@ sub prepare_action
 {
     my $self = shift;
 
-    if ( $self->request()->path() =~ m{location/[^/]+.+\.rss} )
+    if ( $self->request()->path() =~ m{^location.+\.rss$} )
     {
         $self->response()->redirect( $self->request()->uri() );
     }
