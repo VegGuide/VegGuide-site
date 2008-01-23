@@ -27,12 +27,12 @@ use LockFile::Simple;
 use URI::FromHash qw( uri );
 use VegGuide::Config;
 use VegGuide::Exceptions qw( auth_error data_validation_error );
+use VegGuide::Feed;
 use VegGuide::Locale;
 use VegGuide::RSSWriter;
 use VegGuide::SiteURI qw( entry_uri region_uri );
 use VegGuide::Util qw( string_is_empty );
 use VegGuide::Vendor;
-use XML::Feed;
 
 use VegGuide::Validate qw( validate validate_with UNDEF SCALAR ARRAYREF BOOLEAN SCALAR_TYPE );
 
@@ -1131,7 +1131,7 @@ sub _as_xml_feed
 {
     my $self = shift;
 
-    my $feed = XML::Feed->new();
+    my $feed = VegGuide::Feed->new();
 
     $feed->title( 'VegGuide.Org: ' . $self->name() );
     $feed->link( region_uri( location => $self, with_host => 1 ) );
@@ -1315,7 +1315,7 @@ sub _AsXMLFeed
 {
     my $class = shift;
 
-    my $feed = XML::Feed->new();
+    my $feed = VegGuide::Feed->new();
 
     $feed->title( q{VegGuide.Org: What's New} );
     $feed->link( uri( scheme => 'http', host => VegGuide::Config->CanonicalWebHostname() ) );

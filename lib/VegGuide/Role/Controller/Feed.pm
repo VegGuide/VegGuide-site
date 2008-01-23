@@ -7,7 +7,6 @@ use Class::Trait 'base';
 
 use File::Basename qw( basename );
 use URI::FromHash qw( uri );
-use XML::Feed;
 
 
 my %XMLFeedType = ( rss  => 'RSS',
@@ -26,29 +25,6 @@ sub _serve_feed
     local $XML::Atom::DefaultVersion = '1.0';
 
     $c->response()->body( $feed->convert( $XMLFeedType{$type} )->as_xml() );
-}
-
-
-if ( $XML::Feed::VERSION <= 0.12 )
-{
-    no warnings 'redefine';
-    # This monkey patch fixes a problem where summary is empty.
-    eval <<'EOF';
-package XML::Feed::Entry;
-
-sub convert {
-    my $entry = shift;
-    my($format) = @_;
-    my $new = __PACKAGE__->new($format);
-    for my $field (qw( title link content summary category author id issued modified )) {
-        my $val = $entry->$field();
-        next unless defined $val;
-        next if ref $val && $val->can('body') && ! defined $val->body();
-        $new->$field($val);
-    }
-    $new;
-}
-EOF
 }
 
 sub _serve_rss_data_file
