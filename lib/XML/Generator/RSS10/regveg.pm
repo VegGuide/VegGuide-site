@@ -9,7 +9,7 @@ use HTML::Entities qw( encode_entities );
 use Params::Validate
     qw( validate SCALAR ARRAYREF );
 Params::Validate::validation_options
-    ( on_fail => sub { RegVeg::Exception::Params->throw( message => join '', @_ ) } );
+    ( on_fail => sub { VegGuide::Exception::Params->throw( message => join '', @_ ) } );
 
 
 sub NamespaceURI { 'http://www.regveg.org/rss/' }
