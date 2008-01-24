@@ -208,6 +208,13 @@ BEGIN
     }
 }
 
+sub exists
+{
+    my $self = shift;
+
+    return -f $self->original_filename() ? 1 : 0;
+}
+
 sub _uri_prefix
 {
     my $self = shift;

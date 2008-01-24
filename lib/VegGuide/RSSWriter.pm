@@ -5,7 +5,6 @@ use warnings;
 
 use File::Temp;
 use HTML::Entities qw( encode_entities );
-use Image::Size qw( imgsize );
 use URI::FromHash qw( uri );
 use VegGuide::Client;
 use VegGuide::Config;
@@ -247,7 +246,8 @@ sub add_vendor_for_data_feed
 
     $rv{'region-name'} = $p{vendor}->location->name;
 
-    if ( my $image = $p{vendor}->first_image() )
+    my $image = $p{vendor}->first_image();
+    if ( $image && $image->exists() )
     {
         $rv{'image-link'} = $image->small_uri();
         $rv{'image-x'} = $image->small_width();
