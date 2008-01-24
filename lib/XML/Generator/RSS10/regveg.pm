@@ -8,8 +8,10 @@ use base 'XML::Generator::RSS10::Module';
 use HTML::Entities qw( encode_entities );
 use Params::Validate
     qw( validate SCALAR ARRAYREF );
+
+use VegGuide::Exceptions qw( param_error );
 Params::Validate::validation_options
-    ( on_fail => sub { VegGuide::Exception::Params->throw( message => join '', @_ ) } );
+    ( on_fail => sub { param_error join '', @_ } );
 
 
 sub NamespaceURI { 'http://www.regveg.org/rss/' }
