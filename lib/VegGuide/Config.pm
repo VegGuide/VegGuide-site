@@ -13,7 +13,7 @@ use Sys::Hostname qw( hostname );
 {
     my $Hostname = hostname();
     my $IsProd = $Hostname eq 'vegguide.org' ? 1 : 0;
-    my $IsTest = $Hostname =~ /test\.vegguide|test-install/;
+    my $IsTest = $Hostname =~ /test\.vegguide|test-install|satyr/;
 
     sub Hostname { return $Hostname }
 
