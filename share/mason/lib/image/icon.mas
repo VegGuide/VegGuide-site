@@ -13,11 +13,12 @@ $title => ''
 my %sizes;
 </%once>
 <%init>
-my $uri = static_uri( path => "/images/icons/$name.png" );
+my $path = "/images/icons/$name.png";
+my $uri = static_uri( path => $path );
 
 unless ( exists $sizes{$name} )
 {
-    my ($x, $y) = Image::Size::imgsize( VegGuide::Config->ShareDir() . $uri );
+    my ($x, $y) = Image::Size::imgsize( VegGuide::Config->ShareDir() . $path );
 
     my $scale = 1;
     $x *= $scale;
