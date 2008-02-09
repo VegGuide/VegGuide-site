@@ -20,6 +20,12 @@ importance and feasibility.
  </li>
 
  <li>
+  Look into creating importers for the
+  various <a href="http://openguides.org/">OpenGuides</a>. They
+  publish their data under a compatible CC license in RDF format.
+ </li>
+
+ <li>
   Sort of related to the above. It might be useful to allow a set of
   links to be associated with a region, especially travel guides,
   local veg groups, etc. The question is how much this overlaps the
@@ -151,8 +157,7 @@ free to ignore this, it's just for our reference.
 
  <li>
   Switch to Fey! The goal here is to reduce the number of queries sent
-  to the DBMS, and just have a nicer model in general. This requires
-  making Fey::Class first ;)
+  to the DBMS, and just have a nicer model in general.
  </li>
 
  <li>
