@@ -6,6 +6,7 @@ use warnings;
 use NEXT;
 use base 'Catalyst::Request::REST';
 
+use HTTP::Headers::Util qw(split_header_words);
 use List::MoreUtils qw( all );
 use Scalar::Util qw( looks_like_number );
 use VegGuide::Util qw( string_is_empty );
