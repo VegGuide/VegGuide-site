@@ -90,6 +90,7 @@
     # you are l33t
     RewriteRule   ^/https://www\.paypal\.com/cgi-bin/webscr   -                                       [F,L]
     RewriteRule   \.(asp|cfn|php|dll)$                        -                                       [F,L]
+    RewriteRule   (ikonboard\.cgi|YaBB\.pl)$                  -                                       [F,L]
 
     RewriteRule   /rss/static/all\w+\.rss                     /site.rss                               [R=permanent,L]
 
