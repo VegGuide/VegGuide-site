@@ -27,6 +27,11 @@ sub new
     my $class = shift;
     my %p = @_;
 
+    if ( $p{name} )
+    {
+        return $CategoriesByName{ $p{name} };
+    }
+
     return $Categories{ $p{category_id} };
 }
 
