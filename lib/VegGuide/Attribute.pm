@@ -6,6 +6,8 @@ use warnings;
 use VegGuide::Schema;
 use VegGuide::AlzaboWrapper ( table => VegGuide::Schema->Schema()->Attribute_t() );
 
+use VegGuide::Validate qw( validate_with SCALAR );
+
 
 my %Attributes;
 my %AttributesByName;
