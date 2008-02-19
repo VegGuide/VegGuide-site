@@ -1,0 +1,309 @@
+#!/usr/bin/perl -w
+
+use strict;
+use warnings;
+
+use DateTime::Format::MySQL;
+use DateTime::Format::W3CDTF;
+use HTML::Entities qw( decode_entities );
+use HTML::WikiConverter;
+use VegGuide::Util qw( string_is_empty );
+use VegGuide::Vendor;
+use XML::Simple;
+
+use Data::Dumper;
+$Data::Dumper::Sortkeys = 1;
+
+my %location_map = ( 834 => { path => [ qw( Africa Morocco Marrakesh ) ] },
+                     837 => { path => [ qw( Asia Phillipines Cebu ) ] },
+                     838 => { path => [ 'South America', qw( Brazil Curitiba ) ] },
+                     839 => { path => [ qw( USA California Napa ) ] },
+                     840 => { path => [ qw( USA California Summerville ) ] },
+                     841 => { path => [ qw( Europe Germany Siegen ) ] },
+                     842 => { path => [ qw( Europe Germany Cologne ) ] },
+                     843 => { path => [ qw( Europe Poland Wrocław ) ] },
+                     844 => { path => [ 'South America', qw( Guatemala ) ] },
+                   );
+
+restore_locations(\%location_map);
+
+my $data = XMLin( 'site.rss',
+                  ForceArray => [ qw( regveg:category regveg:cuisine
+                                      regveg:payment-option
+                                      regveg:feature regveg:open-close ) ],
+                  GroupTags  => { 'regveg:categories' => 'regveg:category',
+                                  'regveg:cuisines'   => 'regveg:cuisine',
+                                  'regveg:features'   => 'regveg:feature',
+                                  'regveg:hours'      => 'regveg:open-close',
+                                },
+                  KeyAttr    => [],
+                );
+
+for my $item ( @{ $data->{item} } )
+{
+    my %vendor =
+        ( name              => $item->{title},
+          short_description => $item->{description},
+          long_description($item),
+        );
+
+    for my $f ( qw( phone address1 address2
+                    neighborhood directions
+                    city region postal_code home_page ) )
+    {
+        my $key = 'regveg:' . $f;
+        $key =~ s/_/-/g;
+
+        next if string_is_empty( $item->{$key} );
+
+        $vendor{$f} = $item->{$key};
+    }
+
+    $vendor{price_range_id} = $item->{'regveg:price-range-number'};
+
+    $vendor{veg_level} = $item->{'regveg:veg-level-number'};
+
+    for my $f ( qw( allows_smoking accepts_reservations is_wheelchair_accessible ) )
+    {
+        my $key = 'regveg:' . $f;
+        $key =~ s/_/-/g;
+
+        $vendor{$f} = troolean( $item->{$key} );
+    }
+
+    for my $f ( qw( creation_datetime last_modified_datetime ) )
+    {
+        my $key = 'regveg:' . $f;
+        $key =~ s/_/-/g;
+
+        $vendor{$f} =
+            DateTime::Format::MySQL->format_datetime
+                ( DateTime::Format::W3CDTF->parse_datetime( $item->{$key} ) );
+    }
+
+    $vendor{category_id} =
+        [ map { VegGuide::Category->new( name => $_ )->category_id() } @{ $item->{'regveg:categories'} } ];
+
+    $vendor{cuisine_id} =
+        [ map { VegGuide::Cuisine->new( name => $_ )->cuisine_id() } @{ $item->{'regveg:cuisines'} } ];
+
+    $vendor{attribute_id} =
+        [ map { VegGuide::Attribute->new( name => $_ )->attribute_id() } @{ $item->{'regveg:features'} } ];
+
+    $vendor{is_cash_only} = $item->{'regveg:is-cash-only'} ? 1 : 0;
+
+    unless ( $vendor{is_cash_only} )
+    {
+        $vendor{payment_option_id}  =
+            [ map { VegGuide::PaymentOption->new( name => $_ )->payment_option_id() }
+              @{ $item->{'regveg:payment-option'} } ];
+    }
+
+    $vendor{user_id} = 162;
+
+    my ($location_id) = $item->{'regveg:region-link'} =~ m{/(\d+)$};
+    my $location = VegGuide::Location->new( location_id => $location_id );
+    $location ||= $location_map{$location_id}{location};
+
+    unless ($location)
+    {
+        my $msg = "No location id $location_id: ";
+        $msg .= join ', ', $item->{'regveg:region-name'}, $item->{'regveg:country'};
+
+        warn $msg, "\n";
+        next;
+    }
+
+    $vendor{location_id} = $location->location_id();
+
+    my $vendor = VegGuide::Vendor->create(%vendor);
+
+    my @hours;
+    for my $day ( 0..6 )
+    {
+        if ( $item->{'regveg:hours'}[$day]{'regveg:closed'} )
+        {
+            $hours[$day] = [ { open_minute => -1 } ];
+            next;
+        }
+        elsif ( $item->{'regveg:hours'}[$day]{'regveg:unknown'} )
+        {
+            $hours[$day] = undef;
+        }
+        else
+        {
+            $hours[$day] =
+                [ { open_minute  => time_to_minutes( $item->{'regveg:hours'}[$day]{'regveg:open'} ),
+                    close_minute => time_to_minutes( $item->{'regveg:hours'}[$day]{'regveg:close'} ),
+                  },
+                ];
+        }
+    }
+
+    $vendor->replace_hours(\@hours);
+}
+
+exit;
+
+sub restore_locations
+{
+    my $map = shift;
+
+    for my $id ( keys %{ $map } )
+    {
+        my $parent;
+        for my $p ( @{ $map->{$id}{path} } )
+        {
+            my $child = VegGuide::Location->new( name => $p );
+
+            unless ($child)
+            {
+                die "Bad parent: $p"
+                    unless $parent;
+
+                warn "Creating new location: $p\n";
+                $child = VegGuide::Location->create( name => $p,
+                                                     parent_location_id => $parent->location_id,
+                                                     user_id => 1 );
+            }
+
+            $parent = $child;
+        }
+
+        $location_map{$id}{location} = $parent;
+    }
+}
+
+sub long_description
+{
+    my $item = shift;
+
+    return if string_is_empty( $item->{'regveg:long-description'} );
+
+    return ( long_description  => html_to_text( $item->{'regveg:long-description'} ) );
+}
+
+my $converter;
+sub html_to_text
+{
+    my $text = shift;
+
+    return undef if string_is_empty($text);
+
+    $converter ||= HTML::WikiConverter->new( dialect => 'VegGuide' );
+
+    my $wikitext = decode_entities( $converter->html2wiki( html => decode_entities($text) ) );
+
+    die "Missed something:\n\n$wikitext\n"
+        if $wikitext =~ m{\<|\>};
+}
+
+sub troolean
+{
+    my $val = shift;
+
+    return undef unless defined $val;
+
+    return $val eq 'yes' ? 1 : 0;
+}
+
+sub time_to_minutes
+{
+    my $time = shift;
+
+    my ( $h, $m ) = split /:/, $time;
+    $h += 0;
+
+    return ( $h * 60 ) + $m;
+}
+
+
+package HTML::WikiConverter::VegGuide;
+
+use base 'HTML::WikiConverter';
+
+
+sub rules
+{
+    return { b  => { start => q{'''}, end => q{'''} },
+             i  => { start => q{''},  end => q{''} },
+
+             hr => { replace => "\n----\n" },
+
+             strong => { alias => 'b' },
+             em     => { alias => 'i' },
+           };
+}
+
+package HTML::WikiConverter;
+
+no warnings 'redefine';
+sub html2wiki {
+  my $self = shift;
+
+  my %args = @_ % 2 ? ( html => +shift, @_ ) : @_;
+
+  my %common_arg_errors = ( url => 'uri', base_url => 'base_uri', wiki_url => 'wiki_uri' );
+  while( my( $bad, $good ) = each %common_arg_errors ) {
+    $self->__no_such( 'argument to html2wiki()', $bad, $good ) if exists $args{$bad};
+  }
+
+  my @input_sources = grep { exists $args{$_} } qw/ html file uri /;
+  croak "missing 'html', 'file', or 'uri' argument to html2wiki" unless @input_sources;
+  croak "more than one of 'html', 'file', or 'uri' provided, but only one input source allowed" if @input_sources > 1;
+
+  my $html = delete $args{html} || '';
+  my $file = delete $args{file} || '';
+  my $uri  = delete $args{uri}  || '';
+
+  $html = $self->__slurp($file) if $file && $self->slurp;
+  $html = $self->__fetch_html_from_uri($uri) if $uri; # may set 'user_agent' attrib, so call before storing attribs
+  $html = "<html>$html</html>" if $html and $self->wrap_in_html;
+
+  $self->__original_attrs( { %{ $self->__attrs } } );
+  $self->$_( $args{$_} ) foreach keys %args;
+  $self->__setup_rules() if $self->__attrs_changed;
+
+  # Decode into Perl's internal form
+  $html = decode( $self->encoding, $html )
+      unless Encode::is_utf8($html);
+
+  my $tree = new HTML::TreeBuilder();
+  $tree->store_comments(1);
+  $tree->p_strict(1);
+  $tree->implicit_body_p_tag(1);
+  $tree->ignore_unknown(0); # <ruby> et al
+
+  # Parse the HTML string or file
+  if( $html ) {
+    $self->given_html( $html );
+    $tree->parse($html);
+    $tree->eof();
+  } else {
+    $self->given_html( $self->__slurp($file) );
+    $tree->parse_file($file);
+  }
+
+  # Preprocess, save tree and parsed HTML
+  $self->__root( $tree );
+  $self->__preprocess_tree();
+  $self->parsed_html( $tree->as_HTML(undef, '  ') );
+
+  # Convert and preprocess
+  my $output = $self->__wikify($tree);
+  $self->__postprocess_output(\$output);
+
+  # Avoid leaks
+  $tree->delete();
+
+  # Return to original encoding
+  $output = encode( $self->encoding, $output );
+
+  if( $self->__attrs_changed ) {
+    $self->__attrs( { %{ $self->__original_attrs } } );
+    $self->__setup_rules();
+    $self->__attrs_changed(0);
+  }
+
+  return $output;
+}
