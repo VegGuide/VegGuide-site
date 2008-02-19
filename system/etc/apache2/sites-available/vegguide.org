@@ -119,6 +119,8 @@
     Alias        /static               /usr/local/share/vegguide/static
     Alias        /w3c                  /usr/local/share/vegguide/w3c
 
+    Alias        /robots.txt           /usr/local/share/vegguide/static/robots.txt
+
     Alias        /entry-images         /var/lib/vegguide/entry-images
     AliasMatch   (/\d+)?/js(.+)        /var/lib/vegguide/js$2
     Alias        /skin-images          /var/lib/vegguide/skin-images
