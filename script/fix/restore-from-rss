@@ -27,7 +27,8 @@ my %location_map = ( 834 => { path => [ qw( Africa Morocco Marrakesh ) ] },
 
 restore_locations(\%location_map);
 
-my $data = XMLin( 'site.rss',
+my $file = shift or die 'no file';
+my $data = XMLin( $file,
                   ForceArray => [ qw( regveg:category regveg:cuisine
                                       regveg:payment-option
                                       regveg:feature regveg:open-close ) ],
