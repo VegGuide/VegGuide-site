@@ -54,6 +54,15 @@
     <a href="/user/new_user_form?return_to=<% $return_to | uh %>">Make a new account</a>.
    </p>
 
+
+   <p>
+    Some email addresses and password were lost in the "Data
+    Destruction Forkup of February 19, 2008". If you think you should
+    be able to log in but cannot you may be a
+    viction. <a href="/site/forkup-2008-02-19">Check out the list of
+    users affected</a> to see if your username is on the list.
+   </p>
+
   </div>
 
  </div>
