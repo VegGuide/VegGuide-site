@@ -111,8 +111,9 @@ page does not change with or without breadcrumbs being shown.
 %     if ( $crumb eq $crumbs[-1] ) {
      <strong><% $crumb->label() | h %></strong>
 %     } else {
-     <a href="<% $crumb->uri() | h %>"><% $crumb->label() | h %></a></li>
+     <a href="<% $crumb->uri() | h %>"><% $crumb->label() | h %></a>
 %     }
+   </li>
 %   }
   </ul>
 % } else {
