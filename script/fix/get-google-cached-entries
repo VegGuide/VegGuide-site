@@ -1,0 +1,38 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use List::Util qw( shuffle );
+use LWP::Simple qw( getstore );
+use URI::Escape;
+
+
+{
+package LWP::Simple;
+
+sub _init_ua
+{
+    require LWP;
+    require LWP::UserAgent;
+    require HTTP::Status;
+    require HTTP::Date;
+    $ua = new LWP::UserAgent;  # we create a global UserAgent object
+    my $ver = $LWP::VERSION = $LWP::VERSION;  # avoid warning
+    $ua->agent('User-Agent=Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.8.1.12) Gecko/20080207 Ubuntu/7.10 (gutsy) Firefox/2.0.0.12');
+    $ua->env_proxy;
+}
+}
+
+for my $id ( 1 .. 4614 )
+{
+    my $uri = 'www.vegguide.org/entry/' . $id;
+
+    my $cache_uri = 'http://64.233.167.104/search?hl=en&q=cache%3A' . uri_escape($uri);
+
+    print $cache_uri, "\n";
+
+    sleep int( rand(4) ) + 1;
+
+    print getstore( $cache_uri, $id ), "\n";
+}

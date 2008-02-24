@@ -1,0 +1,234 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use DateTime;
+use DateTime::Format::MySQL;
+use Encode qw( decode );
+use Digest::SHA1 qw( sha1_hex );
+use File::Find::Rule;
+use File::Slurp qw( read_file write_file );
+use File::Temp qw( tempdir );
+use HTML::Entities qw( decode_entities );
+use VegGuide::Vendor;
+
+
+binmode STDOUT, ':utf8';
+
+my $cutoff = DateTime->new( year => 2008, month => 1, day => 22 );
+my $admin = VegGuide::User->new( user_id => 1 );
+
+my $dir = tempdir( CLEANUP => 1 );
+
+for my $file ( sort { $a <=> $b }
+               File::Find::Rule
+                   ->name( qr/^\d+$/ )
+                   ->size( '>= 7ki' )
+                   ->in('.')
+             )
+{
+    parse_and_update($file);
+}
+
+sub parse_and_update
+{
+    my $file = shift;
+
+    my $data = decode( 'utf8', read_file($file) );
+
+    my ( $user_id, $username ) =
+        $data =~ m{\Q<p id="entry-attribution">\E
+                   .+?
+                   href="/user/(\d+)".+?title="([^"]+)"
+                  }xism;
+
+    $username = decode_entities($username);
+
+    my $vendor = vendor_from_filename($file);
+
+    my ( $name ) =
+        $data =~ m{\Q<title>\E
+                   .+?
+                   \QVegGuide.Org | \E([^\n]+)$
+                  }xism;
+
+    $name = decode_entities($name);
+
+    if ( $vendor->user_id() != $user_id )
+    {
+        my $user = user_for_username($username);
+
+        $vendor->update( user_id => $user->user_id(),
+                         user    => $admin,
+                       );
+    }
+
+    update_reviews( $data, $vendor );
+
+    update_ratings( $data, $vendor );
+}
+
+sub vendor_from_filename
+{
+    my $vendor_id = shift;
+
+    $vendor_id-- if $vendor_id > 4623;
+    $vendor_id-- if $vendor_id > 4640;
+
+    return VegGuide::Vendor->new( vendor_id => $vendor_id );
+}
+
+sub update_reviews
+{
+    my $data   = shift;
+    my $vendor = shift;
+
+    while ( $data =~ m{\G.+?
+                       \Q<div class="comment\E
+                       (.+?)
+                       </div>
+                       \s+
+                       (?:
+                        (?:
+                           <p>
+                           \s+
+                           \Q<a href="/entry/\E\d+\Q/review_form"\E
+                        )
+                        |
+                        (?:
+                         \Q<a name="user-id-\E\d+
+                        )
+                       )
+                      }ximsg )
+    {
+        my $html_blob = $1;
+
+        my ( $user_id, $username, $date ) =
+            $html_blob =~ m{\Q<div class="attribution">\E
+                          .+?
+                          href="/user/(\d+)".+?title="([^"]+)"
+                          .+?
+                          \s+-\s+
+                          (\w\w\w\s+\d+(?:\s+\d+)?)
+                         }xism;
+
+        $username = decode_entities($username);
+
+        my $dt = datetime($date);
+
+        return if $dt <= $cutoff;
+
+        my ( $rating ) =
+            $html_blob =~ m{ratings/green-(\d)};
+
+        my $review = join "\n\n",
+            $html_blob =~ m{\G.+?<p class="comment[^"]*">(.+?)</p>}ims;
+
+        $review =~ s{<br />}{\n}g;
+
+        my $user = user_for_username($username);
+
+        return if $vendor->comment_by_user($user);
+
+        my $comment =
+            $vendor->add_or_update_comment( user         => $user,
+                                            comment      => $review,
+                                            calling_user => $user,
+                                          );
+
+        $comment->update
+            ( last_modified_datetime => DateTime::Format::MySQL->format_datetime($dt) );
+
+        next if $vendor->rating_from_user($user);
+
+        $vendor->add_or_update_rating( user   => $user,
+                                       rating => $rating,
+                                     );
+    }
+}
+
+sub update_ratings
+{
+    my $data   = shift;
+    my $vendor = shift;
+
+    my ($ratings) =
+        $data =~ m{\Q<ul id="ratings-list">\E(.+?)</ul>}ims;
+
+    return unless $ratings;
+
+    while ( $ratings =~ m{\G
+                          .*?
+                          <li>
+                          .+?
+                          href="/user/(\d+)".+?title="([^"]+)"
+                          .+?
+                          ratings/green-(\d+)
+                         }ximsg )
+    {
+        my ( $user_id, $username, $rating ) = ( $1, $2, $3 );
+
+        $username = decode_entities($username);
+
+        my $user = user_for_username($username);
+
+        next if $vendor->rating_from_user($user);
+
+        $vendor->add_or_update_rating( user   => $user,
+                                       rating => $rating,
+                                     );
+    }
+}
+
+my $num;
+sub user_for_username
+{
+    my $username = shift;
+
+    my $user = VegGuide::User->new( real_name => $username );
+
+    $num ||= 1;
+
+    unless ($user)
+    {
+        print "Could not find user for username: $username\n";
+
+        my $pw = sha1_hex( rand( 1_000_000_000 ) . time );
+
+        $user = VegGuide::User->create( real_name     => $username,
+                                        email_address => 'vg-restoration-' . $num++ . '@urth.org',
+                                        password      => $pw,
+                                        password2     => $pw,
+                                      );
+    }
+
+    return $user;
+}
+
+{
+    my %months;
+    sub datetime
+    {
+        my $date = shift;
+
+        months();
+
+        my ( $m, $d, $y ) = split /\s+/, $date;
+
+        $y ||= 8;
+
+        $y += 2000;
+
+        return DateTime->new( year => $y, month => $months{$m}, day => $d );
+    }
+
+    sub months
+    {
+        return if keys %months;
+
+        my $m = 1;
+
+        %months = map { $_ => $m++ } qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
+    }
+}
