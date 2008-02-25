@@ -1,0 +1,38 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use File::Find::Rule;
+use VegGuide::Vendor;
+use VegGuide::VendorImage;
+
+
+my $admin = VegGuide::User->new( user_id => 1 );
+
+for my $file ( sort
+               File::Find::Rule
+                   ->name( qr/-original/ )
+                   ->in('.')
+             )
+{
+    my ($dir) = $file =~ /^(\d+)/;
+
+    my $vendor = vendor_from_number($dir);
+
+    VegGuide::VendorImage->create_from_file( file   => $file,
+                                             user   => $admin,
+                                             vendor => $vendor,
+                                           );
+}
+
+
+sub vendor_from_number
+{
+    my $vendor_id = shift;
+
+    $vendor_id-- if $vendor_id > 4623;
+    $vendor_id-- if $vendor_id > 4640;
+
+    return VegGuide::Vendor->new( vendor_id => $vendor_id );
+}
