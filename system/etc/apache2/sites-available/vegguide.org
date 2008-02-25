@@ -77,6 +77,10 @@
     RewriteRule   ^/rss                                       /site/feeds                             [R=permanent,L]
     RewriteRule   ^/news                                      /site/news                              [R=permanent,L]
 
+    # Old URI for opensearch widget    
+    RewriteCond   %{QUERY_STRING}         search=(.+)
+    RewriteRule   ^/submit/search                             /site/search?search_text=%1?            [R,L]
+
     RewriteRule   ^/(location|vendor|noauth)/?$               /                                       [R,L]
 
     RewriteRule   ^/plain.*                                   -                                       [G,L]
