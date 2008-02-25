@@ -1,4 +1,0 @@
-# Blocking all robots until the data is restore (want to keep google's
-# cache with the old data)
-User-agent: *
-Disallow: /
