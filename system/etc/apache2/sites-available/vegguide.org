@@ -79,7 +79,7 @@
 
     # Old URI for opensearch widget    
     RewriteCond   %{QUERY_STRING}         search=(.+)
-    RewriteRule   ^/submit/search                             /site/search?search_text=%1?            [R,L]
+    RewriteRule   ^/submit/search                             /site/search?search_text=%1             [R=permanent,L]
 
     RewriteRule   ^/(location|vendor|noauth)/?$               /                                       [R,L]
 
