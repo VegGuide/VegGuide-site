@@ -23,7 +23,7 @@ sub _set_vendor : Chained('/') : PathPart('entry') : CaptureArgs(1)
 
     my $vendor = VegGuide::Vendor->new( vendor_id => $vendor_id );
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $vendor;
 
     $c->stash()->{vendor} = $vendor;
@@ -119,7 +119,7 @@ sub entry_PUT : Private
 
     $c->add_message($_) for @msg;
 
-    $c->redirect( entry_uri( vendor => $vendor ) );
+    $c->redirect_and_detach( entry_uri( vendor => $vendor ) );
 }
 
 sub map : Chained('_set_vendor') : PathPart('map') : Args(0)
@@ -137,7 +137,7 @@ sub confirm_deletion : Chained('_set_vendor') : PathPart('deletion_confirmation_
 
     my $vendor = $c->stash()->{vendor};
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->can_delete_vendor($vendor);
 
     $c->stash()->{thing} = 'entry';
@@ -155,7 +155,7 @@ sub entry_DELETE : Private
 
     my $vendor = $c->stash()->{vendor};
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->can_delete_vendor($vendor);
 
     my $location = $vendor->location();
@@ -165,7 +165,7 @@ sub entry_DELETE : Private
 
     $c->add_message( "$name was deleted." );
 
-    $c->redirect( region_uri( location => $location ) );
+    $c->redirect_and_detach( region_uri( location => $location ) );
 }
 
 sub rating : Chained('_set_vendor') : PathPart('rating') : Args(0) : ActionClass('+VegGuide::Action::REST') { }
@@ -177,7 +177,7 @@ sub rating_GET_html : Private
     my $self = shift;
     my $c    = shift;
 
-    $c->redirect( entry_uri( vendor => $c->stash()->{vendor} ) );
+    $c->redirect_and_detach( entry_uri( vendor => $c->stash()->{vendor} ) );
 }
 
 sub rating_POST : Private
@@ -199,7 +199,7 @@ sub rating_POST : Private
     if ( $c->request()->looks_like_browser() )
     {
         $c->add_message( 'Your rating for ' . $vendor->name() . ' has been recorded.' );
-        $c->redirect( entry_uri( vendor => $vendor ) );
+        $c->redirect_and_detach( entry_uri( vendor => $vendor ) );
     }
     else
     {
@@ -242,7 +242,7 @@ sub review_form : Chained('_set_vendor') : PathPart('review_form') : Args(1)
     my $user = VegGuide::User->new( user_id => $user_id );
     my $comment = $c->stash()->{vendor}->comment_by_user($user);
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $user && $comment;
 
     $c->_redirect_with_error
@@ -265,7 +265,7 @@ sub new_review_form : Chained('_set_vendor') : PathPart('review_form') : Args(0)
 
     if ( my $comment = $vendor->comment_by_user( $c->vg_user() ) )
     {
-        $c->redirect( entry_uri( vendor => $vendor, path => 'review_form/' . $c->vg_user()->user_id() ) );
+        $c->redirect_and_detach( entry_uri( vendor => $vendor, path => 'review_form/' . $c->vg_user()->user_id() ) );
     }
 
     $self->_require_auth( $c,
@@ -307,7 +307,7 @@ sub reviews_POST : Private
         $c->add_message( 'The review has been updated.' );
     }
 
-    $c->redirect( entry_uri( vendor => $vendor ) );
+    $c->redirect_and_detach( entry_uri( vendor => $vendor ) );
 }
 
 sub _set_review : Chained('_set_vendor') : PathPart('review') : CaptureArgs(1)
@@ -321,7 +321,7 @@ sub _set_review : Chained('_set_vendor') : PathPart('review') : CaptureArgs(1)
     my $user = VegGuide::User->new( user_id => $user_id );
     my $comment = $vendor->comment_by_user($user);
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $comment;
 
     $c->stash()->{comment} = $comment;
@@ -387,7 +387,7 @@ sub review_DELETE : Private
 
     $c->add_message( "$subject has been deleted." );
 
-    $c->redirect( entry_uri( vendor => $c->stash()->{vendor} ) );
+    $c->redirect_and_detach( entry_uri( vendor => $c->stash()->{vendor} ) );
 }
 
 sub edit_hours_form : Chained('_set_vendor') : PathPart('edit_hours_form') : Args(0)
@@ -460,7 +460,7 @@ sub hours_POST : Private
 
     $c->add_message($msg);
 
-    $c->redirect( entry_uri( vendor => $vendor ) );
+    $c->redirect_and_detach( entry_uri( vendor => $vendor ) );
 }
 
 {
@@ -586,20 +586,20 @@ sub image_PUT
 
     if ( $c->request()->param('display_order') )
     {
-        $c->redirect('/')
+        $c->redirect_and_detach('/')
             unless $c->vg_user()->can_edit_vendor($vendor);
 
         $image->make_image_first();
     }
     else
     {
-        $c->redirect('/')
+        $c->redirect_and_detach('/')
             unless $c->vg_user()->can_edit_vendor_image($image);
 
         $image->update( caption => $c->request()->param('caption') );
     }
 
-    $c->redirect( entry_uri( vendor => $vendor, path => 'images_form' ) );
+    $c->redirect_and_detach( entry_uri( vendor => $vendor, path => 'images_form' ) );
 }
 
 sub image_DELETE
@@ -610,14 +610,14 @@ sub image_DELETE
     my $vendor = $c->stash()->{vendor};
     my $image = $c->stash()->{image};
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->can_delete_vendor_image($image);
 
     $image->delete();
 
     $c->add_message('The image has been deleted.');
 
-    $c->redirect( entry_uri( vendor => $vendor, path => 'images_form' ) );
+    $c->redirect_and_detach( entry_uri( vendor => $vendor, path => 'images_form' ) );
 }
 
 sub image_confirm_deletion : Chained('_set_vendor_image') : PathPart('deletion_confirmation_form') : Args(0)
@@ -627,7 +627,7 @@ sub image_confirm_deletion : Chained('_set_vendor_image') : PathPart('deletion_c
 
     my $image = $c->stash()->{image};
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->can_delete_vendor_image($image);
 
     $c->stash()->{thing} = 'image';
@@ -688,7 +688,7 @@ sub images_POST
             );
     }
 
-    $c->redirect( entry_uri( vendor => $vendor, path => 'images_form' ) );
+    $c->redirect_and_detach( entry_uri( vendor => $vendor, path => 'images_form' ) );
 }
 
 {

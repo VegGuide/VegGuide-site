@@ -88,7 +88,7 @@ sub home : Path('/home')
 
     my $redirect = $location ? region_uri( location => $location ) : '/';
 
-    $c->redirect($redirect);
+    $c->redirect_and_detach($redirect);
 }
 
 {

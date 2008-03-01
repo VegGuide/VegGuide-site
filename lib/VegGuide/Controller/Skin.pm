@@ -18,7 +18,7 @@ sub _set_skin : Chained('/') : PathPart('skin') : CaptureArgs(1)
     my $skin =
         VegGuide::Skin->new( skin_id => $skin_id );
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $skin && $c->vg_user()->can_edit_skin($skin);
 
     $c->stash()->{skin} = $skin;
@@ -41,7 +41,7 @@ sub skin_PUT
 
     my $skin = $c->stash()->{skin};
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->can_edit_skin($skin);
 
     my %data = $c->request()->skin_data();
@@ -58,7 +58,7 @@ sub skin_PUT
 
     $c->add_message( 'The ' . $skin->hostname() . ' skin has been updated.' );
 
-    $c->redirect( '/skin/' . $skin->skin_id() . '/edit_form' );
+    $c->redirect_and_detach( '/skin/' . $skin->skin_id() . '/edit_form' );
 }
 
 

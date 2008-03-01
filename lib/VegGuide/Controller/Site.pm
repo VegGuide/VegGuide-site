@@ -48,7 +48,7 @@ sub new_region_form : Local
     my $self = shift;
     my $c    = shift;
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->is_admin();
 
     $c->stash()->{template} = '/site/new-region-form';
@@ -85,7 +85,7 @@ sub clone_entry_form : Local
 
     my $vendor = VegGuide::Vendor->new( vendor_id => $vendor_id );
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $vendor;
 
     $c->stash()->{vendor} = $vendor;
@@ -118,7 +118,7 @@ sub clone_entry_form : Local
         my $text = $c->request()->param('search_text');
         $text =~ s/^\s+|\s+$// if defined $text;
 
-        $c->redirect('/')
+        $c->redirect_and_detach('/')
             if string_is_empty($text);
 
         my $looks_like_address = 0;
@@ -265,7 +265,7 @@ sub news_GET_html : Private
 
     my $total = VegGuide::NewsItem->Count();
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         if $start > $total;
 
     $c->stash()->{news} =
@@ -290,7 +290,7 @@ sub news_POST : Private
     my $self = shift;
     my $c    = shift;
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->is_admin();
 
     my $params = $c->request()->parameters();
@@ -301,7 +301,7 @@ sub news_POST : Private
 
     $c->add_message( 'News item added.' );
 
-    $c->redirect('/site/news');
+    $c->redirect_and_detach('/site/news');
 }
 
 sub news_item : LocalRegex('^news/(\d+)$') : ActionClass('+VegGuide::Action::REST') { }
@@ -311,12 +311,12 @@ sub news_item_PUT : Private
     my $self = shift;
     my $c    = shift;
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->is_admin();
 
     my $item = VegGuide::NewsItem->new( item_id => $c->request()->captures()->[0] );
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $item;
 
     my $params = $c->request()->parameters();
@@ -327,7 +327,7 @@ sub news_item_PUT : Private
 
     $c->add_message( 'News item updated.' );
 
-    $c->redirect('/site/news');
+    $c->redirect_and_detach('/site/news');
 }
 
 sub news_item_DELETE : Private
@@ -335,19 +335,19 @@ sub news_item_DELETE : Private
     my $self = shift;
     my $c    = shift;
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->is_admin();
 
     my $item = VegGuide::NewsItem->new( item_id => $c->request()->captures()->[0] );
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $item;
 
     $item->delete();
 
     $c->add_message( 'News item deleted.' );
 
-    $c->redirect('/site/news');
+    $c->redirect_and_detach('/site/news');
 }
 
 sub news_item_edit_form : LocalRegex('^news/(\d+)/edit_form$')
@@ -355,12 +355,12 @@ sub news_item_edit_form : LocalRegex('^news/(\d+)/edit_form$')
     my $self      = shift;
     my $c         = shift;
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->is_admin();
 
     my $item = VegGuide::NewsItem->new( item_id => $c->request()->captures()->[0] );
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $item;
 
     $c->stash()->{item} = $item;
@@ -373,7 +373,7 @@ sub news_item_deletion_confirmation : LocalRegex('^news/(\d+)/deletion_confirmat
     my $self = shift;
     my $c    = shift;
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->is_admin();
 
     my $item = VegGuide::NewsItem->new( item_id => $c->request()->captures()->[0] );
@@ -393,7 +393,7 @@ sub skins_POST : Private
     my $self = shift;
     my $c    = shift;
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->is_admin();
 
     my %data = $c->request()->skin_data();
@@ -407,7 +407,7 @@ sub skins_POST : Private
 
     $c->add_message( 'The ' . $skin->hostname() . ' skin has been created.' );
 
-    $c->redirect( '/skin/' . $skin->skin_id() . '/edit_form' );
+    $c->redirect_and_detach( '/skin/' . $skin->skin_id() . '/edit_form' );
 }
 
 

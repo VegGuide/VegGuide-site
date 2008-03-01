@@ -83,7 +83,7 @@ sub create_new_session_if_needed
 
         if ( $self->request()->looks_like_browser() )
         {
-            $self->redirect( $p{uri} );
+            $self->redirect_and_detach( $p{uri} );
         }
         else
         {

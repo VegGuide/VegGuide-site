@@ -14,7 +14,7 @@ sub auto : Private
     my $self = shift;
     my $c    = shift;
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->is_admin();
 
     return 1;
@@ -45,7 +45,7 @@ sub locale_PUT
 
     $c->add_message( $locale->name() . ' has been updated.' );
 
-    $c->redirect( '/site/admin/locale_list' );
+    $c->redirect_and_detach( '/site/admin/locale_list' );
 }
 
 sub locales : Global : ActionClass('+VegGuide::Action::REST') { }
@@ -63,7 +63,7 @@ sub locales_POST
 
     $c->add_message( $locale->name() . ' has been created.' );
 
-    $c->redirect( '/site/admin/locale_list' );
+    $c->redirect_and_detach( '/site/admin/locale_list' );
 }
 
 sub source_list : Local
@@ -91,7 +91,7 @@ sub source_PUT
 
     $c->add_message( $source->name() . ' has been updated.' );
 
-    $c->redirect( '/site/admin/source_list' );
+    $c->redirect_and_detach( '/site/admin/source_list' );
 }
 
 sub sources : Global : ActionClass('+VegGuide::Action::REST') { }
@@ -107,7 +107,7 @@ sub sources_POST
 
     $c->add_message( $source->name() . ' has been created.' );
 
-    $c->redirect( '/site/admin/source_list' );
+    $c->redirect_and_detach( '/site/admin/source_list' );
 }
 
 

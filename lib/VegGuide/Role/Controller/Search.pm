@@ -140,7 +140,7 @@ sub _search_from_request
                         query => $p,
                       );
 
-        $c->redirect( $path, 301 );
+        $c->redirect_and_detach( $path, 301 );
     }
 
     delete $p{$_} for grep { /^possible/ } keys %p;
@@ -178,7 +178,7 @@ sub _set_search_cursor_params
 
     if ( ( $page - 1 ) * $limit > $search->count() )
     {
-        $c->redirect( $search->uri(1) );
+        $c->redirect_and_detach( $search->uri(1) );
     }
 
     return 1;

@@ -41,7 +41,7 @@ sub _serve_rss_data_file
 
     if ( $c->engine()->isa('Catalyst::Engine::Apache') )
     {
-        $c->redirect( uri( path => '/static/rss/' . basename($file) ) );
+        $c->redirect_and_detach( uri( path => '/static/rss/' . basename($file) ) );
     }
 
     open my $fh, '<', $file

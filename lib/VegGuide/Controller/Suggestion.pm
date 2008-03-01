@@ -18,7 +18,7 @@ sub _set_suggestion : Chained('/') : PathPart('suggestion') : CaptureArgs(1)
     my $suggestion =
         VegGuide::VendorSuggestion->new( vendor_suggestion_id => $suggestion_id );
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $suggestion && $c->vg_user()->can_edit_suggestion($suggestion);
 
     $c->stash()->{suggestion} = $suggestion;
@@ -39,7 +39,7 @@ sub suggestion_PUT
             );
     }
 
-    $c->redirect( user_uri( user => $c->vg_user(), path => 'suggestions' ) );
+    $c->redirect_and_detach( user_uri( user => $c->vg_user(), path => 'suggestions' ) );
 }
 
 sub suggestion_DELETE
@@ -52,7 +52,7 @@ sub suggestion_DELETE
           comment => ( $c->request()->param('comment') || '' ),
         );
 
-    $c->redirect( user_uri( user => $c->vg_user(), path => 'suggestions' ) );
+    $c->redirect_and_detach( user_uri( user => $c->vg_user(), path => 'suggestions' ) );
 }
 
 

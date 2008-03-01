@@ -29,7 +29,7 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1)
 
     my $location = VegGuide::Location->new( location_id => $location_id );
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $location;
 
     $c->stash()->{location} = $location;
@@ -167,7 +167,7 @@ sub region_PUT : Private
 
     my $location = $c->stash()->{location};
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->can_edit_location($location);
 
     my %data = $c->request()->location_data();
@@ -193,7 +193,7 @@ sub region_PUT : Private
 
     $c->add_message( $location->name() . ' has been updated.' );
 
-    $c->redirect( region_uri( location => $location ) );
+    $c->redirect_and_detach( region_uri( location => $location ) );
 }
 
 sub region_POST : Private
@@ -201,7 +201,7 @@ sub region_POST : Private
     my $self = shift;
     my $c    = shift;
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->stash()->{location};
 
     return $self->_new_entry_submit($c);
@@ -214,7 +214,7 @@ sub region_confirm_deletion : Chained('_set_location') : PathPart('deletion_conf
 
     my $location = $c->stash()->{location};
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->can_delete_location($location);
 
     $c->stash()->{thing} = 'region';
@@ -232,7 +232,7 @@ sub region_DELETE : Private
 
     my $location = $c->stash()->{location};
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->can_delete_location($location);
 
     my $name = $location->name();
@@ -243,7 +243,7 @@ sub region_DELETE : Private
     $c->add_message( "$name has been deleted." );
 
     my $redirect = $parent ? region_uri( location => $parent ) : '/';
-    $c->redirect($redirect);
+    $c->redirect_and_detach($redirect);
 }
 
 sub _new_entry_submit
@@ -280,7 +280,7 @@ sub _new_entry_submit
 
     $c->add_message( $vendor->name() . ' has been added.' );
 
-    $c->redirect( entry_uri( vendor => $vendor, path => 'edit_hours_form' ) );
+    $c->redirect_and_detach( entry_uri( vendor => $vendor, path => 'edit_hours_form' ) );
 }
 
 sub entry_form : Chained('_set_location') : PathPart('entry_form') : Args(0)
@@ -325,7 +325,7 @@ sub entry_form_no_region : LocalRegex('^entry_form$')
                     query    => { cloned_vendor_id => $c->request()->param('cloned_vendor_id') },
                   );
 
-    $c->redirect($uri);
+    $c->redirect_and_detach($uri);
 }
 
 sub comment_form : Chained('_set_location') : PathPart('comment_form') : Args(1)
@@ -341,7 +341,7 @@ sub comment_form : Chained('_set_location') : PathPart('comment_form') : Args(1)
     my $user = VegGuide::User->new( user_id => $user_id );
     my $comment = $c->stash()->{location}->comment_by_user($user);
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $user && $comment;
 
     $c->_redirect_with_error
@@ -395,7 +395,7 @@ sub new_region_comment_POST : Private
         $c->add_message( 'The comment has been updated.' );
     }
 
-    $c->redirect( region_uri( location => $location ) );
+    $c->redirect_and_detach( region_uri( location => $location ) );
 }
 
 sub region_comment : Chained('_set_location') : PathPart('comment') : Args(1) : ActionClass('+VegGuide::Action::REST') { }
@@ -415,7 +415,7 @@ sub region_comment_DELETE : Private
     my $user = VegGuide::User->new( user_id => $user_id );
     my $comment = $location->comment_by_user($user);
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $comment;
 
     $c->_redirect_with_error
@@ -433,7 +433,7 @@ sub region_comment_DELETE : Private
 
     $c->add_message( "$subject has been deleted." );
 
-    $c->redirect( region_uri( location => $location ) );
+    $c->redirect_and_detach( region_uri( location => $location ) );
 }
 
 sub stats : Chained('_set_location') : PathPart('stats') : Args(0)
@@ -491,7 +491,7 @@ sub data_feed : LocalRegex('^(\d+).rss')
 
     my $location = eval { VegGuide::Location->new( location_id => $c->request()->captures()->[0] ) };
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $location;
 
     my $cache_only =
@@ -539,7 +539,7 @@ sub edit_form : Chained('_set_location') : PathPart('edit_form') : Args(0)
     my $self = shift;
     my $c    = shift;
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->can_edit_location( $c->stash()->{location} );
 
     $c->stash()->{template} = '/region/edit-form';
@@ -582,7 +582,7 @@ sub regions_POST
         {
             my @locations = VegGuide::Location->ByNameOrCityName( name => $data{name} )->all();
 
-            $c->redirect( uri( path  => '/site/duplicate_resolution_form',
+            $c->redirect_and_detach( uri( path  => '/site/duplicate_resolution_form',
                                query => \%data,
                              )
                         )
@@ -631,7 +631,7 @@ sub regions_POST
 
     $c->add_message($msg);
 
-    $c->redirect( region_uri( location => $location ) );
+    $c->redirect_and_detach( region_uri( location => $location ) );
 }
 
 sub recent : Local

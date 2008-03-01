@@ -1,3 +1,4 @@
+
 package VegGuide::Build;
 
 use strict;
@@ -19,6 +20,7 @@ my %Requires =
       'Catalyst::Plugin::Authentication'         => 0.1,
       'Catalyst::Plugin::Cache::Store::FastMmap' => 0,
       'Catalyst::Plugin::Log::Dispatch'          => 0,
+      'Catalyst::Plugin::RedirectAndDetach'      => 0,
       'Catalyst::Plugin::Session'                => 0.17,
       'Catalyst::Plugin::Session::State'         => 0,
       'Catalyst::Plugin::Session::Store'         => 0,

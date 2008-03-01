@@ -23,7 +23,7 @@ sub _set_user : Chained('/') : PathPart('user') : CaptureArgs(1)
 
     my $user = VegGuide::User->new( user_id => $user_id );
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $user;
 
     $c->stash()->{user} = $user;
@@ -64,7 +64,7 @@ sub authentication_GET_html
     }
     else
     {
-        $c->redirect( '/user/login_form' );
+        $c->redirect_and_detach( '/user/login_form' );
     }
 }
 
@@ -108,7 +108,7 @@ sub authentication_POST
 
     $c->add_message( 'Welcome to the site, ' . $c->vg_user()->real_name() );
 
-    $c->redirect( $c->request()->parameters()->{return_to} || '/' );
+    $c->redirect_and_detach( $c->request()->parameters()->{return_to} || '/' );
 }
 
 sub authentication_DELETE
@@ -120,7 +120,7 @@ sub authentication_DELETE
 
     $c->add_message( 'You have been logged out.' );
 
-    $c->redirect( $c->request()->parameters()->{return_to} || '/' );
+    $c->redirect_and_detach( $c->request()->parameters()->{return_to} || '/' );
 }
 
 sub forgot_password_form : Local
@@ -169,7 +169,7 @@ sub password_reminder_POST
 
     $c->add_message( "A message telling you how to change your password has been sent to $email." );
 
-    $c->redirect( uri( path => '/user/login_form',
+    $c->redirect_and_detach( uri( path => '/user/login_form',
                        query => { return_to => $c->request()->parameters()->{return_to} },
                      )
                 );
@@ -183,7 +183,7 @@ sub change_password_form : Local
 
     my $user = VegGuide::User->new( forgot_password_digest => ( $digest || '' ) );
 
-    $c->redirect('/') unless $user;
+    $c->redirect_and_detach('/') unless $user;
 
     $c->stash()->{digest} = $digest;
     $c->stash()->{user}   = $user;
@@ -210,7 +210,7 @@ sub edit_form : Chained('_set_user') : PathPart('edit_form') : Args(0)
                           'You must be logged in to edit a user.',
                         );
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->can_edit_user( $c->stash()->{user} );
 
     $c->stash()->{template} = '/user/individual/edit-form';
@@ -229,7 +229,7 @@ sub user_PUT
              || ( $digest && $user->forgot_password_digest() eq $digest )
            )
     {
-        $c->redirect('/');
+        $c->redirect_and_detach('/');
     }
 
     if ($digest)
@@ -266,7 +266,7 @@ sub _change_password
     $c->add_message('Your password has been updated');
     $c->save_param( email_address => $user->email_address() );
 
-    $c->redirect( '/user/login_form' );
+    $c->redirect_and_detach( '/user/login_form' );
 }
 
 sub _update_user
@@ -303,7 +303,7 @@ sub _update_user
         $c->add_message( $subject . ' account has been updated' );
     }
 
-    $c->redirect($redirect);
+    $c->redirect_and_detach($redirect);
 }
 
 sub user_confirm_deletion : Chained('_set_user') : PathPart('deletion_confirmation_form') : Args(0)
@@ -313,7 +313,7 @@ sub user_confirm_deletion : Chained('_set_user') : PathPart('deletion_confirmati
 
     my $user = $c->stash()->{user};
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->can_delete_user($user);
 
     $c->stash()->{thing} = 'user';
@@ -331,7 +331,7 @@ sub user_DELETE
 
     my $user = $c->stash()->{user};
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->can_delete_user($user);
 
     my $name = $user->real_name();
@@ -339,7 +339,7 @@ sub user_DELETE
 
     $c->add_message( "The user $name has been deleted." );
 
-    $c->redirect('/user');
+    $c->redirect_and_detach('/user');
 }
 
 my $Captcha = Captcha::reCAPTCHA->new();
@@ -475,7 +475,7 @@ sub users_POST
 
     $c->add_message( 'Your account has been created.' );
 
-    $c->redirect( $c->request()->parameters()->{return_to} || '/' );
+    $c->redirect_and_detach( $c->request()->parameters()->{return_to} || '/' );
 
 }
 
@@ -519,7 +519,7 @@ sub history : Chained('_set_user') : PathPart('history') : Args(0)
 
     my $user = $c->stash()->{user};
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->is_admin();
 
     $c->stash()->{logs} = $user->activity_logs()
@@ -537,7 +537,7 @@ sub watch_list_GET_html : Private
 
     my $user = $c->stash()->{user};
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->can_edit_user($user);
 
     $c->stash()->{locations} = $user->subscribed_locations();
@@ -557,12 +557,12 @@ sub watch_list_POST : Private
 
     my $user = $c->stash()->{user};
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $location && $c->vg_user()->can_edit_user($user);
 
     $user->subscribe_to_location( location => $location );
 
-    $c->redirect( region_uri( location => $location ) );
+    $c->redirect_and_detach( region_uri( location => $location ) );
 }
 
 sub watch_list_region : Chained('_set_user') : PathPart('watch_list') : Args(1) : ActionClass('+VegGuide::Action::REST') { }
@@ -575,17 +575,17 @@ sub watch_list_region_DELETE : Private
 
     my $location = VegGuide::Location->new( location_id => $location_id );
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $location;
 
     my $user = $c->stash()->{user};
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->can_edit_user($user);
 
     $user->unsubscribe_from_location( location => $location );
 
-    $c->redirect( $c->request()->parameters()->{return_to} || '/' );
+    $c->redirect_and_detach( $c->request()->parameters()->{return_to} || '/' );
 }
 
 sub suggestions : Chained('_set_user') : PathPart('suggestions') : Args(0)
@@ -595,7 +595,7 @@ sub suggestions : Chained('_set_user') : PathPart('suggestions') : Args(0)
 
     my $user = $c->stash()->{user};
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->is_admin() || $c->vg_user()->user_id() == $user->user_id();
 
     $c->stash()->{suggestions} = $user->viewable_suggestions();
@@ -610,7 +610,7 @@ sub skins : Chained('_set_user') : PathPart('skins') : Args(0)
 
     my $user = $c->stash()->{user};
 
-    $c->redirect('/')
+    $c->redirect_and_detach('/')
         unless $c->vg_user()->is_admin() || $c->vg_user()->user_id() == $user->user_id();
 
     $c->stash()->{skins} = $user->skins();

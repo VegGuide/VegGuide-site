@@ -31,7 +31,6 @@ use Sys::Hostname qw( hostname );
             +VegGuide::Plugin::FixupHost
             +VegGuide::Plugin::FixupURI
             +VegGuide::Plugin::InOutEncoding
-            +VegGuide::Plugin::Redirect
             +VegGuide::Plugin::ResponseAttributes
             +VegGuide::Plugin::Session
             +VegGuide::Plugin::Session::State::URI
@@ -39,6 +38,7 @@ use Sys::Hostname qw( hostname );
             Cache
             Cache::Store::FastMmap
             Log::Dispatch
+            RedirectAndDetach
             SubRequest
           );
 
