@@ -101,8 +101,8 @@ sub clone_entry_form : Local
     my $PostalCodeRe = qr/ (?: \d{5} (?:-\d{4})?     # US - zip (+4)
                                |
                                \w\d\w(?:\s+\d\w\d)?  # Canada
-#                               |
-#                               [a-z]{1,2}[0-9r][0-9a-z]? [0-9][a-z-[cikmov]]{2}  # UK
+                               |
+                               [a-z]{1,2}[0-9r][0-9a-z]?(?:\s+[0-9][abd-klmp-uwxyz]{2})?  # UK
 #                               |
 #                               \d{4}\w\w             # Netherlands
 #                               |
