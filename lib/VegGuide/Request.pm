@@ -44,7 +44,7 @@ sub method
 
         my $with = $self->header('x-requested-with');
         return 0
-            if $with && $with eq 'HTTP.Request';
+            if $with && grep { $with eq $_ } qw( 'HTTP.Request', 'XMLHttpRequest' );
 
         my $forced_type = $self->param('content-type');
         return 0
