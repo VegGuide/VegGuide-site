@@ -153,6 +153,8 @@ sub _standard_geocode_address
     $address .= ' ' . $p{postal_code}
         if defined $p{postal_code} && length $p{postal_code};
 
+    $address .= ', ' . $self->country();
+
     return $address;
 }
 
