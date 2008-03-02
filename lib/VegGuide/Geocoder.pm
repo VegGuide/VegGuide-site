@@ -5,6 +5,7 @@ use warnings;
 
 use Geo::Coder::Google;
 use VegGuide::Config;
+use VegGuide::Util qw( string_is_empty );
 use VegGuide::Validate qw( validate SCALAR_TYPE );
 
 
@@ -144,14 +145,17 @@ sub _standard_geocode_address
     my $self = shift;
     my %p    = @_;
 
-    my $address =
-        ( join ', ',
-          grep { defined }
-          $p{address1}, $p{city}, $p{region},
-        );
+    my @pieces;
+    if ( string_is_empty( $p{postal_code} ) )
+    {
+        @pieces = qw( address1 city region );
+    }
+    else
+    {
+        @pieces = qw( address1 postal_code );
+    }
 
-    $address .= ' ' . $p{postal_code}
-        if defined $p{postal_code} && length $p{postal_code};
+    my $address = join ', ', grep { ! string_is_empty(@_) } @p{@pieces};
 
     $address .= ', ' . $self->country();
 
