@@ -24,8 +24,7 @@ use Sys::Hostname qw( hostname );
 
 {
     my @StandardImports =
-        qw( +VegGuide::Plugin::Authentication
-            +VegGuide::Plugin::Authentication::Credential::DBMS
+        qw( Authentication::DR
             +VegGuide::Plugin::Authentication::Store::DBMS
             +VegGuide::Plugin::ErrorHandling
             +VegGuide::Plugin::FixupHost
@@ -157,12 +156,13 @@ sub AlzaboRootDir
               { store =>
                 { class => '+VegGuide::Plugin::Authentication::Store::DBMS' },
                 credential =>
-                { class => '+VegGuide::Plugin::Authentication::Credential::DBMS' },
+                { class => 'DR' },
               },
             },
             use_session   => 0,
             cookie_name   => 'VegGuide-user',
             cookie_domain => ( __PACKAGE__->IsProduction() ? '.vegguide.org' : '' ),
+            user_class    => 'VegGuide::User',
           },
 
           dbi =>
