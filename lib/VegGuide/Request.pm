@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use NEXT;
-use base 'Catalyst::Request::REST';
+use base 'Catalyst::Request::REST::ForBrowsers';
 
 use HTTP::Headers::Util qw(split_header_words);
 use List::MoreUtils qw( all );
@@ -16,56 +16,6 @@ use VegGuide::Validate
         HASHREF_TYPE BOOLEAN_TYPE
         SCALAR_OR_ARRAYREF_TYPE );
 
-
-sub method
-{
-    my $self = shift;
-
-    return $self->NEXT::method(@_)
-        if @_;
-
-    return $self->{__method} if $self->{__method};
-
-    my $method = $self->NEXT::method();
-
-    return $method unless $method && uc $method eq 'POST';
-
-    my $tunneled = $self->param('x-tunneled-method');
-
-    return $self->{__method} = $tunneled ? $tunneled : $method;
-}
-
-{
-    my %HTMLTypes = qw( text/html application/xhtml+xml );
-
-    sub looks_like_browser
-    {
-        my $self = shift;
-
-        my $with = $self->header('x-requested-with');
-        return 0
-            if $with && grep { $with eq $_ } qw( 'HTTP.Request', 'XMLHttpRequest' );
-
-        my $forced_type = $self->param('content-type');
-        return 0
-            if $forced_type && ! $HTMLTypes{$forced_type};
-
-        # IE7 does not say it accepts any form of html, but _does_
-        # accept */* (helpful;)
-        return 1
-            if grep { $_ eq '*/*' } @{ $self->accepted_content_types() };
-
-        return 1
-            if grep { $self->accepts($_) } keys %HTMLTypes;
-
-        return 0
-            if @{ $self->accepted_content_types() };
-
-        # If the client did not specify any content types at all,
-        # assume they are a browser.
-        return 1;
-    }
-}
 
 sub location_data
 {
