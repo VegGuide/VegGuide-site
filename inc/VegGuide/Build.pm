@@ -28,6 +28,7 @@ my %Requires =
       'Catalyst::Plugin::StackTrace'             => 0,
       'Catalyst::Plugin::Static::Simple'         => 0,
       'Catalyst::Plugin::SubRequest'             => 0,
+      'Catalyst::Request::REST::ForBrowsers'     => 0,
       'Catalyst::View::Mason'                    => 0.13,
       'Chart::OFC'                               => 0.04,
       'Class::AlzaboWrapper'                     => 0,
