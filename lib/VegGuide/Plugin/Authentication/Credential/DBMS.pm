@@ -17,10 +17,10 @@ sub authenticate
 {
     my $self  = shift;
     my $c     = shift;
-    my $store = shift;
+    my $realm = shift;
     my $auth  = shift;
 
-    return $store->find_user( $auth, $c );
+    return $realm->find_user( $auth, $c );
 }
 
 
