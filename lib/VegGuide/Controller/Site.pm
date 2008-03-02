@@ -102,7 +102,12 @@ sub clone_entry_form : Local
                                |
                                \w\d\w(?:\s+\d\w\d)?  # Canada
                                |
-                               [a-z]{1,2}[0-9r][0-9a-z]?(?:\s+[0-9][abd-klmp-uwxyz]{2})?  # UK
+                               (?:                   # UK
+                                ^
+                                [a-z]{1,2}[0-9r][0-9a-z]?
+                                (?:\s+[0-9][abd-klmp-uwxyz]{2})?
+                                $
+                               )
 #                               |
 #                               \d{4}\w\w             # Netherlands
 #                               |
