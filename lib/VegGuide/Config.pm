@@ -24,7 +24,7 @@ use Sys::Hostname qw( hostname );
 
 {
     my @StandardImports =
-        qw( Authentication::DR
+        qw( AuthenCookie
             +VegGuide::Plugin::ErrorHandling
             +VegGuide::Plugin::FixupHost
             +VegGuide::Plugin::FixupURI
@@ -33,6 +33,7 @@ use Sys::Hostname qw( hostname );
             +VegGuide::Plugin::Session
             +VegGuide::Plugin::Session::State::URI
             +VegGuide::Plugin::Session::Store::VegGuide
+            +VegGuide::Plugin::User
             Cache
             Cache::Store::FastMmap
             Log::Dispatch
@@ -148,25 +149,11 @@ sub AlzaboRootDir
             },
           },
 
-          authentication =>
-          { default_realm => 'default',
-            realms =>
-            { default =>
-              { credential =>
-                { class => 'DR' },
-                store =>
-                { class => '+VegGuide::Authentication::Store::DBMS' },
-              },
-#               openid =>
-#               { credential =>
-#                 { class => 'OpenID' },
-#                 store =>
-#                 { class => '+VegGuide::Authentication::Store::DBMS' },
-#               },
-            },
-            use_session   => 0,
-            cookie_name   => 'VegGuide-user',
-            cookie_domain => ( __PACKAGE__->IsProduction() ? '.vegguide.org' : '' ),
+          authen_cookie =>
+          { name       => 'VegGuide-user',
+            domain     => ( __PACKAGE__->IsProduction() ? '.vegguide.org' : '' ),
+            path       => '/',
+            mac_secret => VegGuide::Config->MACSecret(),
           },
 
           dbi =>

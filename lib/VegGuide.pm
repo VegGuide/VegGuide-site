@@ -39,15 +39,6 @@ __PACKAGE__->response_class( 'VegGuide::Response' );
 __PACKAGE__->setup();
 
 
-sub vg_user
-{
-    my $self = shift;
-
-    return unless $self->user();
-
-    return $self->{vg_user} ||= $self->user()->get_object();
-}
-
 sub skin
 {
     my $self = shift;

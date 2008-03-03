@@ -39,12 +39,6 @@ sub begin : Private
     Alzabo::Runtime::UniqueRowCache->clear();
     VegGuide::AlzaboWrapper->ClearCache();
 
-    # Always authenticate to make sure we have some sort of user
-    # object available. This will be a guest object if the user hasn't
-    # logged in yet, but we don't want $c->user() returning undef.
-    $c->authenticate( {} )
-        unless $c->user();
-
     return unless $c->request()->looks_like_browser();
 
     VegGuide::Javascript->CreateSingleFile()

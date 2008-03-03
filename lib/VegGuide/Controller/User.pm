@@ -73,9 +73,11 @@ sub authentication_POST
     my $self = shift;
     my $c    = shift;
 
-    my $url = $c->request()->param('openid_url');
+    my $url   = $c->request()->param('openid_url');
     my $email = $c->request()->param('email_address');
     my $pw    = $c->request()->param('password');
+
+    my $user;
 
     my @errors;
     if ( defined $url )
@@ -91,15 +93,15 @@ sub authentication_POST
 
         unless (@errors)
         {
-            $c->authenticate( { email_address => $email,
-                                password      => $pw,
-                              } );
+            $user = VegGuide::User->new( email_address => $email,
+                                         password      => $pw,
+                                       );
 
-            if ( $c->user()->get_object()->email_address() ne $email )
+            if ( $user && $user->email_address() ne $email )
             {
                 push @errors,
-                    'The email or password you provided was not valid.'
-                }
+                    'The email or password you provided was not valid.';
+            }
         }
     }
 
@@ -114,7 +116,12 @@ sub authentication_POST
             );
     }
 
-    $c->add_message( 'Welcome to the site, ' . $c->vg_user()->real_name() );
+    my %expires = $c->request()->param('remember') ? ( expires => '+1y' ) : ();
+    $c->set_authen_cookie( value => { user_id => $user->user_id() },
+                           %expires,
+                         );
+
+    $c->add_message( 'Welcome to the site, ' . $user->real_name() );
 
     $c->redirect_and_detach( $c->request()->parameters()->{return_to} || '/' );
 }
@@ -124,7 +131,7 @@ sub authentication_DELETE
     my $self = shift;
     my $c    = shift;
 
-    $c->authenticate( {} );
+    $c->unset_authen_cookie();
 
     $c->add_message( 'You have been logged out.' );
 
