@@ -167,7 +167,6 @@ sub AlzaboRootDir
             use_session   => 0,
             cookie_name   => 'VegGuide-user',
             cookie_domain => ( __PACKAGE__->IsProduction() ? '.vegguide.org' : '' ),
-            user_class    => 'Catalyst::DR::Authentication::User',
           },
 
           dbi =>
