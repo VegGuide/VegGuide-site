@@ -16,6 +16,7 @@ my %Requires =
       'Captcha::reCAPTCHA'                       => 0,
       'Catalyst'                                 => 5.7007,
       'Catalyst::Action::REST'                   => 0.5,
+      'Catalyst::DR'                             => 0.02,
       'Catalyst::Engine::Apache2::MP20'          => 0,
       'Catalyst::Plugin::Authentication'         => 0.1,
       'Catalyst::Plugin::Cache::Store::FastMmap' => 0,

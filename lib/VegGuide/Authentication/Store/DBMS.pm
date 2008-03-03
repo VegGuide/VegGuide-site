@@ -1,4 +1,4 @@
-package VegGuide::Plugin::Authentication::Store::DBMS;
+package VegGuide::Authentication::Store::DBMS;
 
 use strict;
 use warnings;
@@ -6,7 +6,7 @@ use warnings;
 # No doubt SHA-512 is way overkill but it can't hurt (I hope).
 use Digest::SHA qw( sha512_base64 );
 use VegGuide::User;
-use Catalyst::DR::Authentication::User;
+use Catalyst::Authentication::User::DR;
 
 
 sub new
@@ -27,7 +27,7 @@ sub find_user
 
     $user ||= VegGuide::User::Guest->new();
 
-    return Catalyst::DR::Authentication::User->new($user);
+    return Catalyst::Authentication::User::DR->new($user);
 }
 
 sub for_cookie
