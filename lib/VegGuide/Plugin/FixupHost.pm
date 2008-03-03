@@ -7,8 +7,8 @@ sub prepare_action
 {
     my $self = shift;
 
-        my $skin = $self->skin();
-        my $host = $self->request()->uri()->host();
+    my $skin = $self->skin();
+    my $host = $self->request()->uri()->host();
 
     if ( VegGuide::Config->IsProduction() )
     {
