@@ -73,25 +73,33 @@ sub authentication_POST
     my $self = shift;
     my $c    = shift;
 
+    my $url = $c->request()->param('openid_url');
     my $email = $c->request()->param('email_address');
     my $pw    = $c->request()->param('password');
 
     my @errors;
-    push @errors, 'You must provide an email address.'
-        if string_is_empty($email);
-    push @errors, 'You must provide a password.'
-        if string_is_empty($pw);
-
-    unless (@errors)
+    if ( defined $url )
     {
-        $c->authenticate( { email_address => $email,
-                            password      => $pw,
-                          } );
+        $c->detach() unless $c->authenticate( { username => $url }, 'openid' );
+    }
+    else
+    {
+        push @errors, 'You must provide an email address or an OpenID URL.'
+            if string_is_empty($email);
+        push @errors, 'You must provide a password.'
+            if string_is_empty($pw);
 
-        if ( $c->user()->get_object()->email_address() ne $email )
+        unless (@errors)
         {
-            push @errors,
-                'The email or password you provided was not valid.'
+            $c->authenticate( { email_address => $email,
+                                password      => $pw,
+                              } );
+
+            if ( $c->user()->get_object()->email_address() ne $email )
+            {
+                push @errors,
+                    'The email or password you provided was not valid.'
+                }
         }
     }
 

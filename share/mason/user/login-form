@@ -21,7 +21,7 @@
 
     <& /lib/form/errors.mas &>
     <fieldset>
-     <legend>Your credentials</legend>
+     <legend>Your VegGuide.Org login</legend>
 
      <div class="form-item">
       <label for="email_address">Email:</label>
@@ -33,15 +33,32 @@
       <input id="password" class="text" type="password" name="password" />
      </div>
 
+<!--     </fieldset> -->
+
+<!--     <fieldset> -->
+
+<!--      <legend>Or your OpenID</legend> -->
+
+<!--      <div class="form-item"> -->
+<!--       <label for="openid_url">OpenID URL:</label> -->
+<!--       <input id="openid_url" class="text" type="text" name="openid_url" value="" size="40" /> -->
+<!--      </div> -->
+
+<!--     </fieldset> -->
+
+<!--     <fieldset> -->
+<!--      <legend>Log in</legend> -->
+
      <div class="form-item">
       <label for="remember">Remember me:</label>
       <input id="remember" class="checkbox" type="checkbox" name="remember" />
      </div>
-    </fieldset>
 
-    <div class="form-item">
-     <input class="submit" type="submit" value="Log In" />
-    </div>
+     <div class="form-item">
+      <input class="submit" type="submit" value="Log In" />
+     </div>
+
+    </fieldset>
 
    </form>
    </&>

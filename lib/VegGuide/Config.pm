@@ -152,15 +152,22 @@ sub AlzaboRootDir
           { default_realm => 'default',
             realms =>
             { default =>
-              { store =>
-                { class => '+VegGuide::Authentication::Store::DBMS' },
-                credential =>
+              { credential =>
                 { class => 'DR' },
+                store =>
+                { class => '+VegGuide::Authentication::Store::DBMS' },
               },
+#               openid =>
+#               { credential =>
+#                 { class => 'OpenID' },
+#                 store =>
+#                 { class => '+VegGuide::Authentication::Store::DBMS' },
+#               },
             },
             use_session   => 0,
             cookie_name   => 'VegGuide-user',
             cookie_domain => ( __PACKAGE__->IsProduction() ? '.vegguide.org' : '' ),
+            user_class    => 'Catalyst::DR::Authentication::User',
           },
 
           dbi =>
