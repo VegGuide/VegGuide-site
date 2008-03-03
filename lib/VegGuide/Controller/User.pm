@@ -82,7 +82,7 @@ sub authentication_POST
     my @errors;
     if ( defined $url )
     {
-        $c->detach() unless $c->authenticate( { username => $url }, 'openid' );
+        #$c->detach();
     }
     else
     {
@@ -484,9 +484,7 @@ sub users_POST
             );
     }
 
-    $c->authenticate( { email_address => $user->email_address,
-                        password      => $user_data{password},
-                      } );
+    $c->set_authen_cookie( value => { user_id => $user->user_id() } );
 
     $c->add_message( 'Your account has been created.' );
 
