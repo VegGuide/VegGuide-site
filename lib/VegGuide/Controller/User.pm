@@ -365,7 +365,7 @@ sub new_user_form : Local
 
     $c->stash()->{captcha_html} =
         $Captcha->get_html( VegGuide::Config->reCAPTCHAPublicKey(),
-                            undef, undef, { theme => 'blackglass' } );
+                            undef, undef, { theme => 'white' } );
 
     $c->stash()->{template} = '/user/new-user-form';
 }
