@@ -42,6 +42,15 @@
      <div class="form-item">
       <label for="openid_url">OpenID URL:</label>
       <input id="openid_url" class="text" type="text" name="openid_uri" value="" size="40" />
+      <p>
+       Learn more <a href="http://openid.net/">about OpenID</a>.
+      </p>
+
+      <p>
+       Note that if you have an existing account you may need to log
+       in the "old" way first and associate your OpenID URL with your
+       account first.
+      </p>
      </div>
 
     </fieldset>
