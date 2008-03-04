@@ -100,16 +100,10 @@ sub authentication_POST
                                      password      => $pw,
                                    );
 
-        if ( $user && $user->email_address() ne $email )
+        if ( ! $user || $user->email_address() ne $email )
         {
             push @errors,
                 'The email or password you provided was not valid.';
-        }
-
-        if ( ! $user )
-        {
-            push @errors,
-                'Could not find a user with this email address';
         }
     }
 
