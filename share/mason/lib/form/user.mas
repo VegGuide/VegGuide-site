@@ -30,6 +30,11 @@
      </div>
 
      <div class="form-item">
+      <label for="openid_uri">OpenID URL:</label>
+      <input id="openid_uri" class="text medium" type="text" name="openid_uri" value="" />
+     </div>
+
+     <div class="form-item">
       <label for="allows_email">Allow email from the guide?</label>
       <& /lib/form/boolean.mas, name => 'allows_email' &>
       <p>If you check select "Yes" you'll get email from us very infrequently.</p>

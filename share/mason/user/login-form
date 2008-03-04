@@ -33,21 +33,21 @@
       <input id="password" class="text" type="password" name="password" />
      </div>
 
-<!--     </fieldset> -->
+    </fieldset>
 
-<!--     <fieldset> -->
+    <fieldset>
 
-<!--      <legend>Or your OpenID</legend> -->
+     <legend>Or your OpenID</legend>
 
-<!--      <div class="form-item"> -->
-<!--       <label for="openid_url">OpenID URL:</label> -->
-<!--       <input id="openid_url" class="text" type="text" name="openid_url" value="" size="40" /> -->
-<!--      </div> -->
+     <div class="form-item">
+      <label for="openid_url">OpenID URL:</label>
+      <input id="openid_url" class="text" type="text" name="openid_uri" value="" size="40" />
+     </div>
 
-<!--     </fieldset> -->
+    </fieldset>
 
-<!--     <fieldset> -->
-<!--      <legend>Log in</legend> -->
+    <fieldset>
+     <legend>Log in</legend>
 
      <div class="form-item">
       <label for="remember">Remember me:</label>

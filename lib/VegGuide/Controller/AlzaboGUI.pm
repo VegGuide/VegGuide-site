@@ -66,16 +66,6 @@ sub end : Private
         $c->forward( $c->view('AlzaboGUI') );
     }
 
-    if ( $c->error() )
-    {
-        # This keeps us from dumping Alzabo objects to the error
-        # screen, which eats memory like crazy.
-        if ( my $user = $c->user() )
-        {
-            $c->user( ref $user . ' - ' . $user->get_object()->real_name() );
-        }
-    }
-
     return;
 }
 

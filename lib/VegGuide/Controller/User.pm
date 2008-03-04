@@ -8,10 +8,12 @@ use base 'VegGuide::Controller::Base';
 use Class::Trait 'VegGuide::Role::Controller::Search';
 
 use Captcha::reCAPTCHA;
+use LWPx::ParanoidAgent;
+use Net::OpenID::Consumer;
 use URI::FromHash qw( uri );
 use VegGuide::Config;
 use VegGuide::Search::User;
-use VegGuide::SiteURI qw( region_uri user_uri );
+use VegGuide::SiteURI qw( region_uri site_uri user_uri );
 use VegGuide::Util qw( string_is_empty );
 
 
@@ -73,35 +75,35 @@ sub authentication_POST
     my $self = shift;
     my $c    = shift;
 
-    my $url   = $c->request()->param('openid_url');
+    my $uri   = $c->request()->param('openid_uri');
     my $email = $c->request()->param('email_address');
     my $pw    = $c->request()->param('password');
 
     my $user;
 
-    my @errors;
-    if ( defined $url )
+    if ( ! string_is_empty($uri) )
     {
-        #$c->detach();
+        $self->_authenticate_openid( $c, $uri );
+        return;
     }
-    else
+
+    my @errors;
+
+    push @errors, 'You must provide an email address or an OpenID URL.'
+        if string_is_empty($email);
+    push @errors, 'You must provide a password.'
+        if string_is_empty($pw);
+
+    unless (@errors)
     {
-        push @errors, 'You must provide an email address or an OpenID URL.'
-            if string_is_empty($email);
-        push @errors, 'You must provide a password.'
-            if string_is_empty($pw);
+        $user = VegGuide::User->new( email_address => $email,
+                                     password      => $pw,
+                                   );
 
-        unless (@errors)
+        if ( $user && $user->email_address() ne $email )
         {
-            $user = VegGuide::User->new( email_address => $email,
-                                         password      => $pw,
-                                       );
-
-            if ( $user && $user->email_address() ne $email )
-            {
-                push @errors,
-                    'The email or password you provided was not valid.';
-            }
+            push @errors,
+                'The email or password you provided was not valid.';
         }
     }
 
@@ -116,14 +118,62 @@ sub authentication_POST
             );
     }
 
-    my %expires = $c->request()->param('remember') ? ( expires => '+1y' ) : ();
-    $c->set_authen_cookie( value => { user_id => $user->user_id() },
-                           %expires,
-                         );
+    $self->_login_user( $c, $user );
+}
 
-    $c->add_message( 'Welcome to the site, ' . $user->real_name() );
+{
+    my %OpenIDErrors =
+        ( no_identity_server => 'Could not contact an identity server for %s',
+          bogus_url          => 'The OpenID URL you provided (%s) is not valid',
+          no_head_tag        => 'Got bad data when trying to check your identity server',
+          url_fetch_error    => 'Got an error when trying to check your identity server',
+        );
 
-    $c->redirect_and_detach( $c->request()->parameters()->{return_to} || '/' );
+    sub _authenticate_openid
+    {
+        my $self = shift;
+        my $c    = shift;
+        my $uri  = shift;
+
+        my $csr =
+            Net::OpenID::Consumer->new
+                ( ua              => LWPx::ParanoidAgent->new(),
+                  args            => $c->request()->params(),
+                  consumer_secret => sub { $_[0] },
+                );
+
+        my $identity = $csr->claimed_identity($uri);
+
+        unless ($identity)
+        {
+            my $error = sprintf( $OpenIDErrors{ $csr->errcode() }, $uri );
+
+            $c->_redirect_with_error
+                ( error  => $error,
+                  uri    => '/user/login_form',
+                  params => { openid_uri => $uri },
+                );
+        }
+
+        my %query = ( return_to => $c->request()->param('return_to') );
+        $query{remember} = 1
+            if $c->request()->param('remember');
+
+        my $return_to =
+            site_uri( path      => '/user/openid_authentication',
+                      query     => \%query,
+                      with_host => 1,
+                    );
+
+        my $check_url =
+            $identity->check_url
+                ( return_to  => $return_to,
+                  trust_root => site_uri( path => '/', with_host => 1 ),
+                  delayed_return => 1,
+                );
+
+        $c->redirect_and_detach($check_url);
+    }
 }
 
 sub authentication_DELETE
@@ -134,6 +184,69 @@ sub authentication_DELETE
     $c->unset_authen_cookie();
 
     $c->add_message( 'You have been logged out.' );
+
+    $c->redirect_and_detach( $c->request()->parameters()->{return_to} || '/' );
+}
+
+sub openid_authentication : Local
+{
+    my $self = shift;
+    my $c    = shift;
+
+    my $csr =
+        Net::OpenID::Consumer->new
+            ( ua              => LWPx::ParanoidAgent->new(),
+              args            => $c->request()->params(),
+              consumer_secret => sub { $_[0] },
+            );
+
+    if ( my $setup_url = $csr->user_setup_url() )
+    {
+        $c->redirect_and_detach($setup_url);
+    }
+    elsif ( $csr->user_cancel() )
+    {
+        $c->_redirect_with_error
+            ( error  => 'You can still login without OpenID, or make a new account',
+              uri    => '/user/login_form',
+            );
+    }
+
+    my $identity = $csr->verified_identity();
+    unless ($identity)
+    {
+        $c->_redirect_with_error
+            ( error  => 'Something went mysteriously wrong trying to authenticate you with OpenID',
+              uri    => '/user/login_form',
+            );
+    }
+
+    my $user = VegGuide::User->new( openid_uri => $identity->url() );
+
+    unless ($user)
+    {
+        $c->_redirect_with_error
+            ( error  => 'Now you need to create a VegGuide.Org account for your OpenID URL',
+              uri    => '/user/new_user_form',
+              params => { openid_uri => $identity->url() },
+            );
+    }
+
+    $self->_login_user( $c, $user );
+}
+
+sub _login_user
+{
+    my $self = shift;
+    my $c    = shift;
+    my $user = shift;
+
+    my %expires = $c->request()->param('remember') ? ( expires => '+1y' ) : ();
+    $c->set_authen_cookie( value => { user_id => $user->user_id() },
+                           %expires,
+                         );
+
+    $c->add_message( 'Welcome to the site, ' . $user->real_name() );
 
     $c->redirect_and_detach( $c->request()->parameters()->{return_to} || '/' );
 }

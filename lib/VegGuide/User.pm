@@ -30,6 +30,7 @@ sub _new_row
                            spec =>
                            { email_address => { type => SCALAR | UNDEF, optional => 1 },
                              password      => { type => SCALAR | UNDEF, optional => 1 },
+                             openid_uri    => { type => SCALAR | UNDEF, optional => 1 },
                              forgot_password_digest => { type => SCALAR, optional => 1 },
                              real_name => { type => SCALAR, optional => 1 },
                            },
@@ -51,6 +52,13 @@ sub _new_row
 		[ $schema->User_t->password_c, '=', $sha1 ];
 	}
 
+    }
+    elsif ( exists $p{openid_uri} )
+    {
+        push @where,
+            ( [ $schema->User_t->openid_uri_c,
+                '=', $p{openid_uri} ],
+            );
     }
     elsif ( exists $p{forgot_password_digest} )
     {
@@ -112,6 +120,13 @@ sub _validate_data
                          VegGuide::User->new( email_address => $data->{email_address} )
                        );
         }
+    }
+
+    if ( exists $data->{openid_uri} )
+    {
+        push @errors,
+            "That OpenID URL is already in use! Did you forget your password?"
+                if VegGuide::User->new( openid_uri => $data->{openid_uri} );
     }
 
     if ( defined $data->{real_name} &&
