@@ -105,6 +105,12 @@ sub authentication_POST
             push @errors,
                 'The email or password you provided was not valid.';
         }
+
+        if ( ! $user )
+        {
+            push @errors,
+                'Could not find a user with this email address';
+        }
     }
 
     if (@errors)
