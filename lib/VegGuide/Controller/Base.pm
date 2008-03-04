@@ -92,7 +92,6 @@ sub _require_auth
 
     $c->_redirect_with_error
         ( error  => $msg,
-          status => RC_UNAUTHORIZED,
           uri    => '/user/login_form',
           params => { return_to => $c->request()->uri() },
         );

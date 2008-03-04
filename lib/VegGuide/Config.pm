@@ -30,8 +30,8 @@ use Sys::Hostname qw( hostname );
             +VegGuide::Plugin::FixupURI
             +VegGuide::Plugin::InOutEncoding
             +VegGuide::Plugin::ResponseAttributes
-            +VegGuide::Plugin::Session
-            +VegGuide::Plugin::Session::State::URI
+            DR::Session
+            DR::Session::State::URI
             +VegGuide::Plugin::Session::Store::VegGuide
             +VegGuide::Plugin::User
             Cache
