@@ -744,6 +744,200 @@ sub skins : Chained('_set_user') : PathPart('skins') : Args(0)
     $c->stash()->{template} = '/user/individual/skins';
 }
 
+{
+    # Monkey-patch to shut up various warnings
+    package Net::OpenID::Consumer;
+
+    no warnings 'redefine';
+
+sub _find_semantic_info {
+    my Net::OpenID::Consumer $self = shift;
+    my $url = shift;
+    my $final_url_ref = shift;
+
+    my $trim_hook = sub {
+        my $htmlref = shift;
+        # trim everything past the body.  this is in case the user doesn't
+        # have a head document and somebody was able to inject their own
+        # head.  -- brad choate
+        $$htmlref =~ s/<body\b.*//is;
+    };
+
+    my $doc = $self->_get_url_contents($url, $final_url_ref, $trim_hook) or
+        return;
+
+    # find <head> content of document (notably: the first head, if an attacker
+    # has added others somehow)
+    return $self->_fail("no_head_tag", "Couldn't find OpenID servers due to no head tag")
+        unless $doc =~ m!<head[^>]*>(.*?)</head>!is;
+    my $head = $1;
+
+    my $ret = {
+        'openid.server' => undef,
+        'openid.delegate' => undef,
+        'foaf' => undef,
+        'foaf.maker' => undef,
+        'rss' => undef,
+        'atom' => undef,
+    };
+
+    # analyze link/meta tags
+    while ($head =~ m!<(link|meta)\b([^>]+)>!g) {
+        my ($type, $val) = ($1, $2);
+        my $temp;
+
+        # OpenID servers / delegated identities
+        # <link rel="openid.server" href="http://www.livejournal.com/misc/openid.bml" />
+        if ($type eq "link" &&
+            $val =~ /\brel=.openid\.(server|delegate)./i && ($temp = $1) &&
+            $val =~ m!\bhref=[\"\']([^\"\']+)[\"\']!i) {
+            $ret->{"openid.$temp"} = $1;
+            next;
+        }
+
+        # FOAF documents
+        #<link rel="meta" type="application/rdf+xml" title="FOAF" href="http://brad.livejournal.com/data/foaf" />
+        if ($type eq "link" &&
+            $val =~ m!title=.foaf.!i &&
+            $val =~ m!rel=.meta.!i &&
+            $val =~ m!type=.application/rdf\+xml.!i &&
+            $val =~ m!href=[\"\']([^\"\']+)[\"\']!i) {
+            $ret->{"foaf"} = $1;
+            next;
+        }
+
+        # FOAF maker info
+        # <meta name="foaf:maker" content="foaf:mbox_sha1sum '4caa1d6f6203d21705a00a7aca86203e82a9cf7a'" />
+        if ($type eq "meta" &&
+            $val =~ m!name=.foaf:maker.!i &&
+            $val =~ m!content=([\'\"])(.*?)\1!i) {
+            $ret->{"foaf.maker"} = $2;
+            next;
+        }
+
+        if ($type eq "meta" &&
+            $val =~ m!name=.foaf:maker.!i &&
+            $val =~ m!content=([\'\"])(.*?)\1!i) {
+            $ret->{"foaf.maker"} = $2;
+            next;
+        }
+
+        # RSS
+        # <link rel="alternate" type="application/rss+xml" title="RSS" href="http://www.livejournal.com/~brad/data/rss" />
+        if ($type eq "link" &&
+            $val =~ m!rel=.alternate.!i &&
+            $val =~ m!type=.application/rss\+xml.!i &&
+            $val =~ m!href=[\"\']([^\"\']+)[\"\']!i) {
+            $ret->{"rss"} = $1;
+            next;
+        }
+
+        # Atom
+        # <link rel="alternate" type="application/atom+xml" title="Atom" href="http://www.livejournal.com/~brad/data/rss" />
+        if ($type eq "link" &&
+            $val =~ m!rel=.alternate.!i &&
+            $val =~ m!type=.application/atom\+xml.!i &&
+            $val =~ m!href=[\"\']([^\"\']+)[\"\']!i) {
+            $ret->{"atom"} = $1;
+            next;
+        }
+    }
+
+    # map the 4 entities that the spec asks for
+    my $emap = {
+        'lt' => '<',
+        'gt' => '>',
+        'quot' => '"',
+        'amp' => '&',
+    };
+    foreach my $k (keys %$ret) {
+        next unless $ret->{$k};
+        $ret->{$k} =~ s/&(\w+);/$emap->{$1} || ""/eg;
+    }
+
+    {
+        no warnings 'uninitialized';
+        $self->_debug("semantic info ($url) = " . join(", ", %$ret));
+    }
+
+    return $ret;
+}
+
+package Net::OpenID::ClaimedIdentity;
+
+
+sub check_url {
+    my Net::OpenID::ClaimedIdentity $self = shift;
+    my (%opts) = @_;
+
+    my $return_to   = delete $opts{'return_to'};
+    my $trust_root  = delete $opts{'trust_root'};
+    my $delayed_ret = delete $opts{'delayed_return'};
+
+    Carp::croak("Unknown options: " . join(", ", keys %opts)) if %opts;
+    Carp::croak("Invalid/missing return_to") unless $return_to =~ m!^https?://!;
+
+    my $csr = $self->{consumer};
+
+    my $ident_server = $self->{server} or
+        Carp::croak("No identity server");
+
+    # get an assoc (or undef for dumb mode)
+    my $assoc = Net::OpenID::Association::server_assoc($csr, $ident_server);
+
+    my $identity_arg = $self->{'delegate'} || $self->{'identity'};
+
+    # make a note back to ourselves that we're using a delegate
+    if ($self->{'delegate'}) {
+        OpenID::util::push_url_arg(\$return_to,
+                                   "oic.identity",  $self->{identity});
+    }
+
+    # add a HMAC-signed time so we can verify the return_to URL wasn't spoofed
+    my $sig_time = time();
+    my $c_secret = $csr->_get_consumer_secret($sig_time);
+    my $sig = substr(OpenID::util::hmac_sha1_hex($sig_time, $c_secret), 0, 20);
+    OpenID::util::push_url_arg(\$return_to,
+                               "oic.time", "${sig_time}-$sig");
+
+    my $curl = $ident_server;
+    OpenID::util::push_url_arg(\$curl,
+                               "openid.mode",           ($delayed_ret ? "checkid_setup" : "checkid_immediate"),
+                               "openid.identity",       $identity_arg,
+                               "openid.return_to",      $return_to,
+
+                               ($trust_root ?
+                                ("openid.trust_root",   $trust_root) : ()),
+
+                               ($assoc ?
+                                ("openid.assoc_handle", $assoc->handle) : ()),
+                               );
+
+    {
+        no warnings 'uninitialized';
+        $self->{consumer}->_debug("check_url for (del=$self->{delegate}, id=$self->{identity}) = $curl");
+    }
+
+    return $curl;
+}
+
+
+package OpenID::util;
+
+sub hmac {
+    my($data, $key, $hash_func, $block_size) = @_;
+    $block_size ||= 64;
+    $key = &$hash_func($key) if length($key) > $block_size;
+
+    my $k_ipad = $key ^ (chr(0x36) x $block_size);
+    no warnings 'numeric';
+    my $k_opad = $key ^ (chr(0x5c) x $block_size);
+
+    &$hash_func($k_opad, &$hash_func($k_ipad, $data));
+}
+
+}
+
 
 1;
 
