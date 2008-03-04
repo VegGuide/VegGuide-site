@@ -124,7 +124,9 @@ sub _validate_data
 
     if ( ! $is_update
          || ( defined $data->{openid_uri}
-              && $data->{openid_uri} ne $self->openid_uri() )
+              && ( ! defined $self->openid_uri()
+                   || $data->{openid_uri} ne $self->openid_uri() )
+            )
        )
     {
         push @errors,
