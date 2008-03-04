@@ -122,7 +122,10 @@ sub _validate_data
         }
     }
 
-    if ( exists $data->{openid_uri} )
+    if ( ! $is_update
+         || ( defined $data->{openid_uri}
+              && $data->{openid_uri} ne $self->openid_uri() )
+       )
     {
         push @errors,
             "That OpenID URL is already in use! Did you forget your password?"
