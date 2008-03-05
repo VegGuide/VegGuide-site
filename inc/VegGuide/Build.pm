@@ -1,4 +1,3 @@
-
 package VegGuide::Build;
 
 use strict;
