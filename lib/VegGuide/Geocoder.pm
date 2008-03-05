@@ -155,7 +155,7 @@ sub _standard_geocode_address
         @pieces = qw( address1 postal_code );
     }
 
-    my $address = join ', ', grep { ! string_is_empty(@_) } @p{@pieces};
+    my $address = join ', ', grep { ! string_is_empty($_) } @p{@pieces};
 
     $address .= ', ' . $self->country();
 
