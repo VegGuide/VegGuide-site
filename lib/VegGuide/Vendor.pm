@@ -1397,7 +1397,8 @@ sub hour_sets_by_day_as_time_ranges
     my @sets;
     for my $day ( 0..$#raw )
     {
-        if ( $raw[$day][0]{open_minute} == -1 )
+        if ( $raw[$day][0]{open_minute}
+             && $raw[$day][0]{open_minute} == -1 )
         {
             $sets[$day] = [ { is_closed => 1 } ];
         }
