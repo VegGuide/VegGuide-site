@@ -62,6 +62,7 @@ use Sys::Hostname qw( hostname );
     my @Profilers =
         qw( Devel/DProf.pm
             Devel/FastProf.pm
+            Devel/NYTProf.pm
             Devel/Profile.pm
             Devel/Profiler.pm
             Devel/SmallProf.pm
