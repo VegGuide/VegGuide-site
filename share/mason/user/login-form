@@ -56,7 +56,7 @@
     </fieldset>
 
     <fieldset>
-     <legend>Log in</legend>
+     <legend>Log In</legend>
 
      <div class="form-item">
       <label for="remember">Remember me:</label>
