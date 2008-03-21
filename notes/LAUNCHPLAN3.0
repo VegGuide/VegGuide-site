@@ -71,9 +71,6 @@ nn
   sudo ln -s ../mods-available/mime.conf; sudo ln -s ../mods-available/mime.load;
   sudo ln -s ../mods-available/perl.load
 
-nn sudo cat /etc/syslog.conf.vegguide >> /etc/syslog.conf
-nn sudo /etc/init.d/sysklogd restart
-nn sudo /etc/init.d/tenshi restart
 N untar mailman tarball
 N add aliases for mailman lists to Postfix
 N start apaches & mailman on new system
