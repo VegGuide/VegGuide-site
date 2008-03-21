@@ -119,7 +119,7 @@ apache_stop() {
 # Stupid hack to keep lintian happy. (Warrk! Stupidhack!).
 case $1 in
 	start)
-		log_daemon_msg "Starting web server" "apache2"
+		log_daemon_msg "Starting web server" "apache2-backend"
 		if $APACHE2CTL start; then
 			if check_htcacheclean ; then
 				log_progress_msg htcacheclean
@@ -134,9 +134,9 @@ case $1 in
 		if check_htcacheclean ; then
 			log_daemon_msg "Stopping web server" "htcacheclean"
 			stop_htcacheclean
-			log_progress_msg "apache2"
+			log_progress_msg "apache2-backend"
 		else
-			log_daemon_msg "Stopping web server" "apache2"
+			log_daemon_msg "Stopping web server" "apache2-backend"
 		fi
 		if apache_stop; then
                         log_end_msg 0
@@ -150,7 +150,7 @@ case $1 in
                     log_end_msg 1
                     exit 1
                 fi
-                log_daemon_msg "Reloading web server config" "apache2"
+                log_daemon_msg "Reloading web server config" "apache2-backend"
 		if pidof_apache; then
                     if $APACHE2CTL graceful $2 ; then
                         log_end_msg 0
@@ -165,7 +165,7 @@ case $1 in
 			stop_htcacheclean
 			log_progress_msg apache2
 		else
-			log_daemon_msg "Restarting web server" "apache2"
+			log_daemon_msg "Restarting web server" "apache2-backend"
 		fi
 		if ! apache_stop; then
                         log_end_msg 1 || true
