@@ -10,6 +10,9 @@ use File::Find::Rule;
 use File::Path qw( mkpath );
 use File::Spec;
 
+$VegGuide::Build::IsInstalling = 1;
+
+
 my %Requires =
     ( 'Alzabo'                                   => 0.92,
       'Captcha::reCAPTCHA'                       => 0,
@@ -124,11 +127,11 @@ sub _install_extra
 {
     my $self = shift;
 
+    $self->dispatch('make_etc_dir');
     $self->dispatch('copy_share_files');
     $self->dispatch('copy_system_files');
     $self->dispatch('make_entry_images_dir');
     $self->dispatch('make_skin_images_dir');
-    $self->dispatch('make_etc_dir');
     $self->dispatch('write_revision_file');
     $self->dispatch('make_cache_dir');
     $self->dispatch('generate_combined_js');

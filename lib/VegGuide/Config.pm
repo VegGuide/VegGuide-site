@@ -292,6 +292,9 @@ sub CanonicalWebHostname
 
         return $Secret if defined $Secret;
 
+        return 'hack'
+            if $VegGuide::Build::IsInstalling;
+
         $Secret =
             $class->IsProduction()
             ? read_file( File::Spec->catfile( $class->EtcDir(), 'mac-secret' ) )
