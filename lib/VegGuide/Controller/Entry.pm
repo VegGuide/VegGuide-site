@@ -329,8 +329,8 @@ sub _set_review : Chained('_set_vendor') : PathPart('review') : CaptureArgs(1)
 
 sub review_confirm_deletion : Chained('_set_review') : PathPart('deletion_confirmation_form') : Args(0)
 {
-    my $self    = shift;
-    my $c       = shift;
+    my $self = shift;
+    my $c    = shift;
 
     $self->_require_auth( $c,
                           'You must be logged in to delete a review.',
@@ -363,8 +363,8 @@ sub review : Chained('_set_review') : PathPart('') : Args(0) : ActionClass('+Veg
 
 sub review_DELETE : Private
 {
-    my $self    = shift;
-    my $c       = shift;
+    my $self = shift;
+    my $c    = shift;
 
     $self->_require_auth( $c,
                           'You must be logged in to delete a review.',

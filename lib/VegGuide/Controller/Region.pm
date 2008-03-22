@@ -398,22 +398,60 @@ sub new_region_comment_POST : Private
     $c->redirect_and_detach( region_uri( location => $location ) );
 }
 
-sub region_comment : Chained('_set_location') : PathPart('comment') : Args(1) : ActionClass('+VegGuide::Action::REST') { }
-
-sub region_comment_DELETE : Private
+sub _set_comment : Chained('_set_location') : PathPart('comment') : CaptureArgs(1)
 {
     my $self    = shift;
     my $c       = shift;
     my $user_id = shift;
 
-    $self->_require_auth( $c,
-                          'You must be logged in to delete a comment.',
-                        );
-
     my $location = $c->stash()->{location};
 
     my $user = VegGuide::User->new( user_id => $user_id );
     my $comment = $location->comment_by_user($user);
+
+    $c->redirect_and_detach('/')
+        unless $comment;
+
+    $c->stash()->{comment} = $comment;
+}
+
+sub confirm_deletion : Chained('_set_comment') : PathPart('deletion_confirmation_form') : Args(0)
+{
+    my $self    = shift;
+    my $c       = shift;
+
+    $self->_require_auth( $c,
+                          'You must be logged in to delete a comment.',
+                        );
+
+    my $comment = $c->stash()->{comment};
+
+    my $subject =
+        $comment->user_id() == $c->vg_user()->user_id()
+        ? 'your comment'
+        : 'the comment you specified';
+
+    $c->stash()->{thing} = 'region comment';
+    $c->stash()->{name}  = $subject;
+
+    $c->stash()->{uri} = region_uri( location => $comment->location(),
+                                     path     => 'comment/' . $comment->user_id() );
+
+    $c->stash()->{template} = '/shared/deletion-confirmation-form';
+}
+
+sub region_comment : Chained('_set_comment') : PathPart('') : Args(0) : ActionClass('+VegGuide::Action::REST') { }
+
+sub region_comment_DELETE : Private
+{
+    my $self = shift;
+    my $c    = shift;
+
+    $self->_require_auth( $c,
+                          'You must be logged in to delete a comment.',
+                        );
+
+    my $comment = $c->stash()->{comment};
 
     $c->redirect_and_detach('/')
         unless $comment;
@@ -428,6 +466,8 @@ sub region_comment_DELETE : Private
         $comment->user_id() == $c->vg_user()->user_id()
         ? 'Your comment'
         : 'The comment you specified';
+
+    my $location = $comment->location();
 
     $comment->delete();
 
