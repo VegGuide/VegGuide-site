@@ -1,0 +1,18 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+# Should be run as me (autarch) on the vegguide.org box. No need to
+# run as root.
+
+
+system( qw( mysqldump -u root RegVeg --ignore-table RegVeg.Session -r /home/autarch/RegVeg.sql ) )
+    and die 'Cannot execute mysqldump';
+
+for my $source ( qw( /var/lib/vegguide/entry-images /var/lib/vegguide/skin-images /home/autarch/RegVeg.sql /var/lib/mailman ) )
+{
+    system( 'rsync', '-e', 'ssh -i /home/autarch/.ssh/id_dsa.backups', '-r',
+            $source, 'urth.org:/home/autarch/backup/vegguide.org/' )
+        and die "Cannot rsync $source";
+}
