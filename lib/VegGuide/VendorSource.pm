@@ -52,6 +52,8 @@ sub _get_feed
 
         $self->_filter_items($items);
 
+        my $schema = VegGuide::Schema->Connect();
+
         # This is broken, apparently I'm using local times in the
         # DBMS, which is really, really wrong.
         my $processed =
@@ -60,9 +62,25 @@ sub _get_feed
         warn "Processed dt is $processed\n"
             if DEBUG;
 
-        $self->_update_or_create_vendor( $_, $processed ) for @{ $items };
+        # We need to wrap the whole thing in a transaction so that if
+        # updates fail, then we don't update the
+        # last_processed_datetime for the source.
+        eval
+        {
+            $schema->begin_work();
 
-        $self->update( last_processed_datetime => $processed );
+            $self->_update_or_create_vendor( $_, $processed ) for @{ $items };
+
+            $self->update( last_processed_datetime => $processed );
+
+            $schema->commit();
+        };
+
+        if ( my $e = $@ )
+        {
+            eval { $schema->rollback() };
+            die $e;
+        }
     }
 }
 
