@@ -24,7 +24,11 @@ sub process_feed
 
     my $xml = $self->_get_feed();
 
-    return unless $xml;
+    unless ($xml)
+    {
+        warn 'Could not find feed at ' . $self->feed_uri() . "\n";
+        return;
+    }
 
     $self->_process_xml($xml);
 }
@@ -136,10 +140,19 @@ sub _full_filter_class
 
         my $id = $vendor ? $vendor->name() . ' - ' . $vendor->city() : $item->{name} . ' - ' . $item->{city};
 
-        if ( $vendor &&
-             ( ( ! $self->last_processed_datetime() )
-               || $vendor->last_modified_datetime_object() > $self->last_processed_datetime_object()
-             ) )
+        if ( $vendor
+             && ! $vendor->external_unique_id() )
+        {
+            warn "$id was created before we started importing this feed\n"
+                if DEBUG;
+            return;
+        }
+
+
+        if ( $vendor
+             && $self->last_processed_datetime()
+             && $vendor->last_modified_datetime_object() > $self->last_processed_datetime_object()
+           )
         {
             warn "$id was updated since last processed datetime\n"
                 if DEBUG;
