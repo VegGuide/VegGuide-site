@@ -1,0 +1,28 @@
+#!/usr/bin/perl -w
+
+use strict;
+use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../../../lib";
+
+use VegGuide::Vendor;
+
+
+my $dbh = VegGuide::Schema->Connect()->driver()->handle();
+
+my $update_sth = $dbh->prepare( 'UPDATE Vendor SET sortable_name = ? WHERE vendor_id = ?' );
+
+my $select_sth = $dbh->prepare( 'SELECT vendor_id, name FROM Vendor' );
+$select_sth->execute();
+
+while ( my ( $vendor_id, $name ) = $select_sth->fetchrow_array() )
+{
+    my $sortable_name = VegGuide::Vendor->MakeSortableName($name);
+
+    next if $name eq $sortable_name;
+
+    $update_sth->execute( $sortable_name, $vendor_id );
+}
+
+$dbh->do( 'UPDATE Vendor SET sortable_name = name WHERE sortable_name = ?', {}, q{} );

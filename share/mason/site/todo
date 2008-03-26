@@ -50,11 +50,6 @@ importance and feasibility.
  </li>
 
  <li>
-  When sorting by entry name, ignore "The" and "A" prefixes. Maybe
-  also do something similar for other languages ("Der", "Le", etc)?
- </li>
-
- <li>
   The left side listing key for the Google Maps view of an entry list
   could be improved with more useful info.
  </li>

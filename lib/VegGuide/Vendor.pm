@@ -133,6 +133,8 @@ sub create
     data_validation_error error => "One or more data validation errors", errors => \@errors
         if @errors;
 
+    $p{sortable_name} = VegGuide::Vendor->MakeSortableName( $p{name} );
+
     my $schema = VegGuide::Schema->Connect();
 
     $schema->begin_work;
@@ -304,6 +306,11 @@ sub create
         data_validation_error error => "One or more data validation errors", errors => \@errors
             if @errors;
 
+        if ( exists $p{name} )
+        {
+            $p{sortable_name} = VegGuide::Vendor->MakeSortableName( $p{name} );
+        }
+
         my $schema = VegGuide::Schema->Connect();
 
         $schema->begin_work;
@@ -430,6 +437,20 @@ sub create
             die $e;
         }
     }
+}
+
+# This would be a lot smarter if it was sensitive to the language of
+# the region. For example, for French entries, maybe the sortable name
+# should remove "Le" and "La", but for English-speaking areas, those
+# words _should_ be part of the sorting.
+sub MakeSortableName
+{
+    my $class = shift;
+    my $name  = shift;
+
+    $name =~ s/^(?:a|the) //i;
+
+    return $name;
 }
 
 sub update_last_featured_date
@@ -2524,7 +2545,7 @@ sub VendorsWhere
         @order_by =
             ( $schema->Vendor_t->last_modified_datetime_c,
               $p{sort_order},
-              $schema->Vendor_t->name_c,
+              $schema->Vendor_t->sortable_name_c,
               'ASC',
             );
     }
@@ -2533,7 +2554,7 @@ sub VendorsWhere
         @order_by =
             ( $schema->Vendor_t->creation_datetime_c,
               $p{sort_order},
-              $schema->Vendor_t->name_c,
+              $schema->Vendor_t->sortable_name_c,
               'ASC',
             );
     }
@@ -2542,7 +2563,7 @@ sub VendorsWhere
         @order_by =
             ( $schema->Vendor_t->city_c,
               $p{sort_order},
-              $schema->Vendor_t->name_c,
+              $schema->Vendor_t->sortable_name_c,
               'ASC',
             );
     }
@@ -2558,7 +2579,7 @@ sub VendorsWhere
         @order_by =
             ( $schema->PriceRange_t->display_order_c,
               $p{sort_order},
-              $schema->Vendor_t->name_c,
+              $schema->Vendor_t->sortable_name_c,
               'ASC',
             );
     }
@@ -2599,7 +2620,7 @@ sub VendorsWhere
                           $p{sort_order},
                           $count,
                           'DESC',
-                          $schema->Vendor_t->name_c,
+                          $schema->Vendor_t->sortable_name_c,
                           'ASC',
                         ],
                         %limit,
@@ -2611,7 +2632,7 @@ sub VendorsWhere
         @order_by =
             ( $schema->Vendor_t->veg_level_c,
               $p{sort_order},
-              $schema->Vendor_t->name_c,
+              $schema->Vendor_t->sortable_name_c,
               'ASC',
             );
     }
@@ -2643,7 +2664,7 @@ sub VendorsWhere
                         order_by =>
                         [ $distance,
                           $p{sort_order},
-                          $schema->Vendor_t()->name_c(),
+                          $schema->Vendor_t()->sortable_name_c(),
                           'ASC',
                         ],
                         %limit,
@@ -2654,7 +2675,7 @@ sub VendorsWhere
     else # name
     {
         @order_by =
-            ( $schema->Vendor_t->name_c,
+            ( $schema->Vendor_t->sortable_name_c,
               $p{sort_order},
             );
     }
@@ -3102,7 +3123,7 @@ sub ByRating
                       'DESC',
                       $count,
                       'DESC',
-                      $schema->Vendor_t->name_c,
+                      $schema->Vendor_t->sortable_name_c,
                       'ASC',
                     ],
                     limit => $p{limit},

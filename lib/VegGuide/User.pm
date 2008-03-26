@@ -511,7 +511,7 @@ sub vendors_by_location
 
     my ( $lp_join, $lp_order_by ) = VegGuide::Location->LocationAndParentClauses();
 
-    push @{ $lp_order_by }, $schema->Vendor_t()->name_c();
+    push @{ $lp_order_by }, $schema->Vendor_t()->sortable_name_c();
 
     return
         $self->cursor
@@ -567,7 +567,7 @@ sub ratings_without_reviews_by_location
 
     my ( $lp_join, $lp_order_by ) = VegGuide::Location->LocationAndParentClauses();
 
-    push @{ $lp_order_by }, $schema->Vendor_t()->name_c();
+    push @{ $lp_order_by }, $schema->Vendor_t()->sortable_name_c();
 
     my $reviewed_vendor_subselect = $self->_reviewed_vendor_subselect();
 
@@ -629,7 +629,7 @@ sub reviews_by_location
 
     my ( $lp_join, $lp_order_by ) = VegGuide::Location->LocationAndParentClauses();
 
-    push @{ $lp_order_by }, $schema->Vendor_t()->name_c();
+    push @{ $lp_order_by }, $schema->Vendor_t()->sortable_name_c();
 
     $self->cursor
 	( $schema->join
@@ -661,7 +661,7 @@ sub top_vendors
                     [ [ $schema->VendorRating_t()->rating_c(), '=', 5 ],
                       [ $schema->VendorRating_t()->user_id_c(), '=', $self->user_id() ],
                     ],
-                    order_by => $schema->Vendor_t()->name_c(),
+                    order_by => $schema->Vendor_t()->sortable_name_c(),
                   )
             );
 }
@@ -681,7 +681,7 @@ sub bottom_vendors
                     [ [ $schema->VendorRating_t()->rating_c(), '=', 1 ],
                       [ $schema->VendorRating_t()->user_id_c(), '=', $self->user_id() ],
                     ],
-                    order_by => $schema->Vendor_t()->name_c(),
+                    order_by => $schema->Vendor_t()->sortable_name_c(),
                   )
             );
 }
