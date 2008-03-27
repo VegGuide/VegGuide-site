@@ -3504,13 +3504,13 @@ sub _init
 
     if ( $self->type eq 'core' )
     {
+        delete $self->{thawed}{sortable_name};
+
         my %cols =
             map  { $_ => $self->{thawed}{$_} }
             grep { exists $self->{thawed}{$_} }
             map  { $_->name }
             VegGuide::Vendor->columns();
-
-        $cols{sortable_name} = $cols{name} || '';
 
         $self->{potential} = VegGuide::Vendor->potential(%cols);
     }
@@ -3535,8 +3535,6 @@ sub text_changes
         $changes{$col} = $self->{thawed}{$col}
             if exists $self->{thawed}{$col};
     }
-
-    delete $changes{sortable_name};
 
     return \%changes;
 }
