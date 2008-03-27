@@ -3,9 +3,9 @@
    <div id="body" class="one-column">
     <h2>\
 % if ( $is_suggestion ) {
-Edit hours for\
-% } else {
 Suggest a change in hours for\
+% } else {
+Edit hours for\
 % }
  <& /lib/l10n/vendor-name.mas, vendor => $vendor &></h2>
 
