@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Encode 2.23 ();
+use HTTP::Headers::Util qw( split_header_words );
 
 use VegGuide::Validate
     qw( validate validate_with validate_pos UNDEF SCALAR BOOLEAN ARRAYREF HASHREF );
@@ -134,12 +135,13 @@ sub _get_encodings
 
     if ( my $charsets = $request->header('Accept-Charset') )
     {
-        $self->{possible_encodings} = 
-            { map { my ( $c, undef ) = split /\s*;\s*q=\s*/;
-                    my $a = Encode::resolve_alias($c);
-                    $a ? ( $a => 1 ) : () }
-              split /\s*,\s*/, $charsets
-            };
+        for my $c ( map { $_->[0] } split_header_words($charsets) )
+        {
+            my $alias = Encode::resolve_alias($c)
+                or next;
+
+            $self->{possible_encodings}{$alias} = 1;
+        }
     }
     else
     {
@@ -152,23 +154,25 @@ sub _get_languages
     my $self    = shift;
     my $request = shift;
 
-    my $highest_w = 0;
+    my $highest_q = 0;
     if ( my $languages = $request->header('Accept-Language') )
     {
-        foreach my $lang ( split /\s*,\s*/, $languages )
+        for my $word ( split_header_words($languages) )
         {
-            my ( $l, $w ) = split /\s*;\s*q=\s*/, $lang;
+            my %hash = @{ $word };
 
-            $w ||= 1;
+            my $q = delete $hash{q} || 1;
 
-            next if $l eq '*';
+            # There really should only be one key at this point, I
+            # hope.
+            my $l = ( keys %hash )[0];
 
             $l =~ s/-/_/g;
 
-            if ( $w > $highest_w )
+            if ( $q > $highest_q )
             {
                 $self->{preferred_locale} = $l;
-                $highest_w = $w;
+                $highest_q = $q;
             }
 
             $l =~ s/_\w+$//;
