@@ -110,7 +110,7 @@ if ( $search->can('location') )
 % }
        <td class="rating">
 % unless ( $vendor->is_organization() ) {
-<& /lib/stars-for-rating.mas, rating => $weighted_rating, color => 'green' &>
+<& /lib/stars-for-rating.mas, rating => $weighted_rating, color => 'green', title => $rating_title &>
 %   if ($user_rating) {
 <strong>\
 %   }
@@ -145,6 +145,18 @@ $count
 my ( $weighted_rating, $rating_count ) = $vendor->weighted_rating_and_count();
 
 my $user_rating = $vendor->rating_from_user( $c->vg_user() );
+
+my $rating_title;
+
+if ($weighted_rating)
+{
+    $rating_title = "$weighted_rating, with $rating_count " . PL( 'rating', $rating_count );
+    $rating_title .= " (you rated it a $user_rating)" if $user_rating;
+}
+else
+{
+    $rating_title = "no ratings";
+}
 
 my $has_address = $search->has_addresses();
 
