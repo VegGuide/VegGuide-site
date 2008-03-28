@@ -39,7 +39,7 @@
 % if ( $pager->total_entries() ) {
      <tfoot>
       <tr>
-       <td colspan="7" class="first last">
+       <td colspan="<% $colspan %>" class="first last">
         <% $pagination %>
        </td>
       </tr>
@@ -70,7 +70,7 @@ my $pagination =
                things => 'entries',
              );
 
-my $colspan = 7;
+my $colspan = $search->has_addresses() ? 7 : 6;
 
 my $show_add_entry = 0;
 if ( $search->can('location') )
