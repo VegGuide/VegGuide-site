@@ -102,8 +102,7 @@ importance and feasibility.
  </li>
 
  <li>
-  Consider storing a date with ratings and giving newer ratings more
-  weight than old ones
+  Consider giving newer ratings more weight than old ones.
  </li>
 
  <li>
