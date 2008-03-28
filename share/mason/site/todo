@@ -167,12 +167,6 @@ free to ignore this, it's just for our reference.
  </li>
 
  <li>
-  Similar per-location attributes, "has_addresses" and
-  "has_hours". Right now this is hard-coded in VegGuide::Location, but
-  could be expanded (for Airports, Cruise Lines, etc).
- </li>
-
- <li>
   Implement some form of admin tool for cuisines & entry
   features. These change rarely enough that this could be a simple CLI
   tool.

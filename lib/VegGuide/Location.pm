@@ -37,10 +37,6 @@ use VegGuide::Vendor;
 use VegGuide::Validate qw( validate validate_with UNDEF SCALAR ARRAYREF BOOLEAN SCALAR_TYPE );
 
 
-# Needs to be defined before we build the cache
-my %NoAddresses = map { $_ => 1 } qw( Internet );
-my %NoHours     = map { $_ => 1 } qw( Internet );
-
 my %CacheParams = ( parent => 'parent_location_id',
                     roots  => '_RealRootLocations',
                     id     => 'location_id',
@@ -112,12 +108,6 @@ sub new
     my $self = $class->SUPER::new(@_);
 
     return unless $self;
-
-    if ( $self->name() )
-    {
-        $self->{has_addresses} = $NoAddresses{ $self->name } ? 0 : 1;
-        $self->{has_hours}     = $NoHours{ $self->name } ? 0 : 1;
-    }
 
     return $self;
 }
@@ -735,9 +725,6 @@ sub average_rating
                           '=', $self->location_id() ],
             );
 }
-
-sub has_addresses { $_[0]->{has_addresses} }
-sub has_hours     { $_[0]->{has_hours} }
 
 sub time_zone
 {

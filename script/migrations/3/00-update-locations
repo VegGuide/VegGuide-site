@@ -1,0 +1,17 @@
+#!/usr/bin/perl -w
+
+use strict;
+use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../../../lib";
+
+use VegGuide::Schema;
+
+
+my $dbh = VegGuide::Schema->Connect()->driver()->handle();
+
+$dbh->do( 'UPDATE Location SET has_hours = ?, has_addresses = ? WHERE name = ?',
+          {},
+          0, 0, 'Internet',
+        );
