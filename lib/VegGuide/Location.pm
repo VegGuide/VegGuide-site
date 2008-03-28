@@ -149,6 +149,14 @@ sub create
     my $class = shift;
     my %p     = @_;
 
+    if ( $p{parent_location_id} )
+    {
+        my $parent = VegGuide::Location->new( location_id => $p{parent_location_id} );
+
+        $p{has_hours} = $parent->has_hours();
+        $p{has_addresses} = $parent->has_addresses();
+    }
+
     my $schema = VegGuide::Schema->Connect();
 
     my $location;
@@ -158,7 +166,7 @@ sub create
     eval
     {
         $location =
-            $class->SUPER::create( @_,
+            $class->SUPER::create( %p,
                                    creation_datetime => $schema->sqlmaker->NOW(),
                                  );
 

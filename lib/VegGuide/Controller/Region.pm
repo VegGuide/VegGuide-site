@@ -280,7 +280,14 @@ sub _new_entry_submit
 
     $c->add_message( $vendor->name() . ' has been added.' );
 
-    $c->redirect_and_detach( entry_uri( vendor => $vendor, path => 'edit_hours_form' ) );
+    if ( $location->has_hours() )
+    {
+        $c->redirect_and_detach( entry_uri( vendor => $vendor, path => 'edit_hours_form' ) );
+    }
+    else
+    {
+        $c->redirect_and_detach( region_uri( location => $location ) );
+    }
 }
 
 sub entry_form : Chained('_set_location') : PathPart('entry_form') : Args(0)

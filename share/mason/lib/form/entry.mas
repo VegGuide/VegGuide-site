@@ -83,6 +83,7 @@
      </fieldset>
 % }
 
+% if ( $location->has_addresses() ) {
      <fieldset>
       <legend>Address</legend>
 
@@ -120,14 +121,14 @@
 
       <div class="form-item">
        <label for="neighborhood">Neighborhood:</label>
-% if ( my @hoods = $location->current_neighborhoods() ) {
+%   if ( my @hoods = $location->current_neighborhoods() ) {
        <select id="neighborhood" name="neighborhood">
         <option value="">Other</option>
-%    for my $hood (@hoods) {
+%      for my $hood (@hoods) {
         <option value="<% $hood | h %>"><% $hood | h %></option>
-%    }
+%      }
        </select>
-% }
+%   }
        <p>Not listed above? Enter a new neighborhood here</p>
        <input id="new_neighborhood" type="text" class="text short" name="new_neighborhood" value="" />
       </div>
@@ -142,7 +143,7 @@
 
      </fieldset>
 
-% if ( $c->client()->localize_for_location($location) && $location->locale()->requires_localized_addresses() ) {
+%   if ( $c->client()->localize_for_location($location) && $location->locale()->requires_localized_addresses() ) {
      <fieldset>
       <legend><% $location->locale()->language_name() | h %> Address</legend>
 
@@ -175,18 +176,19 @@
 
       <div class="form-item">
        <label for="localized_neighborhood">Neighborhood:</label>
-%   if ( my @hoods = $location->current_localized_neighborhoods() ) {
+%     if ( my @hoods = $location->current_localized_neighborhoods() ) {
        <select id="localized_neighborhood" name="localized_neighborhood">
         <option value="">Other</option>
-%      for my $hood (@hoods) {
+%        for my $hood (@hoods) {
         <option value="<% $hood | h %>"><% $hood | h %></option>
-%      }
+%        }
        </select>
-%   }
+%     }
        <input id="localized_new_neighborhood" type="text" class="text short" name="localized_new_neighborhood" value="" />
       </div>
 
      </fieldset>
+%   }
 % }
 
      <fieldset>
