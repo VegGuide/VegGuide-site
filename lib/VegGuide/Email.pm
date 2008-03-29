@@ -47,7 +47,6 @@ sub TestMode
 
         my %headers =
             ( From         => $p{from},
-              Sender       => $p{from},
               'Reply-To'   => $p{reply_to},
               To           => $p{to},
               Subject      => $p{subject},
