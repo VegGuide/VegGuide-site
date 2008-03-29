@@ -28,6 +28,13 @@ sub TestMode
     my $from_address =
         Email::Address->new( 'VegGuide.Org', 'guide@vegguide.org' )->format();
 
+    my $sender_address;
+    if ( VegGuide::Config->IsProduction() )
+    {
+        my $username = getpwuid($>);
+        $sender_address = $username . '@vegguide.org';
+    }
+
     my $spec =
         { reply_to => SCALAR_TYPE( default => $from_address ),
           to       => SCALAR_TYPE,
@@ -45,17 +52,24 @@ sub TestMode
 
         my $html_body = _HTMLBody(%p);
 
+        my %headers =
+            ( From         => $p{from},
+              'Reply-To'   => $p{reply_to},
+              To           => $p{to},
+              Subject      => $p{subject},
+              'Message-ID' => q{<} . Email::MessageID->new() . q{>},
+              'Content-Transfer-Encoding' => '8bit',
+              'X-Sender'                  => 'VegGuide::Email',
+            );
+
+        if ($sender_address)
+        {
+            $headers{Sender} = $sender_address;
+        }
+
         my $email =
             Email::MIME->create_html
-                ( header =>
-                  [ From         => $p{from},
-                    'Reply-To'   => $p{reply_to},
-                    To           => $p{to},
-                    Subject      => $p{subject},
-                    'Message-ID' => Email::MessageID->new(),
-                    'Content-Transfer-Encoding' => '8bit',
-                    'X-Sender'                  => 'VegGuide::Email',
-                  ],
+                ( header               => [ %headers ],
                   body_attributes      => { charset => 'UTF-8' },
                   text_body_attributes => { charset => 'UTF-8' },
                   body                 => encode( 'utf8', $html_body ),
