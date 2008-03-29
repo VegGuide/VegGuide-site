@@ -1,7 +1,7 @@
     <div id="site-news" class="info-box-container front-page-stats">
      <h2>Site News</h2>
 
-% while ( my $item = $news->next() ) {
+% for my $item (@news) {
 %   if ( $last_date ne $item->creation_datetime_object()->date() ) {
 %     if ($last_date) {
      </ul>
@@ -16,13 +16,14 @@
 %   $last_date = $item->creation_datetime_object()->date();
 % }
 
-% if ( $news->count() ) {
      </ul>
-% }
 
     </div>
 
 <%init>
-my $news = VegGuide::NewsItem->All( limit => 2 );
+my @news = VegGuide::NewsItem->MostRecentItems( limit => 5 )->all();
+
+return unless @news;
+
 my $last_date = '';
 </%init>

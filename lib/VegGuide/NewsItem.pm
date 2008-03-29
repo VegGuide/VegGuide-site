@@ -71,5 +71,23 @@ sub MostRecent
     return $class->new( object => $row ) if $row;
 }
 
+sub MostRecentItems
+{
+    my $class = shift;
+    my %p     = @_;
+
+    my $cutoff = DateTime->today()->subtract( days => $p{days} || 14 );
+
+    return $class->cursor
+        ( $class->table()->rows_where
+              ( where =>
+                [ $class->table()->creation_datetime_c(), '>=',
+                  DateTime::Format::MySQL->format_datetime($cutoff) ],
+                order_by => [ $class->table()->creation_datetime_c(), 'DESC' ],
+                limit => ( $p{limit} || 5 ),
+              )
+        );
+}
+
 
 1;
