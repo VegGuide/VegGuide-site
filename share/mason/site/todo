@@ -10,11 +10,6 @@ importance and feasibility.
  </li>
 
  <li>
-  There are a bunch of spots where a "loading" image would improve the
-  UI. Entry image slideshows, filters, etc.
- </li>
-
- <li>
   Pull relevant event data from sites like Meetup.com and associate it
   with regions.
  </li>
