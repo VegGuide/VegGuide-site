@@ -163,7 +163,7 @@ sub _get_languages
 
             # something seems to be causing this to often have an
             # extra trailing double-quote
-            $hash{q} =~ s/\"//g;
+            $hash{q} =~ s/\"//g
                 if defined $hash{q};
 
             my $q = delete $hash{q} || 1;
