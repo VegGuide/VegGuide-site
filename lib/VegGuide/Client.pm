@@ -161,6 +161,11 @@ sub _get_languages
         {
             my %hash = @{ $word };
 
+            # something seems to be causing this to often have an
+            # extra trailing double-quote
+            $hash{q} =~ s/\"//g;
+                if defined $hash{q};
+
             my $q = delete $hash{q} || 1;
 
             # There really should only be one key at this point, I
