@@ -31,8 +31,7 @@ sub TestMode
     my $sender_address;
     if ( VegGuide::Config->IsProduction() )
     {
-        my $username = getpwuid($>);
-        $sender_address = $username . '@vegguide.org';
+        $sender_address = 'www-data@' . VegGuide::Config->Hostname();
     }
 
     my $spec =
