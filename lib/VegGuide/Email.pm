@@ -28,12 +28,6 @@ sub TestMode
     my $from_address =
         Email::Address->new( 'VegGuide.Org', 'guide@vegguide.org' )->format();
 
-    my $sender_address;
-    if ( VegGuide::Config->IsProduction() )
-    {
-        $sender_address = 'www-data@' . VegGuide::Config->Hostname();
-    }
-
     my $spec =
         { reply_to => SCALAR_TYPE( default => $from_address ),
           to       => SCALAR_TYPE,
@@ -53,6 +47,7 @@ sub TestMode
 
         my %headers =
             ( From         => $p{from},
+              Sender       => $p{from},
               'Reply-To'   => $p{reply_to},
               To           => $p{to},
               Subject      => $p{subject},
@@ -60,11 +55,6 @@ sub TestMode
               'Content-Transfer-Encoding' => '8bit',
               'X-Sender'                  => 'VegGuide::Email',
             );
-
-        if ($sender_address)
-        {
-            $headers{Sender} = $sender_address;
-        }
 
         my $email =
             Email::MIME->create_html
