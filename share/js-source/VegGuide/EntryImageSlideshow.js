@@ -11,6 +11,17 @@ VegGuide.EntryImageSlideshow = function (lb) {
     this._init(lb);
 };
 
+VegGuide.EntryImageSlideshow._loaderImage = ( function() {
+    var img = document.createElement("img");
+
+    img.src = "/images/loader.gif";
+    img.className = "loader";
+    img.height = 32;
+    img.width = 32;
+
+    return img;
+} )();
+
 VegGuide.EntryImageSlideshow.instrumentPage = function () {
     var main_image = $("main-image");
 
@@ -90,6 +101,8 @@ VegGuide.EntryImageSlideshow.prototype.start = function () {
 };
 
 VegGuide.EntryImageSlideshow.prototype._showImage = function (imageNumber) {
+    this._showLoader();
+
     var image = this._getImage(imageNumber);
 
     var img = document.createElement("img");
@@ -172,6 +185,12 @@ VegGuide.EntryImageSlideshow.prototype._getImage = function (imageNumber) {
     this.currentImage = imageNumber;
 
     return this.images[ imageNumber - 1 ];
+};
+
+VegGuide.EntryImageSlideshow.prototype._showLoader = function () {
+    this._emptyElt( this.imageContainer );
+
+    this.imageContainer.appendChild( VegGuide.EntryImageSlideshow._loaderImage );
 };
 
 VegGuide.EntryImageSlideshow.prototype._emptyElt = function (elt) {

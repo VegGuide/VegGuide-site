@@ -875,6 +875,12 @@ div.rating-star-set a img {
   border: 1px solid black;
 }
 
+#slideshow-lightbox #slideshow-image-container img.loader {
+  border: 0px;
+  margin-left: 334px; /* (700-32)/2) */
+  margin-top: 189px;  /* (410-32/2) */
+}
+
 #slideshow-lightbox #slideshow-caption-container {
   text-align: center;
   font-size: 80%; 
