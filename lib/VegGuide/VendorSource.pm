@@ -156,7 +156,13 @@ sub _full_filter_class
             }
         }
 
-        my $id = $vendor ? $vendor->name() . ' - ' . $vendor->city() : $item->{name} . ' - ' . $item->{city};
+        my $id =
+            join ' - ',
+            grep { defined }
+            ( $vendor
+              ? ( $vendor->name(), $vendor->city() )
+              : ( $item->{name}, $item->{city} )
+            );
 
         if ( $vendor
              && ! $vendor->external_unique_id() )
@@ -208,14 +214,8 @@ sub _full_filter_class
             {
                 warn "$_\n" for @{ $e->errors() };
             }
-            elsif ( $e->can('error') )
-            {
-                warn $e->error();
-            }
-            else
-            {
-                warn $e;
-            }
+
+            warn $e;
         }
     }
 }
