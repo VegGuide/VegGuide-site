@@ -3505,6 +3505,7 @@ sub _init
     if ( $self->type eq 'core' )
     {
         delete $self->{thawed}{sortable_name};
+        delete $self->{thawed}{external_unique_id};
 
         my %cols =
             map  { $_ => $self->{thawed}{$_} }
