@@ -57,11 +57,11 @@ sub _new_row
 
     my @where;
 
-    if ( $p{name} && $p{address1} && $p{location_id} )
+    if ( $p{name} && $p{canonical_address} && $p{location_id} )
     {
 	push @where,
 	    ( [ $schema->Vendor_t()->name_c(), '=', $p{name} ],
-              [ $schema->Vendor_t()->address1_c(), '=', $p{address1} ],
+              [ $schema->Vendor_t()->canonical_address_c(), '=', $p{canonical_address} ],
               [ $schema->Vendor_t()->location_id_c(), '=', $p{location_id} ],
             );
     }

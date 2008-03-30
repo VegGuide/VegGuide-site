@@ -8,6 +8,7 @@ use DateTime::Format::MySQL;
 use LWP::Simple qw( get );
 use VegGuide::VendorSource::Filter;
 use VegGuide::User;
+use VegGuide::Util qw( string_is_empty );
 use VegGuide::Vendor;
 use XML::Simple qw( :strict );
 
@@ -133,10 +134,27 @@ sub _full_filter_class
                   vendor_source_id   => $self->vendor_source_id(),
                 );
 
-        $vendor ||= VegGuide::Vendor->new( name        => $item->{name},
-                                           address1    => $item->{address1},
-                                           location_id => $item->{location_id},
-                                         );
+        unless ($vendor)
+        {
+            # XXX - is it likely that we will ever have non-US feeds?
+            my $geocoder = VegGuide::Geocoder->new( country => 'USA' );
+
+            my %p =
+                ( map  { $_ => $item->{$_} }
+                  grep { ! string_is_empty( $item->{$_} ) }
+                  qw( address1 city region postal_code )
+                );
+
+            my $result = $geocoder->geocode(%p);
+
+            if ($result)
+            {
+                $vendor = VegGuide::Vendor->new( name              => $item->{name},
+                                                 canonical_address => $result->canonical_address(),
+                                                 location_id       => $item->{location_id},
+                                               );
+            }
+        }
 
         my $id = $vendor ? $vendor->name() . ' - ' . $vendor->city() : $item->{name} . ' - ' . $item->{city};
 
