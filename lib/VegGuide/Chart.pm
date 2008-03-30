@@ -23,6 +23,11 @@ sub GrowthOverTime
         push @dates, $date->clone;
     }
 
+    if ( $today ne $dates[-1] )
+    {
+        push @dates, $today;
+    }
+
     my @user_count;
     my @vendor_count;
 
