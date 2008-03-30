@@ -85,10 +85,15 @@ BEGIN
 use Exception::Class (%E);
 
 VegGuide::Exception->Trace(1);
+VegGuide::Exception->MaxArgLength(50);
 
 use Exporter qw( import );
 
 our @EXPORT_OK = map { $_->{alias} || () } values %E;
 
+use Alzabo::Exceptions;
+
+# A bit of a hack, but not too dangerous
+Alzabo::Exception->MaxArgLength(50);
 
 1;
