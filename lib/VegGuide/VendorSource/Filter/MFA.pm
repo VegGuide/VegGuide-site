@@ -3,11 +3,12 @@ package VegGuide::VendorSource::Filter::MFA;
 use strict;
 use warnings;
 
+use Geography::States;
 use List::MoreUtils qw( uniq );
 use VegGuide::Category;
 use VegGuide::Location;
 use VegGuide::User;
-use VegGuide::Util qw( clean_text );
+use VegGuide::Util qw( clean_text string_is_empty );
 
 
 sub filter
@@ -17,7 +18,15 @@ sub filter
 
     $class->_merge_categories($items);
 
-    $class->_filter_item($_) for @{ $items };
+    my @save;
+    for my $item ( @{ $items } )
+    {
+        next unless $class->_filter_item($item);
+
+        push @save, $item;
+    }
+
+    @{ $items } = @save;
 }
 
 sub _merge_categories
@@ -73,6 +82,17 @@ sub _merge_categories
         my $class = shift;
         my $item  = shift;
 
+        $item->{name} = delete $item->{title};
+
+        $item->{external_unique_id} = delete $item->{'foreign-id'};
+
+        if ( string_is_empty( $item->{'long-description'} )
+             || ref $item->{'long-description'} )
+        {
+            warn "No description at all for $item->{name} ($item->{external_unique_id})\n";
+            return;
+        }
+
         if ( length $item->{'long-description'} > 100
              && $item->{'long-description'} =~ s/^([^.]+)\.\s+// )
         {
@@ -81,17 +101,16 @@ sub _merge_categories
 
         $item->{short_description} ||= delete $item->{'long-description'};
 
-        $item->{name} = delete $item->{title};
-
-        $item->{external_unique_id} = delete $item->{'foreign-id'};
-
         my $location = $class->_location_for_item( $item, $class->_state_for_id( $item->{external_unique_id} ) );
 
-        if ($location)
+        unless ( $location )
         {
-            $item->{location_id} = $location->location_id();
-            $item->{region} = $location->parent()->name();
+            warn "Could not determine location for $item->{name} ($item->{external_unique_id})\n";
+            return;
         }
+
+        $item->{location_id} = $location->location_id();
+        $item->{region} = $location->parent()->name();
 
         $item->{category_id} = [ map { $class->_category_id_for($_) } @{ delete $item->{category} } ];
 
@@ -111,6 +130,8 @@ sub _merge_categories
         $item->{veg_level} = delete $item->{'veg_level_number'};
 
         delete @{ $item }{@UnusedKeys};
+
+        return 1;
     }
 }
 
@@ -128,11 +149,20 @@ sub _state_for_id
     my $User = VegGuide::User->new( real_name => 'VegGuide.Org' );
     my $USA = VegGuide::Location->USA();
 
+    my $states = Geography::States->new('USA');
+
     sub _location_for_item
     {
         my $class = shift;
         my $item  = shift;
         my $state = shift;
+
+        return if string_is_empty( $item->{region} );
+
+        if ( length $state == 2 )
+        {
+            $state = $states->state($state);
+        }
 
         my $parent = VegGuide::Location->new( name               => $state,
                                               parent_location_id => $USA->location_id(),
