@@ -3,6 +3,7 @@ package VegGuide::VendorSource::Filter::MFA;
 use strict;
 use warnings;
 
+use List::MoreUtils qw( uniq );
 use VegGuide::Category;
 use VegGuide::Location;
 use VegGuide::User;
@@ -39,6 +40,15 @@ sub _merge_categories
         if ( defined $seen{$key} )
         {
             push @{ $items->[ $seen{$key} ]{category} }, @{ $items->[$i]{category} };
+
+            if ( $seen{$key}
+                 && $items->[ $seen{$key} ]{city}
+                 && $items->[$i]{city}
+                 && $items->[ $seen{$key} ]{city} ne $items->[$i]{city}
+               )
+            {
+                warn "Possible duplicate: $items->[$i]{title} in $items->[$i]{city}\n";
+            }
         }
         else
         {
@@ -49,6 +59,11 @@ sub _merge_categories
     }
 
     @{ $items } = @save;
+
+    for my $item ( @{ $items } )
+    {
+        $item->{category} = [ uniq @{ $item->{category} } ];
+    }
 }
 
 {
