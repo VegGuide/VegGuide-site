@@ -145,6 +145,9 @@ sub _full_filter_class
                   qw( address1 city region postal_code )
                 );
 
+            # I think Google is not happy when we hammer it for
+            # addresses or something, let's see if this helps.
+            sleep 1;
             my $result = $geocoder->geocode(%p);
 
             if ($result)
