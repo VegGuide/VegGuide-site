@@ -79,6 +79,16 @@ sub warn : Path('/warn') : Args(0)
     $c->detach('index');
 }
 
+# This should only be callable in a dev environment
+sub robots_txt : Path('/robots.txt') : Args(0)
+{
+    my $self = shift;
+    my $c    = shift;
+
+    $c->response()->content_type('text/plain');
+    $c->response()->body("User-agent: *\nDisallow: /\n");
+}
+
 sub home : Path('/home')
 {
     my $self = shift;
