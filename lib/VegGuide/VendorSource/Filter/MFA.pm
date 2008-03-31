@@ -174,6 +174,11 @@ sub _state_for_id
             return;
         }
 
+        if ( $item->{region} =~ /^Philadelphia/ )
+        {
+            $item->{region} = 'Philadelphia Metro';
+        }
+
         my $location = VegGuide::Location->new( name               => $item->{region},
                                                 parent_location_id => $parent->location_id(),
                                               );
