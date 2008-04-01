@@ -79,14 +79,19 @@
      <p id="entry-attribution">
 % if ( my $source = $vendor->vendor_source() ) {
       Data provided by <a href="<% $source->display_uri() | h %>" title="Go to <% $source->name() | h %>"
-                          ><% $source->name() | h %></a>.
+                          ><% $source->name() | h %></a>
 % } else {
       Added by
       <& /lib/link/user.mas, user => $vendor->user() &>
-      on <& /lib/format/date.mas, date => $vendor->creation_datetime() &>
 % }
+      on <& /lib/format/date.mas, date => $vendor->creation_datetime() &>
 % if ( $vendor->creation_datetime() ne $vendor->last_modified_datetime() ) {
       (updated <& /lib/format/date.mas, date => $vendor->last_modified_datetime() &>)
+% }
+
+% if ( $c->vg_user()->is_admin() && $vendor->external_unique_id() ) {
+      <br />
+      <span id="external-id">External id: <% $vendor->external_unique_id() | h %></span>
 % }
      </p>
 

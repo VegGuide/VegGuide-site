@@ -439,6 +439,18 @@ sub create
     }
 }
 
+sub delete
+{
+    my $self = shift;
+
+    if ( my $source = $self->vendor_source() )
+    {
+        $source->add_excluded_id( $self->external_unique_id() );
+    }
+
+    $self->SUPER::delete();
+}
+
 # This would be a lot smarter if it was sensitive to the language of
 # the region. For example, for French entries, maybe the sortable name
 # should remove "Le" and "La", but for English-speaking areas, those

@@ -775,7 +775,7 @@ div.rating-star-set a img {
 
 #lat-long, #canonical_address {
   font-weight: bold;
-  color: #999;
+  color: #666;
 }
 
 #website {
@@ -934,6 +934,11 @@ p#entry-attribution {
   font-style: italic;
 }
 
+span#external-id {
+  color: #666;
+  font-style: normal;
+}
+
 #features-container {
   background-color: #D9FFB9;
 }
@@ -1020,7 +1025,7 @@ div.comment {
 
 #creation-info {
   font-weight: bold;
-  color: #999;
+  color: #666;
 }
 
 #creation-info a, #creation-info a:visited {

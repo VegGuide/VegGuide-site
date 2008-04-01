@@ -57,6 +57,8 @@ sub _get_feed
 
         $self->_filter_items($items);
 
+        $self->_remove_excluded_items($items);
+
         my $schema = VegGuide::Schema->Connect();
 
         # This is broken, apparently I'm using local times in the
@@ -118,6 +120,61 @@ sub _full_filter_class
     my $self = shift;
 
     return join '::', __PACKAGE__, 'Filter', $self->filter_class();
+}
+
+sub _remove_excluded_items
+{
+    my $self  = shift;
+    my $items = shift;
+
+    my @excluded_ids = $self->_excluded_ids()
+        or return;
+
+    my %id = map { $_ => 1 } @excluded_ids;
+
+    my @save;
+    for my $item ( @{ $items } )
+    {
+        if ( $id{ $item->{external_unique_id} } )
+        {
+            warn "Ignoring excluded item - $item->{name} ($item->{external_unique_id})\n"
+                if DEBUG;
+            next;
+        }
+
+        push @save, $item;
+    }
+
+    @{ $items } = @save;
+}
+
+sub add_excluded_id
+{
+    my $self = shift;
+    my $id   = shift;
+
+    my $schema = VegGuide::Schema->Connect();
+
+    $schema->VendorSourceExcludedId_t()->insert
+        ( values => { vendor_source_id   => $self->vendor_source_id(),
+                      external_unique_id => $id,
+                    },
+        );
+}
+
+sub _excluded_ids
+{
+    my $self = shift;
+
+    my $schema = VegGuide::Schema->Connect();
+
+    return
+        $schema->VendorSourceExcludedId_t()->function
+            ( select => $schema->VendorSourceExcludedId_t()->external_unique_id_c(),
+              where  =>
+              [ $schema->VendorSourceExcludedId_t()->vendor_source_id_c(),
+                '=', $self->vendor_source_id() ],
+            );
 }
 
 {
