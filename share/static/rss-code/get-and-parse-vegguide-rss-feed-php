@@ -1,158 +1,108 @@
 <?php
 
-// Copyright (c) 2004 Dac Chartrand.  All rights reserved.  This
-// program is free software; you can redistribute it and/or modify it
-// under the same terms as the Perl Artistic license.
-                                                                                                   
-// Some code inspired from O'Reilly PHP Cookbook
-// Recipe 11.3 - Fetching a URL with Cookies
-// Recipe 12.4 - Parsing XML with SAX
-                                                                                                   
-// Requires Client URL Library Functions
-// http://www.php.net/manual/en/ref.curl.php
+/*
+   Copyright (c) 2008 Dac Chartrand. No rights reserved.
 
-// Time limit
-set_time_limit (0);
+   No warranty:
+   This software is provided "as is," without warranty of any kind, express or
+   implied. In no event shall the author be held liable for any direct, indirect,
+   incidental, special or consequential damages arising out of the use of or
+   inability to use this software.
 
-// Get RSS feed
-// Change the query string so location_id is an actual valid id!
-$c = curl_init('http://www.vegguide.org/region/X.rss');
-curl_setopt($c, CURLOPT_ENCODING, 'gzip');
-curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt($c, CURLOPT_COOKIEFILE, $cookie_jar);
-$data = curl_exec($c);
+   Requirements:
+   PHP: 5.2+, CURL, XMLReader
+   @see http://www.php.net/manual/en/ref.curl.php
+   @see http://www.php.net/manual/en/ref.xmlreader.php
+
+*/
+
+// ----------------------------------------------------------------------------
+// Variables
+// ----------------------------------------------------------------------------
+
+// URL to Vegguide.org RSS data feed
+$rss_url = 'http://www.vegguide.org/static/rss/site.rss';
+
+// Writable path to local copy of RSS data feed
+$rss_file = 'my.rss';
+
+// The elements in an item you care about
+$elements = array(
+    'title',
+    'link',
+    'description',
+    'phone',
+    'address1',
+    'postal-code',
+    'city',
+    'region',
+    'veg-level',
+    'map-link',
+    );
+
+// ----------------------------------------------------------------------------
+// Function
+// ----------------------------------------------------------------------------
+
+// Adjust this function accordingly
+function do_something_with_item(array $vegguide) {
+    print_r($vegguide);
+}
+
+// ----------------------------------------------------------------------------
+// Get RSS
+// ----------------------------------------------------------------------------
+
+set_time_limit(3600); // One hour
+
+$c = curl_init($rss_url) or die("Error: Unable to initialize curl with $rss_url"); // Read From
+$wh = fopen($rss_file, 'w') or die("Error: Unable to write to file $rss_file"); // Write To
+
+curl_setopt($c, CURLOPT_FILE, $wh); // Buffer output to optimize memory usage
+curl_setopt($c, CURLOPT_ENCODING, 'gzip'); // Use gzip encoding
+curl_exec($c);
+
 curl_close($c);
+fclose($wh);
 
-// Set up XML 
-$xml = xml_parser_create_ns("UTF-8");
-$rss = new regveg_RSS_parser;
-xml_set_object($xml, $rss);
-xml_set_element_handler($xml, 'start_element', 'end_element');
-xml_set_character_data_handler($xml, 'character_data');
-xml_parser_set_option($xml, XML_OPTION_CASE_FOLDING, false);
+// ----------------------------------------------------------------------------
+// Parse large XML document with XMLReader extension
+// ----------------------------------------------------------------------------
 
-// Start XML
-xml_parse($xml, $data) or die("VWO: Can't parse RSS data");
+$reader = new XMLReader();
+$reader->open($rss_file);
 
-// Finish XML;
-xml_parser_free($xml);
-echo "Finished!\n\n";
-exit;
+while ($reader->read()) {
 
-// RSS Channel Class
-class regveg_RSS_channel {
+    // If you're at an element named 'item'
+    if ($reader->nodeType == XMLREADER::ELEMENT && $reader->localName == 'item') {
 
-  var $title = '';
-  var $link = '';
-  var $description = '';
-  var $country = '';
-    
+        // Reset array
+        $vegguide = array();
+
+        // Keep on moving
+        while ($reader->read()) {
+
+            // You've reached the end of item, fallback to previous while()
+            if ($reader->nodeType == XMLREADER::END_ELEMENT && $reader->localName == 'item') {
+                break;
+            }
+
+            // Get the elements we care about
+            if ($reader->nodeType == XMLREADER::ELEMENT && in_array($reader->localName, $elements)) {
+                $tmp = $reader->localName;
+                $reader->read();
+                $vegguide[$tmp] = $reader->value;
+            }
+
+        }
+
+        // Do something with this item
+        if (count($vegguide)) do_something_with_item($vegguide);
+
+    }
+
 }
 
-// RSS Item Class
-class regveg_RSS_item {
-    
-  var $channel_title = '';
-  var $channel_link = '';
-  var $channel_description = ''; 
-  var $channel_country = '';
-  var $title = '';
-  var $link = '';
-  var $description = '';
-  var $phone = '';
-  var $address1 = '';
-  var $address2 = '';
-  var $city = '';
-  var $region = '';
-  var $postal_code = '';
-  var $price_range_number = '';
-  var $payment_option = '';
-  var $veg_level = '';
-  // add the elements you want 
-    
-  function display() {
-    echo "\n<p>";
-    echo "<hr>";
-    echo $this->channel_title . '<br />';
-    echo $this->channel_link . '<br />';
-    echo $this->channel_description . '<br />';
-    echo $this->channel_country . '<br />';
-    echo $this->title . '<br />';
-    echo $this->link . '<br />';
-    echo $this->description . '<br />';
-    echo $this->phone . '<br />';
-    echo $this->address1 . '<br />';
-    echo $this->city . '<br />';
-    echo $this->region . '<br />';
-    echo $this->postal_code . '<br />';
-    echo $this->price_range_number . '<br />';
-    echo $this->payment_option . '<br />';
-    echo $this->veg_level . '<br />';
-    // add the elements you want
-        
-  }   
-}
 
-// XML/RSS Parser Class
-class regveg_RSS_parser {
-    
-  var $tag;
-  var $item;
-    
-  function start_element($parser, $tag, $attributes) {
-        
-    // ptag = parsed tag.
-    $ptag = explode(':', $tag);
-        
-    // NB: Parsing order (open/close) is important        
-    if ('channel' == str_replace('-', '_', end($ptag))) {
-      $this->channel = new regveg_RSS_channel;
-    }
-    else if ('item' == str_replace('-', '_', end($ptag))) {
-      $this->item = new regveg_RSS_item;                  
-    }
-    else if (!empty($this->item)) {
-      $this->tag = str_replace('-', '_', end($ptag));     
-    }
-    else if (!empty($this->channel)) {
-      $this->tag = str_replace('-', '_', end($ptag));     
-    }
-  }
-    
-  function end_element($parser, $tag) {
-        
-    // ptag = parsed tag.
-    $ptag = explode(':', $tag);
-        
-    if ('channel' == str_replace('-', '_', end($ptag))) {
-      unset($this->channel);
-    }
-    else if ('item' == str_replace('-', '_', end($ptag))) {
-                
-      // Item is done, set related channel info
-      $this->item->channel_title = $this->channel->title;
-      $this->item->channel_link = $this->channel->link;
-      $this->item->channel_description = $this->channel->description;
-      $this->item->channel_country = $this->channel->country;
-            
-      $this->item->display();
-      unset($this->item);
-    }         
-  }
-    
-  function character_data($parser, $data) {
-    // NB: Parsing order is important 
-    if (!empty($this->item)) {
-      if (isset($this->item->{$this->tag})) {
-        $this->item->{$this->tag} .= trim($data);
-      }
-    }
-    else if (!empty($this->channel)) {
-      if (isset($this->channel->{$this->tag})) {
-        $this->channel->{$this->tag} .= trim($data);
-      }
-    }           
-  }
-}
-
-?> 
+?>
