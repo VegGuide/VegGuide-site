@@ -19,7 +19,7 @@ sub index : Path('/') : Args(0)
     my $c    = shift;
 
     $c->stash()->{is_front_page} = 1;
-    $c->stash()->{featured_vendor} = undef; #$self->_featured_vendor($c);
+    $c->stash()->{featured_vendor} = $self->_featured_vendor($c);
 
     $c->stash()->{news_item} = VegGuide::NewsItem->MostRecent();
 
