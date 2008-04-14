@@ -25,7 +25,7 @@ sub GrowthOverTime
 
     if ( $today ne $dates[-1] )
     {
-        push @dates, $today;
+        push @dates, $today->clone()->add( days => 1 );
     }
 
     my @user_count;
