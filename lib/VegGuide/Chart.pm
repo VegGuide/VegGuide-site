@@ -36,9 +36,15 @@ sub GrowthOverTime
     {
         push @labels, $d->ymd;
 
+        my $start =
+            ( $d->day() == 1
+              ? $d->clone()->subtract( months => 1 )
+              : $d->clone()->truncate( to => 'month' )
+            );
+
         my $u_count =
             VegGuide::User->CountForDateSpan
-                    ( start_date => $d->clone()->subtract( months => 1 ),
+                    ( start_date => $start,
                       end_date   => $d,
                     );
 
@@ -46,7 +52,7 @@ sub GrowthOverTime
 
         my $v_count =
             VegGuide::Vendor->CountForDateSpan
-                    ( start_date => $d->clone()->subtract( months => 1 ),
+                    ( start_date => $start,
                       end_date   => $d,
                     );
 
