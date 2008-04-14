@@ -25,7 +25,7 @@ sub GrowthOverTime
 
     if ( $today ne $dates[-1] )
     {
-        push @dates, $today->clone()->add( days => 1 );
+        push @dates, $today;
     }
 
     my @user_count;
@@ -42,10 +42,16 @@ sub GrowthOverTime
               : $d->clone()->truncate( to => 'month' )
             );
 
+        my $end =
+            ( $d == $today
+              ? $d->clone()->add( days => 1 )
+              : $d
+            );
+
         my $u_count =
             VegGuide::User->CountForDateSpan
                     ( start_date => $start,
-                      end_date   => $d,
+                      end_date   => $end,
                     );
 
         push @user_count, ( $user_count[-1] || 0 ) + $u_count;
@@ -53,7 +59,7 @@ sub GrowthOverTime
         my $v_count =
             VegGuide::Vendor->CountForDateSpan
                     ( start_date => $start,
-                      end_date   => $d,
+                      end_date   => $end,
                     );
 
         push @vendor_count, ( $vendor_count[-1] || 0 ) + $v_count;
