@@ -227,5 +227,28 @@ sub new
 }
 
 
+{
+    package Geo::Coder::Google;
+
+    # Google does not return valid utf8 unless the user agent looks
+    # like a browser. Fucking stupid Google.
+
+    no warnings 'redefine';
+sub new {
+    my($class, %param) = @_;
+
+    my $key = delete $param{apikey}
+        or Carp::croak("Usage: new(apikey => \$apikey)");
+
+    my $v = __PACKAGE__->VERSION();
+    my $agent = 'Mozilla/5.0 (compatible; ' . __PACKAGE__ . "/$v; Google, please stop smoking crack)";
+
+    my $ua   = delete $param{ua}   || LWP::UserAgent->new(agent => $agent);
+    my $host = delete $param{host} || 'maps.google.com';
+
+    bless { key => $key, ua => $ua, host => $host }, $class;
+}
+}
+
 1;
 
