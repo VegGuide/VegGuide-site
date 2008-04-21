@@ -1,2 +1,5 @@
 User-Agent: *
 Disallow: /user/login_form
+
+User-Agent: twiceler
+Disallow: *
