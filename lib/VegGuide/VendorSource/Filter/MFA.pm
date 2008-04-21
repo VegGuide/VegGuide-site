@@ -151,6 +151,8 @@ sub _state_for_id
 
     my $states = Geography::States->new('USA');
 
+    my %ChampaignUrbana = map { $_ => 1 } qw( Champaign Urbana );
+
     sub _location_for_item
     {
         my $class = shift;
@@ -177,6 +179,11 @@ sub _state_for_id
         if ( $item->{region} =~ /^Philadelphia/ )
         {
             $item->{region} = 'Philadelphia Metro';
+        }
+
+        if ( $ChampaignUrbana{ $item->{region} } )
+        {
+            $item->{region} = 'Champaign-Urbana';
         }
 
         my $location = VegGuide::Location->new( name               => $item->{region},
