@@ -151,7 +151,9 @@ sub _state_for_id
 
     my $states = Geography::States->new('USA');
 
-    my %ChampaignUrbana = map { $_ => 1 } qw( Champaign Urbana );
+    my %RegionMap = ( ( map { $_ => 'Champaign-Urbana' } qw( Champaign Urbana ) ),
+                      ( map { $_ => 'Bloomington-Normal' } qw( Bloomington Normal ) ),
+                    );
 
     sub _location_for_item
     {
@@ -181,9 +183,9 @@ sub _state_for_id
             $item->{region} = 'Philadelphia Metro';
         }
 
-        if ( $ChampaignUrbana{ $item->{region} } )
+        if ( $RegionMap{ $item->{region} } )
         {
-            $item->{region} = 'Champaign-Urbana';
+            $item->{region} = $RegionMap{ $item->{region} };
         }
 
         my $location = VegGuide::Location->new( name               => $item->{region},
