@@ -122,10 +122,11 @@ sub _validate_data
         }
     }
 
-    if ( ! $is_update
-         || ( defined $data->{openid_uri}
-              && ( ! defined $self->openid_uri()
-                   || $data->{openid_uri} ne $self->openid_uri() )
+    if ( defined $data->{openid_uri}
+         && ( ! $is_update
+              ||
+              ( ! defined $self->openid_uri()
+                || $data->{openid_uri} != $self->openid_uri() )
             )
        )
     {
