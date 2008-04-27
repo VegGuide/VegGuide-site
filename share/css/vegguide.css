@@ -1202,7 +1202,7 @@ table.standard-table thead ul li, table.standard-table tfoot ul li {
 }
 
 #entries-table .name address {
-  font-size: 85%;
+  font-size: 90%;
 }
 
 #entries-table.with-distance .distance {
@@ -1218,11 +1218,11 @@ table.standard-table thead ul li, table.standard-table tfoot ul li {
 }
 
 #entries-table .summary span.summary-text {
-  font-size: 85%;
+  font-size: 90%;
 }
 
 #entries-table .summary span.category {
-  font-size: 85%;
+  font-size: 90%;
   font-style: italic;
 }
 
@@ -1250,7 +1250,7 @@ table.standard-table thead ul li, table.standard-table tfoot ul li {
   vertical-align: -15%;
 }
 
-#entries-table span.closed {
+#entries-table div.closed {
   font-weight: bold;
 }
 

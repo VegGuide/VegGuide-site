@@ -88,7 +88,7 @@ if ( $search->can('location') )
         </address>
 % }
 % if ( $vendor->is_closed ) {
-        <br /><span class="closed">Closed as of <& /lib/format/date.mas, date => $vendor->close_date_object &></span>
+        <div class="closed">Closed as of <& /lib/format/date.mas, date => $vendor->close_date_object &></div>
 % }
        </td>
 % if ($distance) {
