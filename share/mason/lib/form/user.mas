@@ -32,6 +32,7 @@
      <div class="form-item">
       <label for="openid_uri">OpenID URL:</label>
       <input id="openid_uri" class="text medium" type="text" name="openid_uri" value="" />
+      <p>This is optional. Learn more <a href="http://openid.net/">about OpenID</a>.</p>
      </div>
 
      <div class="form-item">
