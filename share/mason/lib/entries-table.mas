@@ -1,8 +1,8 @@
-    <table id="entries-table" class="standard-table">
+    <table id="entries-table" class="standard-table <% $search->can('latitude') ? 'with-distance' : '' %>">
 
      <thead>
       <tr>
-       <td colspan="<% $show_add_entry ? $colspan - 2 : $colspan %>" class="first last">
+       <td colspan="<% $show_add_entry ? $colspan - 2 : $colspan %>">
         <div class="entries-links">
 % if ( $search->has_addresses() && $search->has_mappable_vendors() ) {
          <a href="<% $search->map_uri() | h %>" class="map-link" title="An interactive Google map of this entry list">Map this list</a> |
@@ -21,25 +21,22 @@
       </tr>
 
       <tr class="table-heading">
-       <th id="name-header first"><&| /lib/sort-link.mas, search => $search &>Name</&></th>
-       <th id="cuisines-header">Cuisines</th>
+       <th class="name"><&| /lib/sort-link.mas, search => $search &>Name</&></th>
 %   if ( $search->can('latitude') ) {
-       <th id="distance"><&| /lib/sort-link.mas, search => $search &>Distance</&></th>
+       <th class="distance"><&| /lib/sort-link.mas, search => $search &>Distance</&></th>
 %   }
-%   elsif ( $search->has_addresses() ) {
-       <th id="city-header"><&| /lib/sort-link.mas, search => $search &>City</&></th>
-%   }
-       <th id="rating-header"><&| /lib/sort-link.mas, search => $search &>Rating</&></th>
-       <th id="how-veg-header"><&| /lib/sort-link.mas, search => $search &>How Veg?</&></th>
-       <th id="price-range-header"><&| /lib/sort-link.mas, search => $search &>Price</&></th>
-       <th id="info-header last"></th>
+       <th class="summary">Summary</th>
+       <th class="rating"><&| /lib/sort-link.mas, search => $search &>Rating</&></th>
+       <th class="how-veg"><&| /lib/sort-link.mas, search => $search &>How Veg?</&></th>
+       <th class="price-range"><&| /lib/sort-link.mas, search => $search &>Price</&></th>
+       <th class="info"></th>
       </tr>
      </thead>
 
 % if ( $pager->total_entries() ) {
      <tfoot>
       <tr>
-       <td colspan="<% $colspan %>" class="first last">
+       <td colspan="<% $colspan %>">
         <% $pagination %>
        </td>
       </tr>
@@ -70,7 +67,7 @@ my $pagination =
                things => 'entries',
              );
 
-my $colspan = $search->has_addresses() ? 7 : 6;
+my $colspan = $search->can('latitude') ? 7 : 6;
 
 my $show_add_entry = 0;
 if ( $search->can('location') )
@@ -81,33 +78,33 @@ if ( $search->can('location') )
 
 <%def .one-vendor>
       <tr class="<% $count % 2 ? 'odd' : 'even' %>">
-       <td class="name first">
+       <td class="name">
         <& /lib/link/vendor.mas, vendor => $vendor &>
-% my $cat = join ', ', map { $_->name() } $vendor->categories();
-% if ( $cat ne 'Restaurant' ) {
-        <br /><span class="category"><% $cat %></span>
+% if (@address) {
+        <address>
+%   for my $line (@address) {
+         <% $line | h %><% $line ne $address[-1] ? '<br/>' : '' %>
+%   }
+        </address>
 % }
 % if ( $vendor->is_closed ) {
         <br /><span class="closed">Closed as of <& /lib/format/date.mas, date => $vendor->close_date_object &></span>
 % }
-       </td>
-       <td class="cuisines">
-%   if ( my @cuisines = map { $_->name() } $vendor->cuisines() ) {
-        <% join ', ', @cuisines | h %>
-%   }
        </td>
 % if ($distance) {
        <td class="distance">
         <% $distance %> <% PL( $search->unit(), $distance ) %>
        </td>
 % }
-% elsif ($has_address) {
-       <td class="city"><% defined $vendor->city() ? $vendor->city() : '' %>
-%   if ( $c->client()->show_localized_content() && $vendor->localized_city() ) {
-   - <% $c->client()->encode( $vendor->localized_city() ) | h %>
-%   }
-       </td>
+
+       <td class="summary">
+        <span class="summary-text"><% $vendor->short_description | h %></span>
+% my $cat = join ', ', map { $_->name() } $vendor->categories();
+% if ( $cat ne 'Restaurant' ) {
+        <br /><span class="category"><% $cat %></span>
 % }
+       </td>
+
        <td class="rating">
 % unless ( $vendor->is_organization() ) {
 <& /lib/stars-for-rating.mas, rating => $weighted_rating, color => 'green', title => $rating_title &>
@@ -130,7 +127,7 @@ if ( $search->can('location') )
    <% $vendor->price_range()->symbols_only() | h %>
 % }
        </td>
-       <td class="info last">
+       <td class="info">
 <& .info, vendor => $vendor &>
        </td>
       </tr>
@@ -158,10 +155,13 @@ else
     $rating_title = "no ratings";
 }
 
-my $has_address = $search->has_addresses();
+my @address;
+@address = $vendor->address_pieces()
+    if $search->has_addresses();
 
 my $distance;
-if ( $search->can('latitude') ) {
+if ( $search->can('latitude') )
+{
     $distance =
         $vendor->distance_from
             ( latitude  => $search->latitude(),

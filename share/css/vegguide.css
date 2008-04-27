@@ -1197,12 +1197,33 @@ table.standard-table thead ul li, table.standard-table tfoot ul li {
   width: 30%;
 }
 
-#entries-table .cuisines {
-  width: 20%;
+#entries-table.with-distance .name {
+  width: 24%;
 }
 
-#entries-table .city {
-  width: 10%;
+#entries-table .name address {
+  font-size: 85%;
+}
+
+#entries-table.with-distance .distance {
+  width: 12%;
+}
+
+#entries-table .summary {
+  width: 30%;
+}
+
+#entries-table.with-distance .summary {
+  width: 24%;
+}
+
+#entries-table .summary span.summary-text {
+  font-size: 85%;
+}
+
+#entries-table .summary span.category {
+  font-size: 85%;
+  font-style: italic;
 }
 
 #entries-table .rating {
