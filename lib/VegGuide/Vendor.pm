@@ -2689,6 +2689,8 @@ sub VendorsWhere
         @order_by =
             ( $schema->Vendor_t->sortable_name_c,
               $p{sort_order},
+              $schema->Vendor_t->city_c,
+              'ASC',
             );
     }
 
