@@ -415,6 +415,15 @@ sub skins_POST : Private
     $c->redirect_and_detach( '/skin/' . $skin->skin_id() . '/edit_form' );
 }
 
+sub survey_2008_1 : Local : ActionClass('+VegGuide::Action::REST') { }
+
+sub survey_2008_1_GET_html
+{
+    my $self = shift;
+    my $c    = shift;
+
+    $c->stash()->{template} = '/site/survey-2008-1';
+}
 
 1;
 

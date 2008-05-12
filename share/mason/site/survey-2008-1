@@ -1,0 +1,144 @@
+<p>
+This survey is designed to help us learn more about how people use
+VegGuide.Org. This will help guide decisions on future features and
+changes.
+</p>
+
+<p>
+The only identifying information this survey automatically collects is
+your IP address. This will not be shared with anyone besides the site
+administrator. You may also opt to provide your email address so we
+can contact you if we have further questions about your answers.
+</p>
+
+<&| /lib/filter/fill-in-form.mas &>
+<form action="/site/survey-2008-1" method="post" id="survey-form">
+
+ <fieldset>
+  <legend>Survey</legend>
+
+  <div class="form-item" id="frequency">
+   <label>How often do you visit VegGuide.Org, on average?</label>
+   <ul>
+    <li>
+     <input class="radio" type="radio" name="frequency" value="more often than weekly" id="frequency-1" />
+     <label for="frequency-1">More than once a week</label>
+    </li>
+    <li>
+     <input class="radio" type="radio" name="frequency" value="weekly" id="frequency-2" />
+     <label for="frequency-2">Weekly (once a week)</label>
+    </li>
+    <li>
+     <input class="radio" type="radio" name="frequency" value="monthly" id="frequency-3" checked="checked" />
+     <label for="frequency-3">Monthly (once a month)</label>
+    </li>
+    <li>
+     <input class="radio" type="radio" name="frequency" value="less than monthly" id="frequency-4" />
+     <label for="frequency-4">A few times a year</label>
+    </li>
+    <li>
+     <input class="radio" type="radio" name="frequency" value="first visit" id="frequency-5" />
+     <label for="frequency-5">This is my first visit</label>
+    </li>
+   </ul>
+  </div>
+
+  <div class="form-item" id="diet">
+   <label>How veg is your diet?</label>
+   <ul>
+    <li>
+     <input class="radio" type="radio" name="how-veg" value="vegan" id="veg-1" />
+     <label for="veg-1">Vegan (I <em>never</em> eat animal products)</label>
+    </li>
+    <li>
+     <input class="radio" type="radio" name="how-veg" value="vegetarian" id="veg-2" />
+     <label for="veg-2">Strict Vegetarian (I <em>never</em> eat animal flesh, but I do eat eggs and/or dairy)</label>
+    </li>
+    <li>
+     <input class="radio" type="radio" name="how-veg" value="semi-vegetarian" id="veg-3" />
+     <label for="veg-3">Semi-Vegetarian (I regularly eat vegetarian meals, but I also eat animal flesh sometimes)</label>
+    </li>
+    <li>
+     <input class="radio" type="radio" name="how-veg" value="non-vegetarian" id="veg-4" />
+     <label for="veg-4">Not Vegetarian (I don't regularly eat vegetarian meals)</label>
+    </li>
+   </ul>
+  </div>
+
+  <div class="form-item" id="activities">
+   <label>What do you do on the site? (check all that apply)</label>
+   <ul>
+    <li>
+     <input class="checkbox" type="checkbox" name="activities" value="browse with purpose" id="activities-browse-look" />
+     <label for="activities-browse-look">Browse regions, looking for a specific thing (restaurant, grocer, etc)</label>
+    </li>
+    <li>
+     <input class="checkbox" type="checkbox" name="activities" value="browse for fun" id="activities-browse-fun" />
+     <label for="activities-browse-fun">Browse regions, just out of curiosity</label>
+    </li>
+    <li>
+     <input class="checkbox" type="checkbox" name="activities" value="search for a specific entry" id="activities-search-specific" />
+     <label for="activities-search-specific">Search for a specific place</label>
+    </li>
+    <li>
+     <input class="checkbox" type="checkbox" name="activities" value="search for things nearby" id="activities-search-nearby" />
+     <label for="activities-search-nearby">Search for things near an address</label>
+    </li>
+    <li>
+     <input class="checkbox" type="checkbox" name="activities" value="read front page new entries" id="activities-fp-new-entries" />
+     <label for="activities-fp-new-entries">Read new entries listed on the front page</label>
+    </li>
+    <li>
+     <input class="checkbox" type="checkbox" name="activities" value="read front page new reviews" id="activities-fp-new-reviews" />
+     <label for="activities-fp-new-reviews">Read new reviews listed on the front page</label>
+    </li>
+    <li>
+     <input class="checkbox" type="checkbox" name="activities" value="rate and review entries" id="activities-rate-review" />
+     <label for="activities-rate-review">Rate and/or review entries</label>
+    </li>
+    <li>
+     <input class="checkbox" type="checkbox" name="activities" value="add entries" id="activities-add-entry" />
+     <label for="activities-add-entry">Add new entries</label>
+    </li>
+   </ul>
+  </div>
+
+  <div class="form-item" id="survey-features">
+   <label>What features do you use on the site? (check all that apply)</label>
+   <ul>
+    <li>
+     <input class="checkbox" type="checkbox" name="features" value="just restaurants" id="features-just-restaurants" />
+     <label for="features-just-restaurants">The "Just Restaurants" button when viewing a list of entries</label>
+    </li>
+    <li>
+     <input class="checkbox" type="checkbox" name="features" value="listing filter" id="features-filters" />
+     <label for="features-filters">The "Filter this listing" button when viewing a list of entries</label>
+    </li>
+    <li>
+     <input class="checkbox" type="checkbox" name="features" value="printable listings" id="features-printable-listing" />
+     <label for="features-printable-listing">The "Print this list" link when viewing a list of entries</label>
+    </li>
+    <li>
+     <input class="checkbox" type="checkbox" name="features" value="watch lists" id="features-watch-lists" />
+     <label for="features-watch-lists">Watch lists</label>
+    </li>
+    <li>
+     <input class="checkbox" type="checkbox" name="features" value="OpenID" id="features-openid" />
+     <label for="features-openid">OpenID login</label>
+    </li>
+   </ul>
+  </div>
+
+  <div class="form-item">
+   <input class="submit" type="submit" value="Submit" />
+  </div>
+
+ </fieldset>
+
+
+</form>
+</&>
+
+<%method page_title>
+VegGuide.Org User Survey
+</%method>

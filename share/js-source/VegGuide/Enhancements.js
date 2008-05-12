@@ -14,6 +14,7 @@ JSAN.use("VegGuide.RatingStars");
 JSAN.use("VegGuide.RegionForm");
 JSAN.use("VegGuide.SitewideSearch");
 JSAN.use("VegGuide.Suggestions");
+JSAN.use("VegGuide.SurveyForm");
 JSAN.use("VegGuide.UserSearch");
 JSAN.use("VegGuide.Widget.PairedMultiSelect");
 
@@ -39,6 +40,7 @@ VegGuide.Enhancements.instrumentAll = function () {
     VegGuide.RegionForm.instrumentPage();
     VegGuide.SitewideSearch.instrumentPage();
     VegGuide.Suggestions.instrumentPage();
+    VegGuide.SurveyForm.instrumentPage();
     VegGuide.UserSearch.instrumentPage();
 };
 
