@@ -69,6 +69,8 @@ sub _process_sql_query
         VegGuide::Vendor->NameWhere( $self->name() );
 }
 
+sub _exclude_closed_vendors { 0 }
+
 sub _vendor_ids_for_rating
 {
     my $self = shift;

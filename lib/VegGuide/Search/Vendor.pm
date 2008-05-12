@@ -95,7 +95,8 @@ sub _process_sql_query
     $self->{descriptions} = {};
     $self->{path_query}   = {};
 
-    push @{ $self->{where} }, VegGuide::Vendor->CloseCutoffWhereClause();
+    push @{ $self->{where} }, VegGuide::Vendor->CloseCutoffWhereClause()
+        if $self->_exclude_closed_vendors();
 
     if ( $self->{mappable_only} )
     {
@@ -104,6 +105,8 @@ sub _process_sql_query
 
     $self->$_() for grep { $self->can($_) } map { ("_$_") } $self->SearchKeys();
 }
+
+sub _exclude_closed_vendors { 1 }
 
 sub _category_id
 {
