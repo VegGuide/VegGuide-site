@@ -57,12 +57,11 @@ sub _new_row
 
     my @where;
 
-    if ( $p{name} && $p{canonical_address} && $p{location_id} )
+    if ( $p{name} && $p{canonical_address} )
     {
 	push @where,
 	    ( [ $schema->Vendor_t()->name_c(), '=', $p{name} ],
               [ $schema->Vendor_t()->canonical_address_c(), '=', $p{canonical_address} ],
-              [ $schema->Vendor_t()->location_id_c(), '=', $p{location_id} ],
             );
     }
     elsif ( defined $p{external_unique_id} && $p{vendor_source_id} )

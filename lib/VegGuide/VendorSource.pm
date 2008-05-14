@@ -211,7 +211,6 @@ sub _excluded_ids
             {
                 $vendor = VegGuide::Vendor->new( name              => $item->{name},
                                                  canonical_address => $result->canonical_address(),
-                                                 location_id       => $item->{location_id},
                                                );
             }
         }
