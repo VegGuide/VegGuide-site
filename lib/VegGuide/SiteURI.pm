@@ -200,7 +200,7 @@ if ( VegGuide::Config->IsProduction() )
 {
     no warnings 'redefine';
 
-    *validate = sub { @_ };
+    *validate = sub (\@$) { return ( query => {}, @{ $_[0] } ) };
 }
 
 
