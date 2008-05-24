@@ -249,10 +249,7 @@ sub children_of
 
     $class->_check_cache_time unless $Checked;
 
-    return ( $Cache{$class}{nodes}{$id_val}{children} ?
-             @{ $Cache{$class}{nodes}{$id_val}{children} } :
-             ()
-           );
+    return @{ $Cache{$class}{nodes}{$id_val}{children} || [] };
 }
 
 sub _cached_children_with_flag
@@ -326,7 +323,7 @@ sub _cached_ancestors
     return @a;
 }
 
-sub _cached_descendants
+sub descendants
 {
     my $self = shift;
     my $class = ref $self;
@@ -350,8 +347,6 @@ sub _cached_descendants
 
     return @d;
 }
-
-sub descendants { $_[0]->_cached_descendants }
 
 sub descendant_ids
 {
