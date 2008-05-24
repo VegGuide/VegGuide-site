@@ -196,6 +196,8 @@ sub _with_host
            );
 }
 
+# The uri generating functions get called a ridiculous number of
+# times, so disabling validation may help speed up the site.
 if ( VegGuide::Config->IsProduction() )
 {
     no warnings 'redefine';
