@@ -196,5 +196,12 @@ sub _with_host
            );
 }
 
+if ( VegGuide::Config->IsProduction() )
+{
+    no warnings 'redefine';
+
+    *validate = sub { @_ };
+}
+
 
 1;
