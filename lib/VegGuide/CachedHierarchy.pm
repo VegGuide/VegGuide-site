@@ -45,6 +45,9 @@ my %Times;
 
         $class->_add_nodes($roots);
 
+        # Will build descendants cache
+        $class->all();
+
         my $f = $Meta{$class}{file};
 
         _touch_file($f) if $first && $ENV{MOD_PERL};
@@ -249,10 +252,7 @@ sub children_of
 
     $class->_check_cache_time unless $Checked;
 
-    return ( $Cache{$class}{nodes}{$id_val}{children} ?
-             @{ $Cache{$class}{nodes}{$id_val}{children} } :
-             ()
-           );
+    return @{ $Cache{$class}{nodes}{$id_val}{children} || [] };
 }
 
 sub _cached_children_with_flag
@@ -326,7 +326,20 @@ sub _cached_ancestors
     return @a;
 }
 
-sub _cached_descendants
+sub descendants
+{
+    my $self = shift;
+    my $class = ref $self;
+
+    my $id = $Meta{$class}{params}{id};
+    my $id_val = $self->$id();
+
+    $Cache{$class}{nodes}{$id_val}{descendants} ||= $self->_descendants();
+
+    return @{ $Cache{$class}{nodes}{$id_val}{descendants} };
+}
+
+sub _descendants
 {
     my $self = shift;
     my $class = ref $self;
@@ -348,10 +361,8 @@ sub _cached_descendants
         push @c, @c1;
     }
 
-    return @d;
+    return \@d;
 }
-
-sub descendants { $_[0]->_cached_descendants }
 
 sub descendant_ids
 {
