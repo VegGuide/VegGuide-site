@@ -1626,6 +1626,7 @@ form input.submit-small, form button.submit-small {
 
 div.form-item {
   margin-top: 0.4em;
+  padding: 0.1em 0;
 }
 
 div.form-item p {
