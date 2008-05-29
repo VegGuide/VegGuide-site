@@ -25,7 +25,7 @@
 
      <div class="form-item">
       <label for="email_address">Email:</label>
-      <input id="email_address" class="text" type="text" name="email_address" value="" size="40" />
+      <input id="email_address" class="medium text" type="text" name="email_address" value="" />
      </div>
 
      <div class="form-item">
@@ -41,7 +41,7 @@
 
      <div class="form-item">
       <label for="openid_url">OpenID URL:</label>
-      <input id="openid_url" class="text" type="text" name="openid_uri" value="" size="40" />
+      <input id="openid_url" class="medium text" type="text" name="openid_uri" value="" />
       <p>
        Learn more <a href="http://openid.net/">about OpenID</a>.
       </p>
