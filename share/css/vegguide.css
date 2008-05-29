@@ -1660,6 +1660,20 @@ div.form-item ul li label {
   font-size: 95%;
 }
 
+/* These styles are hacks for the survey */
+div.form-item ul li.text-input-container {
+  margin-left: 0.4em;
+}
+
+div.form-item ul li.text-input-container label {
+  display: block;
+}
+
+div.form-item ul li.text-input-container input {
+  background-color: white;
+  margin-bottom: 0.2em;
+}
+
 #how-veg {
   width: 65%;
 }
