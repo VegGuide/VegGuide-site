@@ -1,0 +1,78 @@
+<p>
+A summary of responses to the most first (and maybe only) VegGuide.Org
+survey in 2008.
+</p>
+
+<h2>Total responses: <% $total %></h2>
+
+<h3>Visit frequency</h3>
+
+<ul>
+ <li>More than once a week: <% $visit_frequency{'greater-weekly'} || 0 %></li>
+ <li>Weekly: <% $visit_frequency{'weekly'} || 0 %></li>
+ <li>Monthly: <% $visit_frequency{'monthly'} || 0 %></li>
+ <li>Less than monthly: <% $visit_frequency{'less-monthly'} || 0 %></li>
+ <li>First visit: <% $visit_frequency{'first-visit'} || 0 %></li>
+</ul>
+
+<h3>Diet</h3>
+
+<ul>
+ <li>Vegan: <% $diet{'vegan'} || 0 %></li>
+ <li>Vegetarian: <% $diet{'vegetarian'} || 0 %></li>
+ <li>Semi-vegetarian: <% $diet{'semi-vegetarian'} || 0 %></li>
+ <li>Non-vegetarian: <% $diet{'non-vegetarian'} || 0 %></li>
+</ul>
+
+<h3>How the site is used</h3>
+
+<ul>
+ <li>Browse with a purpose: <% $activities{browse_with_purpose} || 0 %></li>
+ <li>Browse for fun: <% $activities{browse_for_fun} || 0 %></li>
+ <li>Search by name: <% $activities{search_by_name} || 0 %></li>
+ <li>Search by address or city: <% $activities{search_by_address} || 0 %></li>
+ <li>Check out new entries on the front page: <% $activities{front_page_new_entries} || 0 %></li>
+ <li>Check out new reviews on the front page: <% $activities{front_page_new_reviews} || 0 %></li>
+ <li>Rate and/or review entries: <% $activities{rate_review} || 0 %></li>
+ <li>Add new entries: <% $activities{add_entries} || 0 %></li>
+</ul>
+
+<h3>Specific features</h3>
+
+<ul>
+ <li>"Just restaurants" button: <% $features{just_restaurants} || 0 %></li>
+ <li>"Filter this list": <% $features{listing_filter} || 0 %></li>
+ <li>"Map this list": <% $features{map_listings} || 0 %></li>
+ <li>"Print this list": <% $features{printable_listings} || 0 %></li>
+ <li>Watch lists: <% $features{watch_lists} || 0 %></li>
+ <li>OpenID login: <% $features{openid} || 0 %></li>
+</ul>
+
+<h3>Other sites</h3>
+
+<ul>
+ <li>VegDining: <% $other{vegdining} || 0 %></li>
+ <li>HappyCow: <% $other{happycow} || 0 %></li>
+ <li>Citysearch: <% $other{happycow} || 0 %></li>
+ <li>Yelp: <% $other{yelp} || 0 %></li>
+ <li>Veg City/Region sites: <% $other{vegcity} || 0 %></li>
+</ul>
+
+% if ( $c->vg_user()->is_admin() ) {
+<p>
+ <a href="/site/admin/survey_2008_1_admin">More details (admin only)</a>
+</p>
+% }
+
+<%args>
+$total
+%visit_frequency
+%diet
+%activities
+%features
+%other
+</%args>
+
+<%method page_title>
+VegGuide.Org User Survey Summary
+</%method>

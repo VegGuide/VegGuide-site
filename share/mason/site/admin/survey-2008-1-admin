@@ -1,0 +1,33 @@
+<p>
+A summary of responses to the most first (and maybe only) VegGuide.Org
+survey in 2008.
+</p>
+
+<h2>Total responses: <% $total %></h2>
+
+<h3>(Other) Other sites</h3>
+
+<ul>
+% for my $site ( map { split /\s*,\s*/ } @other_sites ) {
+ <li><% $site | h %></li>
+% }
+</ul>
+
+<h3>Suggestions</h3>
+
+% for my $imp (@improvements) {
+<p>
+<% $imp->{email_address} ? $imp->{email_address} : 'Anonymous' | h %> says:<br />
+<% $imp->{improvements} | h %>
+</p>
+% }
+
+<%args>
+$total
+@other_sites
+@improvements
+</%args>
+
+<%method page_title>
+VegGuide.Org User Survey Details
+</%method>

@@ -12,7 +12,8 @@ have further questions about your answers.
 </p>
 
 <&| /lib/filter/fill-in-form.mas &>
-<form action="/site/survey-2008-1" method="post" id="survey-form">
+<form action="/site/survey_2008_1" method="post" id="survey-form">
+ <& /lib/form/errors.mas &>
 
  <fieldset>
   <legend>Survey</legend>
@@ -21,24 +22,24 @@ have further questions about your answers.
    <label>How often do you visit VegGuide.Org, on average?</label>
    <ul>
     <li>
-     <input class="radio" type="radio" name="frequency" value="greater-weekly" id="frequency-1" />
-     <label for="frequency-1">More than once a week</label>
+     <input class="radio" type="radio" name="visit_frequency" value="greater-weekly" id="visit_frequency-1" />
+     <label for="visit_frequency-1">More than once a week</label>
     </li>
     <li>
-     <input class="radio" type="radio" name="frequency" value="weekly" id="frequency-2" />
-     <label for="frequency-2">Weekly (once a week)</label>
+     <input class="radio" type="radio" name="visit_frequency" value="weekly" id="visit_frequency-2" />
+     <label for="visit_frequency-2">Weekly (once a week)</label>
     </li>
     <li>
-     <input class="radio" type="radio" name="frequency" value="monthly" id="frequency-3" checked="checked" />
-     <label for="frequency-3">Monthly (once a month)</label>
+     <input class="radio" type="radio" name="visit_frequency" value="monthly" id="visit_frequency-3" checked="checked" />
+     <label for="visit_frequency-3">Monthly (once a month)</label>
     </li>
     <li>
-     <input class="radio" type="radio" name="frequency" value="less-monthly" id="frequency-4" />
-     <label for="frequency-4">A few times a year</label>
+     <input class="radio" type="radio" name="visit_frequency" value="less-monthly" id="visit_frequency-4" />
+     <label for="visit_frequency-4">A few times a year</label>
     </li>
     <li>
-     <input class="radio" type="radio" name="frequency" value="first-visit" id="frequency-5" />
-     <label for="frequency-5">This is my first visit</label>
+     <input class="radio" type="radio" name="visit_frequency" value="first-visit" id="visit_frequency-5" />
+     <label for="visit_frequency-5">This is my first visit</label>
     </li>
    </ul>
   </div>
@@ -47,19 +48,19 @@ have further questions about your answers.
    <label>How veg is your diet?</label>
    <ul>
     <li>
-     <input class="radio" type="radio" name="how-veg" value="vegan" id="veg-1" />
+     <input class="radio" type="radio" name="diet" value="vegan" id="veg-1" />
      <label for="veg-1">Vegan (I <em>never</em> eat animal products)</label>
     </li>
     <li>
-     <input class="radio" type="radio" name="how-veg" value="vegetarian" id="veg-2" />
+     <input class="radio" type="radio" name="diet" value="vegetarian" id="veg-2" />
      <label for="veg-2">Strict Vegetarian (I <em>never</em> eat animal flesh, but I do eat eggs and/or dairy)</label>
     </li>
     <li>
-     <input class="radio" type="radio" name="how-veg" value="semi-vegetarian" id="veg-3" checked="checked" />
+     <input class="radio" type="radio" name="diet" value="semi-vegetarian" id="veg-3" checked="checked" />
      <label for="veg-3">Semi-Vegetarian (I regularly eat vegetarian meals, but I also eat animal flesh sometimes)</label>
     </li>
     <li>
-     <input class="radio" type="radio" name="how-veg" value="non-vegetarian" id="veg-4" />
+     <input class="radio" type="radio" name="diet" value="non-vegetarian" id="veg-4" />
      <label for="veg-4">Not Vegetarian (I don't regularly eat vegetarian meals)</label>
     </li>
    </ul>
@@ -78,11 +79,11 @@ have further questions about your answers.
     </li>
     <li>
      <input class="checkbox" type="checkbox" name="activities" value="search_by_name" id="activities-search-specific" />
-     <label for="activities-search-specific">Search for a specific place</label>
+     <label for="activities-search-specific">Search for a specific entry by name</label>
     </li>
     <li>
      <input class="checkbox" type="checkbox" name="activities" value="search_by_address" id="activities-search-address" />
-     <label for="activities-search-nearby">Search for things near an address</label>
+     <label for="activities-search-nearby">Search for things near an address or city</label>
     </li>
     <li>
      <input class="checkbox" type="checkbox" name="activities" value="front_page_new_entries" id="activities-fp-new-entries" />
@@ -112,7 +113,7 @@ have further questions about your answers.
     </li>
     <li>
      <input class="checkbox" type="checkbox" name="features" value="listing_filter" id="features-filters" />
-     <label for="features-filters">The "Filter this listing" button when viewing a list of entries</label>
+     <label for="features-filters">The "Filter this list" button when viewing a list of entries</label>
     </li>
     <li>
      <input class="checkbox" type="checkbox" name="features" value="map_listings" id="features-printable-listing" />

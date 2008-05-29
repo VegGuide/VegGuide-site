@@ -16,4 +16,5 @@ VegGuide.SurveyForm.instrumentPage = function () {
     VegGuide.Form.resizeRadioOrCheckboxList("diet");
     VegGuide.Form.resizeRadioOrCheckboxList("activities");
     VegGuide.Form.resizeRadioOrCheckboxList("survey-features");
+    VegGuide.Form.resizeRadioOrCheckboxList("other-sites");
 };

@@ -13,6 +13,7 @@ use VegGuide::NewsItem;
 use VegGuide::Search::Vendor::ByLatLong;
 use VegGuide::Search::Vendor::ByName;
 use VegGuide::SiteURI qw( entry_uri news_item_uri region_uri );
+use VegGuide::SurveyResponse2008001;
 use VegGuide::Util qw( string_is_empty );
 use VegGuide::Vendor;
 
@@ -425,5 +426,80 @@ sub survey_2008_1_GET_html
     $c->stash()->{template} = '/site/survey-2008-1';
 }
 
-1;
+{
+    my %valid_freq = map { $_ => 1 } qw( greater-weekly weekly monthly less-monthly first-visit );
+    my %valid_diet = map { $_ => 1 } qw( vegan vegetarian semi-vegetarian non-vegetarian );
 
+    sub survey_2008_1_POST
+    {
+        my $self = shift;
+        my $c    = shift;
+
+        my $params = $c->request()->params();
+
+        unless ( $valid_freq{ $params->{visit_frequency} } )
+        {
+            $c->_redirect_with_error
+                ( error  => "Invalid frequency: $params->{visit_frequency}",
+                  uri    => '/site/survey_2008_1',
+                  params => $params,
+                );
+        }
+
+        unless ( $valid_diet{ $params->{diet} } )
+        {
+            $c->_redirect_with_error
+                ( error  => "Invalid diet: $params->{diet}",
+                  uri    => '/site/survey_2008_1',
+                  params => $params,
+                );
+        }
+
+        my %survey = ( ip_address      => $c->request()->address(),
+                       visit_frequency => $params->{visit_frequency},
+                       diet            => $params->{diet},
+                     );
+
+        for my $key ( qw( email_address
+                          other_sites_other
+                          improvements
+                        )
+                    )
+        {
+            next if string_is_empty( $params->{$key} );
+
+            $survey{$key} = $params->{$key};
+        }
+
+        for my $item ( @{ $params->{activities} || [] },
+                       @{ $params->{features} || [] },
+                       @{ $params->{other_sites} || [] },
+                     )
+        {
+            $survey{$item} = 1;
+        }
+
+        VegGuide::SurveyResponse2008001->create(%survey);
+
+        $c->add_message( 'Thanks for taking this survey!' );
+
+        $c->redirect_and_detach( '/site/survey_2008_1_summary' );
+    }
+}
+
+sub survey_2008_1_summary : Local
+{
+    my $self = shift;
+    my $c    = shift;
+
+    $c->stash()->{total} = VegGuide::SurveyResponse2008001->Count();
+    $c->stash()->{visit_frequency} = VegGuide::SurveyResponse2008001->VisitFrequencies();
+    $c->stash()->{diet} = VegGuide::SurveyResponse2008001->Diets();
+    $c->stash()->{activities} = VegGuide::SurveyResponse2008001->Activities();
+    $c->stash()->{features} = VegGuide::SurveyResponse2008001->Features();
+    $c->stash()->{other} = VegGuide::SurveyResponse2008001->OtherSites();
+
+    $c->stash()->{template} = '/site/survey-2008-1-summary';
+}
+
+1;
