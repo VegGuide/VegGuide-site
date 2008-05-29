@@ -18,7 +18,7 @@
  <a class="action-button-medium" href="<% $clone->$search_uri_method() | h %>">Show everything</a>
 % } else {
 %   $clone->add( category_id => VegGuide::Category->Restaurant()->category_id() );
- <a class="action-button-medium" href="<% $clone->$search_uri_method() | h %>">Just restaurants</a>
+ <a class="action-button-medium" href="<% $clone->$search_uri_method() | h %>" title="Only show restaurants">Just restaurants</a>
 % }
 
  <div id="region-filter-lightbox" style="display: none;">
