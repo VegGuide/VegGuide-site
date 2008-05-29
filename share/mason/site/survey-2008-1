@@ -5,10 +5,10 @@ changes.
 </p>
 
 <p>
-The only identifying information this survey automatically collects is
-your IP address. This will not be shared with anyone besides the site
-administrator. You may also opt to provide your email address so we
-can contact you if we have further questions about your answers.
+The only identifying information we collect is your IP address. This
+will not be shared with anyone besides the site administrator. You may
+also opt to provide your email address so we can contact you if we
+have further questions about your answers.
 </p>
 
 <&| /lib/filter/fill-in-form.mas &>
@@ -21,7 +21,7 @@ can contact you if we have further questions about your answers.
    <label>How often do you visit VegGuide.Org, on average?</label>
    <ul>
     <li>
-     <input class="radio" type="radio" name="frequency" value="more often than weekly" id="frequency-1" />
+     <input class="radio" type="radio" name="frequency" value="greater-weekly" id="frequency-1" />
      <label for="frequency-1">More than once a week</label>
     </li>
     <li>
@@ -33,11 +33,11 @@ can contact you if we have further questions about your answers.
      <label for="frequency-3">Monthly (once a month)</label>
     </li>
     <li>
-     <input class="radio" type="radio" name="frequency" value="less than monthly" id="frequency-4" />
+     <input class="radio" type="radio" name="frequency" value="less-monthly" id="frequency-4" />
      <label for="frequency-4">A few times a year</label>
     </li>
     <li>
-     <input class="radio" type="radio" name="frequency" value="first visit" id="frequency-5" />
+     <input class="radio" type="radio" name="frequency" value="first-visit" id="frequency-5" />
      <label for="frequency-5">This is my first visit</label>
     </li>
    </ul>
@@ -55,7 +55,7 @@ can contact you if we have further questions about your answers.
      <label for="veg-2">Strict Vegetarian (I <em>never</em> eat animal flesh, but I do eat eggs and/or dairy)</label>
     </li>
     <li>
-     <input class="radio" type="radio" name="how-veg" value="semi-vegetarian" id="veg-3" />
+     <input class="radio" type="radio" name="how-veg" value="semi-vegetarian" id="veg-3" checked="checked" />
      <label for="veg-3">Semi-Vegetarian (I regularly eat vegetarian meals, but I also eat animal flesh sometimes)</label>
     </li>
     <li>
@@ -69,64 +69,117 @@ can contact you if we have further questions about your answers.
    <label>What do you do on the site? (check all that apply)</label>
    <ul>
     <li>
-     <input class="checkbox" type="checkbox" name="activities" value="browse with purpose" id="activities-browse-look" />
+     <input class="checkbox" type="checkbox" name="activities" value="browse_with_purpose" id="activities-browse-look" />
      <label for="activities-browse-look">Browse regions, looking for a specific thing (restaurant, grocer, etc)</label>
     </li>
     <li>
-     <input class="checkbox" type="checkbox" name="activities" value="browse for fun" id="activities-browse-fun" />
+     <input class="checkbox" type="checkbox" name="activities" value="browse_for_fun" id="activities-browse-fun" />
      <label for="activities-browse-fun">Browse regions, just out of curiosity</label>
     </li>
     <li>
-     <input class="checkbox" type="checkbox" name="activities" value="search for a specific entry" id="activities-search-specific" />
+     <input class="checkbox" type="checkbox" name="activities" value="search_by_name" id="activities-search-specific" />
      <label for="activities-search-specific">Search for a specific place</label>
     </li>
     <li>
-     <input class="checkbox" type="checkbox" name="activities" value="search for things nearby" id="activities-search-nearby" />
+     <input class="checkbox" type="checkbox" name="activities" value="search_by_address" id="activities-search-address" />
      <label for="activities-search-nearby">Search for things near an address</label>
     </li>
     <li>
-     <input class="checkbox" type="checkbox" name="activities" value="read front page new entries" id="activities-fp-new-entries" />
+     <input class="checkbox" type="checkbox" name="activities" value="front_page_new_entries" id="activities-fp-new-entries" />
      <label for="activities-fp-new-entries">Read new entries listed on the front page</label>
     </li>
     <li>
-     <input class="checkbox" type="checkbox" name="activities" value="read front page new reviews" id="activities-fp-new-reviews" />
+     <input class="checkbox" type="checkbox" name="activities" value="front_page_new_reviews" id="activities-fp-new-reviews" />
      <label for="activities-fp-new-reviews">Read new reviews listed on the front page</label>
     </li>
     <li>
-     <input class="checkbox" type="checkbox" name="activities" value="rate and review entries" id="activities-rate-review" />
+     <input class="checkbox" type="checkbox" name="activities" value="rate_review" id="activities-rate-review" />
      <label for="activities-rate-review">Rate and/or review entries</label>
     </li>
     <li>
-     <input class="checkbox" type="checkbox" name="activities" value="add entries" id="activities-add-entry" />
+     <input class="checkbox" type="checkbox" name="activities" value="add_entries" id="activities-add-entry" />
      <label for="activities-add-entry">Add new entries</label>
     </li>
    </ul>
   </div>
 
   <div class="form-item" id="survey-features">
-   <label>What features do you use on the site? (check all that apply)</label>
+   <label>What features have you used and found useful? (check all that apply)</label>
    <ul>
     <li>
-     <input class="checkbox" type="checkbox" name="features" value="just restaurants" id="features-just-restaurants" />
+     <input class="checkbox" type="checkbox" name="features" value="just_restaurants" id="features-just-restaurants" />
      <label for="features-just-restaurants">The "Just Restaurants" button when viewing a list of entries</label>
     </li>
     <li>
-     <input class="checkbox" type="checkbox" name="features" value="listing filter" id="features-filters" />
+     <input class="checkbox" type="checkbox" name="features" value="listing_filter" id="features-filters" />
      <label for="features-filters">The "Filter this listing" button when viewing a list of entries</label>
     </li>
     <li>
-     <input class="checkbox" type="checkbox" name="features" value="printable listings" id="features-printable-listing" />
+     <input class="checkbox" type="checkbox" name="features" value="map_listings" id="features-printable-listing" />
+     <label for="features-printable-listing">The "Map this list" button when viewing a list of entries</label>
+    </li>
+    <li>
+     <input class="checkbox" type="checkbox" name="features" value="printable_listings" id="features-printable-listing" />
      <label for="features-printable-listing">The "Print this list" link when viewing a list of entries</label>
     </li>
     <li>
-     <input class="checkbox" type="checkbox" name="features" value="watch lists" id="features-watch-lists" />
+     <input class="checkbox" type="checkbox" name="features" value="watch_lists" id="features-watch-lists" />
      <label for="features-watch-lists">Watch lists</label>
     </li>
     <li>
-     <input class="checkbox" type="checkbox" name="features" value="OpenID" id="features-openid" />
+     <input class="checkbox" type="checkbox" name="features" value="openid" id="features-openid" />
      <label for="features-openid">OpenID login</label>
     </li>
    </ul>
+  </div>
+
+  <div class="form-item" id="other-sites">
+   <label>I also use these other similar sites ...</label>
+   <ul>
+    <li>
+     <input class="checkbox" type="checkbox" name="other_sites" value="vegdining" id="other_sites-vegdining" />
+     <label for="other_sites-vegdining"><a href="http://www.vegdining.com/">VegDining.com</a></label>
+    </li>
+    <li>
+     <input class="checkbox" type="checkbox" name="other_sites" value="happycow" id="other_sites-happycow" />
+     <label for="other_sites-happycow"><a href="http://www.happycow.net/">HappyCow</a></label>
+    </li>
+    <li>
+     <input class="checkbox" type="checkbox" name="other_sites" value="citysearch" id="other_sites-citysearch" />
+     <label for="other_sites-citysearch"><a href="http://www.citysearch.com/">Citysearch</a></label>
+    </li>
+    <li>
+     <input class="checkbox" type="checkbox" name="other_sites" value="yelp" id="other_sites-yelp" />
+     <label for="other_sites-yelp"><a href="http://www.yelp.com/">Yelp</a></label>
+    </li>
+    <li>
+     <input class="checkbox" type="checkbox" name="other_sites" value="vegcity" id="other_sites-vegcity" />
+     <label for="other_sites-vegcity">Regional or city-focused sites like <a href="http://www.vegillinois.com/">VegIllinois</a> or <a href="http://www.vegdc.com/">VegDC</a></label>
+    </li>
+    <li class="text-input-container">
+     <label for="other_sites-other">as well as ...</label>
+     <input class="long text" type="text" name="other_sites_other" id="other_sites-other" />
+    </li>
+   </ul>
+  </div>
+
+  <div class="form-item">
+   <label>How would you improve VegGuide.Org?</label>
+   <textarea class="long" name="improvements"></textarea>
+   <p>
+    Feel free to suggest changes to existing features, new features,
+    things that should be removed. Whatever you can think of.
+   </p>
+  </div>
+
+  <div class="form-item">
+   <label for="email_address">Email address (optional)</label>
+   <input class="medium text" type="text" name="email_address" id="email_address"
+          value="<% ! $c->vg_user()->is_guest() ? $c->vg_user()->email_address() : '' | h %>" />
+   <p>
+    We may want to follow up on improvements you suggest, but
+    providing your email address is entirely optional.
+   </p>
   </div>
 
   <div class="form-item">
@@ -134,7 +187,6 @@ can contact you if we have further questions about your answers.
   </div>
 
  </fieldset>
-
 
 </form>
 </&>
