@@ -13,7 +13,7 @@
 
  </div>
 
- <a id="filter-toggle" class="action-button-medium" href="#" title="Filter this list">Filter this list<% $search->has_filters() ? ' further' : '' %></a>
+ <a id="filter-toggle" class="action-button-medium" href="#" title="Limit which entries are shown">Filter this list<% $search->has_filters() ? ' further' : '' %></a>
 % if ( $search->has_filters() ) {
  <a class="action-button-medium" href="<% $clone->$search_uri_method() | h %>">Show everything</a>
 % } else {
