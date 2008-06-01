@@ -30,7 +30,7 @@ have further questions about your answers.
      <label for="visit_frequency-2">Weekly (once a week)</label>
     </li>
     <li>
-     <input class="radio" type="radio" name="visit_frequency" value="monthly" id="visit_frequency-3" checked="checked" />
+     <input class="radio" type="radio" name="visit_frequency" value="monthly" id="visit_frequency-3" />
      <label for="visit_frequency-3">Monthly (once a month)</label>
     </li>
     <li>
@@ -56,7 +56,7 @@ have further questions about your answers.
      <label for="veg-2">Strict Vegetarian (I <em>never</em> eat animal flesh, but I do eat eggs and/or dairy)</label>
     </li>
     <li>
-     <input class="radio" type="radio" name="diet" value="semi-vegetarian" id="veg-3" checked="checked" />
+     <input class="radio" type="radio" name="diet" value="semi-vegetarian" id="veg-3" />
      <label for="veg-3">Semi-Vegetarian (I regularly eat vegetarian meals, but I also eat animal flesh sometimes)</label>
     </li>
     <li>
@@ -165,11 +165,11 @@ have further questions about your answers.
   </div>
 
   <div class="form-item">
-   <label>How would you improve VegGuide.Org?</label>
+   <label>Comments about VegGuide.Org?</label>
    <textarea class="long" name="improvements"></textarea>
    <p>
     Feel free to suggest changes to existing features, new features,
-    things that should be removed. Whatever you can think of.
+    things that should be removed. Whatever you can want to say.
    </p>
   </div>
 

@@ -437,6 +437,26 @@ sub survey_2008_1_GET_html
 
         my $params = $c->request()->params();
 
+        my @errors;
+        unless ( $params->{visit_frequency} )
+        {
+            push @errors, 'Please tell us how often you visit the site.';
+        }
+
+        unless ( $params->{diet} )
+        {
+            push @errors, 'Please tell us what your diet is.';
+        }
+
+        if (@errors)
+        {
+            $c->_redirect_with_error
+                ( error  => \@errors,
+                  uri    => '/site/survey_2008_1',
+                  params => $params,
+                );
+        }
+
         unless ( $valid_freq{ $params->{visit_frequency} } )
         {
             $c->_redirect_with_error
@@ -471,12 +491,14 @@ sub survey_2008_1_GET_html
             $survey{$key} = $params->{$key};
         }
 
-        for my $item ( @{ $params->{activities} || [] },
-                       @{ $params->{features} || [] },
-                       @{ $params->{other_sites} || [] },
-                     )
+        for my $key ( qw( activities features other_sites ) )
         {
-            $survey{$item} = 1;
+            for my $val ( ref $params->{$key} ? @{ $params->{$key} } : $params->{$key} )
+            {
+                next if string_is_empty($val);
+
+                $survey{$val} = 1;
+            }
         }
 
         VegGuide::SurveyResponse2008001->create(%survey);
