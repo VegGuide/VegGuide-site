@@ -1089,8 +1089,8 @@ sub add_or_update_comment
                             rating =>
                             { type => SCALAR,
                               callbacks =>
-                              { '1 thorugh 5' =>
-                                sub { $_[0] >= 1 && $_[0] <= 5 },
+                              { '1 through 5' =>
+                                sub { defined $_[0] && $_[0] >= 1 && $_[0] <= 5 },
                               },
                             },
                           },
