@@ -28,6 +28,7 @@ my %Times;
     {
         my $class = shift;
         my %p     = validate( @_, $spec );
+        warn "BUILDING CACHE FOR $class\n";
 
         my $first = delete $p{first};
 
