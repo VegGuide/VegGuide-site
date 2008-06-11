@@ -177,7 +177,7 @@ if ( $search->can('latitude') )
 % if ($map_uri) {
          <li><a href="<% $map_uri | h %>" title="Map to <& /lib/l10n/vendor-name.mas, vendor => $vendor &>"><& /lib/image/icon.mas, name => 'map' &></a></li>
 % }
-% if ($comment_count) {
+% if ($review_count) {
          <li><&| /lib/link/vendor.mas, vendor => $vendor, title_prefix => 'Reviews for' &><& /lib/image/icon.mas, name => 'reviews' &></&></li>
 % }
 % if ($is_open) {
@@ -197,11 +197,11 @@ $vendor
 
 <%init>
 my $map_uri = $vendor->map_uri();
-my $comment_count = $vendor->comment_count();
+my $review_count = $vendor->review_count();
 my $is_open = $vendor->is_open( minute_margin => 60 );
 my $smoke_free = $vendor->is_smoke_free();
 my $has_images = $vendor->image_count();
 
-return unless $map_uri || $comment_count || $is_open || $smoke_free || $has_images;
+return unless $map_uri || $review_count || $is_open || $smoke_free || $has_images;
 </%init>
 </%def>

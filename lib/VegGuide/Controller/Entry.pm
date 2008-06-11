@@ -50,10 +50,10 @@ sub entry_GET_html : Private
 
     my $vendor = $c->stash()->{vendor};
 
-    my $comment_count = $vendor->comment_count();
+    my $review_count = $vendor->review_count();
 
     my $comments;
-    $comments = $vendor->comments() if $comment_count;
+    $comments = $vendor->comments() if $review_count;
 
     my $ratings;
     $ratings = $vendor->ratings_without_reviews()

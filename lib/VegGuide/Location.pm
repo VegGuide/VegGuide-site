@@ -29,6 +29,7 @@ use VegGuide::Config;
 use VegGuide::Exceptions qw( auth_error data_validation_error );
 use VegGuide::Feed;
 use VegGuide::Locale;
+use VegGuide::PerRequestCache;
 use VegGuide::RSSWriter;
 use VegGuide::SiteURI qw( entry_uri region_uri );
 use VegGuide::Util qw( string_is_empty );
@@ -257,21 +258,36 @@ sub delete
     $self->_cached_data_has_changed();
 }
 
+sub _per_request_cache_key
+{
+    my $self = shift;
+
+    return join q{/}, (ref $self), $self->location_id(), (caller(1))[3];
+}
+
 sub descendants_vendor_count
 {
     my $self = shift;
 
+    my $cache = VegGuide::PerRequestCache->Cache();
+
+    my $key = $self->_per_request_cache_key();
+
+    return $cache->{$key}
+        if exists $cache->{$key};
+
     my $schema = VegGuide::Schema->Connect();
 
     return
-        $schema->Vendor_t->row_count
-            ( where =>
-              [ [ $schema->Vendor_t->location_id_c,
-                'IN', $self->location_id, $self->descendant_ids ],
-                [ $schema->Vendor_t->close_date_c,
-                  '=', undef ],
-              ],
-            );
+        $cache->{$key} =
+            $schema->Vendor_t->row_count
+                ( where =>
+                  [ [ $schema->Vendor_t->location_id_c,
+                      'IN', $self->location_id, $self->descendant_ids ],
+                    [ $schema->Vendor_t->close_date_c,
+                      '=', undef ],
+                  ],
+                );
 }
 
 sub comment_count
@@ -404,28 +420,45 @@ sub open_vendor_count
 {
     my $self = shift;
 
+    my $cache = VegGuide::PerRequestCache->Cache();
+
+    my $key = $self->_per_request_cache_key();
+
+    return $cache->{$key}
+        if exists $cache->{$key};
+
     my $schema = VegGuide::Schema->Connect();
 
     return
-        VegGuide::Vendor->VendorCount
-            ( where =>
-              [ [ $schema->Vendor_t->location_id_c, '=', $self->location_id ],
-                [ $schema->Vendor_t->close_date_c, '=', undef ],
-              ],
-            );
+        $cache->{$key} =
+            VegGuide::Vendor->VendorCount
+                ( where =>
+                  [ [ $schema->Vendor_t->location_id_c, '=', $self->location_id ],
+                    [ $schema->Vendor_t->close_date_c, '=', undef ],
+                  ],
+                );
 }
 
 sub vendor_count
 {
     my $self = shift;
 
+    my $cache = VegGuide::PerRequestCache->Cache();
+
+    my $key;
+    if ($cache)
+    {
+        $key = $self->_per_request_cache_key();
+    }
+
     my $schema = VegGuide::Schema->Connect();
 
     return
-        VegGuide::Vendor->VendorCount
-            ( where =>
-              [ $schema->Vendor_t->location_id_c, '=', $self->location_id ],
-            );
+        $cache->{$key} =
+            VegGuide::Vendor->VendorCount
+                ( where =>
+                  [ $schema->Vendor_t->location_id_c, '=', $self->location_id ],
+                );
 }
 
 sub vendors
@@ -463,19 +496,27 @@ sub review_count
 {
     my $self = shift;
 
+    my $cache = VegGuide::PerRequestCache->Cache();
+
+    my $key = $self->_per_request_cache_key();
+
+    return $cache->{$key}
+        if exists $cache->{$key};
+
     my $schema = VegGuide::Schema->Connect();
 
     return
-        $schema->row_count
-            ( join =>
-              [ $schema->tables( 'Vendor', 'VendorComment' ) ],
-              where =>
-              [ [ $schema->Vendor_t->location_id_c,
-                  '=', $self->location_id ],
-                [ $schema->Vendor_t->close_date_c,
-                  '=', undef ],
-              ],
-            );
+        $cache->{$key} =
+            $schema->row_count
+                ( join =>
+                  [ $schema->tables( 'Vendor', 'VendorComment' ) ],
+                  where =>
+                  [ [ $schema->Vendor_t->location_id_c,
+                      '=', $self->location_id ],
+                    [ $schema->Vendor_t->close_date_c,
+                      '=', undef ],
+                  ],
+                );
 }
 
 sub vendors_by_review_count

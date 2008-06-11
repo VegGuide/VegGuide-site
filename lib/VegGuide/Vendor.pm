@@ -909,18 +909,22 @@ sub external_uri
     return 'http://' . $self->home_page();
 }
 
-sub comment_count
+sub review_count
 {
     my $self = shift;
+
+    return $self->{__review_count__}
+        if exists $self->{__review_count__};
 
     my $schema = VegGuide::Schema->Connect();
 
     return
-        $schema->VendorComment_t->row_count
-            ( where =>
-              [ $schema->VendorComment_t->vendor_id_c,
-                '=', $self->vendor_id ],
-            );
+        $self->{__review_count__} =
+            $schema->VendorComment_t->row_count
+                ( where =>
+                  [ $schema->VendorComment_t->vendor_id_c,
+                    '=', $self->vendor_id ],
+                );
 }
 
 sub comment_by_user
@@ -1291,35 +1295,29 @@ sub WeightedRatingMinCount
     return $WeightedRatingMinCount;
 }
 
-sub review_count
-{
-    my $self = shift;
-
-    my $schema = VegGuide::Schema->Connect();
-
-    return
-	$schema->VendorComment_t->row_count
-	    ( where =>
-	      [ $schema->VendorComment_t->vendor_id_c, '=', $self->vendor_id ],
-	    );
-}
-
 sub rating_count
 {
     my $self = shift;
 
+    return $self->{__rating_count__}
+        if exists $self->{__rating_count__};
+
     my $schema = VegGuide::Schema->Connect();
 
     return
-	$schema->VendorRating_t->row_count
-	    ( where =>
-	      [ $schema->VendorRating_t->vendor_id_c, '=', $self->vendor_id ],
-	    );
+        $self->{__rating_count__} =
+            $schema->VendorRating_t->row_count
+                ( where =>
+                  [ $schema->VendorRating_t->vendor_id_c, '=', $self->vendor_id ],
+                );
 }
 
 sub ratings_without_review_count
 {
     my $self = shift;
+
+    return $self->{__ratings_without_review_count__}
+        if exists $self->{__ratings_without_review_count__};
 
     my $schema = VegGuide::Schema->Connect();
 
@@ -1330,10 +1328,11 @@ sub ratings_without_review_count
                    $self->_ratings_without_reviews_subselect() ];
 
     return
-        $schema->row_count
-            ( join   => [ $schema->tables( 'VendorRating', 'User' ) ],
-              where  => \@where,
-            );
+        $self->{__ratings_without_review_count__} =
+            $schema->row_count
+                ( join   => [ $schema->tables( 'VendorRating', 'User' ) ],
+                  where  => \@where,
+                );
 }
 
 sub ratings_without_reviews

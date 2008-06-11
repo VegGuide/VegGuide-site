@@ -38,6 +38,7 @@ sub begin : Private
 
     Alzabo::Runtime::UniqueRowCache->clear();
     VegGuide::AlzaboWrapper->ClearCache();
+    VegGuide::PerRequestCache->ClearCache();
 
     return unless $c->request()->looks_like_browser();
 

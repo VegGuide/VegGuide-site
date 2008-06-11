@@ -4,22 +4,22 @@
     <& /lib/region-list.mas, location => $location, locations => \@children &>
 % }
 
-% if ( ( $c->vg_user()->is_admin() || $location->can_have_child_regions() ) && ! $location->active_vendor_count() ) {
+% if ( ( $c->vg_user()->is_admin() || $location->can_have_child_regions() ) && ! $active_vendor_count ) {
      <div class="content-buttons">
       <a class="content-button" href="<% region_uri( location => $location, path => 'new_region_form' ) | h %>"
          >Add a new region</a><& /lib/link/help.mas, name => 'add-region' &>
      </div>
 % }
 
-% if ( @children && $location->active_vendor_count() ) {
+% if ( @children && $active_vendor_count ) {
     <hr />
 % }
 
-% if ( $location->active_vendor_count() ) {
+% if ( $active_vendor_count ) {
     <& /lib/filter-div.mas, location => $location, search => $search &>
 % }
 
-% if ( $location->active_vendor_count() ) {
+% if ( $active_vendor_count ) {
     <& /lib/entries-table.mas, search => $search, pager => $pager &>
 % } elsif ( $c->vg_user()->is_admin() || $location->can_have_vendors() ) {
     <div class="content-buttons">
@@ -36,7 +36,7 @@
     </div>
 % }
 
-% if ( ( $c->vg_user()->is_admin() || $location->can_have_child_regions() ) && $location->active_vendor_count() ) {
+% if ( ( $c->vg_user()->is_admin() || $location->can_have_child_regions() ) && $active_vendor_count ) {
      <div class="content-buttons">
       <a class="content-button" href="<% region_uri( location => $location, path => 'new_region_form' ) | h %>"
          >Add a new region</a><& /lib/link/help.mas, name => 'add-region' &>
@@ -55,6 +55,8 @@ $search
 </%args>
 
 <%init>
+my $active_vendor_count = $location->active_vendor_count();
+
 my @children = $location->children();
 
 my $comment_count = $location->comment_count();
