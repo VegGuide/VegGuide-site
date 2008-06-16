@@ -985,7 +985,7 @@ sub add_or_update_comment
     if ( $p{user}->user_id != $p{calling_user}->user_id )
     {
         auth_error "Cannot edit other user's comments"
-            unless $p{calling_user}->is_location_owner( $self->location );
+            unless $p{calling_user}->is_admin();
     }
 
     my $schema = VegGuide::Schema->Connect();

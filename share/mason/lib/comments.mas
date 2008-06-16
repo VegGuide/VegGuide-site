@@ -21,7 +21,7 @@
 
       <% VegGuide::Util::text_to_html( text => $comment->comment(), first_class => 'first', class => 'comment' ) %>
 
-%   if ( $c->vg_user()->can_edit_comment($comment) ) {
+%   if ( $c->vg_user()->$edit_meth($comment) ) {
       <div class="review-buttons">
        <a href="<% $comment->can('vendor')
                    ? entry_uri( vendor => $comment->vendor(), path => 'review_form/' . $user->user_id() )
@@ -46,6 +46,10 @@ $comments
 $vendor => undef
 $show_location => 0
 </%args>
+
+<%init>
+my $edit_meth = $vendor ? 'can_edit_review' : 'can_edit_comment';
+</%init>
 
 <%def .rating>
        <div class="rating">

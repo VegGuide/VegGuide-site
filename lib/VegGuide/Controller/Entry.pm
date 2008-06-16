@@ -249,7 +249,7 @@ sub review_form : Chained('_set_vendor') : PathPart('review_form') : Args(1)
         ( error => 'You do not have permission to edit this review.',
           uri   => '/',
         )
-            unless $c->vg_user()->can_edit_comment($comment);
+            unless $c->vg_user()->can_edit_review($comment);
 
     $c->stash()->{comment} = $comment;
 

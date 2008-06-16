@@ -323,6 +323,18 @@ sub can_edit_comment
           $self->is_location_owner( $comment->location ) );
 }
 
+sub can_edit_review
+{
+    my $self = shift;
+    my ($comment) = validate_pos( @_,
+                                  { isa => 'VegGuide::Comment' },
+                                );
+
+    return 1 if $self->is_admin;
+
+    return $comment->user_id == $self->user_id;
+}
+
 sub can_delete_comment
 {
     my $self = shift;
