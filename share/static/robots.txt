@@ -1,6 +1,6 @@
-User-Agent: *
+User-agent: *
 Disallow: /user/login_form
 Crawl-Delay: 45
 
-User-Agent: twiceler
+User-agent: twiceler
 Disallow: *
