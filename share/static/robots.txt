@@ -3,4 +3,4 @@ Disallow: /user/login_form
 Crawl-Delay: 45
 
 User-agent: twiceler
-Disallow: *
+Disallow: /
