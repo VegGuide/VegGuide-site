@@ -121,7 +121,8 @@
 
       <div class="form-item">
        <label for="neighborhood">Neighborhood:</label>
-%   if ( my @hoods = $location->current_neighborhoods() ) {
+%   my @hoods;
+%   if ( @hoods = $location->current_neighborhoods() ) {
        <select id="neighborhood" name="neighborhood">
         <option value="">Other</option>
 %      for my $hood (@hoods) {
@@ -129,7 +130,9 @@
 %      }
        </select>
 %   }
+%   if (@hoods) {
        <p>Not listed above? Enter a new neighborhood here</p>
+%   }
        <input id="new_neighborhood" type="text" class="text short" name="new_neighborhood" value="" />
       </div>
 
@@ -176,13 +179,17 @@
 
       <div class="form-item">
        <label for="localized_neighborhood">Neighborhood:</label>
-%     if ( my @hoods = $location->current_localized_neighborhoods() ) {
+%     my @localized_hoods;
+%     if ( @localized_hoods = $location->current_localized_neighborhoods() ) {
        <select id="localized_neighborhood" name="localized_neighborhood">
         <option value="">Other</option>
-%        for my $hood (@hoods) {
-        <option value="<% $hood | h %>"><% $hood | h %></option>
+%        for my $localized_hood (@localized_hoods) {
+        <option value="<% $localized_hood | h %>"><% $localized_hood | h %></option>
 %        }
        </select>
+%     }
+%     if (@localized_hoods) {
+       <p>Not listed above? Enter a new neighborhood here</p>
 %     }
        <input id="localized_new_neighborhood" type="text" class="text short" name="localized_new_neighborhood" value="" />
       </div>
