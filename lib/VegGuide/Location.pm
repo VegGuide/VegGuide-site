@@ -827,6 +827,7 @@ sub current_cities
     my $schema = VegGuide::Schema->Connect();
 
     return
+        map { Encode::decode( 'utf8', $_ ) }
         $schema->Vendor_t->function
             ( select =>
               $schema->sqlmaker->DISTINCT
@@ -847,6 +848,7 @@ sub current_neighborhoods
     my $schema = VegGuide::Schema->Connect();
 
     return
+        map { Encode::decode( 'utf8', $_ ) }
         $schema->Vendor_t->function
             ( select =>
               $schema->sqlmaker->DISTINCT
@@ -867,6 +869,7 @@ sub current_localized_neighborhoods
     my $schema = VegGuide::Schema->Connect();
 
     return
+        map { Encode::decode( 'utf8', $_ ) }
         $schema->Vendor_t->function
             ( select =>
               $schema->sqlmaker->DISTINCT
@@ -1632,6 +1635,7 @@ sub cities_matching_text
     my $schema = VegGuide::Schema->Connect();
 
     my @cities =
+        map { Encode::decode( 'utf8', $_ ) }
         $schema->Vendor_t()->function
             ( select => $schema->sqlmaker()->DISTINCT( $schema->Vendor_t->city_c() ),
               where  =>
@@ -1641,6 +1645,7 @@ sub cities_matching_text
             );
 
     push @cities,
+        map { Encode::decode( 'utf8', $_ ) }
         $schema->Vendor_t()->function
             ( select => $schema->sqlmaker()->DISTINCT( $schema->Vendor_t->localized_city_c() ),
               where  =>
