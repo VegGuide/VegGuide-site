@@ -646,14 +646,14 @@ sub category_ids
     my $schema = VegGuide::Schema->Connect();
 
     $self->{category_ids} ||=
-            [ $schema->function
+        [ $schema->function
               ( select => $schema->VendorCategory_t()->category_id_c(),
                     join   => [ $schema->tables( 'VendorCategory', 'Category' ) ],
                     where  =>
                     [ $schema->VendorCategory_t()->vendor_id_c(), '=', $self->vendor_id() ],
                     order_by => [ $schema->Category_t()->display_order_c(), 'ASC' ],
                   )
-            ];
+        ];
 
     return @{ $self->{category_ids} };
 }
