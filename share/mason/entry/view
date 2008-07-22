@@ -160,8 +160,5 @@ my @attributes = $vendor->attributes();
 
 <%attr>
 show_all_info => 1
-</%attr>
-
-<%attr>
 load_google_maps => 1
 </%attr>
