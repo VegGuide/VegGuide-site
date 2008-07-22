@@ -96,6 +96,9 @@
     RewriteRule   \.(asp|cfn|php|dll)$                        -                                       [F,L]
     RewriteRule   (ikonboard\.cgi|YaBB\.pl)$                  -                                       [F,L]
 
+    # some common robot-requested (or something) uris
+    RewriteRule   ^/entry/?$                                  /                                       [R,L]
+
     RewriteRule   /rss/static/all\w+\.rss                     /site.rss                               [R=permanent,L]
 
     RewriteRule   /maintenance.html                           /                                       [R,L]
