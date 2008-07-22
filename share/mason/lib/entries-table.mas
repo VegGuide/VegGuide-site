@@ -54,11 +54,11 @@
 
 <%args>
 $search
+$pager
 </%args>
 
 <%init>
 my $vendors = $search->vendors();
-my $pager = $search->pager();
 
 my $pagination =
     $m->scomp( '/lib/pagination.mas',
