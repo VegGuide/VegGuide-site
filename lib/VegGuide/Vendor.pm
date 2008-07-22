@@ -3342,6 +3342,30 @@ sub RandomCompleteVendor
     return $class->new( object => $row ) if $row;
 }
 
+sub ActiveVendorCount
+{
+    my $class = shift;
+
+    my $schema = VegGuide::Schema->Connect();
+
+    my @where = VegGuide::Vendor->CloseCutoffWhereClause();
+
+    return VegGuide::Vendor->VendorCount( where => \@where );
+}
+
+sub ActiveVendors
+{
+    my $class = shift;
+
+    my $schema = VegGuide::Schema->Connect();
+
+    my @where = VegGuide::Vendor->CloseCutoffWhereClause();
+
+    return VegGuide::Vendor->VendorsWhere( @_,
+                                           where => \@where,
+                                         );
+}
+
 sub UnGeocoded
 {
     my $class = shift;

@@ -1,0 +1,105 @@
+ <div id="main">
+
+    <table id="entries-table" class="standard-table <% $search->can('latitude') ? 'with-distance' : '' %>">
+
+     <thead>
+      <tr>
+       <td colspan="4">
+        <% $pagination %>
+       </td>
+      </tr>
+
+      <tr class="table-heading">
+       <th class="name"><&| /lib/sort-link.mas, search => $search &>Name</&></th>
+       <th class="summary">Summary</th>
+       <th class="region">Region</th>
+       <th class="created"><&| /lib/sort-link.mas, search => $search &>Created On</&></th>
+      </tr>
+     </thead>
+
+% if ( $pager->total_entries() ) {
+     <tfoot>
+      <tr>
+       <td colspan="4">
+        <% $pagination %>
+       </td>
+      </tr>
+     </tfoot>
+% }
+
+     <tbody>
+%   while ( my $vendor = $vendors->next ) {
+<& .one-vendor, search => $search, vendor => $vendor, count => $vendors->count() &>
+%   }
+
+     </tbody>
+
+    </table>
+
+ </div>
+
+<%args>
+$search
+$pager
+</%args>
+
+<%init>
+my $vendors = $search->vendors();
+
+my $pagination =
+    $m->scomp( '/lib/pagination.mas',
+               pager  => $pager,
+               search => $search,
+               things => 'entries',
+             );
+</%init>
+
+<%def .one-vendor>
+      <tr class="<% $count % 2 ? 'odd' : 'even' %>">
+       <td class="name">
+        <& /lib/link/vendor.mas, vendor => $vendor &>
+% if (@address) {
+        <address>
+%   for my $line (@address) {
+         <% $line | h %><% $line ne $address[-1] ? '<br/>' : '' %>
+%   }
+        </address>
+% }
+% if ( $vendor->is_closed ) {
+        <div class="closed">Closed as of <& /lib/format/date.mas, date => $vendor->close_date_object &></div>
+% }
+       </td>
+
+       <td class="summary">
+        <span class="summary-text"><% $vendor->short_description | h %></span>
+% my $cat = join ', ', map { $_->name() } $vendor->categories();
+% if ( $cat ne 'Restaurant' ) {
+        <br /><span class="category"><% $cat %></span>
+% }
+       </td>
+
+       <td>
+         <& /lib/link/location-and-parent.mas, location => $vendor->location() &>
+       </td>
+
+       <td>
+         <& /lib/format/date.mas, date => $vendor->creation_datetime_object(), compact => 1 &>
+       </td>
+       
+      </tr>
+
+<%args>
+$search
+$vendor
+$count
+</%args>
+
+<%init>
+my @address;
+@address = $vendor->address_pieces();
+</%init>
+</%def>
+
+<%method page_title>
+<% $m->caller_args(-1)->{search}->title() | h %>
+</%method>

@@ -438,7 +438,7 @@ sub _days
 
 {
     my $spec = { order_by   => SCALAR_TYPE( default => undef ),
-                 sort_order => SCALAR_TYPE( default => 'ASC' ),
+                 sort_order => SCALAR_TYPE( default => undef ),
                  page       => SCALAR_TYPE( default => 1 ),
                  limit      => SCALAR_TYPE( default => 20 ),
                };
@@ -448,6 +448,7 @@ sub _days
         my %p    = validate( @_, $spec );
 
         $p{order_by} ||= $self->_default_order_by();
+        $p{sort_order} ||= $self->_default_sort_order( $p{order_by} );
 
         $self->{cursor_params} = \%p;
     }
@@ -542,6 +543,7 @@ sub has_mappable_vendors
                          how_veg  => 'DESC',
                          price    => 'ASC',
                          distance => 'ASC',
+                         created  => 'DESC',
                        );
     sub DefaultSortOrder
     {

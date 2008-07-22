@@ -34,11 +34,19 @@ sub cursor_params
 }
 
 sub order_by   { $_[0]->{cursor_params}{order_by} || $_[0]->_default_order_by() }
-sub sort_order { $_[0]->{cursor_params}{sort_order} || 'ASC' }
+sub sort_order { $_[0]->{cursor_params}{sort_order} || $_[0]->_default_sort_order( $_[0]->order_by() ) }
 sub page       { $_[0]->{cursor_params}{page} }
 sub limit      { $_[0]->{cursor_params}{limit} }
 
 sub _default_order_by { 'name' }
+
+sub _default_sort_order
+{
+    my $self     = shift;
+    my $order_by = shift;
+
+    return $order_by eq 'created' ? 'DESC' : 'ASC';
+}
 
 sub opposite_sort_order { $_[0]->sort_order() eq 'ASC' ? 'DESC' : 'ASC' }
 
@@ -62,6 +70,8 @@ sub ColumnNameToOrderBy
 {
     my $self = shift;
     my $name = shift;
+
+    return 'created' if $name eq 'Created On';
 
     $name =~ s/^\s+|\s+$//g;
     $name =~ s/ /_/g;

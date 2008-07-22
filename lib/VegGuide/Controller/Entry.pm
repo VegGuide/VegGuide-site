@@ -10,10 +10,33 @@ use Class::Trait 'VegGuide::Role::Controller::Search';
 
 use Lingua::EN::Inflect qw( PL );
 use URI::Escape qw( uri_unescape );
+use VegGuide::Search::Vendor::All;
 use VegGuide::Search::Vendor::ByLatLong;
+use VegGuide::Search::Vendor::ByName;
 use VegGuide::SiteURI qw( entry_uri entry_image_uri region_uri );
 use VegGuide::Vendor;
 
+
+sub list : Path('')
+{
+    my $self = shift;
+    my $c    = shift;
+
+    my $search = VegGuide::Search::Vendor::All->new();
+
+    my $params = $c->request()->parameters();
+    my %p =
+      map { $_ => $params->{$_} }
+      grep { defined $params->{$_} }
+      qw( order_by sort_order page limit );
+
+    $search->set_cursor_params(%p);
+
+    $c->stash()->{search} = $search;
+    $c->stash()->{pager } = $search->pager();
+
+    $c->stash()->{template} = '/site/entry-list';
+}
 
 sub _set_vendor : Chained('/') : PathPart('entry') : CaptureArgs(1)
 {
