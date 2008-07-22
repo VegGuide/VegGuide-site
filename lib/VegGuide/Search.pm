@@ -73,6 +73,8 @@ sub ColumnNameToOrderBy
 
     return 'created' if $name eq 'Created On';
 
+    return 'modified' if $name eq 'Last Updated On';
+
     $name =~ s/^\s+|\s+$//g;
     $name =~ s/ /_/g;
 

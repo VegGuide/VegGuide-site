@@ -21,6 +21,7 @@
 % }
 % if ( $reviews->count() ) {
      </ul>
+     <p><a href="/review/" title="All reviews, most recent first">more</a></p>
 % }
 
     </div>

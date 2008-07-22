@@ -21,6 +21,7 @@
 % }
 % if ( $vendors->count() ) {
      </ul>
+     <p><a href="/entry/" title="All entries, most recent first">more</a></p>
 % }
 
     </div>

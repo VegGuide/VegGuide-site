@@ -1,0 +1,101 @@
+ <div id="main">
+
+    <table id="entries-table" class="standard-table <% $search->can('latitude') ? 'with-distance' : '' %>">
+
+     <thead>
+      <tr>
+       <td colspan="5">
+        <% $pagination %>
+       </td>
+      </tr>
+
+      <tr class="table-heading">
+       <th class="user">Reviewer</th>
+       <th class="rating">Rating</th>
+       <th class="summary">Full Review</th>
+       <th class="region">Region</th>
+       <th class="updated"><&| /lib/sort-link.mas, search => $search &>Last Updated On</&></th>
+      </tr>
+     </thead>
+
+% if ( $pager->total_entries() ) {
+     <tfoot>
+      <tr>
+       <td colspan="5">
+        <% $pagination %>
+       </td>
+      </tr>
+     </tfoot>
+% }
+
+     <tbody>
+%   while ( my ( $comment, $vendor, $user ) = $reviews->next ) {
+<& .one-review, search => $search, comment => $comment, vendor => $vendor, user => $user, count => $reviews->count() &>
+%   }
+
+     </tbody>
+
+    </table>
+
+ </div>
+
+<%args>
+$search
+$pager
+</%args>
+
+<%init>
+my $reviews = $search->reviews();
+
+my $pagination =
+    $m->scomp( '/lib/pagination.mas',
+               pager  => $pager,
+               search => $search,
+               things => 'entries',
+             );
+</%init>
+
+<%def .one-review>
+      <tr class="<% $count % 2 ? 'odd' : 'even' %>">
+       <td class="user">
+        <& /lib/link/user.mas, user => $user &>
+       </td>
+
+       <td class="rating">
+% if ( defined $rating ) {
+        <& /lib/stars-for-rating.mas, rating => $rating, color => 'green' &>
+% } else {
+        none
+% }
+       </td>
+
+       <td>
+         <& /lib/link/vendor-review.mas, vendor => $vendor, user => $user &>
+       </td>
+
+       <td>
+         <& /lib/link/location-and-parent.mas, location => $vendor->location() &>
+       </td>
+
+       <td>
+         <& /lib/format/date.mas, date => $comment->last_modified_datetime_object(), compact => 1 &>
+       </td>
+       
+      </tr>
+
+<%args>
+$search
+$comment
+$vendor
+$user
+$count
+</%args>
+
+<%init>
+my $rating = $vendor->rating_from_user($user);
+</%init>
+</%def>
+
+<%method page_title>
+<% $m->caller_args(-1)->{search}->title() | h %>
+</%method>

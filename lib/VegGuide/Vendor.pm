@@ -26,6 +26,7 @@ use VegGuide::Attribute;
 use VegGuide::Category;
 use VegGuide::Config;
 use VegGuide::Cuisine;
+use VegGuide::VendorComment;
 use VegGuide::VendorSource;
 use VegGuide::Geocoder;
 use VegGuide::GreatCircle qw( distance_between_points earth_radius );
@@ -3428,87 +3429,6 @@ sub next
           VegGuide::Vendor->new
               ( vendor_id => $vendor_id )
         );
-}
-
-
-package VegGuide::VendorComment;
-
-use VegGuide::Schema;
-use VegGuide::AlzaboWrapper
-    ( table => VegGuide::Schema->Schema->VendorComment_t );
-
-use base 'VegGuide::Comment';
-
-use Class::Trait qw( VegGuide::Role::FeedEntry );
-
-use VegGuide::SiteURI qw( entry_review_uri );
-
-use VegGuide::Validate
-    qw( validate );
-
-
-sub vendor
-{
-    my $self = shift;
-
-    return $self->{vendor} ||= VegGuide::Vendor->new( object => $self->row_object()->vendor() );
-}
-
-sub location { $_[0]->vendor->location }
-
-sub rating
-{
-    my $self = shift;
-
-    return if $self->row_object()->is_potential();
-
-    return $self->vendor()->rating_from_user( $self->user() );
-}
-
-# provided for FeedEntry
-sub creation_datetime_object
-{
-    return $_[0]->last_modified_datetime_object();
-}
-
-sub feed_title
-{
-    my $self = shift;
-
-    return 'Review of ' . $self->vendor()->name() . ' by ' . $self->user()->real_name();
-}
-
-sub feed_uri
-{
-    my $self = shift;
-
-    return entry_review_uri( vendor    => $self->vendor(),
-                             user      => $self->user(),
-                             with_host => 1,
-                           );
-}
-
-sub feed_template_params
-{
-    my $self = shift;
-
-    return ( '/vendor-comment-content.mas', comment => $self );
-}
-
-sub delete
-{
-    my $self = shift;
-    my %p = validate( @_, { calling_user => { isa => 'VegGuide::User' },
-                          },
-                    );
-
-    $self->user->insert_activity_log
-        ( type      => 'delete review',
-          vendor_id => $self->vendor_id,
-          comment   => 'Deleted by ' . $p{calling_user}->real_name,
-        );
-
-    $self->SUPER::delete;
 }
 
 

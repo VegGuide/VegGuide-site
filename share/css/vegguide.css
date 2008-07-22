@@ -633,6 +633,10 @@ ul.right-list {
   margin: 0.2em 0 0.1em 0.2em;
 }
 
+.front-page-stats p {
+  margin: 0.5em 0 0 6px;
+}
+
 #recent-entries ul li, #recent-reviews ul li {
   margin-bottom: 0.1em;
 
