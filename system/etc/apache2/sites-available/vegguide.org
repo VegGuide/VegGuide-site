@@ -43,7 +43,11 @@
 
     # This dates back to much older versions of the site, when most pages
     # had a .mhtml extension.
-    RewriteRule   (.+)\.mhtml$   $1.html  [R=permanent,L]
+    RewriteRule   (.+)\.mhtml$            $1.html                                                     [R=permanent,L]
+
+    RewriteCond  %{HTTP_HOST}             ^vegguide\.org
+    RewriteRule  (.*)                     http://www.vegguide.org$1                                   [R,L]
+
 
     # Some brain-damaged crawler is requesting URIs like this
     RewriteRule   ^(.+\.rss)%3[Ff]                            /                                       [R=permanent,L]
