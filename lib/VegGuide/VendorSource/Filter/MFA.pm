@@ -151,8 +151,18 @@ sub _state_for_id
 
     my $states = Geography::States->new('USA');
 
-    my %RegionMap = ( ( map { $_ => 'Champaign-Urbana' } qw( Champaign Urbana ) ),
+    my %RegionMap = ( # IL
+                      ( map { $_ => 'Champaign-Urbana' } qw( Champaign Urbana ) ),
                       ( map { $_ => 'Bloomington-Normal' } qw( Bloomington Normal ) ),
+                      # NJ
+                      ( map { $_ => 'Cherry Hill Area' }
+                        'Cherry Hill', qw( Barrington Collingswood Marlton Merchantville Voorhees ) ),
+                      ( map { $_ => 'Mount Laurel' } 'Mt Laurel', 'Mt. Laurel' ),
+                      ( map { $_ => 'Mount Holly' } 'Mt Holly', 'Mt. Holly' ),
+                      ( 'Hohokus' => 'Ho-Ho-Kus' ),
+                      ( 'Ramsey' => 'Ramsey Area' ),
+                      ( map { $_ => 'Parsippany Area' } qw( Parsippany Wayne ) ),
+                      ( map { $_ => 'Hackensack Area' } qw( Hackensack Rutherford Teaneck ) ),
                     );
 
     sub _location_for_item
@@ -208,8 +218,9 @@ sub _state_for_id
 }
 
 {
-    my %Categories = ( Restaurant => VegGuide::Category->Restaurant()->category_id(),
-                       Grocery    => VegGuide::Category->GroceryBakeryDeli()->category_id(),
+    my %Categories = ( Restaurant   => VegGuide::Category->Restaurant()->category_id(),
+                       Grocery      => VegGuide::Category->GroceryBakeryDeli()->category_id(),
+                       Organization => VegGuide::Category->Organization()->category_id(),
                      );
 
     sub _category_id_for
