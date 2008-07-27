@@ -15,7 +15,7 @@ sub prepare_action
         my $skin_host = $self->skin()->hostname();
         my $uri_host  = $self->request()->uri()->host();
 
-        if ( $uri_host && $uri_host !~ /^\Q$skin_host\./ )
+        if ( $uri_host && $uri_host !~ /^\Q$skin_host./ )
         {
             $self->response()->redirect( 'http://' . $skin->hostname() . '.vegguide.org' );
         }
