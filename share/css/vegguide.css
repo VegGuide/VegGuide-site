@@ -170,6 +170,10 @@ div.force-clear {
   font-family: sans-serif;
 }
 
+#main.main-front-page #global-nav {
+  float: right;
+}
+
 #global-nav {
   text-align: right;
 }
