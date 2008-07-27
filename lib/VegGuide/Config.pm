@@ -403,12 +403,11 @@ sub reCAPTCHAPublicKey
         my $class    = shift;
         my $type     = shift;
         my $hostname = shift || VegGuide::Config->Hostname();
-        warn "HN: $hostname\n";
+
         my ($host) = $hostname =~ /^([^.]+)(?:\.|$)/;
         $host = 'prod'
             if ! $GoogleKeys{$host} && VegGuide::Config->IsProduction();
-        warn "HO: $host\n";
-        warn "KEY: $GoogleKeys{$host}{$type}\n";
+
         return $GoogleKeys{$host}{$type} || 'none';
     }
 }
