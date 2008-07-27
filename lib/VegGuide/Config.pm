@@ -408,7 +408,7 @@ sub reCAPTCHAPublicKey
         $host = 'prod'
             if ! $GoogleKeys{$host} && VegGuide::Config->IsProduction();
         warn "HO: $host\n";
-
+        warn "KEY: $GoogleKeys{$host}{$type}\n";
         return $GoogleKeys{$host}{$type} || 'none';
     }
 }
