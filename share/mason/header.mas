@@ -1,4 +1,4 @@
- <div id="header" class="<% $class %>">
+ <div id="header">
 
   <div id="logo">
    <a href="/" title="Home"><img class="png-filter" src="<% $c->skin()->image_uri() | h %>"
@@ -6,28 +6,17 @@
                                  alt="VegGuide.Org Logo" /></a>
   </div>
 
-  <div id="tagline-and-global-nav">
-
-   <span id="tagline">
-% if ($is_front_page) {
-    <% $tagline | h %>
-% } else {
-    &nbsp;
-% }
-   </span>
-
-   <div id="global-nav">
-    <ul>
-     <li class="first"><a href="/" title="Home">Home</a></li>
+  <div id="global-nav">
+   <ul>
+    <li class="first"><a href="/" title="Home">Home</a></li>
 % if ( $c->vg_user()->is_guest() ) {
-     <li><a href="/user/login_form?return_to=<% $c->request()->uri() | uh %>" title="Log in">Log in</a></li>
+    <li><a href="/user/login_form?return_to=<% $c->request()->uri() | uh %>" title="Log in">Log in</a></li>
 % } else {
-     <li><a href="<% user_uri( user => $c->vg_user() ) | h %>" title="My account">My account</a></li>
-     <li><a id="logout" href="/user/authentication?x-tunneled-method=DELETE;return_to=<% $c->request()->uri() | uh %>" title="Log out">Log out</a></li>
+    <li><a href="<% user_uri( user => $c->vg_user() ) | h %>" title="My account">My account</a></li>
+    <li><a id="logout" href="/user/authentication?x-tunneled-method=DELETE;return_to=<% $c->request()->uri() | uh %>" title="Log out">Log out</a></li>
 % }
-     <li><a href="/site/help" title="Help">Help</a></li>
-    </ul>
-   </div>
+    <li><a href="/site/help" title="Help">Help</a></li>
+   </ul>
   </div>
 
   <& /sitewide-search.mas, %ARGS &>
@@ -35,19 +24,3 @@
  </div>
 
  <div class="force-clear"></div>
-
-<%once>
-# This probably belongs in VegGuide::Skin
-
-my $DefaultTagline = 'The ultimate restaurant and shopping guide for vegetarians and vegans';
-</%once>
-
-<%args>
-$is_front_page => 0
-</%args>
-
-<%init>
-my $class = $is_front_page ? 'front-page' : '';
-
-my $tagline = $c->skin()->tagline() || $DefaultTagline;
-</%init>

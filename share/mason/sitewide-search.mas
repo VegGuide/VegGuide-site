@@ -2,53 +2,12 @@
    <div id="text-and-form">
     <form id="sitewide-search" action="/site/search">
      <input id="sitewide-search-input" class="text" type="text" name="search_text" value="<% $search_text | h %>" />
-     <button class="action-button" type="submit">Search</button>
+     <button class="action-button" type="submit">Go</button>
     </form>
    </div>
   </div>
 
-  <div id="sitewide-search-help" style="display: none">
-   <a href="#" id="sitewide-search-help-close" title="Hide this help box"><img src="/images/close-button.png" height="15" width="15" /></a>
-
-   Simple search terms:
-
-   <ul>
-    <li>
-     <strong>Minneapolis</strong> or <strong>55408</strong>
-    </li>
-    <li>
-     <strong>Evergreen Restaurant</strong>
-    </li>
-   </ul>
-
-   Search for entries by street address or intersection:
-
-   <ul>
-    <li>
-     <strong>2424 Nicollet Ave, Minneapolis, MN</strong>
-    </li>
-    <li>
-     <strong>24th St and Nicollet Ave, Minneapolis, MN</strong>
-    </li>
-   </ul>
-
-   And you can search outside the US as well:
-
-   <ul>
-    <li>
-     <strong>Paris, France</strong>
-    </li>
-    <li>
-     <strong>24 rue La Vieuville, Paris, France</strong>
-    </li>
-    </ul>
-   
-   You may need to add a
-   <&| /lib/link/help.mas, name => 'address-search-countries' &>country name</&>
-   to the address to search outside the US. Addresses in Japan and
-   Taiwan must be given in the native language, not English.
-
-  </div>
+  <& sitewide-search-help.mas &>
 
 <%args>
 $search_text => ''

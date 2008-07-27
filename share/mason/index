@@ -13,6 +13,17 @@
 
    <div id="body" class="large-boxes">
 
+    <div id="global-nav">
+     <ul>
+% if ( $c->vg_user()->is_guest() ) {
+      <li class="first"><a href="/user/login_form?return_to=<% $c->request()->uri() | uh %>" title="Log in">Log in</a></li>
+% } else {
+      <li class="first"><a href="<% user_uri( user => $c->vg_user() ) | h %>" title="My account">My account</a></li>
+      <li><a id="logout" href="/user/authentication?x-tunneled-method=DELETE;return_to=<% $c->request()->uri() | uh %>" title="Log out">Log out</a></li>
+% }
+     </ul>
+    </div>
+
     <h1 id="page-title">Welcome to VegGuide.Org!</h1>
 
     <p>
@@ -45,10 +56,6 @@
     </div>
 % }
 
-% if ($featured_vendor) {
-    <& /featured-entry.mas, vendor => $featured_vendor &>
-% }
-
    </div>
 
   </div>
@@ -56,7 +63,6 @@
  </div>
 
 <%args>
-$featured_vendor
 $news_item
 </%args>
 
