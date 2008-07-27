@@ -10,7 +10,7 @@
  <link rel="search" type="application/opensearchdescription+xml"
        href="/static/opensearch_desc.xml" title="VegGuide Search" />
 
- <link rel="shortcut icon" href="/images/favicon.ico" mce_href="/images/favicon.ico" />
+%# <link rel="shortcut icon" href="/favicon.ico" />
  <link rel="stylesheet" type="text/css" href="<% static_uri( path => '/css/vegguide.css' ) %>" />
 <!--[if IE]>
  <link rel="stylesheet" type="text/css" href="<% static_uri( path => '/css/ie.css' ) %>" />
@@ -26,13 +26,9 @@
 
 <body>
 
-% if ($is_front_page) {
-  <& front-page-header.mas, %ARGS &>
-% } else {
   <& .breadcrumbs &>
 
   <& header.mas, %ARGS &>
-% }
 
 % if ( $m->request_comp()->attr('requires_js') ) {
   <div id="requires-js">
