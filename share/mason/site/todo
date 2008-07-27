@@ -6,6 +6,17 @@ importance and feasibility.
 <ul class="todo">
 
  <li>
+  Do some sort of localized front page based on the client's IP
+  address (using GeoIP). This can show nearby entries. For logged-in
+  users, use their home region?
+ </li>
+
+ <li>
+  Redo listing filter so that some subset of common options is
+  selectable in right-side column.
+ </li>
+
+ <li>
   Redo the local navigation "tabs" so they look like real tabs.
  </li>
 
