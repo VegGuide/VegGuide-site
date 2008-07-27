@@ -19,42 +19,10 @@ sub index : Path('/') : Args(0)
     my $c    = shift;
 
     $c->stash()->{is_front_page} = 1;
-    $c->stash()->{featured_vendor} = $self->_featured_vendor($c);
 
     $c->stash()->{news_item} = VegGuide::NewsItem->MostRecent();
 
     $c->stash()->{template} = '/index';
-}
-
-{
-    my $CacheKey = 'featured-vendor';
-    sub _featured_vendor
-    {
-        my $self = shift;
-        my $c    = shift;
-
-        my $cached = $c->cache()->get($CacheKey);
-
-        if ( $cached && $cached->{time} >= ( time() - 86400 ) )
-        {
-            my $vendor = VegGuide::Vendor->new( vendor_id => $cached->{vendor_id} );
-            return $vendor if $vendor;
-        }
-
-        my $vendor = VegGuide::Vendor->RandomCompleteVendor();
-
-        return unless $vendor;
-
-        $c->cache()->set
-            ( $CacheKey => { vendor_id => $vendor->vendor_id(),
-                             time      => time,
-                           },
-            );
-
-        $vendor->update_last_featured_date;
-
-        return $vendor;
-    }
 }
 
 # Used to exit gracefully for the benefit of profilers like FastProf

@@ -45,10 +45,6 @@
     </div>
 % }
 
-% if ($featured_vendor) {
-    <& /featured-entry.mas, vendor => $featured_vendor &>
-% }
-
    </div>
 
   </div>
@@ -56,7 +52,6 @@
  </div>
 
 <%args>
-$featured_vendor
 $news_item
 </%args>
 

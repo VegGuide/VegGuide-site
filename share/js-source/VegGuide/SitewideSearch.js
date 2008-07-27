@@ -7,7 +7,7 @@ if ( typeof VegGuide == "undefined" ) {
 
 VegGuide.SitewideSearch = {};
 
-VegGuide.SitewideSearch._defaultValue = "enter name, city, or address";
+VegGuide.SitewideSearch._defaultValue = "name, city, or address";
 
 VegGuide.SitewideSearch.instrumentPage = function () {
     var input = $("sitewide-search-input");
