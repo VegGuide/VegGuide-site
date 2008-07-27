@@ -334,8 +334,9 @@ sub reCAPTCHAPublicKey
 {
     my %GoogleKeys =
         ( prod            => { api  =>
-                               'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBQJbrWfLEAEyqTG'
-                               . 'EuLojCrBX82DARRenHsFYS69EyIksb1Zp6vMyATaFw',
+                               'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBQwK2hyQ4tHS8UgrjrqH-Bap3Am2xQw8LmDEtIuJ67RoXb0TSzHxc4Jwg',
+                               #'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBQJbrWfLEAEyqTG'
+                               #. 'EuLojCrBX82DARRenHsFYS69EyIksb1Zp6vMyATaFw',
                              },
           test            => { api  =>
                                'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBQFhTS8R6luU5KHR'
