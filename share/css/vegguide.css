@@ -146,7 +146,7 @@ div.force-clear {
 }
 
 #front-page-logo {
-
+  border: 0;
 }
 
 #front-page-header #sitewide-search {
