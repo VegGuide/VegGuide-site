@@ -1,11 +1,12 @@
  <div id="front-page-header">
   <& /lib/rounded-corners-top.mas &>
 
-  <a href="/" title="Home"><img class="png-filter" src="/images/vegguide-logo-front-page.png"
-                                width="600" height="99"
-                                id="front-page-logo"
-                                alt="VegGuide.Org Logo" /></a>
-    
+  <div id="front-page-logo">
+   <a href="/" title="Home"><img class="png-filter" src="/images/vegguide-logo-front-page.png"
+                                 width="600" height="99"
+                                 alt="VegGuide.Org Logo" /></a>
+  </div>
+
   <div id="tagline">
    <% $tagline | h %>
   </div>
