@@ -363,17 +363,10 @@ sub ancestor_ids
 my $dumped;
 sub _check_cache_time
 {
-    my $class = shift;
+    my $class = ref $_[0] || $_[0];
 
     return unless $ENV{MOD_PERL};
 
-    unless ( defined $Meta{$class}{file} || $dumped )
-    {
-        use Data::Dumper;
-        warn "$class\n";
-        warn Dumper $Meta{$class};
-        $dumped = 1;
-    }
     my $last_mod = (stat $Meta{$class}{file})[9];
 
     if ( $last_mod > $Meta{$class}{last_build} )
@@ -384,7 +377,7 @@ sub _check_cache_time
 
 sub _rebuild_cache
 {
-    my $class = shift;
+    my $class = ref $_[0] || $_[0];
 
     my %p = %{ $Meta{$class}{params} };
 
