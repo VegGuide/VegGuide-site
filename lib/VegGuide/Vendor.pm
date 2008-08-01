@@ -1051,37 +1051,9 @@ sub add_or_update_comment
         return $AverageRating;
     }
 
-    my $HighestRating;
-    sub HighestRating
-    {
-        my $class = shift;
-
-        unless ( defined $HighestRating )
-        {
-            my $schema = VegGuide::Schema->Connect();
-
-            my $vr = $schema->VendorRating_t();
-
-            $HighestRating =
-                $vr->function
-                    ( select =>
-                      $schema->sqlmaker()->MAX
-                      ( WEIGHTED_RATING
-                        ( $schema->VendorRating_t()->vendor_id_c(),
-                          $WeightedRatingMinCount,
-                          $class->AverageRating()
-                        )
-                      )
-                    );
-        }
-
-        return $HighestRating;
-    }
-
     sub ClearCache
     {
         undef $AverageRating;
-        undef $HighestRating;
     }
 
     sub add_or_update_rating

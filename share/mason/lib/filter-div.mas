@@ -108,13 +108,6 @@
 
   <form class="filter-form" action="<% $search->$search_uri_method() | h %>" method="post" id="rating-form">
    <label class="title" for="rating">Rating of at least ...</label>
-
-   <p>
-    Currently, the average rating for all entries in the system is
-    <% sprintf( '%.1f', VegGuide::Vendor->AverageRating() ) %>, and the highest rated
-    entry is <% sprintf( '%.1f', VegGuide::Vendor->HighestRating() ) %>.
-   </p>
-
    <div>
     <select id="rating" name="rating">
 % for my $num ( 1..4 ) {
