@@ -124,6 +124,8 @@ sub _add_nodes
 
     while ( my $node = $cursor->next )
     {
+        delete $node->{__children__};
+
         if ($children)
         {
             push @$children, $node;
@@ -233,9 +235,14 @@ sub children
     my $self = shift;
     my $class = ref $self;
 
+    return @{ $self->{__children__} }
+        if exists $self->{__children__};
+
     my $id = $Meta{$class}{params}{id};
 
-    return $class->children_of( $self->$id() );
+    $self->{__children__} = $class->children_of( $self->$id() );
+
+    return @{ $self->{__children__} };
 }
 
 sub children_of
@@ -249,24 +256,7 @@ sub children_of
 
     $class->_check_cache_time unless $Checked;
 
-    return @{ $Cache{$class}{nodes}{$id_val}{children} || [] };
-}
-
-sub _cached_children_with_flag
-{
-    my $self = shift;
-    my $flag = shift;
-    my $val = shift;
-    my $class = ref $self;
-
-    $class->_check_cache_time;
-
-    my $id = $Meta{$class}{params}{id};
-
-    return
-        ( grep { $Cache{$class}{nodes}{ $_->$id() }{flags}{$flag} == $val }
-          @{ $Cache{$class}{nodes}{ $self->$id() }{children} }
-        );
+    return $Cache{$class}{nodes}{$id_val}{children} || [];
 }
 
 sub child_count
@@ -286,24 +276,7 @@ sub child_count
     return scalar @{ $Cache{$class}{nodes}{ $self->$id() }{children} };
 }
 
-sub _cached_child_count_with_flag
-{
-    my $self = shift;
-    my $flag = shift;
-    my $val = shift;
-    my $class = ref $self;
-
-    $class->_check_cache_time;
-
-    my $id = $Meta{$class}{params}{id};
-
-    return
-        scalar ( grep { $Cache{$class}{nodes}{ $_->$id() }{flags}{$flag} == $val }
-                 @{ $Cache{$class}{nodes}{ $self->$id() }{children} }
-               );
-}
-
-sub _cached_ancestors
+sub ancestors
 {
     my $self = shift;
     my $class = ref $self;
@@ -357,8 +330,6 @@ sub descendant_ids
 
     return map { $_->$id() } $self->descendants;
 }
-
-sub ancestors { $_[0]->_cached_ancestors }
 
 sub ancestor_ids
 {
