@@ -40,12 +40,11 @@ my %Times;
 
         my $clean = $class;
         $clean =~ s/::/-/g;
-        $Meta{$class}{file} =
+
+        my $f = $Meta{$class}{file} =
             File::Spec->catfile( File::Spec->tmpdir, $clean );
 
         $class->_add_nodes($roots);
-
-        my $f = $Meta{$class}{file};
 
         _touch_file($f) if $first && $ENV{MOD_PERL};
 
@@ -361,12 +360,20 @@ sub ancestor_ids
     return map { $_->$id() } $self->ancestors;
 }
 
+my $dumped;
 sub _check_cache_time
 {
     my $class = shift;
 
     return unless $ENV{MOD_PERL};
 
+    unless ( defined $Meta{$class}{file} || $dumped )
+    {
+        use Data::Dumper;
+        warn "$class\n";
+        warn Dumper $Meta{$class};
+        $dumped = 1;
+    }
     my $last_mod = (stat $Meta{$class}{file})[9];
 
     if ( $last_mod > $Meta{$class}{last_build} )
