@@ -124,7 +124,7 @@ sub _add_nodes
 
     while ( my $node = $cursor->next )
     {
-        delete $node->{__children__};
+        delete $node->{__hierarchy_cache__};
 
         if ($children)
         {
@@ -218,9 +218,19 @@ sub ByID
 sub parent
 {
     my $self = shift;
-    my $class = ref $self;
 
-    $class->_check_cache_time unless $Checked;
+    $self->_check_cache_time unless $Checked;
+
+    return $self->{__hierarchy_cache__}{parent}
+        if exists $self->{__hierarchy_cache__}{parent};
+
+    return $self->{__hierarchy_cache__}{parent} = $self->_parent();
+}
+
+sub _parent
+{
+    my $self = shift;
+    my $class = ref $self;
 
     my $id_name = $Meta{$class}{params}{id};
 
@@ -235,14 +245,14 @@ sub children
     my $self = shift;
     my $class = ref $self;
 
-    return @{ $self->{__children__} }
-        if exists $self->{__children__};
+    return @{ $self->{__hierarchy_cache__}{children} }
+        if exists $self->{__hierarchy_cache__}{children};
 
     my $id = $Meta{$class}{params}{id};
 
-    $self->{__children__} = $class->children_of( $self->$id() );
+    $self->{__hierarchy_cache__}{children} = $class->children_of( $self->$id() );
 
-    return @{ $self->{__children__} };
+    return @{ $self->{__hierarchy_cache__}{children} };
 }
 
 sub children_of
@@ -305,6 +315,9 @@ sub descendants
 
     local $Checked = 1;
 
+    return @{ $self->{__hierarchy_cache__}{descendants} }
+        if exists $self->{__hierarchy_cache__}{descendants};
+
     my @d = $self->children;
 
     my @c = @d;
@@ -318,6 +331,8 @@ sub descendants
         push @c, @c1;
     }
 
+    $self->{__hierarchy_cache__}{descendants} = \@d;
+
     return @d;
 }
 
@@ -326,9 +341,14 @@ sub descendant_ids
     my $self = shift;
     my $class = ref $self;
 
+    return @{ $self->{__hierarchy_cache__}{descendant_ids} }
+        if exists $self->{__hierarchy_cache__}{descendant_ids};
+
     my $id = $Meta{$class}{params}{id};
 
-    return map { $_->$id() } $self->descendants;
+    $self->{__hierarchy_cache__}{descendant_ids} = [ map { $_->$id() } $self->descendants ];
+
+    return @{ $self->{__hierarchy_cache__}{descendant_ids} };
 }
 
 sub ancestor_ids
