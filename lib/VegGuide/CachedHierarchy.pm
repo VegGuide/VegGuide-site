@@ -171,6 +171,8 @@ sub _cached_roots
 
     $class->_check_cache_time;
 
+    local $Checked = 1;
+
     return @{ $Cache{$class}{roots} };
 }
 
@@ -194,9 +196,9 @@ sub all_with_flag
 
     $class->_check_cache_time;
 
-    my $id = $Meta{$class}{params}{id};
-
     local $Checked = 1;
+
+    my $id = $Meta{$class}{params}{id};
 
     return
         ( grep { $Cache{$class}{nodes}{ $_->$id() }{flags}{$flag} == $val }
@@ -218,7 +220,9 @@ sub parent
 {
     my $self = shift;
 
-    $self->_check_cache_time unless $Checked;
+    $self->_check_cache_time;
+
+    local $Checked = 1;
 
     return $self->{__hierarchy_cache__}{parent}
         if exists $self->{__hierarchy_cache__}{parent};
@@ -244,6 +248,10 @@ sub children
     my $self = shift;
     my $class = ref $self;
 
+    $self->_check_cache_time;
+
+    local $Checked = 1;
+
     return @{ $self->{__hierarchy_cache__}{children} }
         if exists $self->{__hierarchy_cache__}{children};
 
@@ -263,8 +271,6 @@ sub children_of
 
     return $class->_cached_roots unless defined $id_val;
 
-    $class->_check_cache_time unless $Checked;
-
     return $Cache{$class}{nodes}{$id_val}{children} || [];
 }
 
@@ -274,6 +280,8 @@ sub child_count
     my $class = ref $self;
 
     $class->_check_cache_time;
+
+    local $Checked = 1;
 
     my $id = $Meta{$class}{params}{id};
 
@@ -310,7 +318,7 @@ sub descendants
     my $self = shift;
     my $class = ref $self;
 
-    $class->_check_cache_time unless $Checked;
+    $class->_check_cache_time;
 
     local $Checked = 1;
 
@@ -364,6 +372,8 @@ my $dumped;
 sub _check_cache_time
 {
     my $class = ref $_[0] || $_[0];
+
+    return if $Checked;
 
     return unless $ENV{MOD_PERL};
 
