@@ -510,11 +510,14 @@ sub save_core_suggestion
 
     my %skip =
         ( map { $_ => 1 }
-          qw( user_id location_id creation_datetime last_modified_datetime last_featured_date
+          qw( user_id location_id sortable_name
+              creation_datetime
+              last_modified_datetime last_featured_date
               canonical_address longitude latitude )
         );
 
-    foreach my $c ( grep { ! $skip{$_} }
+    foreach my $c ( grep { exists $p{suggestion}{$_} }
+                    grep { ! $skip{$_} }
                     map { $_->name }
                     grep { ! $_->is_primary_key } @Columns )
     {
