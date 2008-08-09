@@ -33,6 +33,17 @@
 
     <& /lib/region-list.mas, locations => \@locations, columns => 2 &>
 
+    <h2 style="margin-top:1em">Take the VegGuide survey</h2>
+
+    <p>
+     <strong>
+     We're trying to figure out what folks are using this site
+     for. You can help by <a href="/site/survey_2008_1">taking this
+     survey</a>. It will just take a minute or two.
+     </strong>
+    </p>
+
+
     <p>
      VegGuide.Org is a community-maintained, world-wide guide to
      vegetarian and vegan restaurants, grocers, and more.
