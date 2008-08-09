@@ -26,13 +26,7 @@
 
     <h1 id="page-title">Welcome to VegGuide.Org!</h1>
 
-    <p>
-     To start browsing, just click on a region in the list below. Or
-     search for entries by location or name using the search form above.
-    </p>
-
-    <& /lib/region-list.mas, locations => \@locations, columns => 2 &>
-
+    <div style="background-color: lightyellow">
     <h2 style="margin-top:1em">Take the VegGuide survey</h2>
 
     <p>
@@ -42,7 +36,14 @@
      survey</a>. It will just take a minute or two.
      </strong>
     </p>
+    </div>
 
+    <p>
+     To start browsing, just click on a region in the list below. Or
+     search for entries by location or name using the search form above.
+    </p>
+
+    <& /lib/region-list.mas, locations => \@locations, columns => 2 &>
 
     <p>
      VegGuide.Org is a community-maintained, world-wide guide to
