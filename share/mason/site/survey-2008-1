@@ -11,6 +11,12 @@ also opt to provide your email address so we can contact you if we
 have further questions about your answers.
 </p>
 
+<p>
+Your answers will be
+made <a href="/site/survey_2008_1_summary">available in anonymized
+form</a>.
+</p>
+
 <&| /lib/filter/fill-in-form.mas &>
 <form action="/site/survey_2008_1" method="post" id="survey-form">
  <& /lib/form/errors.mas &>
