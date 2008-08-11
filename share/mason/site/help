@@ -545,6 +545,7 @@ area.
 <%def .link_images>
 <h3>Do you have any nice images to use when linking?</h3>
 
+<!--
 <p>
 Here are some:
 </p>
@@ -559,6 +560,11 @@ Here are some:
 <a href="/images/link-60-45.jpg"><img class="link-to-us"
                                      s rc="/images/link-60-45.jpg" border="0" alt="small link image" /></a><br />
 60 x 45
+</p>
+-->
+
+<p>
+Not right now, we need to make some from the current logo.
 </p>
 </%def>
 
