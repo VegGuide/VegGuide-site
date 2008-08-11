@@ -58,11 +58,9 @@ survey in 2008.
  <li>Veg City/Region sites: <% $other{vegcity} || 0 %></li>
 </ul>
 
-% if ( $c->vg_user()->is_admin() ) {
 <p>
- <a href="/site/admin/survey_2008_1_admin">More details (admin only)</a>
+ <a href="/site/survey_2008_1_details">More details (could be quite long)</a>
 </p>
-% }
 
 <%args>
 $total

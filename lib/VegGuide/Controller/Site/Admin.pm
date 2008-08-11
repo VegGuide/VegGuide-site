@@ -7,7 +7,6 @@ use base 'VegGuide::Controller::DirectToView';
 
 use VegGuide::VendorSource;
 use VegGuide::Locale;
-use VegGuide::SurveyResponse2008001;
 
 
 sub auto : Private
@@ -109,18 +108,6 @@ sub sources_POST
     $c->add_message( $source->name() . ' has been created.' );
 
     $c->redirect_and_detach( '/site/admin/source_list' );
-}
-
-sub survey_2008_1_admin : Local
-{
-    my $self = shift;
-    my $c    = shift;
-
-    $c->stash()->{total} = VegGuide::SurveyResponse2008001->Count();
-    $c->stash()->{other_sites} = VegGuide::SurveyResponse2008001->OtherSitesOther();
-    $c->stash()->{improvements} = VegGuide::SurveyResponse2008001->Improvements();
-
-    $c->stash()->{template} = '/site/admin/survey-2008-1-admin';
 }
 
 1;

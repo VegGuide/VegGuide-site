@@ -17,9 +17,16 @@ survey in 2008.
 
 % for my $imp (@improvements) {
 <p>
-<% $imp->{email_address} ? $imp->{email_address} : 'Anonymous' | h %> says:<br />
+% if ( $c->vg_user()->is_admin() ) {
+<% $imp->{email_address} ? $imp->{email_address} : 'Anonymous' | h %>
+% } else {
+Someone
+% }
+says:<br />
 <% $imp->{improvements} | h %>
 </p>
+
+<hr />
 % }
 
 <%args>

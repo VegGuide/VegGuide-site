@@ -524,4 +524,16 @@ sub survey_2008_1_summary : Local
     $c->stash()->{template} = '/site/survey-2008-1-summary';
 }
 
+sub survey_2008_1_details : Local
+{
+    my $self = shift;
+    my $c    = shift;
+
+    $c->stash()->{total} = VegGuide::SurveyResponse2008001->Count();
+    $c->stash()->{other_sites} = VegGuide::SurveyResponse2008001->OtherSitesOther();
+    $c->stash()->{improvements} = VegGuide::SurveyResponse2008001->Improvements();
+
+    $c->stash()->{template} = '/site/survey-2008-1-details';
+}
+
 1;
