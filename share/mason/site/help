@@ -310,26 +310,26 @@ it has received into the average which is displayed.
 </p>
 
 <p>
-In practice, this means that entries with few ratings have less
-"extreme" averages. Or in other words, the less ratings an entry has,
-the close its weighted rating is to the average of <em>all</em>
-ratings in the system (currently <% VegGuide::Vendor->AverageRating() %>).
+In practice, this means that when an entry only has a few ratings, the
+average rating we calculate tends be more average. Or in other words,
+the fewer ratings an entry has, ther close its weighted rating is to the
+average of <em>all</em> ratings in the system (currently
+<% VegGuide::Vendor->AverageRating() %>).
 </p>
 
 <p>
-Here's a few simple examples. If an entry receives just one rating of 5
-stars, its weighted rating is 
-<% VegGuide::Vendor->WeightedRating( 5.0, 1 ) %>. If an entry has ten
-ratings, nine 5 star ratings and one 1 star (averaging 4.9), then its
-weighted rating is <% VegGuide::Vendor->WeightedRating( 4.9, 10 ) %>.
+Here's a few simple examples. If an entry receives just one rating of
+5 stars, its weighted rating is <% VegGuide::Vendor->WeightedRating(
+5.0, 1 ) %>. If an entry has ten ratings, nine 5 star ratings and one
+1 star, then its weighted rating is
+<% VegGuide::Vendor->WeightedRating( 4.9, 10 ) %>.
 </p>
 
 <p>
-If an entry receives just one rating of 1
-star, its weighted rating is 
+If an entry receives just one rating of 1 star, its weighted rating is
 <% VegGuide::Vendor->WeightedRating( 1.0, 1 ) %>. If an entry has ten
-ratings, nine 1 star ratings and one 5 star (averaging 1.4), then its
-weighted rating is <% VegGuide::Vendor->WeightedRating( 1.4, 10 ) %>.
+ratings, nine 1 star ratings and one 5 star, then its weighted rating
+is <% VegGuide::Vendor->WeightedRating( 1.4, 10 ) %>.
 </p>
 
 <p>
@@ -364,8 +364,9 @@ weighted rating (WR) = (v ÷ (v+m)) × R + (m ÷ (v+m)) × C
 Ok, <code>m</code> isn't really an arbitrary number. IMDB uses a
 system where a movie needs a minimum number of votes to have a
 weighted rating at all. With the guide, this isn't really practical,
-so we just picked a pretty low number, which means that the amount of
-weighting applied isn't all that much
+so we just picked a pretty low number. In practice, a low value
+of <code>m</code> means that the amount that weighting "tweaks" the
+average is relatively minimal.
 </p>
 
 </%def>
