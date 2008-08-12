@@ -25,9 +25,13 @@ Widget.Lightbox2.prototype._initialize = function (params) {
     var color_val = params.color;
     if ( typeof color_val == "undefined" ) {
         color_val = "#333";
-    }    
+    }
 
-    if ( navigator.userAgent.indexOf('Linux') > -1 ) {
+    /* AFAICT this is really an X driver issue, but we'll use having
+       Firefox 3 as a proxy for having relatively modern drivers. Hopefully
+       this hack can be removed entirely once Firefox 4 is out! */
+    if ( navigator.userAgent.indexOf('Linux') > -1
+         && navigator.userAgent.indexOf('Firefox/3') == -1 ) {
         color_val = "#D9FFB9";
         opacity_val = 1;
     }
