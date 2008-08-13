@@ -11,7 +11,7 @@ sub auto : Private
     my $self = shift;
     my $c    = shift;
 
-    my $status = $c->request()->path() =~ m{/(\d+)$/;
+    my $status = $c->request()->path() =~ m{/(\d+)$};
 
     $c->response()->status($status);
 }
