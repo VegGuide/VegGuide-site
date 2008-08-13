@@ -163,6 +163,7 @@ sub _state_for_id
                       ( 'Ramsey' => 'Ramsey Area' ),
                       ( map { $_ => 'Parsippany Area' } qw( Parsippany Wayne ) ),
                       ( map { $_ => 'Hackensack Area' } qw( Hackensack Rutherford Teaneck ) ),
+                      'All NJ - Catering' => 'New Jersey',
                     );
 
     sub _location_for_item
