@@ -95,6 +95,11 @@
     RewriteRule   ^/favicon.gif                               -                                       [G,L]
     RewriteRule   ^/submit.*                                  -                                       [G,L]
 
+    # Random requests for stuff that we don't have
+    RewriteRule   ^/maps/c/ui/HovercardLauncher/dommanifest\.js$  /404                                [R=permanent,L]
+    RewriteRule   ^/\.api/main\.js                                /404                                [R=permanent,L]
+    RewriteRule   ^/ge/v/1/4/loader\.js                           /404                                [R=permanent,L]
+
     # you are l33t
     RewriteRule   ^/https://www\.paypal\.com/cgi-bin/webscr   -                                       [F,L]
     RewriteRule   \.(asp|cfn|php|dll)$                        -                                       [F,L]
@@ -106,6 +111,7 @@
 
     RewriteRule   ^(/mailman|/pipermail)(.*)  https://%{HTTP_HOST}$1$2 [R=permanent,L]
 
+    RewriteRule   !^/404               - [C]
     RewriteRule   !^(/\d+)?/css        - [C]
     RewriteRule   !^/entry-images      - [C]
     RewriteRule   !^(/\d+)?/images     - [C]
@@ -116,6 +122,10 @@
     RewriteRule   !^/robots\.txt$      - [C]
     RewriteRule   !^/favicon\.ico$     - [C]
     RewriteRule   ^(.*)                http://localhost:8088$1 [P,L]
+
+    <Location /404>
+        Header set Status 404
+    </Location>
 
     <Location />
         SetOutputFilter DEFLATE
