@@ -99,7 +99,7 @@
     RewriteRule   ^/maps/c/ui/HovercardLauncher/dommanifest\.js$  -                                   [G,L]
     RewriteRule   ^/\.api/main\.js                                -                                   [G,L]
     RewriteRule   ^/ge/v/1/4/loader\.js                           -                                   [G,L]
-    RewriteRule   ^/.+/favicon.*                                  -                                   [G,L]
+    RewriteRule   ^/(location|vendor)/favicon.*                   -                                   [G,L]
     RewriteRule   ^/__utm\.gif                                    -                                   [G,L]
 
     # you are l33t
