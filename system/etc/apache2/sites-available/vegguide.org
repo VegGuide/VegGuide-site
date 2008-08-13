@@ -96,9 +96,9 @@
     RewriteRule   ^/submit.*                                  -                                       [G,L]
 
     # Random requests for stuff that we don't have
-    RewriteRule   ^/maps/c/ui/HovercardLauncher/dommanifest\.js$  /error/404                          [R=permanent,L]
-    RewriteRule   ^/\.api/main\.js                                /error/404                          [R=permanent,L]
-    RewriteRule   ^/ge/v/1/4/loader\.js                           /error/404                          [R=permanent,L]
+    RewriteRule   ^/maps/c/ui/HovercardLauncher/dommanifest\.js$  -                                   [G,L]
+    RewriteRule   ^/\.api/main\.js                                -                                   [G,L]
+    RewriteRule   ^/ge/v/1/4/loader\.js                           -                                   [G,L]
 
     # you are l33t
     RewriteRule   ^/https://www\.paypal\.com/cgi-bin/webscr   -                                       [F,L]
