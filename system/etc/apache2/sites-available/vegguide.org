@@ -99,11 +99,16 @@
     RewriteRule   ^/maps/c/ui/HovercardLauncher/dommanifest\.js$  -                                   [G,L]
     RewriteRule   ^/\.api/main\.js                                -                                   [G,L]
     RewriteRule   ^/ge/v/1/4/loader\.js                           -                                   [G,L]
+    RewriteRule   ^/.+/favicon.*                                  -                                   [G,L]
+    RewriteRule   ^/__utm\.gif                                    -                                   [G,L]
 
     # you are l33t
     RewriteRule   ^/https://www\.paypal\.com/cgi-bin/webscr   -                                       [F,L]
     RewriteRule   \.(asp|cfn|php|dll)$                        -                                       [F,L]
     RewriteRule   (ikonboard\.cgi|YaBB\.pl)$                  -                                       [F,L]
+    RewriteRule   ^\/add\.php3$                               -                                       [F,L]
+    RewriteRule   ^\/uds.*                                    -                                       [F,L]
+    RewriteRule   ^\/img.*                                    -                                       [F,L]
 
     RewriteRule   /rss/static/all\w+\.rss                     /site.rss                               [R=permanent,L]
 
