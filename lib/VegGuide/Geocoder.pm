@@ -42,6 +42,7 @@ my %Geocoders =
       [ 'New Zealand'    => 'maps.google.com' ],
       [ 'Poland'         => 'maps.google.com' ],
       [ 'Portugal'       => 'maps.google.com' ],
+      [ 'Puerto Rico'    => 'maps.google.com' ],
       [ 'Singapore'      => 'maps.google.com' ],
       [ 'Spain'          => 'maps.google.es' ],
       [ 'Sweden'         => 'maps.google.se' ],
