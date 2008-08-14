@@ -148,8 +148,11 @@ sub _state_for_id
 {
     my $User = VegGuide::User->new( real_name => 'VegGuide.Org' );
     my $USA = VegGuide::Location->USA();
-
+    my $NJ = VegGuide::Location->new( name => 'New Jersey',
+                                      parent_location_id => $USA->location_id(),
+                                    );
     my $states = Geography::States->new('USA');
+
 
     my %RegionMap = ( # IL
                       ( map { $_ => 'Champaign-Urbana' } qw( Champaign Urbana ) ),
@@ -163,7 +166,7 @@ sub _state_for_id
                       ( 'Ramsey' => 'Ramsey Area' ),
                       ( map { $_ => 'Parsippany Area' } qw( Parsippany Wayne ) ),
                       ( map { $_ => 'Hackensack Area' } qw( Hackensack Rutherford Teaneck ) ),
-                      'All NJ - Catering' => 'New Jersey',
+                     'All NJ - Catering' => $NJ,
                     );
 
     sub _location_for_item
@@ -196,7 +199,10 @@ sub _state_for_id
 
         if ( $RegionMap{ $item->{region} } )
         {
-            $item->{region} = $RegionMap{ $item->{region} };
+            my $region = $RegionMap{ $item->{region} };
+            return $region if ref $region;
+
+            $item->{region} = $region;
         }
 
         my $location = VegGuide::Location->new( name               => $item->{region},
