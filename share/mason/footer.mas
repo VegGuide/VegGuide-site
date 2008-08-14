@@ -25,18 +25,24 @@
 % }
 
     <ul>
-     <li class="first"><a href="/site/about" title="About VegGuide.Org">About/Contact</a></li>
+     <li class="first"><a href="/site/about" title="About VegGuide.Org">About</a></li>
      <li><a href="/site/news" title="VegGuide.Org News">News</a></li>
      <li><a href="/stats/site" title="Site Statistics">Statistics</a></li>
      <li><a href="/user" title="User Listings">Users</a></li>
      <li><a href="/site/feeds" title="Feeds">Feeds</a></li>
-     <li><a href="/site/source" title="Source Code">Source Code</a></li>
-     <li class="last"><a href="/site/privacy" title="Privacy Policy">Privacy</a></li>
+     <li class="last"><a href="http://www.exploreveg.org/donate" title="Donate to Compassionate Action for Animals">Donate</a></li>
     </ul>
 
    </div>
 
    <div id="footer-copyright">
+    <&| /lib/link/license.mas &><img id="cc-logo" src="http://i.creativecommons.org/l/by-nc-sa/3.0/us/88x31.png" alt="Creative Commons License" /></&>
+
+    <div id="organization-logos">
+     <img src="/images/caa-logo.png" alt="CAA Logo" height="60" width="98" />
+     <img src="/images/mfa-logo.gif" alt="MFA Logo" height="60" width="117" />
+    </div>
+
     <p>
      <a href="http://www.vegguide.org/" title="Home">VegGuide.Org</a>
      and its contents are Copyright &copy;
@@ -45,31 +51,6 @@
      Animals</a>.  All rights reserved.
     </p>
 
-    <p>
-     You can support VegGuide.Org by making
-     a <a href="http://www.exploreveg.org/donate" title="Donate to
-     CAA">tax-deductible donation to Compassionate Action for
-     Animals</a>. VegGuide.Org is a project of Compassionate Action for
-     Animals and <a href="http://www.mercyforanimals.org" title="Mercy
-     for Animals">Mercy for Animals</a>.
-    </p>
-
-    <p>
-    <&| /lib/link/license.mas &><img id="cc-logo" src="http://i.creativecommons.org/l/by-nc-sa/3.0/us/88x31.png" alt="Creative Commons License" /></&>
-
-     All content on this website (including text and images), unless
-     otherwise noted, is licensed under a <&| /lib/link/license.mas &>Creative
-     Commons Attribution-Noncommercial-Share Alike 3.0
-     United States License</&>. The
-     site's <a href="/site/source">source code</a> is licensed under
-     the same terms as Perl.
-    </p>
-
-    <p>
-     Logo images displayed in the upper left corner of the page on hosts
-     besides www.vegguide.org are copyright by the user responsible for
-     that host, and should not be reproduced without permission.
-    </p>
    </div>
 
   </div>

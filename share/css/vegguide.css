@@ -1812,10 +1812,21 @@ img.link-to-us {
 
 #footer-copyright p {
   margin: 0.4em 0 0.4em 0;
+  margin-left: 100px;
 }
 
 #footer #cc-logo {
+  float: left;
+  margin-top: 0.5em;
   border: none;
+}
+
+#footer #organization-logos {
+  float: right;
+}
+
+#footer #organization-logos img {
+  margin-left: 1em;
 }
 
 /* #0072b0 - blue

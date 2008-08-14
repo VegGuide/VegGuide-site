@@ -36,6 +36,39 @@ If you want to read a lot more, you can check out
 the <a href="/site/philosophy">philosophy of VegGuide.Org</a>.
 </p>
 
+<h2>Privacy Policy</h2>
+
+<p>
+Our <a href="/site/privacy" title="Privacy Policy">privacy policy</a>
+basically says we use cookies to track logins, and we promise not to
+share your personal info with anyone else.
+</p>
+
+<h2>Copyright Details</h2>
+
+<p>
+All content on this website (including text and images), unless
+otherwise noted, is licensed under a
+<&| /lib/link/license.mas &>Creative Commons
+Attribution-Noncommercial-Share Alike 3.0 United States
+License</&>. The site's <a href="/site/source">source code</a> is
+licensed under the same terms as Perl.
+</p>
+
+<p>
+Logo images displayed in the upper left corner of the page on hosts
+besides www.vegguide.org are copyright by the user responsible for
+that host, and should not be reproduced without permission.
+</p>
+
+<h2>Source Code</h2>
+
+<p>
+The source code for this site is licensed under the same terms as
+Perl, and is available from our <a href="/site/source" title="Source
+Code">source repository</a>.
+</p>
+
 <h2>History</h2>
 
 <p>
