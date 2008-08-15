@@ -41,7 +41,7 @@ DOM.Ready.onDOMDone( function () {
 
        <div>
         <a class="content-button" href="<% entry_uri( vendor => $vendor, path => 'images_form' ) | h %>"
-           >Add/edit images</a><& /lib/link/help.mas, name => 'editing' &>
+           >Add/edit images</a>
        </div>
       </div>
 

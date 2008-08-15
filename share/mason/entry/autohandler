@@ -64,7 +64,7 @@
 
      <div class="content-buttons">
       <a class="content-button" href="<% entry_uri( vendor => $vendor, path => 'edit_form' ) | h %>"
-         >Edit</a><& /lib/link/help.mas, name => 'editing' &>
+         >Edit</a>
 %   if ( $c->vg_user()->can_delete_vendor($vendor) ) {
       <a class="action-button" href="<% entry_uri( vendor => $vendor, path => 'deletion_confirmation_form' ) | h %>"
          >Delete</a>

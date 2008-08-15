@@ -45,8 +45,8 @@
 % }
 
      <p>
-      <a href="<% entry_uri( vendor => $vendor, path => 'edit_form' ) | h %>" class="content-button" title="Edit this entry">Edit</a><& /lib/link/help.mas, name => 'editing' &>
-      <a href="/site/clone_entry_form?vendor_id=<% $vendor->vendor_id() %>" class="content-button" title="Make a new entry based on this one">Clone</a><& /lib/link/help.mas, name => 'cloning' &>
+      <a href="<% entry_uri( vendor => $vendor, path => 'edit_form' ) | h %>" class="content-button" title="Edit this entry">Edit</a>
+      <a href="/site/clone_entry_form?vendor_id=<% $vendor->vendor_id() %>" class="content-button" title="Make a new entry based on this one">Clone</a>
 % if ( $c->vg_user()->can_delete_vendor($vendor) ) {
       <a href="<% entry_uri( vendor => $vendor, path => 'deletion_confirmation_form' ) | h %>" class="action-button" title="Delete this entry">Delete</a>
 % }
@@ -97,7 +97,7 @@
 
      <p>
       <a href="<% entry_uri( vendor => $vendor, path => 'review_form' ) | h %>"
-         class="content-button">Write your review</a><& /lib/link/help.mas, name => 'reviews' &>
+         class="content-button">Write your review</a>
      </p>
 
 % if ($comments || $ratings) {
@@ -111,7 +111,7 @@
 
      <p>
       <a href="<% entry_uri( vendor => $vendor, path => 'review_form' ) | h %>"
-         class="content-button">Write your review</a><& /lib/link/help.mas, name => 'reviews' &>
+         class="content-button">Write your review</a>
      </p>
 % }
 

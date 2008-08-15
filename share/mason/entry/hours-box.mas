@@ -14,7 +14,7 @@
 
       <div>
        <a href="<% entry_uri( vendor => $vendor, path => 'edit_hours_form' ) | h %>"
-          class="content-button">Edit</a><& /lib/link/help.mas, name => 'editing' &>
+          class="content-button">Edit</a>
       </div>
 
      </div>

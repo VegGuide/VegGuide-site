@@ -72,7 +72,7 @@
 
       <div>
        <a class="content-button" href="<% entry_uri( vendor => $vendor, path => 'edit_form' ) | h %>"
-          >Edit</a><& /lib/link/help.mas, name => 'editing' &>
+          >Edit</a>
       </div>
 
      </div>
