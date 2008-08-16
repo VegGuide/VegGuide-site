@@ -611,6 +611,7 @@ ul.right-list {
 .front-page-stats h2, .info-box-container h2 {
   margin: 0 0 0 0;
   padding: 0 0.5em 0.1em 0.3em;
+  letter-spacing: 0.1em;
 
   font-size: 130%;
 
@@ -776,15 +777,15 @@ div.rating-star-set a img {
 }
 
 #hours {
-  margin-top: 0.5em;
-}
-
-#hours {
   white-space: nowrap;
 }
 
 #hours p {
   white-space: normal;
+}
+
+#profile {
+  margin-top: 0.5em;
 }
 
 #map-and-images {

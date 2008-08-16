@@ -1,5 +1,5 @@
 <&| /lib/filter/empty-unless-matches.mas, regex => qr{\Q<div class="info-box">\E\s+\Q<div id=} &>
-    <div class="info-box-container">
+    <div id="profile" class="info-box-container">
 
      <h2 id="profile-title">Profile</h2>
 
