@@ -22,7 +22,7 @@ BEGIN
 }
 
 use Alzabo::Runtime::UniqueRowCache;
-use HTTP::Status qw( RC_UNAUTHORIZED );
+use HTTP::Status qw( RC_FORBIDDEN );
 use URI::Escape qw( uri_unescape );
 use URI::FromHash qw( uri );
 use VegGuide::AlzaboWrapper;
@@ -35,6 +35,13 @@ sub begin : Private
 {
     my $self = shift;
     my $c    = shift;
+
+    if ( $self->_is_bad_request($c) )
+    {
+        $c->response()->body('');
+        $c->response()->status( RC_FORBIDDEN );
+        return $c->detach('/end');
+    }
 
     Alzabo::Runtime::UniqueRowCache->clear();
     VegGuide::AlzaboWrapper->ClearCache();
@@ -81,6 +88,17 @@ sub end : Private
     }
 
     return;
+}
+
+sub _is_bad_request
+{
+    my $self = shift;
+    my $c    = shift;
+
+    return 1
+        if grep { /(?:DECLARE|SET) \@S/ } keys %{ $c->request()->parameters() };
+
+    return 0;
 }
 
 sub _require_auth
