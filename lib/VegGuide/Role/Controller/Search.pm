@@ -5,6 +5,7 @@ use warnings;
 
 use Class::Trait 'base';
 
+use Scalar::Util qw( looks_like_number );
 use URI::FromHash qw( uri );
 
 
@@ -162,6 +163,7 @@ sub _set_search_cursor_params
 
     my $limit = $params->{limit} || $c->vg_user()->entries_per_page();
 
+    $limit = 20 unless looks_like_number($limit);
     $limit = 100 if $limit > 100;
 
     my %p = ( page  => $page,
