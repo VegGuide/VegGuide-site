@@ -345,7 +345,7 @@ else
    Use the "General Store" category for stores that sell non-food
    merchandise. Use the "Other" category for entries that don't fit
    elsewhere, such as a cruelty-free salon or cleaning service. See
-   the <a href="/site/help">help page</a> for more details.
+   the <a href="/site/help#categories">help page</a> for more details.
   </p>
 </%def>
 
