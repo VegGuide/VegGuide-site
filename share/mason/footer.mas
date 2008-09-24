@@ -39,8 +39,8 @@
     <&| /lib/link/license.mas &><img id="cc-logo" src="http://i.creativecommons.org/l/by-nc-sa/3.0/us/88x31.png" alt="Creative Commons License" /></&>
 
     <div id="organization-logos">
-     <img src="/images/caa-logo.png" alt="CAA Logo" height="60" width="98" />
-     <img src="/images/mfa-logo.gif" alt="MFA Logo" height="60" width="117" />
+     <a href="http://www.exploreveg.org/"><img src="/images/caa-logo.png" alt="CAA Logo" height="60" width="98" /></a>
+     <a href="http://www.mercyforanimals.org/"><img src="/images/mfa-logo.gif" alt="MFA Logo" height="60" width="117" /></a>
     </div>
 
     <p>
