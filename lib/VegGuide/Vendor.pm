@@ -3376,6 +3376,8 @@ SELECT V1.vendor_id, V2.vendor_id
    AND V2.canonical_address IS NOT NULL
    AND V1.address1 IS NOT NULL
    AND V2.address1 IS NOT NULL
+   AND V1.close_date IS NULL
+   AND V2.close_date IS NULL
    AND V1.canonical_address = V2.canonical_address
    AND V1.vendor_id != V2.vendor_id
 ORDER BY V1.last_modified_datetime DESC,
