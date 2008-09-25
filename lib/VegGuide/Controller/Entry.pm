@@ -9,6 +9,7 @@ use Class::Trait 'VegGuide::Role::Controller::Comment';
 use Class::Trait 'VegGuide::Role::Controller::Search';
 
 use Lingua::EN::Inflect qw( PL );
+use Time::HiRes;
 use URI::Escape qw( uri_unescape );
 use VegGuide::Search::Vendor::All;
 use VegGuide::Search::Vendor::ByLatLong;
@@ -877,7 +878,9 @@ sub images_POST
     }
 }
 
-sub ungeocoded : Local
+sub ungeocoded : Local : ActionClass('+VegGuide::Action::REST') { }
+
+sub ungeocoded_GET_html
 {
     my $self = shift;
     my $c    = shift;
@@ -892,6 +895,23 @@ sub ungeocoded : Local
     $c->stash()->{template} = '/site/ungeocoded-entry-list';
 }
 
+sub ungeocoded_POST
+{
+    my $self = shift;
+    my $c    = shift;
+
+    my @ids = $c->request->param('vendor_id');
+
+    for my $id (@ids)
+    {
+        my $vendor = VegGuide::Vendor->new( vendor_id => $id );
+        $vendor->update_geocode_info();
+
+        sleep 0.2;
+    }
+
+    $c->redirect_and_detach('/entry/ungeocoded')
+}
 
 1;
 

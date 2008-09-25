@@ -3368,6 +3368,33 @@ sub UnGeocoded
             );
 }
 
+{
+    my $sql = <<'EOF';
+SELECT V1.vendor_id, V2.vendor_id
+  FROM Vendor AS V1, Vendor AS V2
+ WHERE V1.canonical_address IS NOT NULL
+   AND V2.canonical_address IS NOT NULL
+   AND V1.address1 IS NOT NULL
+   AND V2.address1 IS NOT NULL
+   AND V1.canonical_address = V2.canonical_address
+   AND V1.vendor_id != V2.vendor_id
+ORDER BY V1.last_modified_datetime DESC,
+         V1.location_id ASC,
+         V1.name ASC
+EOF
+
+    sub PossibleDuplicates
+    {
+        my $class = shift;
+
+        my $schema = VegGuide::Schema->Connect();
+
+        my $sth_handle = $schema->driver()->statement( sql => $sql );
+
+        return VegGuide::Cursor::DuplicateVendors->new( cursor => $sth_handle );
+    }
+}
+
 package VegGuide::Cursor::VendorByAggregate;
 
 use base qw(Class::AlzaboWrapper::Cursor);
@@ -3404,6 +3431,41 @@ sub next
           VegGuide::Vendor->new
               ( vendor_id => $vendor_id )
         );
+}
+
+
+package VegGuide::Cursor::DuplicateVendors;
+
+use base qw(Class::AlzaboWrapper::Cursor);
+
+sub next
+{
+    my $self = shift;
+
+    my ( $v1_id, $v2_id ) = $self->_next_ids()
+        or return;
+
+    $self->{seen_v1}{$v1_id} = 1;
+
+    return map { VegGuide::Vendor->new( vendor_id => $_ ) } $v1_id, $v2_id;
+}
+
+sub _next_ids
+{
+    my $self = shift;
+
+    my ( $v1_id, $v2_id ) = $self->{cursor}->next()
+        or return;
+
+    while ( defined $v2_id && $self->{seen_v1}{$v2_id} )
+    {
+        ( $v1_id, $v2_id ) = $self->{cursor}->next()
+            or return;
+    }
+
+    $self->{seen_v1}{$v1_id} = 1;
+
+    return ( $v1_id, $v2_id );
 }
 
 

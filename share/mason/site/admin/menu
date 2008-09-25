@@ -8,6 +8,7 @@ If you're not an admin we have a serious bug.
  <li><a href="/region/comment">All region comments</a></li>
  <li><a href="/site/admin/locale_list">Locales</a></li>
  <li><a href="/entry/ungeocoded">Entries that are not geocoded (but could be)</a></li>
+ <li><a href="/site/admin/duplicates">Possible duplicate entries</a></li>
  <li><a href="/site/admin/skin_form">Add a skin</a></li>
  <li><a href="/site/admin/source_list">Entry data sources</a></li>
  <li><a href="/site/admin/cuisines">Cuisines</a></li>

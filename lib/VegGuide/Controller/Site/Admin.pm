@@ -5,8 +5,9 @@ use warnings;
 
 use base 'VegGuide::Controller::DirectToView';
 
-use VegGuide::VendorSource;
 use VegGuide::Locale;
+use VegGuide::Vendor;
+use VegGuide::VendorSource;
 
 
 sub auto : Private
@@ -108,6 +109,16 @@ sub sources_POST
     $c->add_message( $source->name() . ' has been created.' );
 
     $c->redirect_and_detach( '/site/admin/source_list' );
+}
+
+sub duplicates : Local
+{
+    my $self = shift;
+    my $c    = shift;
+
+    $c->stash()->{duplicates} = VegGuide::Vendor->PossibleDuplicates();
+
+    $c->stash()->{template} = '/site/admin/duplicates';
 }
 
 1;
