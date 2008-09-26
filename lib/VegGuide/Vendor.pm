@@ -3370,7 +3370,7 @@ sub UnGeocoded
 
 {
     my $sql = <<'EOF';
-SELECT V1.vendor_id, V2.vendor_id
+SELECT V1.vendor_id, V1.name, V2.vendor_id
   FROM Vendor AS V1, Vendor AS V2
  WHERE V1.canonical_address IS NOT NULL
    AND V2.canonical_address IS NOT NULL
@@ -3381,7 +3381,6 @@ SELECT V1.vendor_id, V2.vendor_id
    AND V1.canonical_address = V2.canonical_address
    AND V1.vendor_id != V2.vendor_id
 ORDER BY V1.last_modified_datetime DESC,
-         V1.location_id ASC,
          V1.name ASC
 EOF
 
