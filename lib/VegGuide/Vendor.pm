@@ -3370,7 +3370,7 @@ sub UnGeocoded
 
 {
     my $sql = <<'EOF';
-SELECT V1.vendor_id, V1.name, V2.vendor_id
+SELECT V1.vendor_id, V2.vendor_id
   FROM Vendor AS V1, Vendor AS V2
  WHERE V1.canonical_address IS NOT NULL
    AND V2.canonical_address IS NOT NULL
@@ -3446,10 +3446,15 @@ sub next
     my ( $v1_id, $v2_id ) = $self->_next_ids()
         or return;
 
+    $self->{count} ||= 0;
+    $self->{count}++;
+
     $self->{seen_v1}{$v1_id} = 1;
 
     return map { VegGuide::Vendor->new( vendor_id => $_ ) } $v1_id, $v2_id;
 }
+
+sub count { $_[0]->{count} }
 
 sub _next_ids
 {
