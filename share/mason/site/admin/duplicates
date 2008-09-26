@@ -11,11 +11,7 @@
 % while ( my ( $vendor1, $vendor2 ) = $duplicates->next() ) {
   <tr class="<% $duplicates->count() % 2 ? 'odd' : 'even' %>">
    <td><& /lib/link/vendor.mas, vendor => $vendor1 &></td>
-   <td>
-%   if ($vendor2) {
-     <& /lib/link/vendor.mas, vendor => $vendor2 &>
-%   }
-   </td>
+   <td><& /lib/link/vendor.mas, vendor => $vendor2 &></td>
   </tr>
 % }
  </tbody>
