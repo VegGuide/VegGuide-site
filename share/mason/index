@@ -26,18 +26,6 @@
 
     <h1 id="page-title">Welcome to VegGuide.Org!</h1>
 
-    <div style="background-color: lightyellow">
-    <h2 style="margin-top:1em">Take the VegGuide survey</h2>
-
-    <p>
-     <strong>
-     We're trying to figure out what folks are using this site
-     for. You can help by <a href="/site/survey_2008_1">taking this
-     survey</a>. It will just take a minute or two.
-     </strong>
-    </p>
-    </div>
-
     <p>
      To start browsing, just click on a region in the list below. Or
      search for entries by location or name using the search form above.
