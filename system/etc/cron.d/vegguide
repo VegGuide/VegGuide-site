@@ -1,4 +1,4 @@
-30 11 * * * www-data  /usr/local/bin/vg-regen-data-feed-rss
-15 1  * * 7 www-data  /usr/local/bin/vg-send-watch-list-emails
-17 2  * * * www-data  /usr/local/bin/vg-update-from-external-sources
+30 10 * * * www-data  /usr/local/bin/vg-regen-data-feed-rss
+15 12 * * 7 www-data  /usr/local/bin/vg-send-watch-list-emails
 37 3  * * * autarch   /usr/local/bin/vg-backup
+17 6  * * * www-data  /usr/local/bin/vg-update-from-external-sources
