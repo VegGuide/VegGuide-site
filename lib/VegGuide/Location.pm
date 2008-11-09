@@ -1424,7 +1424,7 @@ sub _DataFeedHandle
 {
     my $w = VegGuide::RSSWriter->new();
 
-    my $vendors = VegGuide::Vendor->All();
+    my $vendors = VegGuide::Vendor->AllOpen();
 
     while ( my $v = $vendors->next() )
     {
@@ -1432,7 +1432,7 @@ sub _DataFeedHandle
     }
 
     $w->site_channel( 'VegGuide.Org Data Feed',
-                      'Data feed of all entries in the VegGuide.Org system.',
+                      'Data feed of all entries (still in business) in the VegGuide.Org system.',
                     );
 
     return $w->fh();

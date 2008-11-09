@@ -2425,6 +2425,21 @@ sub All
             ( $class->table->all_rows );
 }
 
+sub AllOpen
+{
+    my $class = shift;
+
+    my $schema = VegGuide::Schema->Connect();
+
+    return
+        $class->cursor
+            ( $class->table->rows_where
+              ( where =>
+                [ $schema->Vendor_t->close_date_c, '=', undef ],
+              )
+            );
+}
+
 sub VendorCount
 {
     my $class = shift;
