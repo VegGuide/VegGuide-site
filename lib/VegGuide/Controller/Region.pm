@@ -257,6 +257,12 @@ sub _new_entry_submit
 
     my $location = $c->stash()->{location};
 
+    unless ( $c->vg_user()->is_admin() || $location->can_have_vendors() )
+    {
+        $c->add_message( 'This region cannot have entries.' );
+        $c->redirect_and_detach( region_uri( location => $location ) );
+    }
+
     my %data = $c->request()->vendor_data();
 
     my $vendor;
@@ -298,6 +304,14 @@ sub entry_form : Chained('_set_location') : PathPart('entry_form') : Args(0)
     $self->_require_auth( $c,
                           'You must be logged in to submit a new entry.',
                         );
+
+    my $location = $c->stash()->{location};
+
+    unless ( $c->vg_user()->is_admin() || $location->can_have_vendors() )
+    {
+        $c->add_message( 'This region cannot have entries.' );
+        $c->redirect_and_detach( region_uri( location => $location ) );
+    }
 
     my $cloned_vendor_id = $c->request()->param('cloned_vendor_id');
     $c->stash()->{cloned_vendor} = VegGuide::Vendor->new( vendor_id => $cloned_vendor_id )
