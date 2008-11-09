@@ -84,3 +84,5 @@ if ( $XML::Feed::VERSION <= 0.12 )
         $feed;
     };
 }
+
+1;
