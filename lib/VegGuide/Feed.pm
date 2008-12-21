@@ -21,10 +21,6 @@ sub convert
     {
         $new->_make_atom_valid();
     }
-    else
-    {
-        $new->_make_rss_10();
-    }
 
     return $new;
 }
@@ -35,19 +31,16 @@ sub _make_atom_valid
 
     my $root_elem = $self->{atom}->elem();
 
+    my $link_node = $root_elem->ownerDocument()->createElementNS( $self->{atom}->ns(), 'link' );
+    $link_node->setAttribute( rel => 'self' );
+    $link_node->setAttribute( href => $self->link() );
+
+    $root_elem->insertBefore( $link_node, $root_elem->firstChild() );
+
     my $id_node = $root_elem->ownerDocument()->createElementNS( $self->{atom}->ns(), 'id' );
     $id_node->appendChild( XML::LibXML::Text->new( $self->link() ) );
 
     $root_elem->insertBefore( $id_node, $root_elem->firstChild() );
-
-    return;
-}
-
-sub _make_rss_10
-{
-    my $self = shift;
-
-    $self->{rss}{output} = '1.0';
 
     return;
 }
