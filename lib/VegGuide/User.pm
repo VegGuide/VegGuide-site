@@ -674,11 +674,19 @@ sub update_count
         );
 
     return
-        $schema->row_count
-            ( join =>
-              [ $schema->tables('UserActivityLog') ],
-              where => \@where,
-            );
+        $schema->UserActivityLog_t->row_count( where => \@where );
+}
+
+sub image_count
+{
+    my $self = shift;
+
+    my $schema = VegGuide::Schema->Connect();
+
+    my @where = ( $schema->VendorImage_t->user_id_c, '=', $self->user_id );
+
+    return
+        $schema->VendorImage_t->row_count( where => \@where );
 }
 
 sub top_vendors
@@ -1405,6 +1413,42 @@ sub ByUpdateCount
                     order_by =>
                     [ $schema->sqlmaker->COUNT
                           ( $schema->UserActivityLog_t->user_id_c ),
+                      'DESC',
+                    ],
+                    limit => $p{limit},
+                  )
+            );
+}
+
+sub ByImageCount
+{
+    my $class = shift;
+    my %p = validate( @_,
+                      { limit => { type => SCALAR, default => 5 },
+                      },
+                    );
+
+    my $schema = VegGuide::Schema->Connect();
+
+    return
+        VegGuide::Cursor::UserWithAggregate->new
+            ( cursor =>
+              $schema->VendorImage_t->select
+                  ( select =>
+                    [ $schema->sqlmaker->COUNT
+                          ( $schema->VendorImage_t->vendor_image_id_c ),
+                      $schema->VendorImage_t->user_id_c
+                    ],
+                    where =>
+                    [ $schema->VendorImage_t->user_id_c,
+                      'NOT IN',
+                      $class->users_excluded_from_stats,
+                    ],
+                    group_by =>
+                    $schema->VendorImage_t->user_id_c,
+                    order_by =>
+                    [ $schema->sqlmaker->COUNT
+                          ( $schema->VendorImage_t->user_id_c ),
                       'DESC',
                     ],
                     limit => $p{limit},

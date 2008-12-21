@@ -22,6 +22,14 @@
 % }
 </ol>
 
+<h2>Top Image Providers</h2>
+
+<ol>
+% while ( my $user = $top_imagers->next() ) {
+ <li><& /lib/link/user.mas, user => $user &> - <% $user->image_count() %></li>
+% }
+</ol>
+
 <h2>Most Reviewed Entries</h2>
 
 <ol>
@@ -78,6 +86,7 @@ Only includes entries with 6 or more ratings.
 my $top_adders = VegGuide::User->ByVendorCount( limit => 20 );
 my $top_reviewers = VegGuide::User->ByReviewCount( limit => 20 );
 my $top_updaters = VegGuide::User->ByUpdateCount( limit => 20 );
+my $top_imagers = VegGuide::User->ByImageCount( limit => 20 );
 my $most_reviewed = VegGuide::Vendor->ByReviewCount( limit => 20 );
 my $most_rated = VegGuide::Vendor->ByRatingCount( limit => 20 );
 my $best_rated = VegGuide::Vendor->ByRating( limit => 20 );
