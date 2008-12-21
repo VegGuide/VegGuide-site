@@ -5,10 +5,10 @@ use warnings;
 
 use base 'XML::Feed';
 use XML::Feed;
-use XML::Feed::Entry;
-use XML::Feed::RSS;
+use XML::Feed::Format::Atom;
+use XML::Feed::Format::RSS;
 
-@XML::Feed::RSS::ISA = @XML::Feed::Atom::ISA = 'VegGuide::Feed';
+@XML::Feed::Format::RSS::ISA = @XML::Feed::Format::Atom::ISA = 'VegGuide::Feed';
 
 
 sub convert
