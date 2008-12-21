@@ -41,8 +41,6 @@ use XML::Feed::Entry;
 
         $Interp->exec( $self->feed_template_params() );
 
-        # If the summary is left undefined we get a bunch of uninit
-        # value warnings from XML::Atom
         $entry->content($content);
 
         return $entry;
