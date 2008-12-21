@@ -659,6 +659,28 @@ sub reviews_by_location
 	);
 }
 
+sub update_count
+{
+    my $self = shift;
+
+    my $schema = VegGuide::Schema->Connect();
+
+    my @where =
+        ( [ $schema->UserActivityLog_t->user_id_c, '=', $self->user_id ],
+          [ $schema->UserActivityLog_t->user_activity_log_type_id_c,
+            'IN',
+            $self->entry_update_activity_type_ids,
+          ],
+        );
+
+    return
+        $schema->row_count
+            ( join =>
+              [ $schema->tables('UserActivityLog') ],
+              where => \@where,
+            );
+}
+
 sub top_vendors
 {
     my $self = shift;
@@ -1062,6 +1084,28 @@ sub activity_logs
                 location_id               => $p{location_id},
               },
             );
+
+    }
+
+    sub entry_update_activity_type_ids
+    {
+        return @types{ 'update vendor', 'suggestion accepted' };
+    }
+}
+
+{
+    my $schema = VegGuide::Schema->Connect();
+
+    my @ids =
+        $schema->User_t->function
+            ( select => $schema->User_t()->user_id_c(),
+              where  => [ $schema->User_t()->real_name_c(),
+                          'IN', 'VegGuide.Org', 'Admin' ],
+            );
+
+    sub users_excluded_from_stats
+    {
+        return @ids;
     }
 }
 
@@ -1274,6 +1318,11 @@ sub ByVendorCount
                           ( $schema->Vendor_t->vendor_id_c ),
                       $schema->Vendor_t->user_id_c
                     ],
+                    where =>
+                    [ $schema->Vendor_t->user_id_c,
+                      'NOT IN',
+                      $class->users_excluded_from_stats,
+                    ],
                     group_by =>
                     $schema->Vendor_t->user_id_c,
                     order_by =>
@@ -1305,11 +1354,57 @@ sub ByReviewCount
                           ( $schema->VendorComment_t->vendor_id_c ),
                       $schema->VendorComment_t->user_id_c
                     ],
+                    where =>
+                    [ $schema->VendorComment_t->user_id_c,
+                      'NOT IN',
+                      $class->users_excluded_from_stats,
+                    ],
                     group_by =>
                     $schema->VendorComment_t->user_id_c,
                     order_by =>
                     [ $schema->sqlmaker->COUNT
                           ( $schema->VendorComment_t->vendor_id_c ),
+                      'DESC',
+                    ],
+                    limit => $p{limit},
+                  )
+            );
+}
+
+sub ByUpdateCount
+{
+    my $class = shift;
+    my %p = validate( @_,
+                      { limit => { type => SCALAR, default => 5 },
+                      },
+                    );
+
+    my $schema = VegGuide::Schema->Connect();
+
+    return
+        VegGuide::Cursor::UserWithAggregate->new
+            ( cursor =>
+              $schema->UserActivityLog_t->select
+                  ( select =>
+                    [ $schema->sqlmaker->COUNT
+                          ( $schema->UserActivityLog_t->user_activity_log_id_c ),
+                      $schema->UserActivityLog_t->user_id_c
+                    ],
+                    where =>
+                    [ [ $schema->UserActivityLog_t->user_activity_log_type_id_c,
+                        'IN',
+                        $class->entry_update_activity_type_ids,
+                      ],
+                      [ $schema->UserActivityLog_t->user_id_c,
+                        'NOT IN',
+                        $class->users_excluded_from_stats,
+                      ],
+                    ],
+                    group_by =>
+                    $schema->UserActivityLog_t->user_id_c,
+                    order_by =>
+                    [ $schema->sqlmaker->COUNT
+                          ( $schema->UserActivityLog_t->user_id_c ),
                       'DESC',
                     ],
                     limit => $p{limit},

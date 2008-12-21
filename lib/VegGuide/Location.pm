@@ -1061,6 +1061,8 @@ sub new_vendors_feed
 
     my $feed = $self->_as_xml_feed();
 
+    $feed->is_entries_only(1);
+
     my $description = "The $p{limit} most recent entries in " . $self->name;
     $description .= ', ' . $self->parent->name if $self->parent;
     $description .= '.';
@@ -1091,6 +1093,8 @@ sub new_reviews_feed
                     );
 
     my $feed = $self->_as_xml_feed();
+
+    $feed->is_reviews_only(1);
 
     my $description = "The $p{limit} most recent reviews in " . $self->name;
     $description .= ', ' . $self->parent->name if $self->parent;
