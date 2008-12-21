@@ -11,11 +11,38 @@ use XML::Feed::Format::RSS;
 @XML::Feed::Format::RSS::ISA = @XML::Feed::Format::Atom::ISA = 'VegGuide::Feed';
 
 
+sub is_entries_only
+{
+    my $self = shift;
+
+    if (@_)
+    {
+        $self->{is_entries_only} = shift;
+    }
+
+    return $self->{is_entries_only};
+}
+
+sub is_reviews_only
+{
+    my $self = shift;
+
+    if (@_)
+    {
+        $self->{is_reviews_only} = shift;
+    }
+
+    return $self->{is_reviews_only};
+}
+
 sub convert
 {
     my $self = shift;
 
     my $new = $self->SUPER::convert(@_);
+
+    $new->is_entries_only( $self->is_entries_only() );
+    $new->is_reviews_only( $self->is_reviews_only() );
 
     if ( $new->format() eq 'Atom' )
     {
@@ -33,7 +60,19 @@ sub _make_atom_valid
 
     my $link_node = $root_elem->ownerDocument()->createElementNS( $self->{atom}->ns(), 'link' );
     $link_node->setAttribute( rel => 'self' );
-    $link_node->setAttribute( href => $self->link() );
+
+    my $self_link = $self->link() . '/recent.atom';
+
+    if ( $self->is_entries_only() )
+    {
+        $self_link .= '?entries_only=1';
+    }
+    elsif ( $self->is_reviews_only() )
+    {
+        $self_link .= '?reviews_only=1';
+    }
+
+    $link_node->setAttribute( href => $self_link );
 
     $root_elem->insertBefore( $link_node, $root_elem->firstChild() );
 
