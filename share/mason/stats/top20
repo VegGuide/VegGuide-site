@@ -22,7 +22,7 @@
 % }
 </ol>
 
-<h2>Top Image Providers</h2>
+<h2>Top Image Uploaders</h2>
 
 <ol>
 % while ( my $user = $top_imagers->next() ) {
