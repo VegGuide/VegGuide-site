@@ -2977,7 +2977,6 @@ sub RecentlyAddedCount
             );
 }
 
-my $TopRatedMinCount = 6;
 sub TopRated
 {
     my $class = shift;
@@ -2986,6 +2985,7 @@ sub TopRated
                         location => { isa => 'VegGuide::Location', default => undef },
                         where    => { type => ARRAYREF, optional => 1 },
                         tables   => { type => ARRAYREF, optional => 1 },
+                        rating_count => { type => SCALAR, default => 6 },
                       },
                     );
 
@@ -3034,7 +3034,7 @@ sub TopRated
                     having =>
                     [ $schema->sqlmaker->COUNT
                           ( $schema->VendorRating_t->rating_c ),
-                      '>=', $TopRatedMinCount,
+                      '>=', $p{rating_count}
                     ],
                     order_by =>
                     [ $wr,
@@ -3088,6 +3088,7 @@ sub ByRating
     my $class = shift;
     my %p = validate( @_,
                       { limit => { type => SCALAR, default => 5 },
+                        rating_count => { type => SCALAR, default => 10 },
                       },
                     );
 
@@ -3119,7 +3120,7 @@ sub ByRating
                     having =>
                     [ $schema->sqlmaker->COUNT
                           ( $schema->VendorRating_t->rating_c ),
-                      '>=', $TopRatedMinCount,
+                      '>=', $p{rating_count},
                     ],
                     order_by =>
                     [ $wr,
