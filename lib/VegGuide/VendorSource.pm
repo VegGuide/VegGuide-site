@@ -23,6 +23,9 @@ sub process_feed
 {
     my $self = shift;
 
+    warn "Processing feed at ", $self->feed_uri(), "\n"
+        if DEBUG;
+
     my $xml = $self->_get_feed();
 
     unless ($xml)
