@@ -155,22 +155,22 @@ sub _state_for_id
 
 
     my %RegionMap = ( # IL
-                      ( map { $_ => 'Champaign-Urbana' } qw( Champaign Urbana ) ),
-                      ( map { $_ => 'Bloomington-Normal' } qw( Bloomington Normal ) ),
+                      ( map { lc $_ => 'Champaign-Urbana' } qw( Champaign Urbana ) ),
+                      ( map { lc $_ => 'Bloomington-Normal' } qw( Bloomington Normal ) ),
 
                       # NJ
-                      ( map { $_ => 'Cherry Hill Area' }
+                      ( map { lc $_ => 'Cherry Hill Area' }
                         'Cherry Hill', qw( Barrington Collingswood Marlton Merchantville Voorhees ) ),
-                      ( map { $_ => 'Mount Laurel' } 'Mt Laurel', 'Mt. Laurel' ),
-                      ( map { $_ => 'Mount Holly' } 'Mt Holly', 'Mt. Holly' ),
-                      ( 'Hohokus' => 'Ho-Ho-Kus' ),
-                      ( 'Ramsey' => 'Ramsey Area' ),
-                      ( map { $_ => 'Parsippany Area' } qw( Parsippany Wayne ) ),
-                      ( map { $_ => 'Hackensack Area' } qw( Hackensack Rutherford Teaneck ) ),
-                      'ALL NJ - CATERING' => $NJ,
+                      ( map { lc $_ => 'Mount Laurel' } 'Mt Laurel', 'Mt. Laurel' ),
+                      ( map { lc $_ => 'Mount Holly' } 'Mt Holly', 'Mt. Holly' ),
+                      ( lc 'Hohokus' => 'Ho-Ho-Kus' ),
+                      ( lc 'Ramsey' => 'Ramsey Area' ),
+                      ( map { lc $_ => 'Parsippany Area' } qw( Parsippany Wayne ) ),
+                      ( map { lc $_ => 'Hackensack Area' } qw( Hackensack Rutherford Teaneck ) ),
+                      'all nj - catering' => $NJ,
 
                       # NC
-                      ( map { $_ => 'Triangle Area' } qw( Raleigh Durham Cary ), 'Chapel Hill' ),
+                      ( map { lc $_ => 'Triangle Area' } qw( Raleigh Durham Cary ), 'Chapel Hill' ),
                     );
 
     sub _location_for_item
@@ -201,24 +201,32 @@ sub _state_for_id
             $item->{region} = 'Philadelphia Metro';
         }
 
-        if ( $RegionMap{ $item->{region} } )
+        if ( $RegionMap{ lc $item->{region} } )
         {
-            my $region = $RegionMap{ $item->{region} };
+            my $region = $RegionMap{ lc $item->{region} };
             return $region if ref $region;
 
             $item->{region} = $region;
         }
 
-        my $location = VegGuide::Location->new( name               => $item->{region},
+        my $region = $item->{region};
+        # apparently the NJ folks thought it'd "stand out more" if the
+        # regions were in all caps - fucking brilliant
+        if ( $parent->name() eq 'New Jersey' )
+        {
+            $region = join q{ }, map { ucfirst lc } split /\s+/, $region;
+        }
+
+        my $location = VegGuide::Location->new( name               => $region,
                                                 parent_location_id => $parent->location_id(),
                                               );
 
         unless ($location)
         {
-            warn "Making new location $item->{region}, $state\n"
+            warn "Making new location $region, $state\n"
                 if VegGuide::VendorSource::DEBUG();
 
-            $location = VegGuide::Location->create( name               => $item->{region},
+            $location = VegGuide::Location->create( name               => $region,
                                                     parent_location_id => $parent->location_id(),
                                                     user_id            => $User->user_id(),
                                                   );
