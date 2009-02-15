@@ -157,6 +157,7 @@ sub _state_for_id
     my %RegionMap = ( # IL
                       ( map { $_ => 'Champaign-Urbana' } qw( Champaign Urbana ) ),
                       ( map { $_ => 'Bloomington-Normal' } qw( Bloomington Normal ) ),
+
                       # NJ
                       ( map { $_ => 'Cherry Hill Area' }
                         'Cherry Hill', qw( Barrington Collingswood Marlton Merchantville Voorhees ) ),
@@ -166,7 +167,10 @@ sub _state_for_id
                       ( 'Ramsey' => 'Ramsey Area' ),
                       ( map { $_ => 'Parsippany Area' } qw( Parsippany Wayne ) ),
                       ( map { $_ => 'Hackensack Area' } qw( Hackensack Rutherford Teaneck ) ),
-                     'ALL NJ - CATERING' => $NJ,
+                      'ALL NJ - CATERING' => $NJ,
+
+                      # NC
+                      ( map { $_ => 'Triangle Area' } qw( Raleigh Durham Cary ), 'Chapel Hill' ),
                     );
 
     sub _location_for_item
