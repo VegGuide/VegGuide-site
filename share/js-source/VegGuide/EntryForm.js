@@ -89,6 +89,11 @@ VegGuide.EntryForm._setPayments = function (is_enabled) {
         DOM.Element.addClassName( poss_payments, "disabled" );
     }
 
-    payments.disabled = !!is_enabled
-    poss_payments.disabled = !!is_enabled;
+    for ( var i = 0; i < payments.options.length; i++  ) {
+        payments.options[i].disabled = ! is_enabled;
+    }
+
+    for ( var i = 0; i < poss_payments.options.length; i++  ) {
+        poss_payments.options[i].disabled = ! is_enabled;
+    }
 };
