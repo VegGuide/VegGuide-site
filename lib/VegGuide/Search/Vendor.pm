@@ -505,6 +505,9 @@ sub _path_query
     my $self = shift;
 
     my $uri = uri( path => '/', query => $self->{path_query} );
+    # URI.pm insists on escaping a space as + but Catalyst does not
+    # like that.
+    $uri =~ s/\+/%20/g;
 
     return $1
         if $uri =~ /\?(.*)$/;
