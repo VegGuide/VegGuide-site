@@ -17,8 +17,9 @@
 
     <p>
       Please make sure that you have rights to upload this picture. It
-      is not okay to take pictures from blogs or flickr unless those
-      images are under a license that permits their reuse elsewhere.
+      is not okay to upload pictures from blogs, flickr, or elsewhere
+      unless those images are under a license that permits their reuse
+      elsewhere.
     </p>
 
     <p>
@@ -46,6 +47,8 @@
      </div>
 
     </form>
+
+    <& /lib/form/copyright.mas &>
 
    </div>
 
