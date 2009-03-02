@@ -15,6 +15,17 @@
     <hr />
 % }
 
+    <p>
+      Please make sure that you have rights to upload this picture. It
+      is not okay to take pictures from blogs or flickr unless those
+      images are under a license that permits their reuse elsewhere.
+    </p>
+
+    <p>
+      If the image is under a license that requires attribute, please
+      make sure to include this in the caption.
+    </p>
+
     <form action="<% entry_uri( vendor => $vendor, path => 'image' ) %>"
           method="post" enctype="multipart/form-data">
 
