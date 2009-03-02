@@ -23,8 +23,10 @@
     </p>
 
     <p>
-      If the image is under a license that requires attribute, please
-      make sure to include this in the caption.
+      If the image is under a license that requires attribution,
+      please make sure to include this in the caption. If the image is
+      under a Creative Commons license, please cite the license URL as
+      well.
     </p>
 
     <form action="<% entry_uri( vendor => $vendor, path => 'image' ) %>"
