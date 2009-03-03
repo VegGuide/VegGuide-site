@@ -820,6 +820,14 @@ div.rating-star-set a img {
   border: 1px solid #68AA11;
 }
 
+#entry-image .caption {
+  font-size: 70%;
+  font-style: italic;
+  margin-bottom: 0.1em;
+  margin-top: 0.1em;
+  text-align: left;
+}
+
 #images #image-count {
   font-size: 80%;
 }

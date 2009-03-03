@@ -27,6 +27,12 @@ DOM.Ready.onDOMDone( function () {
 % if ($first_image) {
         <img id="main-image" src="<% $first_image->small_uri() | h %>" alt="main image"
              height="<% $first_image->small_height() %>" width="<% $first_image->small_width() %>" />
+%   if ( $first_image->caption() ) {
+        <p class="caption">
+          <% $first_image->caption() %>
+%   }
+        </p>
+        
 %   if ($image_count) {
         <div id="image-count">
          This entry has <a id="show-slideshow" href="#"><% $image_count %>
