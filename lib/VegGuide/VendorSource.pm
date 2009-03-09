@@ -10,7 +10,10 @@ use VegGuide::VendorSource::Filter;
 use VegGuide::User;
 use VegGuide::Util qw( string_is_empty );
 use VegGuide::Vendor;
-use XML::Simple qw( :strict );
+# I'd like to use XML::Simple's strict mode but doing so breaks
+# Net::OpenID::Yadis, because strict mode is set for all users of
+# XML::Simple.
+use XML::Simple;
 
 use VegGuide::Schema;
 use VegGuide::AlzaboWrapper
