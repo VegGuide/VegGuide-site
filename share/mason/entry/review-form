@@ -15,7 +15,7 @@
     <ul>
      <li><b>No personal attacks</b>.  Don't trash anyone else in your review.</li>
      <li><b>Don't mention non-vegetarian food in your review.</b></li>
-     <li><b>Restaurant owners/workers, this is not a forum. Please don't respond to reviews by writing a review</b></li>
+     <li><b>Restaurant owners/workers, this is not a forum. Please don't respond to reviews by writing something here.</b></li>
     </ul>
 
     <& /lib/form/comment.mas, action_uri => $uri, comment => $comment, type => 'review' &>
