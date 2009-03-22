@@ -1196,7 +1196,7 @@ BEGIN
 
 sub has_image
 {
-    return -f $_[0]->large_image_path();
+    return $_[0]->image_extension() && -f $_[0]->large_image_path();
 }
 
 sub _uri_prefix
