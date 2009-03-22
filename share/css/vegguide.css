@@ -963,9 +963,12 @@ span#external-id {
 
 div.attribution-and-rating {
   margin-bottom: 0.2em;
+  /* IE7 bug fix - triggers hasLayout so image is not
+     partially obscured by rating stars */
+  min-height: 1px;
 }
 
-div.attribution img.user-image {
+div.attribution-and-rating img.user-image {
   float: left;
   margin-right: 0.3em;
   margin-bottom: 0.1em;

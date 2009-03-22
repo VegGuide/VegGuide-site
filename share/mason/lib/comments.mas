@@ -9,19 +9,17 @@
 %   }
       <div class="attribution-and-rating">
 
-       <div class="attribution">
 %   if ( $user->has_image() ) {
-        <&| /lib/link/user.mas, user => $user &>
-        <img class="user-image"
-             src="<% $user->small_image_uri() %>"
-             height="<% $user->small_image_height() %>"
-             width="<% $user->small_image_width() %>"
-             alt="Image for <% $user->real_name() %>" />
-        </&>
+       <&| /lib/link/user.mas, user => $user &>
+       <img class="user-image"
+            src="<% $user->small_image_uri() %>"
+            height="<% $user->small_image_height() %>"
+            width="<% $user->small_image_width() %>"
+            alt="Image for <% $user->real_name() %>" />
+       </&>
 %   }             
-        <& /lib/link/user.mas, user => $user &> -
-        <& /lib/format/date.mas, date => $comment->last_modified_datetime() &>
-       </div>
+       <& /lib/link/user.mas, user => $user &> -
+       <& /lib/format/date.mas, date => $comment->last_modified_datetime() &>
 
 %   if ($vendor) {
 <& .rating, vendor => $vendor, user => $user &>
