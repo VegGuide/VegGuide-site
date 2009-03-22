@@ -119,6 +119,7 @@
     RewriteRule   !^/404               - [C]
     RewriteRule   !^(/\d+)?/css        - [C]
     RewriteRule   !^/entry-images      - [C]
+    RewriteRule   !^/user-images       - [C]
     RewriteRule   !^(/\d+)?/images     - [C]
     RewriteRule   !^(/\d+)?/js         - [C]
     RewriteRule   !^/skin-images       - [C]
@@ -141,6 +142,7 @@
     Alias        /robots.txt           /usr/local/share/vegguide/static/robots.txt
 
     Alias        /entry-images         /var/lib/vegguide/entry-images
+    Alias        /user-images          /var/lib/vegguide/user-images
     AliasMatch   (/\d+)?/js(.+)        /var/lib/vegguide/js$2
     Alias        /skin-images          /var/lib/vegguide/skin-images
 

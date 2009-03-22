@@ -16,8 +16,12 @@ exit 0
 system( qw( mysqldump -u root RegVeg --ignore-table RegVeg.Session -r /home/autarch/RegVeg.sql ) )
     and die 'Cannot execute mysqldump';
 
-for my $source ( qw( /var/lib/vegguide/entry-images /var/lib/vegguide/skin-images /home/autarch/RegVeg.sql
-                     /var/lib/mailman/archives /var/lib/mailman/lists ) )
+for my $source ( qw( /var/lib/vegguide/entry-images
+                     /var/lib/vegguide/user-images
+                     /var/lib/vegguide/skin-images
+                     /home/autarch/RegVeg.sql
+                     /var/lib/mailman/archives
+                     /var/lib/mailman/lists ) )
 {
     system( 'rsync', '-e', 'ssh -i /home/autarch/.ssh/id_rsa.backups', '-r',
             $source, 'urth.org:/home/autarch/backup/vegguide.org/' )
