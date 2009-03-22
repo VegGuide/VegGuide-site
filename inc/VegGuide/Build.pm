@@ -324,6 +324,23 @@ sub ACTION_make_entry_images_dir
         or die "Cannot chown $uid:$gid $target_dir: $!";
 }
 
+sub ACTION_make_user_images_dir
+{
+    my $self = shift;
+
+    return if $FAKE;
+
+    require VegGuide::Config;
+    my $target_dir = File::Spec->catdir( VegGuide::Config->VarLibDir(), 'user-images', );
+
+    mkpath( $target_dir, 1, 0755 );
+
+    my ( $uid, $gid ) = $self->_server_uid_gid();
+
+    chown $uid, $gid, $target_dir
+        or die "Cannot chown $uid:$gid $target_dir: $!";
+}
+
 sub ACTION_make_skin_images_dir
 {
     my $self = shift;
