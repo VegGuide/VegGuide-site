@@ -7,9 +7,18 @@
      <a href="<% user_uri( user => $user, path => 'deletion_confirmation_form' ) | h %>" class="action-button">Delete</a>
 %   }
     </p>
+    <p>
+     <a href="<% user_uri( user => $user, path => 'image_form' ) | h %>">upload an image for <% lc $possessive %> profile</a>
+    </p>
 % }
 
-    <h2>About <% $subject | h %></h2>
+% if ( my $bio = $user->bio() ) {
+    <h2>Bio</h2>
+
+    <% VegGuide::Util::text_to_html( text => $bio ) %>
+% }
+
+    <h2>About <% $subject | h %> on VegGuide</h2>
 
     <p>
      <% $subject | h %> <% $has_verb %> added <% $vendor_count %> entr<% $vendor_count != 1 ? 'ies' : 'y' %>,
@@ -70,7 +79,7 @@ $user
 <%init>
 my ( $subject, $possessive, $has_verb, $doesnot_verb ) =
     $c->vg_user()->user_id() == $user->user_id()
-    ? ( 'you', 'your', 'have', q{don't} )
+    ? ( 'You', 'Your', 'have', q{don't} )
     : ( $user->real_name(), $user->real_name() . q{'s}, 'has', q{doesn't} );
 
 my $vendor_count = $user->vendor_count();

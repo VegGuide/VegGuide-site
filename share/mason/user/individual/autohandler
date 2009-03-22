@@ -4,7 +4,22 @@
    <& /lib/rounded-corners-top.mas &>
 
    <div id="page-title-and-info">
+% if ( $user->has_image() ) {
+   <div id="page-title-and-info-image-container">
+    <img id="user-image"
+         src="<% $user->large_image_uri() %>"
+         height="<% $user->large_image_height() %>"
+         width="<% $user->large_image_width() %>"
+         alt="Image for <% $user->real_name() %>" />
+% }
+
     <h1 id="page-title"><% $user->real_name() | h %></h1>
+
+% if ( $user->how_veg() ) {
+    <div id="how-veg">
+     I'm <% $user->veg_level_description %>
+    </div>
+% }
 
     <div id="registered-date">
      Registered on <& /lib/format/date.mas, date => $user->creation_datetime() &>
@@ -20,6 +35,9 @@
     <div id="email-address">
      <% $user->email_address() | h %>
     </div>
+% }
+% if ( $user->has_image() ) {
+   </div>
 % }
    </div>
   </div>

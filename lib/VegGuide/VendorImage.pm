@@ -15,9 +15,9 @@ use File::Copy qw( copy );
 use File::LibMagic;
 use File::Path qw( mkpath );
 use File::Spec;
-use Image::Magick;
 use Image::Size qw( imgsize );
 use VegGuide::Config;
+use VegGuide::Image;
 use VegGuide::Vendor;
 
 
@@ -53,29 +53,18 @@ use VegGuide::Vendor;
                  vendor  => VENDOR_TYPE,
                };
 
-    my $Magic = File::LibMagic->new();
-
-    my %SupportedTypes = map { $_ => 1 } qw( image/gif image/png image/jpeg );
-    my %Extensions     = ( 'image/gif'  => 'gif',
-                           'image/png'  => 'png',
-                           'image/jpeg' => 'jpg',
-                         );
-
     sub create_from_file
     {
         my $class = shift;
         my %p     = validate( @_, $spec );
 
-        my $type = $Magic->checktype_filename( $p{file} );
-
-        data_validation_error 'Invalid file type: ' . $type
-            unless $SupportedTypes{ $type || '' };
+        my $file = VegGuide::Image->new( file => $p{file} );
 
         my $image =
             $class->create( vendor_id => $p{vendor}->vendor_id(),
                             user_id   => $p{user}->user_id(),
                             caption   => $p{caption},
-                            extension => $Extensions{$type},
+                            extension => $file->extension(),
                           );
 
         mkpath( $image->dir(), 0, 0755 );
@@ -84,7 +73,7 @@ use VegGuide::Vendor;
         copy( $p{file}, $to )
             or die "Cannot copy $p{file} => $to: $!";
 
-        $image->_make_resized_images();
+        $image->_make_resized_images($file);
     }
 }
 
@@ -125,48 +114,14 @@ EOF
 
     sub _make_resized_images
     {
-        my $self = shift;
+        my $self  = shift;
+        my $image = shift;
 
-        $self->_resize_image( @Small, 'small' );
-        $self->_resize_image( @Large, 'large' );
+        $image->resize( @Small, $self->small_path() );
+        $image->resize( @Large, $self->large_path() );
     }
 }
 
-sub _resize_image
-{
-    my $self   = shift;
-    my $height = shift;
-    my $width  = shift;
-    my $size   = shift;
-
-    my $img = Image::Magick->new();
-    $img->read( filename => $self->original_path() );
-
-    my $i_height = $img->get('height');
-    my $i_width  = $img->get('width');
-
-    if ( $height < $i_height
-         ||
-         $width  < $i_width
-       )
-    {
-        my $height_r = $height / $i_height;
-        my $width_r  = $width / $i_width;
-
-        my $ratio = $height_r < $width_r ? $height_r : $width_r;
-
-        $img->Scale( height => int( $i_height * $ratio ),
-                     width  => int( $i_width * $ratio ),
-                   );
-    }
-
-    my $meth = $size . '_path';
-    $img->write( filename => $self->$meth(),
-                 quality  => $img->get('quality'),
-                 type     => 'Palette',
-               );
-
-}
 
 BEGIN
 {

@@ -1,0 +1,36 @@
+  <div id="body" class="one-column">
+
+   <h2>Upload a photo for <% $c->vg_user()->user_id() == $user->user_id() ? 'your profile' : $user->real_name() | h %></h2>
+
+    <p>
+     Please make sure that you have rights to upload this image.
+    </p>
+
+    <p>
+     The photo you upload will be resized so that it is no bigger than
+     100x100 pixels.
+    </p>
+
+    <form action="<% user_uri( user => $user, path => 'image' ) %>"
+          method="post" enctype="multipart/form-data">
+
+     <& /lib/form/errors.mas &>
+
+     <div class="form-item">
+      <label for="image">Pick an image:</label>
+      <input id="image" name="image" class="file" type="file" />
+     </div>
+
+     <div class="form-item">
+      <input type="submit" class="submit" value="Upload this photo" />
+     </div>
+
+    </form>
+
+    <& /lib/form/copyright.mas &>
+
+  </div>
+
+<%args>
+$user
+</%args>

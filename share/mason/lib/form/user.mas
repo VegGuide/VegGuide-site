@@ -36,6 +36,31 @@
      </div>
 
      <div class="form-item">
+      <label for="home_page">Your blog or website:</label>
+      <input id="home_page" class="text medium" type="text" name="home_page" value="" />
+     </div>
+
+     <div class="form-item">
+      <label for="bio">Your bio:</label>
+      <textarea id="bio" name="bio" class="text long"></textarea>
+      <p>
+       Tell us something about yourself. What do you like to do?
+       <br /> How did you get interested in this site? What should
+       other people know about you?
+      </p>
+     </div>
+
+     <div class="form-item">
+      <label for="how_veg">How veg are you?</label>
+      <select id="how_veg" name="how_veg">
+% for my $x (0..4) {
+       <option value="<% $x %>">I'm <% VegGuide::User->VegLevelDescription($x) | h %></option>
+% }
+      </select>
+     </div>
+       
+
+     <div class="form-item">
       <label for="allows_email">Allow email from the guide?</label>
       <& /lib/form/boolean.mas, name => 'allows_email' &>
       <p>If you check select "Yes" you'll get email from us very infrequently.</p>

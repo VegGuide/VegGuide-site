@@ -14,11 +14,13 @@ use DateTime;
 use DateTime::Format::MySQL;
 use Digest::SHA1 ();
 use Email::Valid ();
+use Image::Size qw( imgsize );
 use List::Util qw( sum );
 use Sys::Hostname ();
 use URI::FromHash qw( uri );
 use VegGuide::Config;
 use VegGuide::Email;
+use VegGuide::Image;
 use VegGuide::Location;
 use VegGuide::Util qw( string_is_empty );
 
@@ -1115,6 +1117,107 @@ sub activity_logs
     {
         return @ids;
     }
+}
+
+
+{
+    my %Desc =
+        ( 4 => 'vegan',
+          3 => 'vegetarian',
+          2 => 'mostly vegetarian, but not always',
+          1 => 'not vegetarian',
+          0 => 'not telling',
+        );
+
+    sub VegLevelDescription
+    {
+        return $Desc{ $_[1] };
+    }
+}
+
+sub veg_level_description
+{
+    return $_[0]->VegLevelDescription( $_[0]->how_veg() );
+}
+
+sub add_image_from_file
+{
+    my $self = shift;
+    my $file = shift;
+
+    my $image = VegGuide::Image->new( file => $file );
+
+    $self->update( image_extension => $image->extension() );
+
+    $image->resize( 100, 100, $self->large_image_path() );
+    $image->resize( 40, 40, $self->small_image_path() );
+}
+
+
+BEGIN
+{
+    for my $size ( qw( small large ) )
+    {
+        my $filename_method =
+            sub { return $_[0]->base_filename() . q{-} . $size . q{.} . $_[0]->image_extension() };
+
+        my $filename_meth_name = $size . '_image_filename';
+        my $path_method =
+            sub { return File::Spec->catfile( $_[0]->dir(), $_[0]->$filename_meth_name() ) };
+
+        my $uri_method =
+            sub { return File::Spec::Unix->catfile( '', $_[0]->_uri_prefix(), $_[0]->$filename_meth_name() ) };
+
+        my $path_meth_name = $size . '_image_path';
+
+        my $dimensions_key = $size . '_image_dimensions';
+        my $dimensions_method =
+            sub {
+                my $self = shift;
+
+                $self->{$dimensions_key} ||= [ imgsize( $self->$path_meth_name() ) ];
+
+                return $self->{$dimensions_key};
+              };
+
+        my $dimensions_meth_name = q{_} . $size . '_image_dimensions';
+        my $width_method  = sub { $_[0]->$dimensions_meth_name()->[0] };
+        my $height_method = sub { $_[0]->$dimensions_meth_name()->[1] };
+
+        no strict 'refs';
+        *{ $filename_meth_name }     = $filename_method;
+        *{ $path_meth_name }         = $path_method;
+        *{ $size . '_image_uri' }    = $uri_method;
+        *{ $dimensions_meth_name }   = $dimensions_method;
+        *{ $size . '_image_height' } = $height_method;
+        *{ $size . '_image_width' }  = $width_method;
+    }
+}
+
+sub has_image
+{
+    return -f $_[0]->large_image_path();
+}
+
+sub _uri_prefix
+{
+    my $self = shift;
+
+    return ( 'user-images' );
+}
+
+sub dir
+{
+    my $self = shift;
+
+    return File::Spec->catdir( VegGuide::Config->VarLibDir(), $self->_uri_prefix() );
+}
+
+sub base_filename
+{
+    my $self = shift;
+
+    return $self->user_id();
 }
 
 sub is_guest { 0 }

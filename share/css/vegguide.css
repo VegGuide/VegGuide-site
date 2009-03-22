@@ -391,6 +391,8 @@ a.map-link:visited {
 }
 
 #local-nav {
+  clear: both;
+
   width: 78%;
 
   padding: 0.3em 0;
@@ -961,6 +963,12 @@ span#external-id {
 
 div.attribution-and-rating {
   margin-bottom: 0.2em;
+}
+
+div.attribution img.user-image {
+  float: left;
+  margin-right: 0.3em;
+  margin-bottom: 0.1em;
 }
 
 div.review-buttons {
@@ -1755,6 +1763,16 @@ table.suggestion td.hours ul li {
 
 div.suggestion-buttons {
   margin-top: 0.2em;
+}
+
+#user-image {
+  float: left;
+  margin-right: 0.5em;
+  margin-bottom: 0.2em;
+}
+
+#page-title-and-info-image-container {
+  min-height: 100px;
 }
 
 /*
