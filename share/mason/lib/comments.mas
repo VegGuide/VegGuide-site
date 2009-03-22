@@ -11,11 +11,13 @@
 
        <div class="attribution">
 %   if ( $user->has_image() ) {
+        <&| /lib/link/user.mas, user => $user &>
         <img class="user-image"
              src="<% $user->small_image_uri() %>"
              height="<% $user->small_image_height() %>"
              width="<% $user->small_image_width() %>"
              alt="Image for <% $user->real_name() %>" />
+        </&>
 %   }             
         <& /lib/link/user.mas, user => $user &> -
         <& /lib/format/date.mas, date => $comment->last_modified_datetime() &>
@@ -26,7 +28,9 @@
 %   }
       </div>
 
+      <div class="comment-body">
       <% VegGuide::Util::text_to_html( text => $comment->comment(), first_class => 'first', class => 'comment' ) %>
+      </div>
 
 %   if ( $c->vg_user()->$edit_meth($comment) ) {
       <div class="review-buttons">

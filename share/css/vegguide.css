@@ -969,6 +969,11 @@ div.attribution img.user-image {
   float: left;
   margin-right: 0.3em;
   margin-bottom: 0.1em;
+  border: 0;
+}
+
+div.comment-body {
+  clear: left;
 }
 
 div.review-buttons {
