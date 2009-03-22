@@ -128,7 +128,7 @@ sub _validate_data
          && ( ! $is_update
               ||
               ( ! defined $self->openid_uri()
-                || $data->{openid_uri} != $self->openid_uri() )
+                || $data->{openid_uri} ne $self->openid_uri() )
             )
        )
     {
