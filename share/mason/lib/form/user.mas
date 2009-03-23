@@ -21,12 +21,12 @@
 
      <div class="form-item">
       <label for="password">Password:</label>
-      <input id="password" class="text" type="password" name="password" value="" />
+      <input id="password" class="text" type="password" name="password" value="" autocomplete="off" />
      </div>
 
      <div class="form-item">
       <label for="password2">Repeat password:</label>
-      <input id="password2" class="text" type="password" name="password2" value="" />
+      <input id="password2" class="text" type="password" name="password2" value="" autocomplete="off" />
      </div>
 
      <div class="form-item">
