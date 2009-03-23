@@ -49,7 +49,7 @@ sub _new_row
 
 	if ( exists $p{password} )
 	{
-	    my $sha1 = Digest::SHA1::sha1_base64( $p{password} );
+	    my $sha1 = Digest::SHA1::sha1_base64( Encode::encode( 'utf-8', $p{password} ) );
 	    push @where,
 		[ $schema->User_t->password_c, '=', $sha1 ];
 	}
@@ -203,8 +203,9 @@ sub _validate_data
     $data->{home_page} = VegGuide::Util::normalize_uri( $data->{home_page} )
         if defined $data->{home_page};
 
-    $data->{password} = Digest::SHA1::sha1_base64( $data->{password} )
-        if defined $data->{password};
+    $data->{password} =
+        Digest::SHA1::sha1_base64( Encode::encode( 'utf-8', $data->{password} ) )
+            if defined $data->{password};
 }
 
 {
