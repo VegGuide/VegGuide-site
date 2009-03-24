@@ -1,0 +1,9 @@
+<& /lib/users-table.mas, users => $users &>
+
+<%args>
+$users
+</%args>
+
+<%method page_title>
+Users with Bios or Images
+</%method>

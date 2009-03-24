@@ -121,4 +121,12 @@ sub duplicates : Local
     $c->stash()->{template} = '/site/admin/duplicates';
 }
 
+sub users_with_profiles : Local
+{
+    my $self = shift;
+    my $c    = shift;
+
+    $c->stash()->{users} = VegGuide::User->All( with_profile => 1 );
+}
+
 1;

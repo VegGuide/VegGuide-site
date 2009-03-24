@@ -1315,6 +1315,7 @@ sub All
     my %p = validate( @_,
                       { real_name => { type => SCALAR, optional => 1 },
                         email_address => { type => SCALAR, optional => 1 },
+                        with_profile => { type => BOOLEAN, default => 0 },
                         limit => { type => SCALAR, optional => 1 },
                         start => { type => SCALAR, optional => 1 },
                         order_by => { type => SCALAR,
@@ -1406,6 +1407,15 @@ sub _WhereClauseForSearch
     {
         $where{where} = [ $user_t->email_address_c(),
                           'LIKE', '%' . $p{email_address} . '%' ];
+    }
+    elsif ( $p{with_profile} )
+    {
+        $where{where} = [ '(',
+                          [ $user_t->bio_c(), '!=', undef ],
+                          'or',
+                          [ $user_t->image_extension_c(), '!=', undef ],
+                          ')',
+                        ];
     }
 
     return %where;
