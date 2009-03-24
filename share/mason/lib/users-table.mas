@@ -1,0 +1,96 @@
+    <table id="users-table" class="standard-table">
+
+     <thead>
+      <tr>
+       <td colspan="<% $col_count %>" class="first last">
+        <% $pagination %>
+       </td>
+      </tr>
+
+      <tr class="table-heading">
+       <th id="name-header first">
+% if ($search) {
+<&| /lib/sort-link.mas, search => $search &>Name</&>
+% } else {
+Name
+% }
+       </th>
+% if ( $c->vg_user()->is_admin() ) {
+       <th id="email-address-header">
+%   if ($search) {
+<&| /lib/sort-link.mas, search => $search &>Email Address</&>
+%   } else {
+Email Address
+%   }
+       </th>
+% }
+       <th id="signup-date-header">
+% if ($search) {
+<&| /lib/sort-link.mas, search => $search &>Signup Date</&>
+% } else {
+Signup Date
+% }
+       </th>
+       <th id="entry-count-header">Entries</th>
+       <th id="review-count-header">Reviews</th>
+       <th id="rating-count-header">Ratings</th>
+       <th id="button-header last"></th>
+      </tr>
+     </thead>
+
+% if ( $pager && $pager->total_entries() ) {
+     <tfoot>
+      <tr>
+       <td colspan="<% $col_count %>" class="first last">
+        <% $pagination %>
+       </td>
+      </tr>
+     </tfoot>
+% }
+
+     <tbody>
+% while ( my $user = $users->next() ) {
+      <tr class="<% $users->count() % 2 ? 'odd' : 'even' %>">
+       <td class="first"><& /lib/link/user.mas, user => $user &></td>
+% if ( $c->vg_user()->is_admin() ) {
+       <td><% $user->email_address() | h %></td>
+% }
+       <td><& /lib/format/date.mas, date => $user->creation_datetime() &></td>
+       <td><% $user->vendor_count() %></td>
+       <td><% $user->review_count() %></td>
+       <td><% $user->rating_count() %></td>
+       <td class="last">
+%   if ( $c->vg_user()->can_edit_user($user) ) {
+        <a href="<% user_uri( user => $user, path => 'edit_form' ) | h %>"
+           class="content-button-medium">Edit</a>
+%   }
+%   if ( $c->vg_user()->can_delete_user($user) ) {
+        <a href="<% user_uri( user => $user, path => 'deletion_confirmation_form' ) | h %>"
+           class="action-button-medium">Delete</a>
+%   }
+       </td>
+      </tr>
+% }
+     </tbody>
+
+    </table>
+
+<%args>
+$users
+$search => undef
+$pager => undef
+</%args>
+
+<%init>
+my $pagination;
+
+$pagination =
+    $m->scomp( '/lib/pagination.mas',
+               pager  => $pager,
+               search => $search,
+               things => 'entries',
+             )
+        if $pager;
+
+my $col_count = $c->vg_user()->is_admin() ? 7 : 6;
+</%init>
