@@ -83,10 +83,12 @@ sub resize
                    );
     }
 
-    $img->write( filename => $path,
-                 quality  => $img->get('quality'),
-                 type     => 'Palette',
-               );
+    my $status = $img->write( filename => $path,
+                              quality  => $img->get('quality'),
+                              type     => 'Palette',
+                            );
+
+    die $status if $status;
 }
 
 
