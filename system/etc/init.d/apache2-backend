@@ -90,7 +90,7 @@ pidof_apache() {
 }
 
 apache_stop() {
-	if `$APACHE2 -t > /dev/null 2>&1`; then
+	if `$APACHE2CTL configtest > /dev/null 2>&1`; then
 		# if the config is ok than we just stop normaly
                 $APACHE2CTL graceful-stop
 	else
