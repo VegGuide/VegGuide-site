@@ -116,6 +116,9 @@
 
     RewriteRule   ^(/mailman|/pipermail)(.*)  https://%{HTTP_HOST}$1$2 [R=permanent,L]
 
+    # something keep requesting URIs like /foo/bar/favicon.ico
+    RewriteRule   ^.+/favicon.ico                             /favicon.ico                            [R,L]
+
     RewriteRule   !^/404               - [C]
     RewriteRule   !^(/\d+)?/css        - [C]
     RewriteRule   !^/entry-images      - [C]
