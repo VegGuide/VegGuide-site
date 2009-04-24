@@ -101,6 +101,10 @@
     RewriteRule   ^/ge/v/1/4/loader\.js                           -                                   [G,L]
     RewriteRule   ^/(location|vendor)/favicon.*                   -                                   [G,L]
     RewriteRule   ^/__utm\.gif                                    -                                   [G,L]
+    RewriteRule   ^\/apple-touch-icon\.png                        -                                   [G,L]
+    RewriteRule   ^\/apple-touch-icon-precomposed\.png            -                                   [G,L]
+    RewriteRule   ^\/labels\.rdf                                  -                                   [G,L]
+    RewriteRule   ^\/sugest\.css                                  -                                   [G,L]
 
     # you are l33t
     RewriteRule   ^/https://www\.paypal\.com/cgi-bin/webscr   -                                       [F,L]
@@ -109,6 +113,7 @@
     RewriteRule   ^\/add\.php3$                               -                                       [F,L]
     RewriteRule   ^\/uds.*                                    -                                       [F,L]
     RewriteRule   ^\/img.*                                    -                                       [F,L]
+    RewriteRule   ^\/\.\.\.                                   -                                       [F,L]
 
     RewriteRule   /rss/static/all\w+\.rss                     /site.rss                               [R=permanent,L]
 
@@ -117,7 +122,7 @@
     RewriteRule   ^(/mailman|/pipermail)(.*)  https://%{HTTP_HOST}$1$2 [R=permanent,L]
 
     # something keep requesting URIs like /foo/bar/favicon.ico
-    RewriteRule   ^.+/favicon.ico                             /favicon.ico                            [R,L]
+    RewriteRule   ^.+/favicon.ico$                            /favicon.ico                            [R,L]
 
     RewriteRule   !^/404               - [C]
     RewriteRule   !^(/\d+)?/css        - [C]
