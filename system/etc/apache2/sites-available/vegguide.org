@@ -121,7 +121,7 @@
 
     # something keep requesting URIs like /foo/bar/favicon.ico
     RewriteRule   !^/images/favicon\.ico                      -                                       [C]
-    RewriteRule   ^.+/favicon.(gif|ico)$                      /images/favicon.ico                     [R,L]
+    RewriteRule   favicon.(gif|ico)$                          /images/favicon.ico                     [R,L]
 
     RewriteRule   !^/404               - [C]
     RewriteRule   !^(/\d+)?/css        - [C]
