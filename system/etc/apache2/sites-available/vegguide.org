@@ -92,14 +92,12 @@
     RewriteRule   ^/(source|privacy|about|contact|info_key|contest|todo).html  -                      [G,L]
     RewriteRule   ^/(search|printable|location_suggestion|promo_cards|vegsiteinabox).html    -        [G,L]
     RewriteRule   ^/by_(name|geocode|zipcode).html            -                                       [G,L]
-    RewriteRule   ^/favicon.gif                               -                                       [G,L]
     RewriteRule   ^/submit.*                                  -                                       [G,L]
 
     # Random requests for stuff that we don't have
     RewriteRule   ^/maps/c/ui/HovercardLauncher/dommanifest\.js$  -                                   [G,L]
     RewriteRule   ^/\.api/main\.js                                -                                   [G,L]
     RewriteRule   ^/ge/v/1/4/loader\.js                           -                                   [G,L]
-    RewriteRule   ^/(location|vendor)/favicon.*                   -                                   [G,L]
     RewriteRule   ^/__utm\.gif                                    -                                   [G,L]
     RewriteRule   ^\/apple-touch-icon\.png                        -                                   [G,L]
     RewriteRule   ^\/apple-touch-icon-precomposed\.png            -                                   [G,L]
@@ -122,7 +120,8 @@
     RewriteRule   ^(/mailman|/pipermail)(.*)  https://%{HTTP_HOST}$1$2 [R=permanent,L]
 
     # something keep requesting URIs like /foo/bar/favicon.ico
-    RewriteRule   ^.+/favicon.ico$                            /images/favicon.ico                     [R,L]
+    RewriteRule   !^/images/favicon\.ico                      -                                       [C]
+    RewriteRule   ^.+/favicon.(gif|ico)$                      /images/favicon.ico                     [R,L]
 
     RewriteRule   !^/404               - [C]
     RewriteRule   !^(/\d+)?/css        - [C]
