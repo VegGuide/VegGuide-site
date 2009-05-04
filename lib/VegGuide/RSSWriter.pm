@@ -268,22 +268,6 @@ sub add_vendor_for_data_feed
                     );
 }
 
-sub add_vendor
-{
-    my $self = shift;
-    my $vendor = shift;
-
-    my %item = $self->_vendor_basic_item( $vendor, 1 );
-
-    $self->{g}->item( %item,
-                      dc =>
-                      { date =>
-                        DateTime::Format::W3CDTF->format_datetime
-                            ( $vendor->creation_datetime_object->set_time_zone('UTC') ),
-                      },
-                    );
-}
-
 sub _vendor_basic_item
 {
     my $self = shift;
