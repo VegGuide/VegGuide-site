@@ -2397,9 +2397,12 @@ sub rest_data
 
 sub feed_title
 {
-    my $self = shift;
+    my $self          = shift;
 
-    return $self->name();
+    my $title = $self->name();
+    $title .= ' in ' . $self->location->name_with_parent;
+
+    return $title;
 }
 
 sub feed_uri

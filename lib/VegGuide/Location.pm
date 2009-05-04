@@ -775,6 +775,20 @@ sub average_rating
             );
 }
 
+sub name_with_parent
+{
+    my $self = shift;
+
+    my $name = $self->name();
+
+    if ( $self->parent() )
+    {
+        $name .= q{, } . $self->parent()->name();
+    }
+
+    return $name;
+}
+
 sub time_zone
 {
     my $self = shift;
@@ -1027,8 +1041,8 @@ sub new_vendors_and_reviews_feed
 
     my $feed = $self->_as_xml_feed();
 
-    my $description = "The $p{limit} most recent entries and reviews in " . $self->name;
-    $description .= ', ' . $self->parent->name if $self->parent;
+    my $description = "The $p{limit} most recent entries and reviews in ";
+    $description .= $self->name_with_parent;
     $description .= '.';
 
     $feed->description($description);
@@ -1063,8 +1077,8 @@ sub new_vendors_feed
 
     $feed->is_entries_only(1);
 
-    my $description = "The $p{limit} most recent entries in " . $self->name;
-    $description .= ', ' . $self->parent->name if $self->parent;
+    my $description = "The $p{limit} most recent entries in ";
+    $description .= $self->name_with_parent;
     $description .= '.';
 
     $feed->description($description);
@@ -1096,8 +1110,8 @@ sub new_reviews_feed
 
     $feed->is_reviews_only(1);
 
-    my $description = "The $p{limit} most recent reviews in " . $self->name;
-    $description .= ', ' . $self->parent->name if $self->parent;
+    my $description = "The $p{limit} most recent reviews in ";
+    $description .= $self->name_with_parent;
     $description .= '.';
 
     $feed->description($description);

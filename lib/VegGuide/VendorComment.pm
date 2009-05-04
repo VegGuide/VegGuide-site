@@ -45,7 +45,11 @@ sub feed_title
 {
     my $self = shift;
 
-    return 'Review of ' . $self->vendor()->name() . ' by ' . $self->user()->real_name();
+    my $title = 'Review of ' . $self->vendor()->name();
+    $title .= ' in ' . $self->location->name_with_parent;
+    $title .= ' by ' . $self->user()->real_name();
+
+    return $title;
 }
 
 sub feed_uri
