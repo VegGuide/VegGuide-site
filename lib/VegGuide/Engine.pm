@@ -1,7 +1,12 @@
 package VegGuide::Engine;
 
+use strict;
+use warnings;
+
 {
     package Catalyst::Engine;
+
+    use HTML::Entities qw( encode_entities );
 
     use Data::Dump::Streamer;
 
