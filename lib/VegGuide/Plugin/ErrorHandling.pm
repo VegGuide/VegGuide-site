@@ -75,6 +75,11 @@ sub _log_error
             if $user->user_id();
     }
 
+    if ( my $ref = $self->request()->referer() )
+    {
+        $error{referer} = $ref;
+    }
+
     $error{error} = $error . '';
 
     $self->log()->error( VegGuide::JSON->Encode( \%error ) );
