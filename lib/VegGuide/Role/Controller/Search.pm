@@ -126,6 +126,28 @@ sub _search_from_request
               %{ $extra || {} },
             );
 
+    $self->_redirect_on_bad_request( $c, %p );
+
+    delete $p{$_} for grep { /^possible/ } keys %p;
+    delete @p{ qw( order_by sort_order page limit ) };
+    delete $p{'ie-hack'};
+
+    return $class->new(%p);
+}
+
+sub _redirect_on_bad_request
+{
+    my $self = shift;
+    my $c    = shift;
+    my %p    = @_;
+
+    # Some l33t hacker bot keeps trying to stick links in these
+    # parameters
+    if ( grep { /^http/ } @p{ 'order_by', 'sort_order', 'page', 'limit' } )
+    {
+        $c->redirect_and_detach( q{/}, 301 );
+    }
+
     my @bad_keys = qw( location_id new_query amp );
     # Some bad redirects pointed bots to these URIs and now they keep
     # trying them -
@@ -143,12 +165,6 @@ sub _search_from_request
 
         $c->redirect_and_detach( $path, 301 );
     }
-
-    delete $p{$_} for grep { /^possible/ } keys %p;
-    delete @p{ qw( order_by sort_order page limit ) };
-    delete $p{'ie-hack'};
-
-    return $class->new(%p);
 }
 
 sub _set_search_cursor_params
