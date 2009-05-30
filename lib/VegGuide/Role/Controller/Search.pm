@@ -143,7 +143,7 @@ sub _redirect_on_bad_request
 
     # Some l33t hacker bot keeps trying to stick links in these
     # parameters
-    if ( grep { /^http/ } @p{ 'order_by', 'sort_order', 'page', 'limit' } )
+    if ( grep { defined && /^http/ } @p{ 'order_by', 'sort_order', 'page', 'limit' } )
     {
         $c->redirect_and_detach( q{/}, 301 );
     }
