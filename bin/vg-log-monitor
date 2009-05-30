@@ -74,8 +74,15 @@ sub process_line
                 $text .= 'User: ' . $error->{user}
             }
 
+            if ( $error->{referer} )
+            {
+                $text .= "\n";
+                $text .= "Referer: $error->{referer}";
+            }
+
             $text .= "\n";
             $text .= $error->{error};
+
         }
 
         $message{text} = $text;
@@ -83,7 +90,6 @@ sub process_line
 
     next unless $message{text};
 
-    $message{date}->set_time_zone('America/Chicago');
     $message{text} =~ s/^\s*/    /gm;
 
     push @messages, \%message;
