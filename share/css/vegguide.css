@@ -692,6 +692,8 @@ h2#closed {
   font-size: 130%;
 
   font-style: italic;
+
+  color: #333;
 }
 
 h2#entry-categories {
