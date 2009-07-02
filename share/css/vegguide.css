@@ -338,6 +338,10 @@ h1#page-title {
   color: #9A241F;
 }
 
+div.closed h1#page-title {
+  color: #333;
+}
+
 .veg-level-0, .veg-level-1, .veg-level-2, .veg-level-3, .veg-level-4, .veg-level-5 {
   font-variant: small-caps;
 }

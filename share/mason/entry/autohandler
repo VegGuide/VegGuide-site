@@ -1,6 +1,6 @@
- <div id="main" class="main-entry">
+ <div id="main" class="main-entry <% $vendor->is_closed ? 'closed' : q{} %>">
 
-  <div id="title-and-info-container">
+  <div id="title-and-info-container"">
    <& /lib/rounded-corners-top.mas &>
 
 % if ($show_all_info) {
