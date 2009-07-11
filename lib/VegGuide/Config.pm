@@ -31,7 +31,7 @@ use Sys::Hostname qw( hostname );
             +VegGuide::Plugin::InOutEncoding
             +VegGuide::Plugin::ResponseAttributes
             DR::Session
-            DR::Session::State::URI
+            Session::State::URI
             +VegGuide::Plugin::Session::Store::VegGuide
             +VegGuide::Plugin::User
             Cache
@@ -137,9 +137,11 @@ sub AlzaboRootDir
           default_view   => 'Mason',
 
           session        =>
-          { expires        => ( 60 * 5 ),
-            dbi_table      => 'Session',
-            dbi_dbh        => 'VegGuide::Plugin::Session::Store::VegGuide',
+          { expires          => ( 60 * 5 ),
+            dbi_table        => 'Session',
+            dbi_dbh          => 'VegGuide::Plugin::Session::Store::VegGuide',
+            rewrite_body     => 0,
+            rewrite_redirect => 1,
           },
 
           cache =>

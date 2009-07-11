@@ -26,6 +26,7 @@ my %Requires =
       'Catalyst::Plugin::RedirectAndDetach'      => 0,
       'Catalyst::Plugin::Session'                => 0.17,
       'Catalyst::Plugin::Session::State'         => 0,
+      'Catalyst::Plugin::Session::State::URI'    => '0.10',
       'Catalyst::Plugin::Session::Store'         => 0,
       'Catalyst::Plugin::Session::Store::DBI'    => 0,
       'Catalyst::Plugin::StackTrace'             => 0,
