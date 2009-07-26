@@ -2942,8 +2942,10 @@ sub RecentlyAdded
         my $since = DateTime->today->subtract( days => $p{days} );
 
         $where{where} =
-            [ $schema->Vendor_t->creation_datetime_c,
-              '>=', DateTime::Format::MySQL->format_datetime($since) ];
+            [ [ $schema->Vendor_t->creation_datetime_c,
+                '>=', DateTime::Format::MySQL->format_datetime($since) ],
+              [ $schema->Vendor_t->close_date_c, '=', undef ],
+            ];
     }
 
     my %limit;
@@ -2975,8 +2977,10 @@ sub RecentlyAddedCount
     return
         $schema->Vendor_t->row_count
             ( where =>
-              [ $schema->Vendor_t->creation_datetime_c,
-                '>=', DateTime::Format::MySQL->format_datetime($since) ],
+              [ [ $schema->Vendor_t->creation_datetime_c,
+                  '>=', DateTime::Format::MySQL->format_datetime($since) ],
+                [ $schema->Vendor_t->close_date_c, '=', undef ],
+              ],
             );
 }
 
