@@ -5,6 +5,8 @@ use warnings;
 
 use base 'Catalyst::Action::REST';
 
+use MRO::Compat;
+
 
 sub dispatch
 {
@@ -27,7 +29,7 @@ sub dispatch
         }
     }
 
-    return $self->NEXT::dispatch($c);
+    return $self->next::method($c);
 }
 
 

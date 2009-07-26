@@ -3,7 +3,6 @@ package VegGuide::Request;
 use strict;
 use warnings;
 
-use NEXT;
 use base 'Catalyst::Request::REST::ForBrowsers';
 
 use HTTP::Headers::Util qw(split_header_words);

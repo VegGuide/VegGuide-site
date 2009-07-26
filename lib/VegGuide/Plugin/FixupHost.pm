@@ -3,6 +3,8 @@ package VegGuide::Plugin::FixupHost;
 use strict;
 use warnings;
 
+use MRO::Compat;
+
 sub prepare_action
 {
     my $self = shift;
@@ -21,7 +23,7 @@ sub prepare_action
         }
     }
 
-    return $self->NEXT::prepare_action(@_);
+    return $self->maybe::next::method(@_);
 }
 
 sub dispatch
@@ -30,7 +32,7 @@ sub dispatch
 
     return if $self->response()->redirect();
 
-    return $self->NEXT::dispatch(@_);
+    return $self->maybe::next::method(@_);
 }
 
 

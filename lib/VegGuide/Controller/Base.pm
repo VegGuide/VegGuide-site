@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use base 'Catalyst::Controller';
+use MRO::Compat;
 
 # Normally I'd inherit from this class, but that seems to magically
 # break handling of "normal" views (the various *_GET_html
@@ -76,7 +77,7 @@ sub end : Private
     my $self = shift;
     my $c    = shift;
 
-    return $self->NEXT::end($c)
+    return $self->next::method($c)
         if $c->stash()->{rest};
 
     if ( ( ! $c->response()->status()

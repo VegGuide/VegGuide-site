@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Encode;
+use MRO::Compat;
 use VegGuide::Util qw( string_is_empty );
 
 
@@ -11,7 +12,7 @@ sub prepare_parameters
 {
     my $self = shift;
 
-    $self->NEXT::prepare_parameters();
+    $self->maybe::next::method();
 
     # This fiddling around in the request object's internally is a bit
     # gross.
@@ -46,13 +47,13 @@ sub finalize
              && $self->response()->content_type() =~ /^text/
            )
     {
-        return $self->NEXT::finalize();
+        return $self->maybe::next::method();
     }
 
     # Also quite gross, but this does the encoding in place.
     utf8::encode( $self->response->{body} );
 
-    return $self->NEXT::finalize();
+    return $self->maybe::next::method();
 }
 
 

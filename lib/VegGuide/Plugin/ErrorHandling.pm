@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use HTTP::Status qw( RC_NOT_FOUND RC_INTERNAL_SERVER_ERROR );
+use MRO::Compat;
 use VegGuide::JSON;
 
 
@@ -19,7 +20,7 @@ use VegGuide::JSON;
 sub finalize {
     my $self = shift;
 
-    $self->NEXT::finalize(@_);
+    $self->maybe::next::method(@_);
 
     for my $error ( @{ $self->error } ) {
         $self->_log_error($error);
@@ -91,7 +92,7 @@ sub finalize_error
 
     if ( $self->debug() )
     {
-        $self->NEXT::finalize_error( $self, @_ );
+        $self->maybe::next::method( $self, @_ );
         return;
     }
 

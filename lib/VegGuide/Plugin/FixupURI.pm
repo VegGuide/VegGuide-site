@@ -3,6 +3,9 @@ package VegGuide::Plugin::FixupURI;
 use strict;
 use warnings;
 
+use MRO::Compat;
+
+
 # A broken crawler keeps trying to fetch URIs like
 # /location/data.rss%3flocation_id=196%26include_hours=0
 # Unfortunately, for some reason I cannot match this with mod_rewrite
@@ -16,7 +19,7 @@ sub prepare_action
         $self->response()->redirect( $self->request()->uri() );
     }
 
-    return $self->NEXT::prepare_action(@_);
+    return $self->maybe::next::method(@_);
 }
 
 sub dispatch
@@ -25,7 +28,7 @@ sub dispatch
 
     return if $self->response()->redirect();
 
-    return $self->NEXT::dispatch(@_);
+    return $self->maybe::next::method(@_);
 }
 
 
