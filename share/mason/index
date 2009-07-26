@@ -27,11 +27,15 @@
     <h1 id="page-title">Welcome to VegGuide.Org!</h1>
 
     <!--[if lte IE 6]>
-      <p class="ie6" style="background-color:#ffeecc; padding: 1em; margin-top: 1em;"><strong>IE6?</strong> Did you know that IE6 was
-      release in the year 2000? Maybe it's time
-      to <a href="http://www.quirksmode.org/upgrade.html">upgrade to a
-      better browser</a>?  (Unless you're here for testing
-      purposes, of course.)</p>
+
+      <p class="ie6" style="background-color:#ffeecc; padding: 1em;
+                            margin-top: 1em;">
+        <strong>Wow, you're using IE6?</strong> Did you know that IE6
+        was release in the year 2000? Please consider
+        <a href="http://www.quirksmode.org/upgrade.html">upgrading to a
+        modern browser</a>.
+      </p>
+
     <![endif]-->
 
     <p>
