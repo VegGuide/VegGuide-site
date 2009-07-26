@@ -2936,16 +2936,15 @@ sub RecentlyAdded
 
     my $schema = VegGuide::Schema->Connect();
 
-    my %where;
+    my @where = [ $schema->Vendor_t->close_date_c, '=', undef ];
+
     if ( $p{days} )
     {
         my $since = DateTime->today->subtract( days => $p{days} );
 
-        $where{where} =
-            [ [ $schema->Vendor_t->creation_datetime_c,
-                '>=', DateTime::Format::MySQL->format_datetime($since) ],
-              [ $schema->Vendor_t->close_date_c, '=', undef ],
-            ];
+        push @where,
+            [ $schema->Vendor_t->creation_datetime_c,
+              '>=', DateTime::Format::MySQL->format_datetime($since) ];
     }
 
     my %limit;
@@ -2954,7 +2953,7 @@ sub RecentlyAdded
     return
         $class->cursor
             ( $schema->Vendor_t->rows_where
-                  ( %where,
+                  ( where => \@where,
                     order_by =>
                     [ $schema->Vendor_t->creation_datetime_c, 'DESC' ],
                     %limit
