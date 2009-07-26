@@ -3,6 +3,8 @@ package VegGuide::Plugin::ErrorHandling;
 use strict;
 use warnings;
 
+use Catalyst ();
+use Catalyst::Engine ();
 use HTTP::Status qw( RC_NOT_FOUND RC_INTERNAL_SERVER_ERROR );
 use MRO::Compat;
 use VegGuide::JSON;
