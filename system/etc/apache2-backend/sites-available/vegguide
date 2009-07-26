@@ -4,6 +4,8 @@
 #   authz_host  (order, deny)
 #   perl
 
+CustomLog /var/log/apache2-backend/access.log combined
+
 Listen localhost:8088
 
 PerlOptions +Autoload
