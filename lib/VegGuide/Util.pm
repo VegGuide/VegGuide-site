@@ -166,6 +166,8 @@ sub clean_text (\$)
                   },
                 );
 
+        $html =~ s/<a href/<a rel="nofollow" href/g;
+
         if ( $p{class} )
         {
             $html =~ s/<p>/<p class="$p{class}">/g;
