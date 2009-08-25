@@ -148,11 +148,14 @@ sub _redirect_on_bad_request
         $c->redirect_and_detach( q{/}, 301 );
     }
 
-    my @bad_keys = qw( location_id new_query amp );
+    my @bad_keys = qw( location_id new_query amp from );
     # Some bad redirects pointed bots to these URIs and now they keep
     # trying them -
     # /region/706?page=1&sort_order=DESC&order_by=Rating&location_id=706
     # and some are still including new_query=1
+    #
+    # weather.com generates links with from=search_webresults<1> in the query
+    # string (wtf)
     if ( grep { exists $p{$_} } @bad_keys )
     {
         my $p = $c->request()->parameters();
