@@ -236,7 +236,7 @@ sub rating_POST : Private
             );
 
         $self->status_accepted( $c,
-                                entity   => \%rating_info,
+                                entity => \%rating_info,
                               );
     }
 }
