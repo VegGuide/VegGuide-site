@@ -1490,13 +1490,13 @@ sub LocationsForVendors
 
     foreach my $l ( $class->all )
     {
-	next unless $l->can_have_vendors;
+        next unless $l->can_have_vendors;
 
-	my $root = ($l->ancestors)[0];
+        my $root = ($l->ancestors)[0];
 
-	next unless $l->name eq 'Internet' || $root;
+        next unless $l->name eq 'Internet' || $root;
 
-	push @l, $l;
+        push @l, $l;
     }
 
     if ( $p{order_by} eq 'parent' )
