@@ -5,7 +5,11 @@ use warnings;
 
 use base 'VegGuide::Controller::Base';
 
+use Geo::IP;
+use List::AllUtils qw( uniq );
+use VegGuide::Category;
 use VegGuide::Config;
+use VegGuide::Search::Vendor::ByLatLong;
 use VegGuide::SiteURI qw( region_uri );
 use VegGuide::Util qw( string_is_empty );
 use VegGuide::Vendor;
@@ -19,6 +23,27 @@ sub index : Path('/') : Args(0)
     my $c    = shift;
 
     $c->stash()->{is_front_page} = 1;
+
+    my $geo = Geo::IP->open( '/usr/share/GeoIP/GeoIPCity.dat', GEOIP_STANDARD );
+    my $loc = $geo->record_by_addr( $c->request()->params()->{ip} || $c->request()->address() );
+
+    if ($loc)
+    {
+        my $city = join ', ', uniq( grep { defined } $loc->city(), $loc->region_name() );
+
+        $c->stash()->{city} = $city;
+
+        $c->stash()->{search} =
+            VegGuide::Search::Vendor::ByLatLong->new
+                ( address     => $city,
+                  unit        => ( $loc->country_code() eq 'US' ? 'mile' : 'km' ),
+                  latitude    => $loc->latitude(),
+                  longitude   => $loc->longitude(),
+                  category_id => [ VegGuide::Category->Restaurant()->category_id() ],
+            );
+
+        $c->stash()->{search}->set_cursor_params( limit => 4 );
+    }
 
     $c->stash()->{news_item} = VegGuide::NewsItem->MostRecent();
 

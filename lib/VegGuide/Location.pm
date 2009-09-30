@@ -28,6 +28,7 @@ use URI::FromHash qw( uri );
 use VegGuide::Config;
 use VegGuide::Exceptions qw( auth_error data_validation_error );
 use VegGuide::Feed;
+use VegGuide::GreatCircle qw( earth_radius );
 use VegGuide::Locale;
 use VegGuide::PerRequestCache;
 use VegGuide::RSSWriter;
@@ -1896,6 +1897,22 @@ sub next
           VegGuide::Location->new
               ( location_id => $location_id )
         );
+}
+
+package VegGuide::Cursor::LocationById;
+
+use base qw(Class::AlzaboWrapper::Cursor);
+
+sub next
+{
+    my $self = shift;
+
+    my ($location_id) = $self->{cursor}->next
+        or return;
+
+    return
+        VegGuide::Location->new
+            ( location_id => $location_id );
 }
 
 

@@ -38,6 +38,35 @@
 
     <![endif]-->
 
+% if ($city) {
+    <p>
+     Looks like you are in <% $city | h %>.
+%   if ( my $count = $search->count() ) {
+     There <% PL( 'is', $count ) %> <% $count %> <% PL( 'restaurant', $count ) %> nearby.
+%     if ( $count > 4 ) {
+     Here a few of the closest:
+%     }
+    </p>
+%     my $vendors = $search->vendors();
+%     my $location;
+    <ul>
+%     while ( my $vendor = $vendors->next() ) {
+%       $location ||= $vendor->location();
+%       my $distance = $vendor->distance_from( latitude => $search->latitude(), longitude => $search->longitude(), unit => $search->unit() );
+     <li><& /lib/link/vendor.mas, vendor => $vendor &> - <% $distance %> <% PL( $search->unit, $distance ) %></li>
+%     }
+    </ul>
+
+    <p>
+     Browse other nearby entries in <& /lib/link/location-and-parent.mas, location => $location &>.
+    </p>
+%   } else {
+     We don't have any restaurants near your current
+     location. Please <a href="/site/help#editing">add some</a> if you can!
+    </p>
+%   }
+% }
+
     <p>
      To start browsing, just click on a region in the list below. Or
      search for entries by location or name using the search form above.
@@ -76,6 +105,8 @@
 
 <%args>
 $news_item
+$city => undef
+$search => undef
 </%args>
 
 <%init>

@@ -223,5 +223,17 @@ sub _uri_base_params
     return %params;
 }
 
+sub locations
+{
+    my $self = shift;
+
+    VegGuide::Location->NearLatLong
+        ( where    => $self->{where},
+          join     => $self->{join},
+          lat_long => [ $self->latitude(), $self->longitude() ],
+          unit     => $self->unit(),
+          limit    => 4,
+        );
+}
 
 1;
