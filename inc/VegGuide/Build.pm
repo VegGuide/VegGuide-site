@@ -61,6 +61,7 @@ my %Requires =
       'File::Slurp'                              => 0,
       'File::Tail'                               => 0,
       'Geo::Coder::Google'                       => 0,
+      'Geo::IP'                                  => 0,
       'Geography::States'                        => 0,
       'HTML::Entities'                           => 0,
       'HTML::FillInForm'                         => 1.07,
