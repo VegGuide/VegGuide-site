@@ -1,0 +1,8 @@
+#!/bin/sh
+
+mysql -u root -e 'drop database RegVeg; create database RegVeg'
+mysql -u root RegVeg < ./RegVeg.sql
+#mysql -u root RegVeg -e "insert into Skin (hostname,tagline,owner_user_id)values('www', 'Your guide to vegetarian food and shopping', 1)"
+mysql -u root RegVeg -e "delete from VendorSource"
+mysql -u root RegVeg -e "insert into VendorSource (name, display_uri, feed_uri, filter_class) values('VegNJ.com', 'http://www.vegnj.com/', 'http://www.vegnj.com/xmlfeedforvegguide.asp', 'MFA')"
+./script/vegguide_sync_db.pl
