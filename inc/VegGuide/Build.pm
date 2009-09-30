@@ -286,7 +286,7 @@ sub _find_things
 
     $rule = $rule->or( $rule->new()
 		       ->directory()
-		       ->name('.svn')
+		       ->name('.hg')
 		       ->prune()
 		       ->discard(),
 
@@ -387,7 +387,7 @@ sub ACTION_write_revision_file
 
     require VegGuide::Config;
 
-    my ($revision) = `svn info` =~ /Revision: (\d+)/;
+    my ($revision) = `hg tip` =~ /changeset:\s+(\d+)/;
 
     return unless $revision;
 
@@ -446,12 +446,12 @@ sub ACTION_copy_alzabo_schema
 
     require Alzabo::Config;
 
-    my $schema_svn_dir =
+    my $schema_repo_dir =
         File::Spec->catdir( $self->base_dir(), qw( data alzabo schemas RegVeg ) );
 
     my $to_dir = File::Spec->catdir( Alzabo::Config::schema_dir(), 'RegVeg' );
 
-    foreach my $file ( glob File::Spec->catfile( $schema_svn_dir, 'RegVeg.*' ) )
+    foreach my $file ( glob File::Spec->catfile( $schema_repo_dir, 'RegVeg.*' ) )
     {
 	if ($FAKE)
 	{
