@@ -25,7 +25,13 @@ sub index : Path('/') : Args(0)
     $c->stash()->{is_front_page} = 1;
 
     my $geo = Geo::IP->open( '/usr/share/GeoIP/GeoIPCity.dat', GEOIP_STANDARD );
-    my $loc = $geo->record_by_addr( $c->request()->params()->{ip} || $c->request()->address() );
+
+    my $ip =
+          ! VegGuide::Config->IsProduction()
+        ? ( $c->request()->params()->{ip} || $c->request()->address() )
+        : $c->request()->address();
+
+    my $loc = $geo->record_by_addr($ip);
 
     if ($loc)
     {
