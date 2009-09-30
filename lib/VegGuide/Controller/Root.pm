@@ -41,7 +41,7 @@ sub index : Path('/') : Args(0)
 
         $c->stash()->{search} =
             VegGuide::Search::Vendor::ByLatLong->new
-                ( address     => $city,
+                ( address     => 'Your location',
                   unit        => ( $loc->country_code() eq 'US' ? 'mile' : 'km' ),
                   latitude    => $loc->latitude(),
                   longitude   => $loc->longitude(),
