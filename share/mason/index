@@ -57,7 +57,7 @@
 %     }
 %     if ( $count > 4 ) {
 %       $search->set_cursor_params( page => 1, limit => $c->vg_user()->entries_per_page() );
-     <li><a href="<% $search->uri() %>">See more restaurants sorted by distance</a></li>
+     <li><a href="<% $search->uri() %>">More nearby restaurants sorted by distance</a></li>
 %     }
     </ul>
 
