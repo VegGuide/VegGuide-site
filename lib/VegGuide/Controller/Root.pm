@@ -46,6 +46,7 @@ sub index : Path('/') : Args(0)
                   latitude    => $loc->latitude(),
                   longitude   => $loc->longitude(),
                   category_id => [ VegGuide::Category->Restaurant()->category_id() ],
+                  veg_level   => 2,
             );
 
         $c->stash()->{search}->set_cursor_params( limit => 4 );
