@@ -30,10 +30,12 @@
 
       <p class="ie6" style="background-color:#ffeecc; padding: 1em;
                             margin-top: 1em;">
-        <strong>Wow, you're using IE6?</strong> Did you know that IE6
-        was release in the year 2000? Please consider
-        <a href="http://www.quirksmode.org/upgrade.html">upgrading to a
-        modern browser</a>.
+        It looks like you're using IE6. This site probably won't work too well
+        for you. If you can,
+        please <a href="http://www.quirksmode.org/upgrade.html">upgrade to a
+        modern browser</a>. We know that some of you may not have the ability
+        to upgrade, but unfortunately supporting IE6 is no longer viable for
+        us.
       </p>
 
     <![endif]-->
