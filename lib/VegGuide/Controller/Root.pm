@@ -41,13 +41,14 @@ sub index : Path('/') : Args(0)
 
         $c->stash()->{search} =
             VegGuide::Search::Vendor::ByLatLong->new
-                ( address     => 'Your location',
-                  unit        => ( $loc->country_code() eq 'US' ? 'mile' : 'km' ),
-                  latitude    => $loc->latitude(),
-                  longitude   => $loc->longitude(),
-                  category_id => [ VegGuide::Category->Restaurant()->category_id() ],
-                  veg_level   => 2,
-            );
+                ( address      => 'Your location',
+                  unit         => ( $loc->country_code() eq 'US' ? 'mile' : 'km' ),
+                  latitude     => $loc->latitude(),
+                  longitude    => $loc->longitude(),
+                  category_id  => [ VegGuide::Category->Restaurant()->category_id() ],
+                  veg_level    => 2,
+                  allow_closed => 0,
+                );
 
         $c->stash()->{search}->set_cursor_params( limit => 4 );
     }

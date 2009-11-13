@@ -28,6 +28,7 @@ use VegGuide::Validate
           city                     => SCALAR_TYPE( default             => undef ),
           days                     => SCALAR_TYPE( default             => undef ),
           mappable_only            => BOOLEAN_TYPE( default            => 0 ),
+          allow_closed             => BOOLEAN_TYPE( default            => 1 ),
         );
 
     my @SearchKeys   = grep { ! ref } @SearchParams;
@@ -95,8 +96,16 @@ sub _process_sql_query
     $self->{descriptions} = {};
     $self->{path_query}   = {};
 
-    push @{ $self->{where} }, VegGuide::Vendor->CloseCutoffWhereClause()
-        if $self->_exclude_closed_vendors();
+    if ( $self->{allow_closed} )
+    {
+        push @{ $self->{where} }, VegGuide::Vendor->CloseCutoffWhereClause()
+            if $self->_exclude_long_closed_vendors();
+    }
+    else
+    {
+        push @{ $self->{where} },
+            [ VegGuide::Schema->Schema()->Vendor_t->close_date_c, '=', undef ];
+    }
 
     if ( $self->{mappable_only} )
     {
@@ -106,7 +115,7 @@ sub _process_sql_query
     $self->$_() for grep { $self->can($_) } map { ("_$_") } $self->SearchKeys();
 }
 
-sub _exclude_closed_vendors { 1 }
+sub _exclude_long_closed_vendors { 1 }
 
 sub _category_id
 {
