@@ -243,8 +243,11 @@ sub _excluded_ids
              && $vendor->last_modified_datetime_object() > $self->last_processed_datetime_object()
            )
         {
-            warn "$id was updated since last processed datetime\n"
+            warn "$id was updated since last processed datetime (excluding from future feed updates)\n"
                 if DEBUG;
+
+            $self->add_excluded_id( $vendor->external_unique_id() );
+
             return;
         }
 
