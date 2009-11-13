@@ -12,5 +12,3 @@ while ( my $source = $sources->next() )
 {
     $source->process_feed();
 }
-
-
