@@ -164,6 +164,7 @@ sub _state_for_id
                       ( map { lc $_ => 'Mount Laurel' } 'Mt Laurel', 'Mt. Laurel' ),
                       ( map { lc $_ => 'Mount Holly' } 'Mt Holly', 'Mt. Holly' ),
                       ( lc 'Hohokus' => 'Ho-Ho-Kus' ),
+                      ( lc 'Lindenwald' => 'Lindenwold' ),
                       ( lc 'Ramsey' => 'Ramsey Area' ),
                       ( map { lc $_ => 'Parsippany Area' } qw( Parsippany Wayne ) ),
                       ( map { lc $_ => 'Hackensack Area' } qw( Hackensack Rutherford Teaneck ) ),
