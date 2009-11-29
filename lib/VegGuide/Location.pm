@@ -1322,6 +1322,7 @@ sub NewVendorsFeed
     my $schema = VegGuide::Schema->Connect();
 
     my $feed = $class->_AsXMLFeed();
+    $feed->is_entries_only(1);
     $feed->description( "The $p{limit} most recent entries on VegGuide.org." );
 
     my $count = 0;
@@ -1351,6 +1352,7 @@ sub NewReviewsFeed
     my $schema = VegGuide::Schema->Connect();
 
     my $feed = $class->_AsXMLFeed();
+    $feed->is_reviews_only(1);
     $feed->description( "The $p{limit} most recent reviews on VegGuide.org." );
 
     my $count = 0;
