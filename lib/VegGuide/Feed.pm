@@ -61,7 +61,13 @@ sub _make_atom_valid
     my $link_node = $root_elem->ownerDocument()->createElementNS( $self->{atom}->ns(), 'link' );
     $link_node->setAttribute( rel => 'self' );
 
-    my $self_link = $self->link() . '/recent.atom';
+    my $self_link = $self->link();
+    $self_link =~ s{/$}{};
+
+    $self_link .= '/site'
+        if $self_link =~ m{http://[^/]+$};
+
+    $self_link .= '/recent.atom';
 
     if ( $self->is_entries_only() )
     {
