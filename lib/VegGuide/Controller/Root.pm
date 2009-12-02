@@ -26,25 +26,46 @@ sub index : Path('/') : Args(0)
 
     my $geo = Geo::IP->open( '/usr/share/GeoIP/GeoIPCity.dat', GEOIP_STANDARD );
 
-    my $ip =
-          ! VegGuide::Config->IsProduction()
-        ? ( $c->request()->params()->{ip} || $c->request()->address() )
-        : $c->request()->address();
-
-    my $loc = $geo->record_by_addr($ip);
-
-    if ($loc)
+    # There is a hack here to allow for this to work and show some sort of
+    # local data even if the geoip city database is not installed
+    my %geo_loc;
+    if ($geo)
     {
-        my $city = join ', ', uniq( grep { defined } $loc->city(), $loc->region_name() );
+        my $ip =
+            ! VegGuide::Config->IsProduction()
+            ? ( $c->request()->params()->{ip} || $c->request()->address() )
+            : $c->request()->address();
+
+        my $record = $geo->record_by_addr($ip);
+        %geo_loc =
+            map { $_ => $record->$_() }
+            qw( city region_name country_code latitude longitude );
+    }
+    else
+    {
+        die "It looks like GeoIPCity.dat is not installed\n"
+            if VegGuide::Config->IsProduction();
+
+        %geo_loc = ( longitude    => '-93.3063',
+                     city         => 'Minneapolis',
+                     latitude     => '44.9823',
+                     country_code => 'US',
+                     region_name  => 'Minnesota'
+                   );
+    }
+
+    if ( keys %geo_loc )
+    {
+        my $city = join ', ', uniq( grep { defined } $geo_loc{city}, $geo_loc{region_name} );
 
         $c->stash()->{city} = $city;
 
         $c->stash()->{search} =
             VegGuide::Search::Vendor::ByLatLong->new
                 ( address      => 'Your location',
-                  unit         => ( $loc->country_code() eq 'US' ? 'mile' : 'km' ),
-                  latitude     => $loc->latitude(),
-                  longitude    => $loc->longitude(),
+                  unit         => ( $geo_loc{country_code} eq 'US' ? 'mile' : 'km' ),
+                  latitude     => $geo_loc{latitude},
+                  longitude    => $geo_loc{longitude},
                   category_id  => [ VegGuide::Category->Restaurant()->category_id() ],
                   veg_level    => 2,
                   allow_closed => 0,
