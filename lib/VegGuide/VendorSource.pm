@@ -251,6 +251,9 @@ sub _excluded_ids
             return;
         }
 
+        $self->_set_location_for_item($item)
+            or return;
+
         eval
         {
             if ($vendor)
@@ -286,6 +289,25 @@ sub _excluded_ids
             warn $e;
         }
     }
+}
+
+sub _set_location_for_item
+{
+    my $self = shift;
+    my $item = shift;
+
+    my $location = $self->_full_filter_class()->_location_for_item($item);
+
+    unless ( $location )
+    {
+        warn "Could not determine location for $item->{name} ($item->{external_unique_id})\n";
+        return 0;
+    }
+
+    $item->{location_id} = $location->location_id();
+    $item->{region} = $location->parent()->name();
+
+    return 1;
 }
 
 sub All

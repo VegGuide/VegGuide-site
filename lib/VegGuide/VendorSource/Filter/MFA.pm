@@ -101,17 +101,6 @@ sub _merge_categories
 
         $item->{short_description} ||= delete $item->{'long-description'};
 
-        my $location = $class->_location_for_item( $item, $class->_state_for_id( $item->{external_unique_id} ) );
-
-        unless ( $location )
-        {
-            warn "Could not determine location for $item->{name} ($item->{external_unique_id})\n";
-            return;
-        }
-
-        $item->{location_id} = $location->location_id();
-        $item->{region} = $location->parent()->name();
-
         $item->{category_id} = [ map { $class->_category_id_for($_) } @{ delete $item->{category} } ];
 
         # XXX - hacky
@@ -133,16 +122,6 @@ sub _merge_categories
 
         return 1;
     }
-}
-
-sub _state_for_id
-{
-    my $class = shift;
-    my $id    = shift;
-
-    return $1 if $id =~ /^Veg(\w+)\./;
-
-    die "Cannot determine state for $id";
 }
 
 {
@@ -178,7 +157,8 @@ sub _state_for_id
     {
         my $class = shift;
         my $item  = shift;
-        my $state = shift;
+
+        my $state = $class->_state_for_item($item);
 
         return if string_is_empty( $item->{region} );
 
@@ -235,6 +215,16 @@ sub _state_for_id
 
         return $location;
     }
+}
+
+sub _state_for_item
+{
+    my $class = shift;
+    my $item  = shift;
+
+    return $1 if $item->{external_unique_id} =~ /^Veg(\w+)\./;
+
+    die "Cannot determine state for $item->{external_unique_id}";
 }
 
 {
