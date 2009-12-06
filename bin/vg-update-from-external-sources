@@ -6,9 +6,13 @@ use warnings;
 use VegGuide::VendorSource;
 
 
+my $only = shift;
+
 my $sources = VegGuide::VendorSource->All();
 
 while ( my $source = $sources->next() )
 {
+    next if $only && $source->vendor_source_id() != $only;
+
     $source->process_feed();
 }
