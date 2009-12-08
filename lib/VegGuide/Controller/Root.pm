@@ -32,14 +32,15 @@ sub index : Path('/') : Args(0)
     if ($geo)
     {
         my $ip =
-            ! VegGuide::Config->IsProduction()
-            ? ( $c->request()->params()->{ip} || $c->request()->address() )
-            : $c->request()->address();
+              VegGuide::Config->IsProduction()
+            ? $c->request()->address()
+            : ( $c->request()->params()->{ip} || $c->request()->address() );
 
         my $record = $geo->record_by_addr($ip);
         %geo_loc =
             map { $_ => $record->$_() }
-            qw( city region_name country_code latitude longitude );
+            qw( city region_name country_code latitude longitude )
+                if $record;
     }
     else
     {
