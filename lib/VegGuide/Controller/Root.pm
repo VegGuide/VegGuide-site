@@ -22,8 +22,6 @@ sub index : Path('/') : Args(0)
     my $self = shift;
     my $c    = shift;
 
-    $c->stash()->{is_front_page} = 1;
-
     my $geo = Geo::IP->open( '/usr/share/GeoIP/GeoIPCity.dat', GEOIP_STANDARD );
 
     # There is a hack here to allow for this to work and show some sort of

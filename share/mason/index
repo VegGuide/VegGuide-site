@@ -118,3 +118,8 @@ $search => undef
 <%init>
 my @locations = VegGuide::Location->RootLocations();
 </%init>
+
+<%attr>
+layout => '3.0'
+is_front_page => 1
+</%attr>
