@@ -451,7 +451,7 @@ a.map-link:visited {
 
 #local-nav ul li a.feeds {
   padding-left: 1.3em;
-  background: url(../images/feed-icon.png) no-repeat 5% 55%;
+  background: url(../../images/feed-icon.png) no-repeat 5% 55%;
 }
 
 #local-nav ul li.current {
@@ -508,7 +508,7 @@ a.map-link:visited {
   padding: 0 0 0 12px;
   margin: 0;
 
-  background: url(../images/red-bullet-small.png) no-repeat 0 50%;
+  background: url(../../images/red-bullet-small.png) no-repeat 0 50%;
 
   line-height: 1.1em;
 }
@@ -964,7 +964,7 @@ span#external-id {
 
   padding: 0 0 0 12px;
 
-  background: url(../images/red-bullet-small.png) no-repeat 0 50%;
+  background: url(../../images/red-bullet-small.png) no-repeat 0 50%;
 }
 
 div.attribution-and-rating {
@@ -997,7 +997,7 @@ div.review-buttons {
 }
 
 #ratings-list li {
-  background: url(../images/red-bullet-small.png) no-repeat 0 50%;  
+  background: url(../../images/red-bullet-small.png) no-repeat 0 50%;  
   padding-left: 12px;
 }
 
@@ -1055,7 +1055,7 @@ div.comment {
 
 #region-lists li {
   list-style: none;
-  background: url(../images/red-bullet-small.png) no-repeat 0 50%;  
+  background: url(../../images/red-bullet-small.png) no-repeat 0 50%;  
   padding-left: 12px;
 }
 
@@ -1104,7 +1104,7 @@ div.current-filters ul {
 
 div.current-filters ul li {
   padding-left: 12px;
-  background: url(../images/red-bullet-small.png) no-repeat 0 50%;
+  background: url(../../images/red-bullet-small.png) no-repeat 0 50%;
 }
 
 table.standard-table {
@@ -1770,7 +1770,7 @@ table.suggestion td.hours ul li {
   padding: 0 0 0 12px;
   margin: 0;
 
-  background: url(../images/red-bullet-small.png) no-repeat 0 50%;
+  background: url(../../images/red-bullet-small.png) no-repeat 0 50%;
 
   line-height: 1.1em;
 }
