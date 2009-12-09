@@ -56,7 +56,9 @@ a.action-button:visited, a.action-button-medium:visited, a.action-button-small:v
 
 .content-button, .action-button {
     font-size: 120%;
+    *font-size: 110%;
     padding: 0.2em;
+    *padding: 0.05em;
 }
 
 .content-button-medium, .action-button-medium {
