@@ -437,9 +437,9 @@ sub ACTION_generate_combined_js
     return if $FAKE;
 
     require VegGuide::Web::Javascript;
-    VegGuide::Web::Javascript->CreateSingleFile();
+    VegGuide::Web::Javascript->create_single_file();
 
-    my $file = VegGuide::Web::Javascript->CombinedFile();
+    my $file = VegGuide::Web::Javascript->target_file();
     chmod 0644, $file
         or die "Cannot chmod 0644 $file: $!";
 }
@@ -459,9 +459,9 @@ sub ACTION_generate_combined_css
     return if $FAKE;
 
     require VegGuide::Web::CSS;
-    VegGuide::Web::CSS->CreateSingleFile();
+    VegGuide::Web::CSS->create_single_file();
 
-    my $file = VegGuide::Web::CSS->CombinedFile();
+    my $file = VegGuide::Web::CSS->target_file();
     chmod 0644, $file
         or die "Cannot chmod 0644 $file: $!";
 }
