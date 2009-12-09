@@ -454,7 +454,7 @@ sub ACTION_generate_combined_css
     mkpath( $target_dir, 1, 0755 )
         unless $FAKE;
 
-    $self->log_info("Generating combined JS source file\n");
+    $self->log_info("Generating combined CSS source file\n");
 
     return if $FAKE;
 
