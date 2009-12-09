@@ -443,6 +443,28 @@ sub ACTION_generate_combined_js
         or die "Cannot chmod 0644 $file: $!";
 }
 
+sub ACTION_generate_combined_css
+{
+    my $self = shift;
+
+    require VegGuide::Config;
+    my $target_dir = VegGuide::Config->VarLibDir();
+
+    mkpath( $target_dir, 1, 0755 )
+        unless $FAKE;
+
+    $self->log_info("Generating combined JS source file\n");
+
+    return if $FAKE;
+
+    require VegGuide::CSS;
+    VegGuide::CSS->CreateSingleFile();
+
+    my $file = VegGuide::CSS->CombinedFile();
+    chmod 0644, $file
+        or die "Cannot chmod 0644 $file: $!";
+}
+
 sub ACTION_copy_alzabo_schema
 {
     my $self = shift;
