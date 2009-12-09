@@ -140,6 +140,7 @@ sub _install_extra
     $self->dispatch('write_revision_file');
     $self->dispatch('make_cache_dir');
     $self->dispatch('generate_combined_js');
+    $self->dispatch('generate_combined_css');
     $self->dispatch('copy_alzabo_schema');
     $self->dispatch('sync_db');
     $self->dispatch('generate_secrets');
