@@ -13,10 +13,13 @@
 <![endif]-->
 
 <div id="special-grid">
+
   <div class="yui-gb">
     <div class="yui-g first small">&nbsp;</div>
 
     <div class="yui-g large">
+
+      <& /lib/messages.mas &>
 
       <div class="yui-u first column">
         <& '/lib/front-page/' . $columns[0] . '.mas', %ARGS &>

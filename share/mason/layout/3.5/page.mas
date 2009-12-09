@@ -13,9 +13,8 @@
           </div>
 % }
 
-<& .messages &>
-
 % $m->call_next();
+
         </div>
       </div>
     </div>
@@ -25,22 +24,3 @@
   <& footer.mas &>
 
 </div>
-
-<%def .messages>
-
-% if (@messages) {
-  <div id="messages" class="<% $m->request_comp()->attr('is_front_page') ? 'front-page' : '' %>">
-%   for my $msg (@messages) {
-   <p>
-    <% $msg | h %>
-   </p>
-%   }
-  </div>
-% }
-
-<%init>
-my @messages = @{ $c->session()->{messages} || [] };
-return unless @messages;
-</%init>
-
-</%def>

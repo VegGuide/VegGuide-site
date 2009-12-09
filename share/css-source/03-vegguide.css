@@ -102,7 +102,14 @@ a.action-button-medium:visited, a.action-button-small:visited {
     margin-top: 1em;
 }
 
-#logo {
+#messages {
+    background-color: #FFC;
+    border: 1px solid #EEE;
+    margin-bottom: 0.5em;
+    padding: 0.4em;
+}
+
+#front-page-logo {
     margin-bottom: 1em;
 }
 
