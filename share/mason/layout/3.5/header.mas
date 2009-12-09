@@ -1,0 +1,13 @@
+<div id="hd">
+  <& global-nav.mas, %ARGS &>
+
+% if ( $m->request_comp()->attr('is_front_page') ) {
+ <& front-page-header.mas, %ARGS &>
+% } else {
+  <div id="logo">
+   <a href="/" title="Home"><img class="png-filter" src="<% $c->skin()->image_uri() | h %>"
+                                 <% html_imgsize( $c->skin()->image_file() ) %>
+                                 alt="VegGuide.Org Logo" /></a>
+  </div>
+% }
+</div>

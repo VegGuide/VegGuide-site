@@ -1,3 +1,8 @@
+% if ( $m->request_comp()->attr('is_front_page') ) {
+ <& front-page-header.mas, %ARGS &>
+% } else {
+ <& breadcrumbs.mas, %ARGS &>
+
  <div id="header">
 
   <div id="logo">
@@ -19,8 +24,11 @@
    </ul>
   </div>
 
-  <& /sitewide-search.mas, %ARGS &>
+  <& sitewide-search.mas, %ARGS &>
 
  </div>
 
  <div class="force-clear"></div>
+
+% }
+

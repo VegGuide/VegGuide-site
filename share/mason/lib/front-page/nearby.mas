@@ -1,0 +1,63 @@
+    <div class="column-header">
+      <& /lib/rounded-corners-top.mas &>
+      <h2>Nearby</h2>
+    </div>
+
+    <div class="column-content">
+% if ($city) {
+%   if ( my $count = $search->count() ) {
+      <ul>
+% for my $item (@vendors) {
+        <li><& /lib/link/vendor.mas, vendor => $item->[1] &> - <% $item->[0] %> <% PL( $search->unit, $item->[0] ) %></li>
+%     }
+%     if ( $count > 10 ) {
+%       $search->set_cursor_params( page => 1, limit => $c->vg_user()->entries_per_page() );
+        <li><a href="<% $search->uri() %>"><% $count %> <% PL( 'restaurant', $count ) %> near <% $city | h %></a></li>
+%     }
+      </ul>
+
+      <p>
+        Browse all entries in <& /lib/link/location-and-parent.mas, location
+        => $location &>, including grocers, organizations, etc.
+      </p>
+%   } else {
+      <p>
+        We don't have any restaurants near your current
+        location. Please <a href="/site/help#editing">add some</a> if you can!
+      </p>
+%   }
+% } else {
+      <p>
+        Sorry, we can't figure out where you are. Try the links to your left,
+        or the search box at the top of the page.
+      </p>
+% }
+    </div>
+
+<%args>
+$city => undef
+$search => undef
+</%args>
+
+<%init>
+my @vendors;
+my $location;
+
+if ($search) {
+    my $vendors = $search->vendors();
+
+    while ( my $vendor = $vendors->next() ) {
+        my $distance =
+            $vendor->distance_from
+                ( latitude  => $search->latitude(),
+                  longitude => $search->longitude(),
+                  unit      => $search->unit(),
+                );
+        push @vendors, [ $distance, $vendor ];
+    }
+
+    @vendors = sort { $a->[0] <=> $b->[0] } @vendors;
+
+    $location = $vendors[0][1]->location() if @vendors;
+}
+</%init>

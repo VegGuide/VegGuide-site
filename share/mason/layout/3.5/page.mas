@@ -1,0 +1,26 @@
+<div id="doc4" class="<% $m->request_comp()->attr('is_front_page') ? 'front-page' : q{} %>">
+
+<& header.mas, %ARGS &>
+
+  <div id="bd">
+    <div id="yui-main">
+      <div class="yui-b">
+        <div id="content">
+
+% if ( $m->request_comp()->attr('requires_js') ) {
+          <div id="requires-js">
+            This page requires that you have Javascript enabled in your browser.
+          </div>
+% }
+
+% $m->call_next();
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <& footer.mas &>
+
+</div>

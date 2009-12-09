@@ -17,7 +17,7 @@
 <button class="action-button" type="submit">Search</button>
   </form>
 
-  <& sitewide-search-help.mas &>
+  <& /sitewide-search-help.mas &>
 
   <& /lib/rounded-corners-bottom.mas &>
 

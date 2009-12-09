@@ -1,0 +1,6 @@
+<& /lib/front-page/page.mas, columns => [ 'recent-entries', 'recent-reviews' ], %ARGS &>
+
+<%attr>
+is_front_page => 1
+layout => '3.5'
+</%attr>

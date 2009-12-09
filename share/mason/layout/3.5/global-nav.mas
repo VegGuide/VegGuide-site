@@ -1,0 +1,14 @@
+  <div id="global-nav">
+   <ul>
+% unless ( $m->request_comp()->attr('is_front_page') ) {
+    <li class="first"><a href="/" title="Home">Home</a></li>
+% }
+% if ( $c->vg_user()->is_guest() ) {
+    <li><a href="/user/login_form?return_to=<% $c->request()->uri() | uh %>" title="Log in">Log in</a></li>
+% } else {
+    <li><a href="<% user_uri( user => $c->vg_user() ) | h %>" title="My account">My account</a></li>
+    <li><a id="logout" href="/user/authentication?x-tunneled-method=DELETE;return_to=<% $c->request()->uri() | uh %>" title="Log out">Log out</a></li>
+% }
+    <li><a href="/site/help" title="Help">Help</a></li>
+   </ul>
+  </div>

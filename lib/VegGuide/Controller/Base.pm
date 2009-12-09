@@ -27,9 +27,10 @@ use HTTP::Status qw( RC_FORBIDDEN );
 use URI::Escape qw( uri_unescape );
 use URI::FromHash qw( uri );
 use VegGuide::AlzaboWrapper;
-use VegGuide::Javascript;
 use VegGuide::JSON;
 use VegGuide::Util qw( string_is_empty );
+use VegGuide::Web::CSS;
+use VegGuide::Web::Javascript;
 
 
 sub begin : Private
@@ -50,8 +51,10 @@ sub begin : Private
 
     return unless $c->request()->looks_like_browser();
 
-    VegGuide::Javascript->CreateSingleFile()
-        unless VegGuide::Config->IsProduction() || VegGuide::Config->Profiling();
+    unless ( VegGuide::Config->IsProduction() || VegGuide::Config->Profiling() ) {
+        VegGuide::Web::CSS->new()->create_single_file();
+        VegGuide::Web::Javascript->new()->create_single_file();
+    }
 
     my $response = $c->response();
     $response->breadcrumbs()->add( uri  => '/',

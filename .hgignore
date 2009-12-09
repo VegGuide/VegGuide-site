@@ -13,3 +13,5 @@ Makefile.PL
 Makefile
 Makefile.old
 pm_to_blib*
+RegVeg.sql
+xmlfeedforvegguide.asp

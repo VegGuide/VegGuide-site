@@ -1,0 +1,33 @@
+    <div class="column-header">
+      <& /lib/rounded-corners-top.mas &>
+      <h2>Entries</h2>
+    </div>
+
+    <div class="column-content">
+% my $last_date = '';
+% while ( my $vendor = $vendors->next() ) {
+%   if ( $last_date ne $vendor->creation_date() ) {
+%     if ($last_date) {
+      </ul>
+%     }
+
+      <h3 class="date"><& /lib/format/date.mas, date => $vendor->creation_datetime_object(), compact => 1 &></h3>
+%     $last_date = $vendor->creation_date();
+
+      <ul>
+%   }
+
+        <li>
+          <& /lib/link/vendor.mas, vendor => $vendor &>,
+          <& /lib/link/location.mas, location => $vendor->location() &>
+        </li>
+% }
+% if ( $vendors->count() ) {
+      </ul>
+      <p><a href="/entry/" title="All entries, most recent first">more</a></p>
+% }
+    </div>
+
+<%init>
+my $vendors = VegGuide::Vendor->RecentlyAdded( limit => 10 );
+</%init>

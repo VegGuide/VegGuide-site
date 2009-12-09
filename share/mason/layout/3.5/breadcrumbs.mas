@@ -1,0 +1,36 @@
+<%doc>
+This div must always be present so that the vertical layout of the
+page does not change with or without breadcrumbs being shown.
+</%doc>
+
+ <div id="breadcrumbs">
+% if ( @crumbs > 1 ) {
+  <ul>
+   <li><strong>You are here:</strong></li>
+%   foreach my $crumb (@crumbs) {
+   <li>
+%     if ( $crumb ne $crumbs[0] ) {
+     &gt;
+%     }
+
+%     if ( $crumb eq $crumbs[-1] ) {
+     <strong><% $crumb->label() | h %></strong>
+%     } else {
+     <a href="<% $crumb->uri() | h %>"><% $crumb->label() | h %></a>
+%     }
+   </li>
+%   }
+  </ul>
+% } else {
+  &nbsp;
+% }
+ </div>
+
+<%args>
+$is_front_page => 0
+</%args>
+
+<%init>
+return if $is_front_page;
+my @crumbs = $c->response()->breadcrumbs()->all();
+</%init>
