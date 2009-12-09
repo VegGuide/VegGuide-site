@@ -140,6 +140,7 @@
         SetOutputFilter DEFLATE
     </Location>
 
+    AliasMatch   (/\d+)?/css/vegguide-combined.css       /var/lib/vegguide/css/vegguide-combined.css
     AliasMatch   (/\d+)?/css(.+)       /usr/local/share/vegguide/css$2
     AliasMatch   (/\d+)?/images(.+)    /usr/local/share/vegguide/images$2
     Alias        /static/rss           /var/cache/vegguide/rss

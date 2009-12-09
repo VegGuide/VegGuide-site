@@ -443,6 +443,8 @@ sub ACTION_generate_combined_js
     my $file = $js->target_file();
     chmod 0644, $file
         or die "Cannot chmod 0644 $file: $!";
+
+    $self->log_info(" ... at $file\n");
 }
 
 sub ACTION_generate_combined_css
@@ -460,12 +462,14 @@ sub ACTION_generate_combined_css
     return if $FAKE;
 
     require VegGuide::Web::CSS;
-    my $css =VegGuide::Web::CSS->new();
+    my $css = VegGuide::Web::CSS->new();
     $css->create_single_file();
 
     my $file = $css->target_file();
     chmod 0644, $file
         or die "Cannot chmod 0644 $file: $!";
+
+    $self->log_info(" ... at $file\n");
 }
 
 sub ACTION_copy_alzabo_schema
