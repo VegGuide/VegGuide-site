@@ -1,0 +1,59 @@
+  <div class="yui-u column">
+    <div class="column-header">
+      <& /lib/rounded-corners-top.mas &>
+      <h2>Recent</h2>
+    </div>
+
+    <div class="column-content">
+% for my $item (@items) {
+%   if ( $last_date ne $item->[0] ) {
+%     if ($last_date) {
+      </ul>
+%     }
+
+      <h3 class="date"><& /lib/format/date.mas, date => $item->[0], compact => 1 &></h3>
+%        $last_date = $item->[0];
+
+      <ul>
+%   }
+
+        <li>
+%   if ( @{$item} == 2 ) {
+          <& /lib/link/vendor.mas, vendor => $item->[1] &>,
+          <& /lib/link/location.mas, location => $item->[1]->location() &>
+%   } else {
+          <& /lib/link/vendor-review.mas,
+             vendor => $item->[1],
+             user => $item->[2],
+             title_prefix => $item->[2]->real_name() . ' reviews' &>, 
+          <& /lib/link/location.mas, location => $item->[1]->location &>
+          (<& /lib/link/user.mas, user => $item->[2] &>)
+%   }
+        </li>
+% }
+% if (@items) {
+      </ul>
+% }
+    </div>
+  </div>
+</div>
+
+<%init>
+my $vendors = VegGuide::Vendor->RecentlyAdded( limit => 10 );
+my $reviews = VegGuide::Vendor->RecentlyReviewed( limit => 10 );
+
+my @items;
+
+while ( my ( $vendor, $review, $user ) = $reviews->next() ) {
+    push @items, [ $review->last_modified_datetime_object(), $vendor, $user ];
+}
+
+while ( my $vendor = $vendors->next() ) {
+    push @items, [ $vendor->creation_datetime_object(), $vendor ];
+}
+
+$_->[0]->truncate( to => 'day' ) for @items;
+@items = sort { $b->[0] <=> $a->[0] } @items;
+
+my $last_date = q{};
+</%init>

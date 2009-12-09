@@ -7,7 +7,7 @@
    </div>
   </div>
 
-  <& sitewide-search-help.mas &>
+  <& /sitewide-search-help.mas &>
 
 <%args>
 $search_text => ''

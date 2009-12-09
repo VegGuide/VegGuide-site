@@ -2676,6 +2676,11 @@ sub VendorsWhere
                 );
 
     }
+    # XXX - special case for front page
+    elsif ( lc $p{order_by} eq 'rand' )
+    {
+        @order_by = $schema->sqlmaker()->RAND();
+    }
     else # name
     {
         @order_by =

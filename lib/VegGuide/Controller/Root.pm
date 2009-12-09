@@ -70,12 +70,22 @@ sub index : Path('/') : Args(0)
                   allow_closed => 0,
                 );
 
-        $c->stash()->{search}->set_cursor_params( limit => 4 );
+        $c->stash()->{search}->set_cursor_params( limit => 10, order_by => 'rand' );
     }
 
     $c->stash()->{news_item} = VegGuide::NewsItem->MostRecent();
 
     $c->stash()->{template} = '/index';
+}
+
+sub recent : Local : Args(0)
+{
+    my $self = shift;
+    my $c    = shift;
+
+    $c->stash()->{news_item} = VegGuide::NewsItem->MostRecent();
+
+    $c->stash()->{template} = '/recent';
 }
 
 # Used to exit gracefully for the benefit of profilers like FastProf

@@ -1,19 +1,8 @@
-% if ( $m->request_comp()->attr('is_front_page') ) {
- <& front-page-header.mas, %ARGS &>
-% } else {
- <& breadcrumbs.mas, %ARGS &>
-
- <div id="header">
-
-  <div id="logo">
-   <a href="/" title="Home"><img class="png-filter" src="<% $c->skin()->image_uri() | h %>"
-                                 <% html_imgsize( $c->skin()->image_file() ) %>
-                                 alt="VegGuide.Org Logo" /></a>
-  </div>
-
   <div id="global-nav">
    <ul>
+% unless ( $m->request_comp()->attr('is_front_page') ) {
     <li class="first"><a href="/" title="Home">Home</a></li>
+% }
 % if ( $c->vg_user()->is_guest() ) {
     <li><a href="/user/login_form?return_to=<% $c->request()->uri() | uh %>" title="Log in">Log in</a></li>
 % } else {
@@ -23,12 +12,3 @@
     <li><a href="/site/help" title="Help">Help</a></li>
    </ul>
   </div>
-
-  <& sitewide-search.mas, %ARGS &>
-
- </div>
-
- <div class="force-clear"></div>
-
-% }
-

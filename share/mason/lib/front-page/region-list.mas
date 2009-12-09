@@ -1,0 +1,42 @@
+    <div class="column-header">
+      <& /lib/rounded-corners-top.mas &>
+      <h2>Browse</h2>
+    </div>
+    
+    <div class="column-content">
+      <ul>
+% for my $location ( @locations{@browse_main} ) {
+%   my $count = $location->descendants_vendor_count();
+        <li><& /lib/link/location.mas, location => $location &> (<% $count %>)</li>
+% }
+      </ul>
+
+      <ul class="secondary">
+% for my $location ( @locations{@browse_sec} ) {
+%   my $count = $location->descendants_vendor_count();
+        <li><& /lib/link/location.mas, location => $location &> (<% $count %>)</li>
+% }
+      </ul>
+    </div>
+
+<%init>
+my %locations = map { $_->name() => $_ } VegGuide::Location->RootLocations();
+
+my @browse_main = grep { exists $locations{$_} } (
+    'North America',
+    'Europe',
+    'Asia',
+    'Central America',
+    'South America',
+    'Caribbean',
+    'Australia',
+    'New Zealand',
+    'Middle East',
+    'Pacific Islands',
+);
+
+my @browse_sec = grep { exists $locations{$_} } (
+    'Airports',
+    'Internet',
+);
+</%init>

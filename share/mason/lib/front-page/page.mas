@@ -1,0 +1,75 @@
+<!--[if lte IE 6]>
+
+    <p class="ie6" style="background-color:#ffeecc; padding: 1em;
+                          margin-top: 1em;">
+      It looks like you're using IE6. This site probably won't work too well
+      for you. If you can,
+      please <a href="http://www.quirksmode.org/upgrade.html">upgrade to a
+        modern browser</a>. We know that some of you may not have the ability
+      to upgrade, but unfortunately supporting IE6 is no longer viable for
+      us.
+    </p>
+
+<![endif]-->
+
+<div id="special-grid">
+  <div class="yui-gb">
+    <div class="yui-g first small">&nbsp;</div>
+
+    <div class="yui-g large">
+
+      <div class="yui-u first column">
+        <& '/lib/front-page/' . $columns[0] . '.mas', %ARGS &>
+      </div>
+
+      <div class="yui-u column">
+        <& '/lib/front-page/' . $columns[1] . '.mas', %ARGS &>
+      </div>
+
+    </div>
+
+    <div class="yui-g small">&nbsp;</div>
+  </div>
+
+  <div class="yui-gb">
+    <div class="yui-g first small">&nbsp;</div>
+
+    <div class="yui-g large">
+      <p>
+        VegGuide.Org is a community-maintained, world-wide guide to
+        vegetarian and vegan restaurants, grocers, and more.
+      </p>
+
+% if ( $columns[0] eq 'region-list' ) {
+      <p>
+        <a href="/recent">What's new site-wide?</a>
+      </p>
+% }
+
+% if ($news_item) {
+      <h2>News</h2>
+
+      <h3><& /lib/format/date.mas, date => $news_item->creation_datetime_object() &> - <% $news_item->title() | h %></h3>
+
+      <% $news_item->body() %>
+% }
+    </div>
+
+    <div class="yui-g small">&nbsp;</div>
+  </div>
+</div>
+
+% if ( VegGuide::Config->IsTest() ) {
+<div style="border: 2px solid red; padding: 0 0.4em; margin-bottom: 0.5em;">
+  <p>
+    <strong>WARNING:</strong> this is a test server,
+    so data stored here may be wiped out without any notice. Don't
+    do any work here you are not prepared to lose.
+  </p>
+</div>
+% }
+
+<%args>
+$news_item
+@columns
+</%args>

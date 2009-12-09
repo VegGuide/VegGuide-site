@@ -1,0 +1,274 @@
+#content {
+    font-size: 120%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: Bitstream Vera Sans, Verdana, sans-serif;
+}
+
+h2, h4, h6 {
+    color: #6aa41d;
+}
+
+a {
+    color: #0072B0;
+}
+
+a:visited {
+    color: red;
+}
+
+ul li {
+    background: url(../../images/red-bullet-small.png) no-repeat 0 6px;
+    list-style: none;
+    margin-left: 0;
+    padding-left: 12px;
+}
+
+.content-button, .content-button-medium, .content-button-small {
+    background-color: #0072B0;
+    border-top: 1px solid #80D2FF;
+    border-left: 1px solid #80D2FF;
+    border-bottom: 2px solid #00527B;
+    border-right: 2px solid #00527B;
+    color: white;
+    font-weight: bold;
+    font-family: sans-serif;
+    text-decoration: none;
+}
+
+.action-button, .action-button-medium, .action-button-small {
+    background-color: #BE3F23;
+    border-top: 1px solid #EC836C;
+    border-left: 1px solid #EC836C;
+    border-bottom: 2px solid #A7280C;
+    border-right: 2px solid #A7280C;
+    color: white;
+    font-weight: bold;
+    font-family: sans-serif;
+    text-decoration: none;
+}
+
+a.content-button:visited, a.content-button-medium:visited, a.content-button-small:visited,
+a.action-button:visited, a.action-button-medium:visited, a.action-button-small:visited {
+    color: white;
+}
+
+.content-button, .action-button {
+    font-size: 120%;
+    padding: 0.2em;
+}
+
+.content-button-medium, .action-button-medium {
+    font-size: 100%;
+    padding: 0.1em;
+}
+
+.content-button-small, .action-button-small {
+    font-size: 90%;
+    padding: 0em;
+}
+
+a.content-button:visited, a.action-button:visited,
+a.action-button-medium:visited, a.action-button-small:visited {
+    color: white;
+}
+
+#global-nav {
+    text-align: right;
+}
+
+#global-nav ul {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+#global-nav ul li {
+    background: none;
+    display: inline;
+    padding-left: 0.5em;
+    margin-left: 0.3em;
+}
+
+#page-title {
+    color: #6aa41d;
+    font-size: 200%;
+}
+
+#content {
+    margin-top: 1em;
+}
+
+#logo {
+    margin-bottom: 1em;
+}
+
+.front-page #hd {
+    text-align: center;
+}
+
+.front-page #sitewide-search-text-and-form form {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+#sitewide-search input.text {
+    background-color: white;
+    border: 1px solid #00527B;
+    color: #0072B0;
+    font-size: 130%;
+    font-weight: bold;
+    padding: 0.2em;
+    width: 24em;
+}
+
+#sitewide-search .action-button {
+    font-size: 140%;
+}
+
+#sitewide-search-help {
+    -moz-opacity: 0.97;
+    background-color: #E5F8C9;
+    border: 1px solid black;
+    color: black;
+    padding: 0.5em;
+    position: absolute;
+    text-align: left;
+    z-index: 10;
+}
+
+#sitewide-search-help ul, #sitewide-search-help ul li {
+    background: url(../../images/red-bullet-small.png) no-repeat 0 4px;
+}
+
+#sitewide-search-help-close {
+    float: right;
+}
+
+#sitewide-search-help-close img {
+  border: 0;
+}
+
+.column-header {
+    background-color: #6aa41d;
+}
+
+.column-header h2 {
+    color: white;
+    font-variant: small-caps;
+    letter-spacing: 0.2em;
+    margin: 0;
+    padding-bottom: 0.3em;
+    text-align: center;
+}
+
+.column-content {
+    margin-top: 0.5em;
+    padding-left: 0.2em;
+}
+
+.column-content ul {
+    margin: 0 0 0.5em 0;
+    padding: 0;
+}
+
+.column-content h3.date {
+    font-size: 100%;
+    margin: 0;
+}
+
+.rounded-corners-container, .rounded-corners-container * {
+    background-color: transparent;
+    display: block;
+}
+
+.rounded-corners-container * {
+    border-style: solid;
+    border-width: 0px 1px;
+    border-color: white;
+    font-size: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.rounded-corners-1 {
+    border-left-width: 5px;
+    border-right-width: 5px;
+}
+
+.rounded-corners-2 {
+    border-left-width: 3px;
+    border-right-width: 3px;
+}
+
+.rounded-corners-3 {
+    border-left-width: 2px;
+    border-right-width: 2px;
+}
+
+.rounded-corners-4 {
+    height: 2px;
+}
+
+#special-grid div.small {
+    width: 15%
+}
+
+#special-grid div.large {
+    width: 70%;
+    *width: 65%;
+}
+
+#ft {
+    border-top: 1px solid #8CC63F;
+}
+
+#footer-nav {
+    text-align: center;
+}
+
+#footer-nav ul {
+    display: block;
+    list-style-type: none;
+    margin: 0.4em 0 0 0;
+    padding: 0;
+}
+
+#footer-nav ul li {
+    background: none;
+    border-left: 1px solid #aaa;
+    display: inline;
+    margin-left: 0.3em;
+    padding-left: 0.5em;
+}
+
+#footer-nav ul li.first {
+    border-left: 0;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+#footer-copyright {
+    font-size: 85%;
+    margin-top: 2em;
+}
+
+#footer-copyright p {
+    margin: 0.4em 0 0.4em 100px;
+}
+
+#ft #cc-logo {
+    border: none;
+    float: left;
+    margin-top: 0.5em;
+}
+
+#ft #organization-logos {
+    float: right;
+}
+
+#ft #organization-logos img {
+    border: none;
+    margin-left: 1em;
+}

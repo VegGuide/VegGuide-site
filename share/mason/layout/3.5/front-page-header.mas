@@ -1,0 +1,7 @@
+  <a href="/" title="Home"><img class="png-filter"
+                                id="logo"
+                                src="/images/vegguide-logo-front-page.png"
+                                width="600" height="99"
+                                alt="VegGuide.Org Logo" /></a>
+
+  <& sitewide-search.mas, button => 'Search' &>
