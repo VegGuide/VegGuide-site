@@ -15,6 +15,7 @@ $VegGuide::Build::IsInstalling = 1;
 
 my %Requires =
     ( 'Alzabo'                                   => '0.92',
+      'autodie'                                  => '0',
       'Captcha::reCAPTCHA'                       => '0',
       'Catalyst'                                 => '5.80007',
       'Catalyst::Action::REST'                   => '0.5',
