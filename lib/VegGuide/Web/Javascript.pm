@@ -50,19 +50,16 @@ sub _target_file {
         qr/\@end/,
     );
 
+    my $Squish = JavaScript::Squish->new();
+
     sub _squish {
         my $self = shift;
         my $code = shift;
 
-        return $code;
-#            unless VegGuide::Config->IsProduction();
+        $Squish->data($code);
+        $Squish->remove_comments( exceptions => \@Exceptions );
 
-        # XXX - this is breaking VegGuide.SitewideSearch for some reason
-        return JavaScript::Squish->squish(
-            $code,
-            remove_comments_exceptions => \@Exceptions,
-        );
-    }
+        return $Squish->data();
 }
 
 no Moose;
