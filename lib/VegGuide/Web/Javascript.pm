@@ -54,9 +54,10 @@ sub _target_file {
         my $self = shift;
         my $code = shift;
 
-        return $code
-            unless VegGuide::Config->IsProduction();
+        return $code;
+#            unless VegGuide::Config->IsProduction();
 
+        # XXX - this is breaking VegGuide.SitewideSearch for some reason
         return JavaScript::Squish->squish(
             $code,
             remove_comments_exceptions => \@Exceptions,
