@@ -31,6 +31,7 @@ my @browse_main = grep { exists $locations{$_} } (
     'Caribbean',
     'Australia',
     'New Zealand',
+    'Africa',
     'Middle East',
     'Pacific Islands',
 );
