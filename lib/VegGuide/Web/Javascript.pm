@@ -58,7 +58,7 @@ sub _target_file {
             unless VegGuide::Config->IsProduction();
 
         return JavaScript::Squish->squish(
-            \$code,
+            $code,
             remove_comments_exceptions => \@Exceptions,
         );
     }
