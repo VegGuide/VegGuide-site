@@ -60,6 +60,7 @@ sub _target_file {
         $Squish->remove_comments( exceptions => \@Exceptions );
 
         return $Squish->data();
+    }
 }
 
 no Moose;
