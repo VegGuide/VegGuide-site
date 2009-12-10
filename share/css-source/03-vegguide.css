@@ -133,7 +133,9 @@ a.action-button-medium:visited, a.action-button-small:visited {
 }
 
 #sitewide-search .action-button {
+    margin-left: 0.2em;
     font-size: 140%;
+    *font-size: 130%;
 }
 
 #sitewide-search-help {
@@ -187,46 +189,9 @@ a.action-button-medium:visited, a.action-button-small:visited {
     margin: 0;
 }
 
-.rounded-corners-container, .rounded-corners-container * {
-    background-color: transparent;
-    display: block;
-}
-
-.rounded-corners-container * {
-    border-style: solid;
-    border-width: 0px 1px;
-    border-color: white;
-    font-size: 1px;
-    height: 1px;
-    overflow: hidden;
-}
-
-.rounded-corners-1 {
-    border-left-width: 5px;
-    border-right-width: 5px;
-}
-
-.rounded-corners-2 {
-    border-left-width: 3px;
-    border-right-width: 3px;
-}
-
-.rounded-corners-3 {
-    border-left-width: 2px;
-    border-right-width: 2px;
-}
-
-.rounded-corners-4 {
-    height: 2px;
-}
-
-#special-grid div.small {
-    width: 15%
-}
-
-#special-grid div.large {
-    width: 70%;
-    *width: 65%;
+#front-page-text {
+    margin-left: 17%;
+    margin-right: 17%;
 }
 
 #ft {
@@ -280,4 +245,37 @@ a.action-button-medium:visited, a.action-button-small:visited {
 #ft #organization-logos img {
     border: none;
     margin-left: 1em;
+}
+
+.rounded-corners-container, .rounded-corners-container * {
+    background-color: transparent;
+    display: block;
+}
+
+.rounded-corners-container * {
+    border-style: solid;
+    border-width: 0px 1px;
+    border-color: white;
+    font-size: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.rounded-corners-1 {
+    border-left-width: 5px;
+    border-right-width: 5px;
+}
+
+.rounded-corners-2 {
+    border-left-width: 3px;
+    border-right-width: 3px;
+}
+
+.rounded-corners-3 {
+    border-left-width: 2px;
+    border-right-width: 2px;
+}
+
+.rounded-corners-4 {
+    height: 2px;
 }
