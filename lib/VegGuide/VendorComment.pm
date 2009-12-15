@@ -14,7 +14,7 @@ use Class::Trait qw( VegGuide::Role::FeedEntry );
 use VegGuide::SiteURI qw( entry_review_uri );
 
 use VegGuide::Validate
-    qw( validate );
+    qw( validate SCALAR );
 
 
 sub vendor
@@ -129,6 +129,31 @@ sub All
                     %limit,
                   )
             );
+}
+
+sub NewCommentCount {
+    my $class = shift;
+    my %p     = validate(
+        @_, {
+            days => { type => SCALAR },
+        },
+    );
+
+    my $week_ago = DateTime->today()->subtract( days => 7 );
+
+    my $schema = VegGuide::Schema->Connect();
+
+    my @where = (
+        $schema->VendorComment_t()->last_modified_datetime_c(),
+        '>=',
+        DateTime::Format::MySQL->format_datetime($week_ago)
+    );
+
+    return $schema->VendorComment_t()->function(
+        select =>
+            $schema->sqlmaker->COUNT( $schema->VendorComment_t->vendor_id_c ),
+        where => \@where,
+    );
 }
 
 sub Count

@@ -2443,6 +2443,27 @@ sub AllOpen
             );
 }
 
+sub NewVendorCount {
+    my $class = shift;
+    my %p     = validate(
+        @_, {
+            days => { type => SCALAR },
+        },
+    );
+
+    my $week_ago = DateTime->today()->subtract( days => 7 );
+
+    my $schema = VegGuide::Schema->Connect();
+
+    my @where = (
+        $schema->Vendor_t()->creation_datetime_c(),
+        '>=',
+        DateTime::Format::MySQL->format_datetime($week_ago)
+    );
+
+    return $class->VendorCount( where => \@where );
+}
+
 sub VendorCount
 {
     my $class = shift;
