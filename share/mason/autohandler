@@ -1,4 +1,4 @@
-<& /layout/head.mas &>
+<& /layout/head.mas, title => $m->request_comp()->scall_method('title') &>
 
 <body>
 
