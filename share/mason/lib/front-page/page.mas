@@ -48,12 +48,6 @@
     vegan restaurants, grocers, and more.
   </p>
 
-% if ( $columns[0] eq 'region-list' ) {
-  <p>
-    <a href="/recent">What's new site-wide?</a>
-  </p>
-% }
-
 % if ($news_item) {
   <h2>News</h2>
 
