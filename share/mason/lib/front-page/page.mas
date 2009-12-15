@@ -36,11 +36,11 @@
 % if ($new_vendor_count) {
   <p>
     There have been <strong><% $new_vendor_count %>
-    <% PL( 'entry', $new_vendor_count ) %></strong> added in the last 7 days\
-%   if ($new_review_count) {
-, and <strong><% $new_review_count %> <% PL( 'review', $new_review_count ) %></strong>\
+    <% PL( 'entry', $new_vendor_count ) %></strong>
+%   if ($new_review_count) { 
+    and <strong><% $new_review_count %> <% PL( 'review', $new_review_count ) %></strong>
 %   }
-.
+    added in the last 7 days\
   </p>
 % }
   <p>
