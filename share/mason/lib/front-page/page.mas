@@ -13,8 +13,23 @@
 <![endif]-->
 
 <div class="yui-g">
+
   <div class="yui-gd first">
-    <& /lib/messages.mas &>
+    <div class="yui-u first">&nbsp;</div>
+    <div class="yui-u">
+      <& /lib/messages.mas &>
+    </div>
+  </div>
+  <div class="yui-gc">
+    <div class="yui-u first">&nbsp;</div>
+
+    <div class="yui-u">&nbsp;</div>
+
+  </div>
+</div>
+
+<div class="yui-g">
+  <div class="yui-gd first">
 
     <div class="yui-u first">&nbsp;</div>
 
