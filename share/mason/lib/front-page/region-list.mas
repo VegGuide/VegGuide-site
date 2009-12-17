@@ -18,9 +18,9 @@
 % }
       </ul>
 
-      <ul>
-        <li><a href="/recent" title="Recent entries and reviews">What's new site-wide?</a></li>
-      </ul>
+      <p>
+        <a href="/recent" title="Recent entries and reviews">What's new site-wide?</a>
+      </p>
     </div>
 
 <%init>
