@@ -12,7 +12,7 @@ bugs you find.
 <p>
 You can help this guide by keeping it up to date.
 % if ( $c->vg_user()->is_guest() ) {
-<a href="/user/registration_form">Sign up</a> for an account, and you
+<a href="/user/new_user_form">Sign up</a> for an account, and you
 % } else {
 You
 % }
@@ -61,7 +61,7 @@ besides www.vegguide.org are copyright by the user responsible for
 that host, and should not be reproduced without permission.
 </p>
 
-<h2>Copyright Infringemnt</h2>
+<h2>Copyright Infringement</h2>
 
 <p>
 This website is hosted by <a href="http://www.exploreveg.org/">Compassionate
@@ -184,6 +184,10 @@ at <a href="mailto:guide@vegguide.org">guide@vegguide.org</a>.
 <%init>
 my $internet = VegGuide::Location->new( name => 'Internet' );
 </%init>
+
+<%attr>
+layout => '3.5'
+</%attr>
 
 <%method page_title>
 About VegGuide.Org

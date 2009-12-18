@@ -10,8 +10,8 @@ David Rolsky<br />
 3340 Grand Ave S<br />
 Minneapolis, MN 55414<br />
 <a href="mailto:copyright-policy@exploreveg.org">copyright-policy@exploreveg.org</a><br />
-Phone: 612-626-5785<br />
-Fax: 612-626-5785
+Phone: 612-276-2242<br />
+Fax: 612-276-2242 (call ahead to arrange faxes)
 </p>
 
 <p>
@@ -47,6 +47,10 @@ notification, a statement that the agent is authorized to act on
 behalf of the owner of an exclusive right that is allegedly
 infringed.</li>
 </ol>
+
+<%attr>
+layout => '3.5'
+</%attr>
 
 <%method page_title>
 Copyright Policy

@@ -6,6 +6,10 @@ h1, h2, h3, h4, h5, h6 {
     font-family: Bitstream Vera Sans, Verdana, sans-serif;
 }
 
+h1, h2, h3 {
+    margin: 1em 0 0.5em 0;
+}
+
 h2, h4, h6 {
     color: #6aa41d;
 }
@@ -23,6 +27,10 @@ ul li {
     list-style: none;
     margin-left: 0;
     padding-left: 12px;
+}
+
+.no-top-margin {
+    margin-top: 0;
 }
 
 .content-button, .content-button-medium, .content-button-small {
@@ -96,6 +104,8 @@ a.action-button-medium:visited, a.action-button-small:visited {
 #page-title {
     color: #6aa41d;
     font-size: 200%;
+    margin-bottom: 0.5em;
+    margin-top: 0;
 }
 
 #content {
@@ -114,22 +124,45 @@ a.action-button-medium:visited, a.action-button-small:visited {
 }
 
 .front-page #hd {
+    border-bottom: none;
     text-align: center;
 }
 
-.front-page #sitewide-search-text-and-form form {
+.front-page #sitewide-search {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
+    float: none;
+}
+
+#sitewide-search {
+    margin: 0;
+}
+
+#hd {
+    border-bottom: 1px solid #999;
+    padding-bottom: 0.8em;
+}
+
+#logo {
+    float: left;
+}
+
+#sitewide-search {
+    margin-top: 1.3em;
+    text-align: right;
 }
 
 #sitewide-search input.text {
-    background-color: white;
     border: 1px solid #00527B;
     color: #0072B0;
     font-size: 130%;
     font-weight: bold;
     padding: 0.2em;
     width: 24em;
+}
+
+.front-page #sitewide-search {
+    text-align: center;
 }
 
 #sitewide-search .action-button {
@@ -139,8 +172,8 @@ a.action-button-medium:visited, a.action-button-small:visited {
 }
 
 #sitewide-search-help {
-    -moz-opacity: 0.97;
-    background-color: #E5F8C9;
+    opacity: 0.96;
+    background-color: #fdffe1;
     border: 1px solid black;
     color: black;
     padding: 0.5em;
@@ -245,6 +278,118 @@ a.action-button-medium:visited, a.action-button-small:visited {
 #ft #organization-logos img {
     border: none;
     margin-left: 1em;
+}
+
+form {
+    margin-bottom: 1em;
+}
+
+form legend {
+    background-color: #8CC63F;
+    color: white;
+    font-size: 120%;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    padding: 0.1em 0.2em;
+}
+
+
+form label {
+    display: block;
+    font-weight: bold;
+    margin-top: 0.4em;
+    margin-bottom: 0.1em;
+}
+
+form label.sub-label {
+    display: inline;
+    font-weight: normal;
+}
+
+form input.text,
+form input.file,
+form textarea,
+form select {
+    border: 1px solid #68AA11;
+    color: #0072B0;
+    font-weight: bold;
+    padding: 0.2em;
+}
+
+form input:focus,
+form textarea:focus,
+form select:focus {
+    background-color: #fdffe1;
+}
+
+form input.error,
+form textarea.error,
+form select.error,
+form p.error {
+    background-color: #FFCC66;
+}
+
+div.form-item p.error {
+    border: 1px solid #8CC63F;
+    margin-top: 0.3em;
+    padding: 0.1em;
+}
+
+form input.disabled,
+form textarea.disabled,
+form select.disabled {
+    background-color: #CCC;
+    border-color: #333;
+}
+
+form select optgroup {
+    color: #000000;
+}
+
+form input.text {
+    width: 20em;
+}
+
+form .short {
+    width: 15em;
+}
+
+form .medium {
+    width: 30em;
+}
+
+form .long {
+    width: 42em;
+}
+
+form .high {
+    height: 10em;
+}
+
+form textarea {
+    height: 7em;
+}
+
+form textarea.medium {
+    height: 3em;
+}
+
+form input.submit, form button.submit,
+form input.submit-small, form button.submit-small {
+    background-color: #BE3F23;
+    border-top: 1px solid #EC836C;
+    border-left: 1px solid #EC836C;
+    border-bottom: 2px solid #A7280C;
+    border-right: 2px solid #A7280C;
+    color: white;
+    font-weight: bold;
+    margin-top: 0.5em;
+    padding: 0.1em;
+}
+
+form input.submit-small, form button.submit-small {
+    font-size: 90%;
+    padding: 0em;
 }
 
 .rounded-corners-container, .rounded-corners-container * {

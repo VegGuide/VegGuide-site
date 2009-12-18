@@ -824,6 +824,10 @@ the <a href="/site/philosophy">philosophy of VegGuide.Org</a>.
 
 </%def>
 
+<%attr>
+layout => '3.5'
+</%attr>
+
 <%method page_title>
 VegGuide.Org Help
 </%method>

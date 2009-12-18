@@ -9,5 +9,7 @@
                                  <% html_imgsize( $c->skin()->image_file() ) %>
                                  alt="VegGuide.Org Logo" /></a>
   </div>
+
+  <& sitewide-search.mas &>
 % }
 </div>

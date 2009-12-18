@@ -9,5 +9,5 @@
 
 <%args>
 $button => 'Go'
-$search_text => ''
+$search_text => q{}
 </%args>
