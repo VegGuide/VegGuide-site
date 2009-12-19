@@ -1,9 +1,9 @@
 /* custom 600px wide grid for front page */
 #front-page-doc { 
 	margin:auto;text-align:left; /* leave unchanged */ 
-	width:46.15em;/* non-IE */ 
-	*width:45.00em;/* IE */ 
-	min-width:600px;/* optional but recommended */ 
+	width: 50em;/* non-IE */ 
+	*width: 48.76em;/* IE */ 
+	min-width: 650px;/* optional but recommended */ 
 } 
 
 #content {
