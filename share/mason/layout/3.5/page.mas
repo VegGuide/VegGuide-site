@@ -1,4 +1,5 @@
-<div id="doc4" class="<% $m->request_comp()->attr('is_front_page') ? 'front-page' : q{} %>">
+<div id="<% $is_front_page ? 'front-page-doc' : 'doc4' %>"
+     class="<% $is_front_page ? 'front-page' : q{} %>">
 
 <& header.mas, %ARGS &>
 
@@ -30,3 +31,7 @@
   <& footer.mas &>
 
 </div>
+
+<%init>
+my $is_front_page = $m->request_comp()->attr('is_front_page');
+</%init>
