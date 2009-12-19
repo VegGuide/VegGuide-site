@@ -13,6 +13,8 @@ sub auto : Private
 
     return 1 if $self->action_for( $c->action() );
 
+    $self->_add_tabs($c);
+
     my $uri = $c->request()->uri();
 
     $c->response()->breadcrumbs()->add
@@ -22,6 +24,8 @@ sub auto : Private
 
     return 1;
 }
+
+sub _add_tabs { }
 
 sub _breadcrumb_title
 {

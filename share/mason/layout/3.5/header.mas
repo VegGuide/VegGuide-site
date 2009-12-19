@@ -11,5 +11,7 @@
   </div>
 
   <& sitewide-search.mas &>
+
+  <& local-nav.mas &>
 % }
 </div>

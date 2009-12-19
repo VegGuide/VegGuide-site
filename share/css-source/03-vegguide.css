@@ -16,10 +16,19 @@ h2, h4, h6 {
 
 a {
     color: #0072B0;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 
 a:visited {
     color: red;
+}
+
+ul {
+    margin-left: 0.1em;
 }
 
 ul li {
@@ -108,10 +117,6 @@ a.action-button-medium:visited, a.action-button-small:visited {
     margin-top: 0;
 }
 
-#content {
-    margin-top: 1em;
-}
-
 #messages {
     background-color: #FFC;
     border: 1px solid #EEE;
@@ -139,7 +144,6 @@ a.action-button-medium:visited, a.action-button-small:visited {
 }
 
 #hd {
-    border-bottom: 1px solid #999;
     padding-bottom: 0.8em;
 }
 
@@ -191,7 +195,62 @@ a.action-button-medium:visited, a.action-button-small:visited {
 }
 
 #sitewide-search-help-close img {
-  border: 0;
+    border: 0;
+}
+
+#tabs {
+    font-size: 110%;
+    line-height: 1.2;
+    margin-top: 1.5em;
+}
+
+#tabs ul {
+    border-bottom: 1px solid #999;
+    margin: 0;
+    padding: 4px 0;
+}
+
+#tabs li {
+    background: none;
+    display: inline;
+    list-style: none;
+}
+
+#tabs li a {
+    background-color: #f3f3f3;
+    border: 1px solid #999;
+    border-bottom: none;
+    color: #333;
+    font-variant: small-caps;
+    font-weight: bold;
+    letter-spacing: 0.07em;
+    margin-left: 0.1em;
+    padding: 4px 1em;
+    text-decoration: none;
+}
+
+#tabs li.selected a {
+    background-color: white;
+    border-bottom: 1px solid white;
+    color: black;
+    font-weight: bold;
+}
+
+/* This makes sure that the header is the same height with our without
+   tabs */
+#tabs li.invisible {
+    background-color: transparent;
+    padding: 0.3em 1em 0.11em 1em;
+}
+
+#tabs li a:hover {
+    background-color: #0072b0;
+    color: white;
+}
+
+#tabs li.selected a:hover {
+    background-color: white;
+    color: black;
 }
 
 .column-header {
@@ -390,6 +449,33 @@ form input.submit-small, form button.submit-small {
 form input.submit-small, form button.submit-small {
     font-size: 90%;
     padding: 0em;
+}
+
+div.form-item {
+    margin-top: 0.7em;
+}
+
+div.form-item p {
+    font-size: 85%;
+    margin: 0.1em 0 0 0;
+}
+
+div.form-item ul.radio-boolean {
+    margin: 0;g
+    width: 5em;
+}
+
+div.form-item ul.radio-boolean li {
+    background: none;
+}
+
+div.form-item ul li input.radio {
+    display: inline;
+}
+
+div.form-item ul li label {
+    display: inline;
+    font-size: 95%;
 }
 
 .rounded-corners-container, .rounded-corners-container * {

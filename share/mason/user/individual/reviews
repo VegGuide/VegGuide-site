@@ -1,7 +1,3 @@
-   <div id="body" class="one-column">
-
-    <h2>Reviews written by <% $user->real_name() | h %></h2>
-
 % if ( $reviews ) {
 %   while ( my ( $comment, $vendor ) = $reviews->next() ) {
      <div class="comment <% $reviews->count() % 2 ? 'odd' : 'even' %>">
@@ -55,8 +51,6 @@
     This user has not written any reviews or rated any entries.
 % }
 
-   </div>
-
 <%args>
 $user
 $reviews => undef
@@ -78,3 +72,14 @@ my $rating = $vendor->rating_from_user($user);
 return unless defined $rating;
 </%init>
 </%def>
+
+<%method page_title>
+Review written by <% $user->real_name() | h %>
+<%args>
+$user
+</%args>
+</%method>
+
+<%attr>
+layout => '3.5'
+</%attr>

@@ -7,6 +7,12 @@
       <div class="yui-b">
         <div id="content">
 
+% if ( $m->request_comp()->method_exists('page_title') ) {
+          <h1 id="page-title">
+%   $m->request_comp()->call_method( 'page_title', %ARGS );
+          </h1>
+% }
+
 % if ( $m->request_comp()->attr('requires_js') ) {
           <div id="requires-js">
             This page requires that you have Javascript enabled in your browser.
