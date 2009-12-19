@@ -170,6 +170,8 @@ a.action-button-medium:visited, a.action-button-small:visited {
 
 #sitewide-search {
     margin-top: 1.3em;
+    margin-bottom: 2em;
+    padding-top: 0.8em;
     text-align: right;
 }
 
