@@ -17,6 +17,10 @@
         <li><& /lib/link/location.mas, location => $location &> (<% $count %>)</li>
 % }
       </ul>
+
+      <p>
+        <a href="/recent" title="Recent entries and reviews">What's new site-wide?</a>
+      </p>
     </div>
 
 <%init>

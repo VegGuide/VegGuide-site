@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head profile="http://a9.com/-/spec/opensearch/1.1/">
 <meta name="verify-v1" content="S8S8dgpeS5UYctqac1Xv4fsG+sYdS77Qtni99/Y9wds=" />
- <title><& SELF:title &></title>
+ <title><% $title %></title>
 
  <& .rss_link, %ARGS &>
 
@@ -28,6 +28,10 @@
  <script src="<% static_uri( path => '/js/vegguide-combined.js' ) %>" type="text/javascript"></script>
 
 </head>
+
+<%args>
+$title
+</%args>
 
 <%def .rss_link>
 % for my $link (@links) {
