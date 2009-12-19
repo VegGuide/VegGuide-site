@@ -32,6 +32,8 @@
 </div>
 % }
 
+<div class="force-clear">&nbsp;</div>
+
 % $m->call_next();
 
 <%args>

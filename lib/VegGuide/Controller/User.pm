@@ -53,7 +53,7 @@ sub _set_user : Chained('/') : PathPart('user') : CaptureArgs(1) {
         if ( $c->vg_user()->can_edit_user($user) ) {
             $c->add_tab(
                 {
-                    uri   => user_uri( user => $user ),
+                    uri   => user_uri( user => $user, path => 'watch_list' ),
                     label => 'Watch list',
                     tooltip => 'Watch list for ' . $user->real_name(),
                     id      => 'watch_list',
@@ -64,7 +64,7 @@ sub _set_user : Chained('/') : PathPart('user') : CaptureArgs(1) {
         if ( $c->vg_user()->is_admin() ) {
             $c->add_tab(
                 {
-                    uri     => user_uri( user => $user ),
+                    uri     => user_uri( user => $user, path => 'history' ),
                     label   => 'History',
                     tooltip => 'History for ' . $user->real_name(),
                     id      => 'history',
