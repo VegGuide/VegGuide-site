@@ -109,6 +109,28 @@ a.action-button-medium:visited, a.action-button-small:visited {
     color: white;
 }
 
+#breadcrumbs {
+    float: left;
+}
+
+#breadcrumbs ul {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+#breadcrumbs ul li {
+    background: none;
+    display: inline;
+    margin-left: 0.3em;
+    padding-left: 0;
+}
+
+#breadcrumbs ul li.first {
+    margin-left: 0;
+    padding-left: 0;
+}
+
 #global-nav {
     border-bottom: 1px solid #ccc;
     margin-bottom: 1em;
@@ -275,7 +297,7 @@ a.action-button-medium:visited, a.action-button-small:visited {
 }
 
 .column-header {
-    background-color: #6aa41d;
+    background-color: #8cc63f;
 }
 
 .column-header h2 {
@@ -559,13 +581,18 @@ div.pagination form select, div.pagination form select option {
 
 .standard-table th {
     background-color: #8CC63F;
+    border-right: 1px dotted white;
     color: white;
     font-size: 110%;
+    font-variant: small-caps;
+    font-weight: bold;
+    letter-spacing: 0.07em;
     text-align: left;
 }
 
 .standard-table th, .standard-table td {
     border: none;
+    vertical-align: top;
 }
 
 .standard-table tr td, .standard-table tr th {
@@ -595,6 +622,81 @@ div.pagination form select, div.pagination form select option {
     background-color: #f4f4f4;
 }
 
+#entries-table .name {
+    width: 30%;
+}
+
+#entries-table.with-distance .name {
+    width: 24%;
+}
+
+#entries-table .name address {
+    font-size: 90%;
+}
+
+#entries-table.with-distance .distance {
+    width: 12%;
+}
+
+#entries-table .summary {
+    width: 30%;
+}
+
+#entries-table.with-distance .summary {
+    width: 24%;
+}
+
+#entries-table .summary span.summary-text {
+    font-size: 90%;
+}
+
+#entries-table .summary span.category {
+    font-size: 90%;
+    font-style: italic;
+}
+
+#entries-table .rating {
+    width: 10%;
+}
+
+#entries-table .how-veg {
+    width: 15%;
+}
+
+#entries-table .price-range {
+    width: 10%;
+}
+
+#entries-table .info {
+    width: 10%;
+}
+
+#entries-table th, #entries-table td.rating, #entries-table td.price-range, #entries-table td.info {
+    white-space: nowrap;
+}
+
+#entries-table td.rating img {
+    vertical-align: -15%;
+}
+
+#entries-table div.closed {
+    font-weight: bold;
+}
+
+#entries-table td.info ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#entries-table td.info ul li {
+    display: inline;
+}
+
+#entries-table td.info img { 
+    border: none;
+}
+
 #user-image {
     float: left;
     margin-right: 0.5em;
@@ -604,6 +706,62 @@ div.pagination form select, div.pagination form select option {
 #watch-list-regions form, #watch-list-regions form input {
     display: inline;
     margin: 0;
+}
+
+#entry-summary {
+    border-bottom: 1px solid #999;
+    padding-bottom: 1em;
+}
+
+#entry-summary .content-buttons {
+    margin-top: 0.5em;
+}
+
+#ratings-and-total {
+    text-align: center;
+}
+
+#rating-numbers {
+    font-size: 120%;
+    font-weight: bold;
+    margin: 0;
+}
+
+#rating-help {
+    font-size: 80%;
+    margin-top: 0.2em;
+}
+
+#weighted-text {
+    font-size: 80%;
+    margin-top: 0.3em;
+}
+
+#veg-level {
+    font-variant: small-caps;
+}
+
+.veg-level-1 {
+    color: #8cc63f;
+}
+
+.veg-level-2 {
+    color: #68aa11;
+}
+
+.veg-level-3 {
+    color: #8cc63f;
+    font-weight: bold;
+}
+
+.veg-level-4 {
+    color: #68aa11
+    font-weight: bold;
+}
+
+.veg-level-5 {
+    color: #68aa11
+    font-weight: bold;
 }
 
 .rounded-corners-container, .rounded-corners-container * {

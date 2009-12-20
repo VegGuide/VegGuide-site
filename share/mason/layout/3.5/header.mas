@@ -1,4 +1,6 @@
 <div id="hd">
+  <& breadcrumbs.mas, %ARGS &>
+
   <& global-nav.mas, %ARGS &>
 
 % if ( $m->request_comp()->attr('is_front_page') ) {

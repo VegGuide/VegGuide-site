@@ -1,137 +1,120 @@
-  <div id="body-and-boxes-container">
+%#<& /entry/profile-and-hours.mas, vendor => $vendor &>
 
-<& /entry/profile-and-hours.mas, vendor => $vendor &>
-
-   <div id="body">
-
-    <& /entry/map-and-images.mas, vendor => $vendor &>
-
-    <div id="description-and-reviews">
+%#<& /entry/map-and-images.mas, vendor => $vendor &>
 
 % unless ( $vendor->is_organization() ) {
-     <div id="info-band">
-      <span class="how-veg veg-level-<% $vendor->veg_level() %>"><% $vendor->veg_description | h %></span>
+<div id="veg-level"
+     class="veg-level-<% $vendor->veg_level() %>"><% $vendor->veg_description | h %></div>
 
 %   if ( $vendor->is_restaurant() ) {
-      <br />
-      <label>Prices:</label> <span class="price-range"><% $vendor->price_range()->description() | h %></span>
+<div>
+  <label>Prices:</label> <span class="price-range"><% $vendor->price_range()->description() | h %></span>
+</div>
 %   }
 
 %   if ( my @cuisines = $vendor->cuisines() ) {
-      <br />
-      <label>Cuisines:</label> <span class="cuisines"><% join ', ', map { $_->name() } @cuisines | h %></span>
+<label>Cuisines:</label> <span class="cuisines"><% join ', ', map { $_->name() } @cuisines | h %></span>
 %   }
-     </div>
 % }
 
-     <p id="summary"><% $vendor->short_description() | h %>
+<p id="summary"><% $vendor->short_description() | h %>
 % if ( $c->client()->show_localized_content() && defined $vendor->localized_short_description() ) {
-      - <% $c->client()->encode( $vendor->localized_short_description() ) | h %>
+  - <% $c->client()->encode( $vendor->localized_short_description() ) | h %>
 % }
-     </p>
+</p>
 
 % if ( defined $description && length $description ) {
-     <% $description %>
+<% $description %>
 % }
 
 % if ( defined $localized_description && length $localized_description ) {
-     <% $localized_description %>
+<% $localized_description %>
 % }
 
 % if ( ! defined $description && ! defined $localized_description ) {
-     <p class="first">
-      <em>No description yet. Click on the Edit button to add one.</em>
-     </p>
+<p class="first">
+  <em>No description yet. Click on the Edit button to add one.</em>
+</p>
 % }
 
-     <p>
-      <a href="<% entry_uri( vendor => $vendor, path => 'edit_form' ) | h %>" class="content-button" title="Edit this entry">Edit</a>
-      <a href="/site/clone_entry_form?vendor_id=<% $vendor->vendor_id() %>" class="content-button" title="Make a new entry based on this one">Clone</a>
+<p>
+  <a href="<% entry_uri( vendor => $vendor, path => 'edit_form' ) | h %>"
+     class="content-button" title="Edit this entry">Edit</a>
+  <a href="/site/clone_entry_form?vendor_id=<% $vendor->vendor_id() %>"
+     class="content-button" title="Make a new entry based on this one">Clone</a>
 % if ( $c->vg_user()->can_delete_vendor($vendor) ) {
-      <a href="<% entry_uri( vendor => $vendor, path => 'deletion_confirmation_form' ) | h %>" class="action-button" title="Delete this entry">Delete</a>
+  <a href="<% entry_uri( vendor => $vendor, path => 'deletion_confirmation_form' ) | h %>"
+     class="action-button" title="Delete this entry">Delete</a>
 % }
-     </p>
+</p>
 
 % if ( defined $vendor->directions() ) {
-     <div id="directions">
-      <strong>Directions:</strong> <% VegGuide::Util::text_to_html( text => $vendor->directions(), class => 'compact' ) %>
-     </div>
+<div id="directions">
+  <strong>Directions:</strong> <% VegGuide::Util::text_to_html( text => $vendor->directions(), class => 'compact' ) %>
+</div>
 % }
 
 % if (@attributes) {
-     <div id="features-container">
-      <& /lib/rounded-corners-top.mas &>
-
-      <div id="features">
-
-       <ul>
+<ul id="features">
 %   for my $att (@attributes) {
-        <li><% $att->name() | h %></li>
+  <li><% $att->name() | h %></li>
 %   }
-       </ul>
-
-      </div>
-
-      <& /lib/rounded-corners-bottom.mas &>
-     </div>
+</ul>
 % }
 
-     <p id="entry-attribution">
+<p id="entry-attribution">
 % if ( my $source = $vendor->vendor_source() ) {
-      Data provided by <a href="<% $source->display_uri() | h %>" title="Go to <% $source->name() | h %>"
-                          ><% $source->name() | h %></a>
+  Data provided by
+  <a href="<% $source->display_uri() | h %>"
+     title="Go to <% $source->name() | h %>"
+     ><% $source->name() | h %></a>
 % } else {
-      Added by
-      <& /lib/link/user.mas, user => $vendor->user() &>
+  Added by
+  <& /lib/link/user.mas, user => $vendor->user() &>
 % }
-      on <& /lib/format/date.mas, date => $vendor->creation_datetime() &>
+  on <& /lib/format/date.mas, date => $vendor->creation_datetime() &>
 % if ( $vendor->creation_datetime() ne $vendor->last_modified_datetime() ) {
-      (updated <& /lib/format/date.mas, date => $vendor->last_modified_datetime() &>)
+  (updated <& /lib/format/date.mas, date => $vendor->last_modified_datetime() &>)
 % }
 
 % if ( $c->vg_user()->is_admin() && $vendor->external_unique_id() ) {
-      <br />
-      <span id="external-id">External id: <% $vendor->external_unique_id() | h %></span>
+  <br />
+  <span id="external-id">External id: <% $vendor->external_unique_id() | h %></span>
 % }
-     </p>
+</p>
 
-     <p>
-      <a href="<% entry_uri( vendor => $vendor, path => 'review_form' ) | h %>"
-         class="content-button">Write your review</a>
-     </p>
+<p>
+  <a href="<% entry_uri( vendor => $vendor, path => 'review_form' ) | h %>"
+     class="content-button">Write your review</a>
+</p>
 
 % if ($comments || $ratings) {
-     <hr />
+<hr />
 % }
 
 % if ($comments) {
-     <h2>Reviews</h2>
+<h2>Reviews</h2>
 
-     <& /lib/comments.mas, comments => $comments, vendor => $vendor &>
+<& /lib/comments.mas, comments => $comments, vendor => $vendor &>
 
-     <p>
-      <a href="<% entry_uri( vendor => $vendor, path => 'review_form' ) | h %>"
-         class="content-button">Write your review</a>
-     </p>
+<p>
+  <a href="<% entry_uri( vendor => $vendor, path => 'review_form' ) | h %>"
+     class="content-button">Write your review</a>
+</p>
 % }
 
 % if ($ratings) {
-     <h3>Ratings Without Reviews</h3>
+<h3>Ratings Without Reviews</h3>
 
-     <ul id="ratings-list">
+<ul id="ratings-list">
 %   while ( my ( $rating, $user ) = $ratings->next() ) {
-      <li><a name="user-id-<% $user->user_id() %>"></a>
-          <& /lib/link/user.mas, user => $user &>:
-          <& /lib/stars-for-rating.mas, rating => $rating->rating(), color => 'green' &>
-      </li>
+  <li><a name="user-id-<% $user->user_id() %>"></a>
+      <& /lib/link/user.mas, user => $user &>:
+      <& /lib/stars-for-rating.mas, rating => $rating->rating(), color => 'green' &>
+  </li>
 %   }
-     </ul>
+</ul>
 % }
-
-    </div>
-
-   </div>
-  </div>
 
 <%args>
 $vendor

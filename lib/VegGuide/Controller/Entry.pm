@@ -64,6 +64,26 @@ sub _set_vendor : Chained('/') : PathPart('entry') : CaptureArgs(1)
     {
         my $location = $vendor->location();
 
+        $c->add_tab(
+            {
+                uri     => entry_uri( vendor => $vendor ),
+                label   => 'Info',
+                tooltip => 'About ' . $vendor->name(),
+                id      => 'info',
+            }
+        );
+
+        if ( $vendor->map_uri() ) {
+            $c->add_tab(
+                {
+                    uri   => entry_uri( vendor => $vendor, path => 'map' ),
+                    label => 'Map',
+                    tooltip => 'Map for ' . $vendor->name(),
+                    id      => 'map',
+                }
+            );
+        }
+
         $c->response()->breadcrumbs()->add_region_breadcrumbs($location);
 
         $c->response()->breadcrumbs()->add
@@ -79,6 +99,8 @@ sub entry_GET_html : Private
 {
     my $self = shift;
     my $c    = shift;
+
+    $c->tab_by_id('info')->set_is_selected(1);
 
     my $vendor = $c->stash()->{vendor};
 
@@ -158,6 +180,8 @@ sub map : Chained('_set_vendor') : PathPart('map') : Args(0)
 {
     my $self = shift;
     my $c    = shift;
+
+    $c->tab_by_id('map')->set_is_selected(1);
 
     $c->stash()->{template} = '/entry/large-map';
 }

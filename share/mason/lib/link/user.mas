@@ -2,7 +2,7 @@
 % if ( $text ) {
 <% $text %>\
 % } else {
-<% $user->real_name() | h %></a>\
+<% $user->user_id() == $c->vg_user()->user_id() ? 'You' : $user->real_name() | h %></a>\
 % }
 <%args>
 $user
