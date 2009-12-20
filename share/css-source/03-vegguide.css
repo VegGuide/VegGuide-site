@@ -110,8 +110,10 @@ a.action-button-medium:visited, a.action-button-small:visited {
 }
 
 #global-nav {
-    text-align: right;
+    border-bottom: 1px solid #ccc;
     margin-bottom: 1em;
+    padding-bottom: 0.2em;
+    text-align: right;
 }
 
 #global-nav ul {
