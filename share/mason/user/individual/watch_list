@@ -58,3 +58,7 @@ my %p1 = ( template => 'watch-list', params => { user => $user, vendors1 => $new
 my %p2 = ( template => 'watch-list', params => { user => $user, vendors2 => $user->new_entries_for_subscription() } );
 </%init>
 </%def>
+
+<%attr>
+layout => '3.5'
+</%attr>

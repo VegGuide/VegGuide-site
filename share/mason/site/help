@@ -727,7 +727,7 @@ Compassionate Action for Animals.
 
 <p>
 This site was primarily designed to look good in Mozilla/Firefox and
-Internet Explorer 6.0+. It should also look okay in Safari, Konqueror,
+Internet Explorer 7.0+. It should also look okay in Safari, Konqueror,
 and Opera 7+. Because the site is standards-compliant, it should also
 be usable in text-only browsers.
 </p>
@@ -823,6 +823,10 @@ the <a href="/site/philosophy">philosophy of VegGuide.Org</a>.
 </p>
 
 </%def>
+
+<%attr>
+layout => '3.5'
+</%attr>
 
 <%method page_title>
 VegGuide.Org Help

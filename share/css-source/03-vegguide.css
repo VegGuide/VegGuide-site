@@ -14,16 +14,29 @@ h1, h2, h3, h4, h5, h6 {
     font-family: Bitstream Vera Sans, Verdana, sans-serif;
 }
 
+h1, h2, h3 {
+    margin: 1em 0 0.5em 0;
+}
+
 h2, h4, h6 {
     color: #6aa41d;
 }
 
 a {
     color: #0072B0;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 
 a:visited {
     color: red;
+}
+
+ul {
+    margin-left: 0.1em;
 }
 
 ul li {
@@ -31,6 +44,10 @@ ul li {
     list-style: none;
     margin-left: 0;
     padding-left: 12px;
+}
+
+.no-top-margin {
+    margin-top: 0;
 }
 
 .content-button, .content-button-medium, .content-button-small {
@@ -45,6 +62,10 @@ ul li {
     text-decoration: none;
 }
 
+.content-button:hover, .content-button-medium:hover, .content-button-small:hover {
+    text-decoration: none;
+}
+
 .action-button, .action-button-medium, .action-button-small {
     background-color: #BE3F23;
     border-top: 1px solid #EC836C;
@@ -54,6 +75,10 @@ ul li {
     color: white;
     font-weight: bold;
     font-family: sans-serif;
+    text-decoration: none;
+}
+
+.action-button:hover, .action-button-medium:hover, .action-button-small:hover {
     text-decoration: none;
 }
 
@@ -71,7 +96,7 @@ a.action-button:visited, a.action-button-medium:visited, a.action-button-small:v
 
 .content-button-medium, .action-button-medium {
     font-size: 100%;
-    padding: 0.1em;
+    padding: 0.2em;
 }
 
 .content-button-small, .action-button-small {
@@ -82,6 +107,28 @@ a.action-button:visited, a.action-button-medium:visited, a.action-button-small:v
 a.content-button:visited, a.action-button:visited,
 a.action-button-medium:visited, a.action-button-small:visited {
     color: white;
+}
+
+#breadcrumbs {
+    float: left;
+}
+
+#breadcrumbs ul {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+#breadcrumbs ul li {
+    background: none;
+    display: inline;
+    margin-left: 0.3em;
+    padding-left: 0;
+}
+
+#breadcrumbs ul li.first {
+    margin-left: 0;
+    padding-left: 0;
 }
 
 #global-nav {
@@ -107,10 +154,8 @@ a.action-button-medium:visited, a.action-button-small:visited {
 #page-title {
     color: #6aa41d;
     font-size: 200%;
-}
-
-#content {
-    margin-top: 1em;
+    margin-bottom: 0.5em;
+    margin-top: 0;
 }
 
 #messages {
@@ -125,22 +170,46 @@ a.action-button-medium:visited, a.action-button-small:visited {
 }
 
 .front-page #hd {
+    border-bottom: none;
     text-align: center;
 }
 
-.front-page #sitewide-search-text-and-form form {
+.front-page #sitewide-search {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
+    float: none;
+}
+
+#sitewide-search {
+    margin: 0;
+}
+
+#hd {
+    padding-bottom: 0.8em;
+}
+
+#logo {
+    float: left;
+}
+
+#sitewide-search {
+    margin-top: 1.3em;
+    margin-bottom: 2em;
+    padding-top: 0.8em;
+    text-align: right;
 }
 
 #sitewide-search input.text {
-    background-color: white;
     border: 1px solid #00527B;
     color: #0072B0;
     font-size: 130%;
     font-weight: bold;
     padding: 0.2em;
     width: 24em;
+}
+
+.front-page #sitewide-search {
+    text-align: center;
 }
 
 #sitewide-search .action-button {
@@ -150,8 +219,8 @@ a.action-button-medium:visited, a.action-button-small:visited {
 }
 
 #sitewide-search-help {
-    -moz-opacity: 0.97;
-    background-color: #E5F8C9;
+    opacity: 0.96;
+    background-color: #fdffe1;
     border: 1px solid black;
     color: black;
     padding: 0.5em;
@@ -169,11 +238,66 @@ a.action-button-medium:visited, a.action-button-small:visited {
 }
 
 #sitewide-search-help-close img {
-  border: 0;
+    border: 0;
+}
+
+#tabs {
+    font-size: 110%;
+    line-height: 1.2;
+    margin-top: 1.5em;
+}
+
+#tabs ul {
+    border-bottom: 1px solid #999;
+    margin: 0;
+    padding: 4px 0;
+}
+
+#tabs li {
+    background: none;
+    display: inline;
+    list-style: none;
+}
+
+#tabs li a {
+    background-color: #f3f3f3;
+    border: 1px solid #999;
+    border-bottom: none;
+    color: #333;
+    font-variant: small-caps;
+    font-weight: bold;
+    letter-spacing: 0.07em;
+    margin-left: 0.1em;
+    padding: 4px 1em;
+    text-decoration: none;
+}
+
+#tabs li.selected a {
+    background-color: white;
+    border-bottom: 1px solid white;
+    color: black;
+    font-weight: bold;
+}
+
+/* This makes sure that the header is the same height with our without
+   tabs */
+#tabs li.invisible {
+    background-color: transparent;
+    padding: 0.3em 1em 0.11em 1em;
+}
+
+#tabs li a:hover {
+    background-color: #0072b0;
+    color: white;
+}
+
+#tabs li.selected a:hover {
+    background-color: white;
+    color: black;
 }
 
 .column-header {
-    background-color: #6aa41d;
+    background-color: #8cc63f;
 }
 
 .column-header h2 {
@@ -258,6 +382,388 @@ a.action-button-medium:visited, a.action-button-small:visited {
     margin-left: 1em;
 }
 
+.comment {
+    margin-bottom: 2em;
+}
+
+.comment h2 {
+    margin: 0;
+}
+
+.comment h3 {
+    margin: 0;
+}
+
+.comment .rating {
+    margin: 0.1em 0 0.5em 0;
+}
+
+form {
+    margin-bottom: 1em;
+}
+
+form legend {
+    background-color: #8CC63F;
+    color: white;
+    font-size: 120%;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    padding: 0.1em 0.2em;
+}
+
+
+form label {
+    display: block;
+    font-weight: bold;
+    margin-top: 0.4em;
+    margin-bottom: 0.1em;
+}
+
+form label.sub-label {
+    display: inline;
+    font-weight: normal;
+}
+
+form input.text,
+form input.file,
+form textarea,
+form select {
+    border: 1px solid #68AA11;
+    color: #0072B0;
+    font-weight: bold;
+    padding: 0.2em;
+}
+
+form input:focus,
+form textarea:focus,
+form select:focus {
+    background-color: #fdffe1;
+}
+
+form input.error,
+form textarea.error,
+form select.error,
+form p.error {
+    background-color: #FFCC66;
+}
+
+div.form-item p.error {
+    border: 1px solid #8CC63F;
+    margin-top: 0.3em;
+    padding: 0.1em;
+}
+
+form input.disabled,
+form textarea.disabled,
+form select.disabled {
+    background-color: #CCC;
+    border-color: #333;
+}
+
+form select optgroup {
+    color: #000000;
+}
+
+form input.text {
+    width: 20em;
+}
+
+form .short {
+    width: 15em;
+}
+
+form .medium {
+    width: 30em;
+}
+
+form .long {
+    width: 42em;
+}
+
+form .high {
+    height: 10em;
+}
+
+form textarea {
+    height: 7em;
+}
+
+form textarea.medium {
+    height: 3em;
+}
+
+form input.submit, form button.submit,
+form input.submit-small, form button.submit-small {
+    background-color: #BE3F23;
+    border-top: 1px solid #EC836C;
+    border-left: 1px solid #EC836C;
+    border-bottom: 2px solid #A7280C;
+    border-right: 2px solid #A7280C;
+    color: white;
+    font-weight: bold;
+    margin-top: 0.5em;
+    padding: 0.1em;
+}
+
+form input.submit-small, form button.submit-small {
+    font-size: 90%;
+    padding: 0em;
+}
+
+div.form-item {
+    margin-top: 0.7em;
+}
+
+div.form-item p {
+    font-size: 85%;
+    margin: 0.1em 0 0 0;
+}
+
+div.form-item ul.radio-boolean {
+    margin: 0;g
+    width: 5em;
+}
+
+div.form-item ul.radio-boolean li {
+    background: none;
+}
+
+div.form-item ul li input.radio {
+    display: inline;
+}
+
+div.form-item ul li label {
+    display: inline;
+    font-size: 95%;
+}
+
+div.pagination ul {
+    margin: 0 1.5em 0 0;
+    padding: 0;
+}
+
+div.pagination ul li {
+    background: none;
+    display: inline;
+    padding: 0.1em;
+}
+
+div.pagination ul li.current {
+    font-weight: bold;
+}
+
+div.pagination ul li.previous-set {
+    margin-right: 0.2em;
+}
+
+div.pagination ul li.next-set {
+    margin-left: 0.2em;
+}
+
+div.pagination form {
+    display: inline;
+    margin-left: 0.5em;
+}
+
+div.pagination form select {
+    width: 13.5em;
+}
+
+div.pagination form select, div.pagination form select option {
+    font-size: 80%;
+}
+
+.standard-table {
+    border-collapse: collapse;
+    margin: 0.5em 0 1em 0;
+    width: 100%;
+}
+
+.standard-table th {
+    background-color: #8CC63F;
+    border-right: 1px dotted white;
+    color: white;
+    font-size: 110%;
+    font-variant: small-caps;
+    font-weight: bold;
+    letter-spacing: 0.07em;
+    text-align: left;
+}
+
+.standard-table th, .standard-table td {
+    border: none;
+    vertical-align: top;
+}
+
+.standard-table tr td, .standard-table tr th {
+    padding: 0.5em 0.4em;
+}
+
+.standard-table tbody tr:hover {
+    background-color: #ddd;
+}
+
+.standard-table tr {
+    border-left: 1px dotted #8cc63f;
+    border-right: 1px dotted #8cc63f;
+}
+
+.standard-table thead {
+    border-top: 1px dotted #8cc63f;
+    border-bottom: 2px solid #8cc63f;
+}
+
+.standard-table tfoot {
+    border-top: 2px solid #8cc63f;
+    border-bottom: 1px dotted #8cc63f;
+}
+
+.standard-table tr.even {
+    background-color: #f4f4f4;
+}
+
+#entries-table .name {
+    width: 30%;
+}
+
+#entries-table.with-distance .name {
+    width: 24%;
+}
+
+#entries-table .name address {
+    font-size: 90%;
+}
+
+#entries-table.with-distance .distance {
+    width: 12%;
+}
+
+#entries-table .summary {
+    width: 30%;
+}
+
+#entries-table.with-distance .summary {
+    width: 24%;
+}
+
+#entries-table .summary span.summary-text {
+    font-size: 90%;
+}
+
+#entries-table .summary span.category {
+    font-size: 90%;
+    font-style: italic;
+}
+
+#entries-table .rating {
+    width: 10%;
+}
+
+#entries-table .how-veg {
+    width: 15%;
+}
+
+#entries-table .price-range {
+    width: 10%;
+}
+
+#entries-table .info {
+    width: 10%;
+}
+
+#entries-table th, #entries-table td.rating, #entries-table td.price-range, #entries-table td.info {
+    white-space: nowrap;
+}
+
+#entries-table td.rating img {
+    vertical-align: -15%;
+}
+
+#entries-table div.closed {
+    font-weight: bold;
+}
+
+#entries-table td.info ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#entries-table td.info ul li {
+    display: inline;
+}
+
+#entries-table td.info img { 
+    border: none;
+}
+
+#user-image {
+    float: left;
+    margin-right: 0.5em;
+    margin-bottom: 0.2em;
+}
+
+#watch-list-regions form, #watch-list-regions form input {
+    display: inline;
+    margin: 0;
+}
+
+#entry-summary {
+    border-bottom: 1px solid #999;
+    padding-bottom: 1em;
+}
+
+#entry-summary .content-buttons {
+    margin-top: 0.5em;
+}
+
+#ratings-and-total {
+    text-align: center;
+}
+
+#rating-numbers {
+    font-size: 120%;
+    font-weight: bold;
+    margin: 0;
+}
+
+#rating-help {
+    font-size: 80%;
+    margin-top: 0.2em;
+}
+
+#weighted-text {
+    font-size: 80%;
+    margin-top: 0.3em;
+}
+
+#veg-level {
+    font-variant: small-caps;
+}
+
+.veg-level-1 {
+    color: #8cc63f;
+}
+
+.veg-level-2 {
+    color: #68aa11;
+}
+
+.veg-level-3 {
+    color: #8cc63f;
+    font-weight: bold;
+}
+
+.veg-level-4 {
+    color: #68aa11
+    font-weight: bold;
+}
+
+.veg-level-5 {
+    color: #68aa11
+    font-weight: bold;
+}
+
 .rounded-corners-container, .rounded-corners-container * {
     background-color: transparent;
     display: block;
@@ -289,4 +795,8 @@ a.action-button-medium:visited, a.action-button-small:visited {
 
 .rounded-corners-4 {
     height: 2px;
+}
+
+.force-clear {
+    clear: both;
 }

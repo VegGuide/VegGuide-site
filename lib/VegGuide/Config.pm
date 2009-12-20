@@ -76,6 +76,17 @@ use Sys::Hostname qw( hostname );
     }
 }
 
+{
+    my @Roles =
+        qw( VegGuide::Role::Tabs
+          );
+
+    sub CatalystRoles
+    {
+        return @Roles;
+    }
+}
+
 sub VarLibDir
 {
     my $class = shift;

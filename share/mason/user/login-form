@@ -1,89 +1,57 @@
- <div id="main">
+<div class="yui-g">
+  <div class="yui-u first">
 
-  <div id="title-and-info-container" class="no-nav one-column">
-   <& /lib/rounded-corners-top.mas &>
+    <h2 class="no-top-margin">Log in</h2>
+    <&| /lib/filter/fill-in-form.mas &>
 
-   <div id="page-title-and-info">
-    <h1 id="page-title">Log In</h1>
-   </div>
+    <form action="/user/authentication" method="post">
+      <input type="hidden" name="return_to" value="<% $return_to | h %>" />
 
+      <& /lib/form/errors.mas &>
+      <div class="form-item">
+        <label for="email_address">Email:</label>
+        <input id="email_address" class="text" type="text" name="email_address" value="" />
+      </div>
+
+      <div class="form-item">
+        <label for="password">Password:</label>
+        <input id="password" class="text" type="password" name="password" />
+      </div>
+
+      <div class="form-item">
+        <label for="remember">Remember me:</label>
+        <input id="remember" class="checkbox" type="checkbox" name="remember" />
+      </div>
+
+      <div class="form-item">
+        <input class="submit" type="submit" value="Log in" />
+      </div>
+
+    </form>
+    </&>
+
+    <p>
+      <a href="/user/forgot_password_form?return_to=<% $return_to | uh %>">Forgot your password?</a>
+    </p>
   </div>
+  <div class="yui-u">
+    <h2 class="no-top-margin">Register</h2>
 
- </div>
+    <p>
+      As a registered user, you'll be able to review the places you
+      love (and hate), add new entries, upload pictures, and more.
+    </p>
 
- <div id="body-container">
-
-  <div id="body" class="one-column">
-
-   <&| /lib/filter/fill-in-form.mas &>
-   <form action="/user/authentication" method="post">
-    <input type="hidden" name="return_to" value="<% $return_to | h %>" />
-
-    <& /lib/form/errors.mas &>
-    <fieldset>
-     <legend>Your VegGuide.Org login</legend>
-
-     <div class="form-item">
-      <label for="email_address">Email:</label>
-      <input id="email_address" class="medium text" type="text" name="email_address" value="" />
-     </div>
-
-     <div class="form-item">
-      <label for="password">Password:</label>
-      <input id="password" class="text" type="password" name="password" />
-     </div>
-
-    </fieldset>
-
-    <fieldset>
-
-     <legend>Or your OpenID</legend>
-
-     <div class="form-item">
-      <label for="openid_url">OpenID URL:</label>
-      <input id="openid_url" class="medium text" type="text" name="openid_uri" value="" />
-      <p>
-       Learn more <a href="http://openid.net/">about OpenID</a>.
-      </p>
-
-      <p>
-       Note that if you have an existing account you may need to log
-       in the "old" way first and associate your OpenID URL with your
-       account first.
-      </p>
-     </div>
-
-    </fieldset>
-
-    <fieldset>
-     <legend>Log In</legend>
-
-     <div class="form-item">
-      <label for="remember">Remember me:</label>
-      <input id="remember" class="checkbox" type="checkbox" name="remember" />
-     </div>
-
-     <div class="form-item">
-      <input class="submit" type="submit" value="Log In" />
-     </div>
-
-    </fieldset>
-
-   </form>
-   </&>
-
-   <p>
-    <a href="/user/forgot_password_form?return_to=<% $return_to | uh %>">Forgot your password</a>?
-   </p>
-
-   <p>
-    <a href="/user/new_user_form?return_to=<% $return_to | uh %>">Make a new account</a>.
-   </p>
-
+    <p>
+      <a class="action-button" href="/user/new_user_form">Create an account</a>
+    </p>
   </div>
-
- </div>
+</div>
 
 <%init>
 my $return_to = $c->request()->param('return_to') || $c->session()->{saved_params}{return_to} || '/';
 </%init>
+
+<%attr>
+layout => '3.5'
+</%attr>

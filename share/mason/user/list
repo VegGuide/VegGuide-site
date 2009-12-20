@@ -1,46 +1,33 @@
- <div id="main">
-
-  <div id="title-and-info-container" class="no-nav">
-   <& /lib/rounded-corners-top.mas &>
-
-   <div id="page-title-and-info">
-    <h1 id="page-title">VegGuide.Org Users</h1>
-   </div>
-
-  </div>
-
- </div>
-
- <div id="body-container">
-
-  <div id="body" class="one-column">
-
-    <&| /lib/filter/fill-in-form.mas, objects => [ $search ] &>
-    <form id="user-filter" action="/user" method="get">
-     <label for="real_name">Name:</label>
-     <input id="real_name" type="text" class="text" name="real_name" />
+<&| /lib/filter/fill-in-form.mas, objects => [ $search ] &>
+<form id="user-filter" action="/user" method="get">
+  <label for="real_name">Name:</label>
+  <input id="real_name" type="text" class="text" name="real_name" />
 % if ( $c->vg_user()->is_admin() ) {
-     <label for="email_address">Email:</label>
-     <input id="email_address" type="text" class="text" name="email_address" />
+  <label for="email_address">Email:</label>
+  <input id="email_address" type="text" class="text" name="email_address" />
 % }
-     <input type="submit" class="submit" value="Search" />
-    </form>
-    </&>
+  <input type="submit" class="submit" value="Search" />
+</form>
+</&>
 
 % if ( $search->matching() ) {
-    <h3 id="current-filters-heading">Currently showing users ...</h3>
+<h2 id="current-filters-heading">Currently showing users ...</h2>
 
-    <ul>
-     <li>with <% $search->matching() | h %>.</li>
-    </ul>
+<ul>
+  <li>with <% $search->matching() | h %>.</li>
+</ul>
 % }
 
 <& /lib/users-table.mas, search => $search, users => $search->users(), pager => $search->pager() &>
 
-  </div>
-
- </div>
-
 <%args>
 $search
 </%args>
+
+<%method page_title>
+VegGuide.Org Users
+</%method>
+
+<%attr>
+layout => '3.5'
+</%attr>

@@ -23,11 +23,17 @@ use VegGuide::User;
 use VegGuide::Vendor;
 use VegGuide::VendorSource;
 
+use namespace::autoclean;
+use Moose;
 
 BEGIN
 {
+    extends 'Catalyst';
+
     Catalyst->import( VegGuide::Config->CatalystImports() );
 }
+
+with( VegGuide::Config->CatalystRoles() );
 
 __PACKAGE__->config( name => 'VegGuide',
                      VegGuide::Config->CatalystConfig(),
