@@ -96,7 +96,7 @@ a.action-button:visited, a.action-button-medium:visited, a.action-button-small:v
 
 .content-button-medium, .action-button-medium {
     font-size: 100%;
-    padding: 0.1em;
+    padding: 0.2em;
 }
 
 .content-button-small, .action-button-small {
@@ -358,6 +358,22 @@ a.action-button-medium:visited, a.action-button-small:visited {
 #ft #organization-logos img {
     border: none;
     margin-left: 1em;
+}
+
+.comment {
+    margin-bottom: 2em;
+}
+
+.comment h2 {
+    margin: 0;
+}
+
+.comment h3 {
+    margin: 0;
+}
+
+.comment .rating {
+    margin: 0.1em 0 0.5em 0;
 }
 
 form {
