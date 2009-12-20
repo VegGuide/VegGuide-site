@@ -9,6 +9,7 @@ use Class::Trait 'VegGuide::Role::Controller::Comment';
 use Class::Trait 'VegGuide::Role::Controller::Search';
 
 use Lingua::EN::Inflect qw( PL );
+use Scalar::Util qw( looks_like_number );
 use Time::HiRes;
 use URI::Escape qw( uri_unescape );
 use VegGuide::Search::Vendor::All;
@@ -30,6 +31,13 @@ sub list : Path('')
       map { $_ => $params->{$_} }
       grep { defined $params->{$_} }
       qw( order_by sort_order page limit );
+
+    my $limit = $params->{limit} || $c->vg_user()->entries_per_page();
+
+    $limit = 20 unless looks_like_number($limit);
+    $limit = 100 if $limit > 100;
+
+    $p{limit} = $limit;
 
     $search->set_cursor_params(%p);
 

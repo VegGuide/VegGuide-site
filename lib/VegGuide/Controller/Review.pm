@@ -5,6 +5,7 @@ use warnings;
 
 use base 'VegGuide::Controller::Base';
 
+use Scalar::Util qw( looks_like_number );
 use VegGuide::Search::Review;
 
 
@@ -20,6 +21,13 @@ sub list : Path('')
       map { $_ => $params->{$_} }
       grep { defined $params->{$_} }
       qw( order_by sort_order page limit );
+
+    my $limit = $params->{limit} || $c->vg_user()->entries_per_page();
+
+    $limit = 20 unless looks_like_number($limit);
+    $limit = 100 if $limit > 100;
+
+    $p{limit} = $limit;
 
     $search->set_cursor_params(%p);
 
