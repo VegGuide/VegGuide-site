@@ -1,3 +1,11 @@
+/* custom 600px wide grid for front page */
+#front-page-doc { 
+	margin:auto;text-align:left; /* leave unchanged */ 
+	width: 50em;/* non-IE */ 
+	*width: 48.76em;/* IE */ 
+	min-width: 650px;/* optional but recommended */ 
+} 
+
 #content {
     font-size: 120%;
 }
@@ -77,6 +85,9 @@ a.action-button-medium:visited, a.action-button-small:visited {
 }
 
 #global-nav {
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 1em;
+    padding-bottom: 0.2em;
     text-align: right;
 }
 
