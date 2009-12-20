@@ -25,6 +25,17 @@
   </div>
 </div>
 
+% if ($new_vendor_count) {
+<p>
+  There have been <strong><% $new_vendor_count %>
+  <% PL( 'entry', $new_vendor_count ) %></strong>
+%   if ($new_review_count) { 
+  and <strong><% $new_review_count %> <% PL( 'review', $new_review_count ) %></strong>
+%   }
+  added in the last 7 days\
+</p>
+% }
+
 <p>
   VegGuide.Org is a community-maintained, world-wide guide to vegetarian and
   vegan restaurants, grocers, and more.
@@ -52,3 +63,8 @@
 $news_item
 @columns
 </%args>
+
+<%init>
+my $new_vendor_count = VegGuide::Vendor->NewVendorCount( days => 7 );
+my $new_review_count = VegGuide::VendorComment->NewCommentCount( days => 7 );
+</%init>
