@@ -1,77 +1,5 @@
-<div id="entry-summary" class="yui-gc">
-  <div class="yui-u first">
-
-% if ( $vendor->is_closed ) {
-      <h2 id="closed">
-        Closed as of <& /lib/format/date.mas, date => $vendor->close_date_object &>
-      </h2>
-% }
-% if ( $vendor->categories > 1 || ! $vendor->is_restaurant ) {
-      <h2 id="entry-categories"><% join ', ', map { $_->name } $vendor->categories | h %></h2>
-% }
-
-% if ( $m->request_comp()->attr('show_all_info') ) {
-%   if ( $vendor->location()->has_addresses() ) {
-      <& .address, address => \@address &>
-%   }
-
-%   if ( $vendor->location()->has_addresses() && $c->vg_user()->is_admin() ) {
-      <div id="lat-long">
-%     if ( defined $vendor->latitude() ) {
-        <% $vendor->latitude() | h %> / <% $vendor->longitude() | h %>
-%     } else {
-        No lat/long
-%     }
-      </div>
-      <div id="canonical_address">
-%     if ( string_is_empty( $vendor->canonical_address() ) ) {
-        No canonical address from Google Maps
-%     } else {
-        <% $vendor->canonical_address() | h %>
-%     }
-      </div>
-%   }
-
-
-%   if ( $c->client()->show_localized_content() && $vendor->has_localized_address() ) {
-      <& .address, address => [ $vendor->localized_address_pieces() ] &>
-%   }
-%   if ( defined $vendor->phone() ) {
-      <div id="phone"><% $vendor->phone() %></div>
-%   }
-
-% if ( $vendor->home_page() ) {
-      <div id="website">
-        <a class="external" rel="nofollow"
-           href="<% $vendor->external_uri() | h %>"
-           title="Go to this entry's home page"
-           ><% $vendor->external_uri() | h %></a>
-      </div>
-% }
-
-      <div class="content-buttons">
-        <a class="content-button" href="<% entry_uri( vendor => $vendor, path => 'edit_form' ) | h %>"
-             >Edit</a>
-%   if ( $c->vg_user()->can_delete_vendor($vendor) ) {
-        <a class="action-button"
-           href="<% entry_uri( vendor => $vendor, path => 'deletion_confirmation_form' ) | h %>"
-           >Delete</a>
-%   }
-% }
-      </div>
-    </div>
-
-    <div id="rating-info" class="yui-u">
-% if ($show_all_info) {
-      <& /lib/ratings-div.mas, vendor => $vendor &>
-% }
-    </div>
-
-  </div>
 
 % $m->call_next( vendor => $vendor );
-
- </div>
 
 <%args>
 $vendor
@@ -98,7 +26,7 @@ $vendor
 </%method>
 
 <%def .address>
-  <address>
+  <address class="entry-address">
 %     foreach my $line (@address) {
     <% $line | h %>
 %       if ( $line ne $address[-1] ) {

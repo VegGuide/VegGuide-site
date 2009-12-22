@@ -64,6 +64,7 @@ ul li {
 
 .content-button:hover, .content-button-medium:hover, .content-button-small:hover {
     text-decoration: none;
+    background-color: #2092D0;
 }
 
 .action-button, .action-button-medium, .action-button-small {
@@ -79,6 +80,7 @@ ul li {
 }
 
 .action-button:hover, .action-button-medium:hover, .action-button-small:hover {
+    background-color: #de5f43;
     text-decoration: none;
 }
 
@@ -322,11 +324,6 @@ a.action-button-medium:visited, a.action-button-small:visited {
 .column-content h3.date {
     font-size: 100%;
     margin: 0;
-}
-
-#front-page-text {
-    margin-left: 17%;
-    margin-right: 17%;
 }
 
 #ft {
@@ -708,13 +705,14 @@ div.pagination form select, div.pagination form select option {
     margin: 0;
 }
 
-#entry-summary {
-    border-bottom: 1px solid #999;
-    padding-bottom: 1em;
-}
-
 #entry-summary .content-buttons {
     margin-top: 0.5em;
+}
+
+#entry-categories {
+    color: black;
+    font-size: 110%;
+    margin: 0;
 }
 
 #ratings-and-total {
@@ -737,30 +735,41 @@ div.pagination form select, div.pagination form select option {
     margin-top: 0.3em;
 }
 
-#veg-level {
-    font-variant: small-caps;
+#phone {
+    font-weight: bold;
 }
 
-.veg-level-1 {
+#lat-long, #canonical-address {
+    color: #888;
+}
+
+#veg-level {
+    font-size: 120%;
+    font-variant: small-caps;
+    font-weight: normal;
+    margin: 0;
+}
+
+#veg-level.veg-level-1 {
     color: #8cc63f;
 }
 
-.veg-level-2 {
+#veg-level.veg-level-2 {
     color: #68aa11;
 }
 
-.veg-level-3 {
+#veg-level.veg-level-3 {
     color: #8cc63f;
     font-weight: bold;
 }
 
-.veg-level-4 {
-    color: #68aa11
+#veg-level.veg-level-4 {
+    color: #68aa11;
     font-weight: bold;
 }
 
-.veg-level-5 {
-    color: #68aa11
+#veg-level.veg-level-5 {
+    color: #68aa11;
     font-weight: bold;
 }
 

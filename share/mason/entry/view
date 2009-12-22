@@ -1,10 +1,54 @@
-%#<& /entry/profile-and-hours.mas, vendor => $vendor &>
+<div class="yui-g">
+  <div class="yui-u first">
 
-%#<& /entry/map-and-images.mas, vendor => $vendor &>
+% if ( $vendor->is_closed ) {
+    <h2 id="closed">
+      Closed as of <& /lib/format/date.mas, date => $vendor->close_date_object &>
+    </h2>
+% }
+
+% if ( $vendor->location()->has_addresses() ) {
+    <& .address, address => \@address &>
+% }
+
+% if ( defined $vendor->phone() ) {
+    <div id="phone"><% $vendor->phone() %></div>
+% }
+
+% if ( $c->client()->show_localized_content() && $vendor->has_localized_address() ) {
+    <& .address, address => [ $vendor->localized_address_pieces() ] &>
+% }
+
+% if ( $vendor->home_page() ) {
+    <div id="website">
+      <a class="external" rel="nofollow"
+         href="<% $vendor->external_uri() | h %>"
+         title="<% $vendor->name() | h %> web site"
+         ><% $vendor->external_uri() | h %></a>
+    </div>
+% }
+
+% if ( $vendor->location()->has_addresses() && $c->vg_user()->is_admin() ) {
+    <div id="lat-long">
+%   if ( defined $vendor->latitude() ) {
+      <% $vendor->latitude() | h %> / <% $vendor->longitude() | h %>
+%   } else {
+      No lat/long
+%   }
+    </div>
+    <div id="canonical-address">
+%   if ( string_is_empty( $vendor->canonical_address() ) ) {
+      No canonical address from Google Maps
+%   } else {
+      <% $vendor->canonical_address() | h %>
+%   }
+    </div>
+% }
+
 
 % unless ( $vendor->is_organization() ) {
-<div id="veg-level"
-     class="veg-level-<% $vendor->veg_level() %>"><% $vendor->veg_description | h %></div>
+<h3 id="veg-level"
+     class="veg-level-<% $vendor->veg_level() %>"><% $vendor->veg_description | h %></h3>
 
 %   if ( $vendor->is_restaurant() ) {
 <div>
@@ -15,6 +59,10 @@
 %   if ( my @cuisines = $vendor->cuisines() ) {
 <label>Cuisines:</label> <span class="cuisines"><% join ', ', map { $_->name() } @cuisines | h %></span>
 %   }
+% }
+
+% if ( $vendor->categories > 1 || ! $vendor->is_restaurant ) {
+<div id="entry-categories"><% join ', ', map { $_->name } $vendor->categories | h %></div>
 % }
 
 <p id="summary"><% $vendor->short_description() | h %>
@@ -50,7 +98,7 @@
 
 % if ( defined $vendor->directions() ) {
 <div id="directions">
-  <strong>Directions:</strong> <% VegGuide::Util::text_to_html( text => $vendor->directions(), class => 'compact' ) %>
+  <h3>Directions</h3> <% VegGuide::Util::text_to_html( text => $vendor->directions(), class => 'compact' ) %>
 </div>
 % }
 
@@ -82,6 +130,28 @@
   <span id="external-id">External id: <% $vendor->external_unique_id() | h %></span>
 % }
 </p>
+
+  </div>
+
+  <div class="yui-u">
+    <div class="yui-g">
+
+      <div id="rating-info" class="yui-u first">
+        <& /lib/ratings-div.mas, vendor => $vendor &>
+      </div>
+
+      <div class="yui-u">
+        pics
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+%#<& /entry/profile-and-hours.mas, vendor => $vendor &>
+
+%#<& /entry/map-and-images.mas, vendor => $vendor &>
 
 <p>
   <a href="<% entry_uri( vendor => $vendor, path => 'review_form' ) | h %>"
@@ -123,6 +193,11 @@ $ratings => undef
 </%args>
 
 <%init>
+my $c_r_pc = $vendor->city_region_postal_code();
+my $localized_c_r_pc = $vendor->localized_city_region_postal_code();
+
+my @address = $vendor->address_pieces();
+
 my $description =
       VegGuide::Util::text_to_html( text        => $vendor->long_description(),
                                     first_class => 'first',
@@ -140,6 +215,20 @@ if ( $c->client()->show_localized_content() )
 
 my @attributes = $vendor->attributes();
 </%init>
+
+<%def .address>
+  <address class="entry-address">
+% foreach my $line (@address) {
+    <% $line | h %>
+%   if ( $line ne $address[-1] ) {
+    <br />
+%   }
+% }
+  </address>
+<%args>
+@address
+</%args>
+</%def>
 
 <%attr>
 show_all_info => 1
