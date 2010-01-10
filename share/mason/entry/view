@@ -1,4 +1,4 @@
-<div class="yui-g">
+<div class="yui-gc">
   <div class="yui-u first">
 
 % if ( $vendor->is_closed ) {
@@ -47,29 +47,14 @@
 
 
 % unless ( $vendor->is_organization() ) {
-<h3 id="veg-level"
-     class="veg-level-<% $vendor->veg_level() %>"><% $vendor->veg_description | h %></h3>
+    <h3 id="veg-level"
+        class="veg-level-<% $vendor->veg_level() %>"><% $vendor->veg_description | h %></h3>
 
-%   if ( $vendor->is_restaurant() ) {
-<div>
-  <label>Prices:</label> <span class="price-range"><% $vendor->price_range()->description() | h %></span>
-</div>
-%   }
-
-%   if ( my @cuisines = $vendor->cuisines() ) {
-<label>Cuisines:</label> <span class="cuisines"><% join ', ', map { $_->name() } @cuisines | h %></span>
-%   }
-% }
-
-% if ( $vendor->categories > 1 || ! $vendor->is_restaurant ) {
-<div id="entry-categories"><% join ', ', map { $_->name } $vendor->categories | h %></div>
-% }
-
-<p id="summary"><% $vendor->short_description() | h %>
+      <p id="summary"><% $vendor->short_description() | h %>
 % if ( $c->client()->show_localized_content() && defined $vendor->localized_short_description() ) {
-  - <% $c->client()->encode( $vendor->localized_short_description() ) | h %>
+        - <% $c->client()->encode( $vendor->localized_short_description() ) | h %>
 % }
-</p>
+      </p>
 
 % if ( defined $description && length $description ) {
 <% $description %>
@@ -85,21 +70,25 @@
 </p>
 % }
 
-<p>
-  <a href="<% entry_uri( vendor => $vendor, path => 'edit_form' ) | h %>"
-     class="content-button" title="Edit this entry">Edit</a>
-  <a href="/site/clone_entry_form?vendor_id=<% $vendor->vendor_id() %>"
-     class="content-button" title="Make a new entry based on this one">Clone</a>
-% if ( $c->vg_user()->can_delete_vendor($vendor) ) {
-  <a href="<% entry_uri( vendor => $vendor, path => 'deletion_confirmation_form' ) | h %>"
-     class="action-button" title="Delete this entry">Delete</a>
-% }
-</p>
-
 % if ( defined $vendor->directions() ) {
 <div id="directions">
   <h3>Directions</h3> <% VegGuide::Util::text_to_html( text => $vendor->directions(), class => 'compact' ) %>
 </div>
+% }
+
+%   if ( $vendor->is_restaurant() ) {
+<div>
+  <label>Prices:</label> <span class="price-range"><% $vendor->price_range()->description() | h %></span>
+</div>
+%   }
+
+%   if ( my @cuisines = $vendor->cuisines() ) {
+<label>Cuisines:</label> <span class="cuisines"><% join ', ', map { $_->name() } @cuisines | h %></span>
+%   }
+% }
+
+% if ( $vendor->categories > 1 || ! $vendor->is_restaurant ) {
+<div id="entry-categories"><% join ', ', map { $_->name } $vendor->categories | h %></div>
 % }
 
 % if (@attributes) {
@@ -131,46 +120,22 @@
 % }
 </p>
 
-  </div>
-
-  <div class="yui-u">
-    <div class="yui-g">
-
-      <div id="rating-info" class="yui-u first">
-        <& /lib/ratings-div.mas, vendor => $vendor &>
-      </div>
-
-      <div class="yui-u">
-        pics
-      </div>
-
-    </div>
-  </div>
-
-</div>
-
-%#<& /entry/profile-and-hours.mas, vendor => $vendor &>
-
-%#<& /entry/map-and-images.mas, vendor => $vendor &>
 
 <p>
-  <a href="<% entry_uri( vendor => $vendor, path => 'review_form' ) | h %>"
-     class="content-button">Write your review</a>
-</p>
-
-% if ($comments || $ratings) {
-<hr />
+  <a href="<% entry_uri( vendor => $vendor, path => 'edit_form' ) | h %>"
+     class="content-button" title="Edit this entry">Edit</a>
+  <a href="/site/clone_entry_form?vendor_id=<% $vendor->vendor_id() %>"
+     class="content-button" title="Make a new entry based on this one">Clone</a>
+% if ( $c->vg_user()->can_delete_vendor($vendor) ) {
+  <a href="<% entry_uri( vendor => $vendor, path => 'deletion_confirmation_form' ) | h %>"
+     class="action-button" title="Delete this entry">Delete</a>
 % }
+</p>
 
 % if ($comments) {
 <h2>Reviews</h2>
 
 <& /lib/comments.mas, comments => $comments, vendor => $vendor &>
-
-<p>
-  <a href="<% entry_uri( vendor => $vendor, path => 'review_form' ) | h %>"
-     class="content-button">Write your review</a>
-</p>
 % }
 
 % if ($ratings) {
@@ -185,6 +150,20 @@
 %   }
 </ul>
 % }
+
+
+  </div>
+
+  <div class="yui-u">
+    <& /entry/ratings.mas, vendor => $vendor &>
+
+    <& /entry/images.mas, vendor => $vendor &>
+  </div>
+</div>
+
+%#<& /entry/profile-and-hours.mas, vendor => $vendor &>
+
+%#<& /entry/map-and-images.mas, vendor => $vendor &>
 
 <%args>
 $vendor

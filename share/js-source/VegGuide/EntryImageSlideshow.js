@@ -1,5 +1,6 @@
 JSAN.use('DOM.Element');
 JSAN.use('DOM.Events');
+JSAN.use('DOM.Find');
 JSAN.use('HTTP.Request');
 JSAN.use('Widget.Lightbox2');
 
@@ -29,18 +30,6 @@ VegGuide.EntryImageSlideshow.instrumentPage = function () {
         return;
     }
 
-    var slideshow_link = document.createElement("a");
-    slideshow_link.title = "Click on this link to see a larger version of this and other images";
-    slideshow_link.href = "#";
-
-    var container = main_image.parentNode;
-
-    container.removeChild(main_image);
-
-    slideshow_link.appendChild(main_image);
-
-    container.insertBefore( slideshow_link, container.firstChild );
-
     var lb = new Widget.Lightbox2( { sourceElement: $("slideshow-lightbox") } );
 
     var show = new VegGuide.EntryImageSlideshow (lb);
@@ -54,16 +43,15 @@ VegGuide.EntryImageSlideshow.instrumentPage = function () {
         }
     };
 
-    DOM.Events.addListener(
-        slideshow_link,
-        "click",
-        show_func
-    );
+    var links =
+        DOM.Find.getElementsByAttributes( { tagName:   "A",
+                                            className: "activate-slideshow"
+                                          },
+                                          $("entry-images") );
 
-    var show_link = $( "show-slideshow" );
-    if (show_link) {
+    for ( var i = 0; i < links.length; i++ ) {
         DOM.Events.addListener(
-            show_link,
+            links[i],
             "click",
             show_func
         );
@@ -78,11 +66,12 @@ VegGuide.EntryImageSlideshow.prototype._init = function (lb) {
         return;
     }
 
-    this.imageContainer    = $("slideshow-image-container");
-    this.captionContainer  = $("slideshow-caption-container");
-    this.controlsContainer = $("slideshow-controls-container");
-    this.prevContainer     = $("slideshow-prev-container");
-    this.nextContainer     = $("slideshow-next-container");
+    this.imageContainer       = $("slideshow-image-container");
+    this.captionContainer     = $("slideshow-caption-container");
+    this.attributionContainer = $("slideshow-attribution-container");
+    this.controlsContainer    = $("slideshow-controls-container");
+    this.prevContainer        = $("slideshow-prev-container");
+    this.nextContainer        = $("slideshow-next-container");
 
     this.vendor_id = matches[1];
 
@@ -130,6 +119,16 @@ VegGuide.EntryImageSlideshow.prototype._showImage = function (imageNumber) {
         var caption = document.createTextNode( image.caption );
         this.captionContainer.appendChild(caption);
     }
+
+    this._emptyElt( this.attributionContainer );
+
+    var attribution = document.createTextNode( ' Uploaded by ' );
+    var user_link = document.createElement("a");
+    user_link.href = "/user/" + image.user_id;
+    user_link.appendChild( document.createTextNode( image.user_real_name ) );
+
+    this.attributionContainer.appendChild(attribution);
+    this.attributionContainer.appendChild(user_link);
 
     var prev_link;
     if ( image.previous ) {
@@ -213,7 +212,7 @@ VegGuide.EntryImageSlideshow.prototype._makeControLink = function ( text, number
 
     return link;
 }
-    
+
 
 VegGuide.EntryImageSlideshow.prototype._makeShowFunction = function (number) {
     var self = this;

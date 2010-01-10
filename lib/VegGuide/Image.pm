@@ -27,7 +27,7 @@ has type =>
       isa      => 'Str',
       init_arg => undef,
       lazy     => 1,
-      default  => sub { $Magic->checktype_filename( $_[0]->file() ) },
+      builder  => '_build_type',
     );
 
 my %Extensions = ( 'image/gif'  => 'gif',
@@ -89,6 +89,16 @@ sub resize
                             );
 
     die $status if $status;
+}
+
+sub _build_type {
+    my $self = shift;
+
+    my $type = $Magic->checktype_filename( $self->file() );
+
+    $type =~ s/; .+$//;
+
+    return $type;
 }
 
 

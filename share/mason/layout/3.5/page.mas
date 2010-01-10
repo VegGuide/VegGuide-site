@@ -9,9 +9,14 @@
         <div id="content">
 
 % if ( $m->request_comp()->method_exists('page_title') ) {
+%   my $title = $m->request_comp()->scall_method( 'page_title', %ARGS );
+%   if ( $title =~ /<h1/ ) {
+<% $title %>
+%   } else {
           <h1 id="page-title">
-%   $m->request_comp()->call_method( 'page_title', %ARGS );
+            <% $title %>
           </h1>
+%   }
 % }
 
 % if ( $m->request_comp()->attr('requires_js') ) {

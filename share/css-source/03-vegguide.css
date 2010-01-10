@@ -1,3 +1,4 @@
+
 /* custom 600px wide grid for front page */
 #front-page-doc { 
 	margin:auto;text-align:left; /* leave unchanged */ 
@@ -103,7 +104,7 @@ a.action-button:visited, a.action-button-medium:visited, a.action-button-small:v
 
 .content-button-small, .action-button-small {
     font-size: 90%;
-    padding: 0em;
+    padding: 0.1em 0.2em;
 }
 
 a.content-button:visited, a.action-button:visited,
@@ -158,6 +159,10 @@ a.action-button-medium:visited, a.action-button-small:visited {
     font-size: 200%;
     margin-bottom: 0.5em;
     margin-top: 0;
+}
+
+#page-title.closed {
+    color: #333;
 }
 
 #messages {
@@ -705,34 +710,9 @@ div.pagination form select, div.pagination form select option {
     margin: 0;
 }
 
-#entry-summary .content-buttons {
-    margin-top: 0.5em;
-}
-
-#entry-categories {
-    color: black;
-    font-size: 110%;
+#closed {
+    color: #333;
     margin: 0;
-}
-
-#ratings-and-total {
-    text-align: center;
-}
-
-#rating-numbers {
-    font-size: 120%;
-    font-weight: bold;
-    margin: 0;
-}
-
-#rating-help {
-    font-size: 80%;
-    margin-top: 0.2em;
-}
-
-#weighted-text {
-    font-size: 80%;
-    margin-top: 0.3em;
 }
 
 #phone {
@@ -773,6 +753,40 @@ div.pagination form select, div.pagination form select option {
     font-weight: bold;
 }
 
+#ratings-and-total {
+    border: 1px solid #6aa41d;
+    padding: 0.5em 0 1em 0;
+    text-align: center;
+}
+
+#rating-numbers {
+    font-size: 120%;
+    font-weight: bold;
+    margin: 0;
+}
+
+#rating-help {
+    font-size: 80%;
+    margin-top: 0.2em;
+}
+
+#write-your-review {
+    margin-top: 0.3em;
+}
+
+#entry-images {
+    margin-top: 1em;
+}
+
+#main-image {
+    margin-bottom: 4px;
+}
+
+.image-attribution {
+    font-size: 80%;
+    font-style: italic;
+}
+
 .rounded-corners-container, .rounded-corners-container * {
     background-color: transparent;
     display: block;
@@ -808,4 +822,67 @@ div.pagination form select, div.pagination form select option {
 
 .force-clear {
     clear: both;
+}
+
+a.lightbox2-close img {
+    border: 0;
+    float: right;
+}
+
+#slideshow-lightbox {
+    background-color: white;
+    border: 1px solid #666;
+    margin: 0 auto;
+    padding: 5px;
+    position: absolute;
+    top: 50px;
+    width: 700px;
+}
+
+#slideshow-lightbox h2 {
+    margin: 0 0 1em 0;
+}
+
+#slideshow-lightbox #slideshow-controls-container {
+
+}
+
+#slideshow-lightbox #slideshow-controls-container.empty {
+    border-bottom: 0;
+}
+
+#slideshow-lightbox #slideshow-image-container {
+    height: 410px;
+    width: 620px;
+}
+
+#slideshow-lightbox #slideshow-image-container img {
+    border: 1px solid black;
+}
+
+#slideshow-lightbox #slideshow-image-container img.loader {
+    border: 0px;
+    margin-left: 334px; /* (700-32)/2) */
+    margin-top: 189px;  /* (410-32/2) */
+}
+
+#slideshow-lightbox #slideshow-caption-container {
+    font-size: 90%; 
+    font-style: italic;
+    margin-bottom: 0.2em;
+    text-align: center;
+}
+
+#slideshow-lightbox #slideshow-attribution-container {
+    font-size: 80%; 
+    font-style: italic;
+    text-align: center;
+}
+
+#slideshow-lightbox #slideshow-prev-container, #slideshow-lightbox #slideshow-next-container {
+    float: left;
+}
+
+#slideshow-lightbox #slideshow-next-container {
+    float: right;
 }
