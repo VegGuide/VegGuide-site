@@ -37,8 +37,9 @@
     </p>
 % }
 
-    <div>
-      <a class="content-button" href="<% entry_uri( vendor => $vendor, path => 'images_form' ) | h %>"
+    <div id="add-edit-images">
+      <a class="content-button"
+         href="<% entry_uri( vendor => $vendor, path => 'images_form' ) | h %>"
          >Add/edit images</a>
     </div>
 

@@ -30,7 +30,7 @@ $comment
 </%args>
 
 <%init>
-my $uri = entry_uri( vendor => $vendor, path => 'review' );
+my $uri = entry_uri( vendor => $vendor, path => 'reviews' );
 </%init>
 
 <%attr>

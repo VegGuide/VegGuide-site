@@ -73,6 +73,15 @@ sub _set_vendor : Chained('/') : PathPart('entry') : CaptureArgs(1)
             }
         );
 
+        $c->add_tab(
+            {
+                uri     => entry_uri( vendor => $vendor, path => 'reviews' ),
+                label   => 'Reviews',
+                tooltip => 'Reviews and ratings for ' . $vendor->name(),
+                id      => 'reviews',
+            }
+        );
+
         if ( $vendor->map_uri() ) {
             $c->add_tab(
                 {
@@ -107,14 +116,10 @@ sub entry_GET_html : Private
     my $review_count = $vendor->review_count();
 
     my $comments;
-    $comments = $vendor->comments() if $review_count;
-
-    my $ratings;
-    $ratings = $vendor->ratings_without_reviews()
-        if $vendor->ratings_without_review_count();
+    $comments = $vendor->comments( limit => 2 )
+        if $review_count;
 
     $c->stash()->{comments} = $comments;
-    $c->stash()->{ratings}  = $ratings;
 
     $c->stash()->{template} = '/entry/view';
 }
@@ -336,7 +341,23 @@ sub new_review_form : Chained('_set_vendor') : PathPart('review_form') : Args(0)
     $c->stash()->{template} = '/entry/review-form';
 }
 
-sub reviews : Chained('_set_vendor') : PathPart('review') : Args(0) : ActionClass('+VegGuide::Action::REST') { }
+sub reviews : Chained('_set_vendor') : PathPart('reviews') : Args(0) : ActionClass('+VegGuide::Action::REST') { }
+
+sub reviews_GET_html : Private
+{
+    my $self = shift;
+    my $c    = shift;
+
+    my $vendor = $c->stash()->{vendor};
+
+    $c->stash()->{comments} = $vendor->comments()
+        if $vendor->review_count();
+
+    $c->stash()->{ratings} = $vendor->ratings_without_reviews()
+        if $vendor->ratings_without_review_count();
+
+    $c->stash()->{template} = '/entry/reviews';
+}
 
 sub reviews_POST : Private
 {

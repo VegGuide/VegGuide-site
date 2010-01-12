@@ -7,7 +7,9 @@
 %   }
     </ul>
 % } else {
-    This user has not created any entries.
+    <p>
+      This user has not created any entries.
+    </p>
 % }
 
 <%args>

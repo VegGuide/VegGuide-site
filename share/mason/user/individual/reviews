@@ -28,7 +28,9 @@
      </div>
 %   }
 % } elsif ($ratings) {
-    This user has not written any reviews.
+    <p>
+      This user has not written any reviews.
+    </p>
 % }
 
 % if ($ratings) {
@@ -45,7 +47,9 @@
 % }
 
 % unless ( $reviews || $ratings ) {
-    This user has not written any reviews or rated any entries.
+    <p>
+      This user has not written any reviews or rated any entries.
+    </p>
 % }
 
 <%args>

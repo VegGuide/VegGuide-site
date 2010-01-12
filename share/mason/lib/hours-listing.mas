@@ -1,15 +1,14 @@
+<div id="hours">
 %   foreach my $desc (@descriptions) {
-      <div>
-       <h3><% $desc->{days} | h %>
-       </h3>
-       <ul>
-        <li><% $desc->{hours}[0] | h %></li>
+  <div class="hours-set">
+    <label><% $desc->{days} | h %></label>
+    <% $desc->{hours}[0] | h %>
 %     if ( $desc->{hours}[1] ) {
-        <li><% $desc->{hours}[1] | h %></li>
+    ; <% $desc->{hours}[1] | h %>
 %     }
-       </ul>
-      </div>
+  </div>
 %   }
+</div>
 
 <%args>
 @descriptions

@@ -8,7 +8,7 @@
 % }
 
 % if ( $vendor->location()->has_addresses() ) {
-    <& .address, address => \@address &>
+    <& .address, vendor => $vendor, address => \@address &>
 % }
 
 % if ( defined $vendor->phone() ) {
@@ -16,7 +16,7 @@
 % }
 
 % if ( $c->client()->show_localized_content() && $vendor->has_localized_address() ) {
-    <& .address, address => [ $vendor->localized_address_pieces() ] &>
+    <& .address, vendor => $vendor, address => [ $vendor->localized_address_pieces() ] &>
 % }
 
 % if ( $vendor->home_page() ) {
@@ -45,16 +45,20 @@
     </div>
 % }
 
+% if ( $vendor->categories > 1 || ! $vendor->is_restaurant ) {
+<div id="entry-categories"><% join ', ', map { $_->name } $vendor->categories | h %></div>
+% }
 
 % unless ( $vendor->is_organization() ) {
-    <h3 id="veg-level"
-        class="veg-level-<% $vendor->veg_level() %>"><% $vendor->veg_description | h %></h3>
-
-      <p id="summary"><% $vendor->short_description() | h %>
-% if ( $c->client()->show_localized_content() && defined $vendor->localized_short_description() ) {
-        - <% $c->client()->encode( $vendor->localized_short_description() ) | h %>
+<h3 id="veg-level"
+    class="veg-level-<% $vendor->veg_level() %>"><% $vendor->veg_description | h %></h3>
 % }
-      </p>
+
+<p id="summary"><% $vendor->short_description() | h %>
+% if ( $c->client()->show_localized_content() && defined $vendor->localized_short_description() ) {
+  - <% $c->client()->encode( $vendor->localized_short_description() ) | h %>
+% }
+</p>
 
 % if ( defined $description && length $description ) {
 <% $description %>
@@ -70,35 +74,6 @@
 </p>
 % }
 
-% if ( defined $vendor->directions() ) {
-<div id="directions">
-  <h3>Directions</h3> <% VegGuide::Util::text_to_html( text => $vendor->directions(), class => 'compact' ) %>
-</div>
-% }
-
-%   if ( $vendor->is_restaurant() ) {
-<div>
-  <label>Prices:</label> <span class="price-range"><% $vendor->price_range()->description() | h %></span>
-</div>
-%   }
-
-%   if ( my @cuisines = $vendor->cuisines() ) {
-<label>Cuisines:</label> <span class="cuisines"><% join ', ', map { $_->name() } @cuisines | h %></span>
-%   }
-% }
-
-% if ( $vendor->categories > 1 || ! $vendor->is_restaurant ) {
-<div id="entry-categories"><% join ', ', map { $_->name } $vendor->categories | h %></div>
-% }
-
-% if (@attributes) {
-<ul id="features">
-%   for my $att (@attributes) {
-  <li><% $att->name() | h %></li>
-%   }
-</ul>
-% }
-
 <p id="entry-attribution">
 % if ( my $source = $vendor->vendor_source() ) {
   Data provided by
@@ -111,7 +86,7 @@
 % }
   on <& /lib/format/date.mas, date => $vendor->creation_datetime() &>
 % if ( $vendor->creation_datetime() ne $vendor->last_modified_datetime() ) {
-  (updated <& /lib/format/date.mas, date => $vendor->last_modified_datetime() &>)
+  (last updated <& /lib/format/date.mas, date => $vendor->last_modified_datetime() &>)
 % }
 
 % if ( $c->vg_user()->is_admin() && $vendor->external_unique_id() ) {
@@ -133,24 +108,19 @@
 </p>
 
 % if ($comments) {
-<h2>Reviews</h2>
+<hr />
+
+<h2>Latest Reviews</h2>
 
 <& /lib/comments.mas, comments => $comments, vendor => $vendor &>
-% }
 
-% if ($ratings) {
-<h3>Ratings Without Reviews</h3>
-
-<ul id="ratings-list">
-%   while ( my ( $rating, $user ) = $ratings->next() ) {
-  <li><a name="user-id-<% $user->user_id() %>"></a>
-      <& /lib/link/user.mas, user => $user &>:
-      <& /lib/stars-for-rating.mas, rating => $rating->rating(), color => 'green' &>
-  </li>
+%   if ( $vendor->review_count() > 2 ) {
+<p>
+  <a href="<% entry_uri( vendor => $vendor, path => 'reviews' ) | h %>"
+     >Read all <% $vendor->review_count() %> reviews</a>.
+</p>
 %   }
-</ul>
 % }
-
 
   </div>
 
@@ -161,14 +131,11 @@
   </div>
 </div>
 
-%#<& /entry/profile-and-hours.mas, vendor => $vendor &>
-
-%#<& /entry/map-and-images.mas, vendor => $vendor &>
+<& .supplementary, vendor => $vendor &>
 
 <%args>
 $vendor
 $comments => undef
-$ratings => undef
 </%args>
 
 <%init>
@@ -191,11 +158,12 @@ if ( $c->client()->show_localized_content() )
                                       first_class => $description ? '' : 'first',
                                     );
 }
-
-my @attributes = $vendor->attributes();
 </%init>
 
 <%def .address>
+% unless ( string_is_empty( $vendor->canonical_address() ) ) {
+  <a href="<% entry_uri( vendor => $vendor, path => 'map' ) %>" title="Google Map of this address">
+% }
   <address class="entry-address">
 % foreach my $line (@address) {
     <% $line | h %>
@@ -204,9 +172,75 @@ my @attributes = $vendor->attributes();
 %   }
 % }
   </address>
+% unless ( string_is_empty( $vendor->canonical_address() ) ) {
+  </a>
+% }
 <%args>
+$vendor
 @address
 </%args>
+</%def>
+
+<%def .supplementary>
+<hr />
+
+<h3>Hours</h3>
+% if ( $vendor->has_hours_info() ) {
+<& /lib/hours-listing.mas, descriptions => [ $vendor->hours_as_descriptions() ], mark_today => 1 &>
+
+<p>
+  <a href="<% entry_uri( vendor => $vendor, path => 'edit_hours_form' ) | h %>"
+     class="content-button-small">Edit Hours</a>
+</p>
+% } else {
+<p>
+  We don't have any info on this entry's hours.
+  Please <a href="entry_uri( vendor => $vendor, path => 'edit_hours_form' ) %>">add them if you can</a>.
+</p>
+% }
+
+% if ( defined $directions ) {
+<h3>Directions</h3>
+<% VegGuide::Util::text_to_html( text => $directions, class => 'compact' ) %>
+% }
+
+% if ( $vendor->is_restaurant() ) {
+<h3>Prices</h3>
+
+<p><% $vendor->price_range()->description() | h %></p>
+% }
+
+% if (@cuisines) {
+<h3>Cuisines</h3>
+
+<p><% join ', ', map { $_->name() } @cuisines | h %></p>
+% }
+
+% if (@attributes) {
+<h3>Features</h3>
+
+<ul id="features" class="no-top-margin">
+%   for my $att (@attributes) {
+  <li><% $att->name() | h %></li>
+%   }
+</ul>
+% }
+
+<p>
+  <a href="<% entry_uri( vendor => $vendor, path => 'edit_form' ) | h %>"
+     class="content-button-small">Edit</a>
+</p>
+<%args>
+$vendor
+</%args>
+
+<%init>
+my $directions = $vendor->directions();
+
+my @cuisines = $vendor->cuisines();
+
+my @attributes = $vendor->attributes();
+</%init>
 </%def>
 
 <%attr>

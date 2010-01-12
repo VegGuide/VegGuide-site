@@ -1,14 +1,12 @@
 % while ( my ( $comment, $user, @extra ) = $comments->next() ) {
 %   $vendor = shift @extra if @extra;
      <a name="user-id-<% $user->user_id() %>"></a>
-     <div class="comment <% $comments->count % 2 ? 'odd' : 'even' %>">
 %   if ($show_location) {
-      <div class="region">
+     <div class="region">
        <& /lib/link/location-and-parent.mas, location => $comment->location() &>
-      </div>
+     </div>
 %   }
-      <div class="attribution-and-rating">
-
+     <h3 class="comment-attribution">
 %   if ( $user->has_image() ) {
        <&| /lib/link/user.mas, user => $user &>
        <img class="user-image"
@@ -17,21 +15,24 @@
             width="<% $user->small_image_width() %>"
             alt="Image for <% $user->real_name() %>" />
        </&>
-%   }             
-       <& /lib/link/user.mas, user => $user &> -
-       <& /lib/format/date.mas, date => $comment->last_modified_datetime() &>
+%   }
+       <div class="user-name">
+         <& /lib/link/user.mas, user => $user &>
+       </div>
+       <div class="comment-date">
+         <& /lib/format/date.mas, date => $comment->last_modified_datetime() &>
+       </div>
+     </h3>
 
+     <div class="comment-body">
 %   if ($vendor) {
 <& .rating, vendor => $vendor, user => $user &>
 %   }
-      </div>
-
-      <div class="comment-body">
-      <% VegGuide::Util::text_to_html( text => $comment->comment(), first_class => 'first', class => 'comment' ) %>
-      </div>
+       <% VegGuide::Util::text_to_html( text => $comment->comment(), first_class => 'first' ) %>
+     </div>
 
 %   if ( $c->vg_user()->$edit_meth($comment) ) {
-      <div class="review-buttons">
+     <div class="review-buttons">
        <a href="<% $comment->can('vendor')
                    ? entry_uri( vendor => $comment->vendor(), path => 'review_form/' . $user->user_id() )
                    : region_uri( location => $comment->location(), path => 'comment_form/' . $user->user_id() ) | h %>"
@@ -44,10 +45,9 @@
                                       path  => 'comment/' . $user->user_id() . '/deletion_confirmation_form' ) | h %>"
            class="action-button">Delete</a>
 %     }
-      </div>
+     </div>
 %   }
 
-     </div>
 % }
 
 <%args>

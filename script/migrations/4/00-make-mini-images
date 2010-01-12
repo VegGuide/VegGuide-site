@@ -17,7 +17,7 @@ while ( my $image = $images->next() ) {
 sub make_mini {
     my $vendor_image = shift;
 
-    shift unless -f $vendor_image->original_path();
+    return unless -f $vendor_image->original_path();
     my $image_file = VegGuide::Image->new( file => $vendor_image->original_path() );
 
     $image_file->resize( 123, 123, $vendor_image->mini_path() );

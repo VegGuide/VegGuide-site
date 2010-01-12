@@ -37,14 +37,13 @@ a:visited {
 }
 
 ul {
-    margin-left: 0.1em;
+    margin-left: 0;
+    padding-left: 0;
 }
 
 ul li {
-    background: url(../../images/red-bullet-small.png) no-repeat 0 6px;
-    list-style: none;
-    margin-left: 0;
-    padding-left: 12px;
+    list-style-position: inside;
+    margin-left: 0.2em;
 }
 
 .no-top-margin {
@@ -326,6 +325,10 @@ a.action-button-medium:visited, a.action-button-small:visited {
     padding: 0;
 }
 
+.column-content ul li {
+    margin-left: 0;
+}
+
 .column-content h3.date {
     font-size: 100%;
     margin: 0;
@@ -382,22 +385,6 @@ a.action-button-medium:visited, a.action-button-small:visited {
 #ft #organization-logos img {
     border: none;
     margin-left: 1em;
-}
-
-.comment {
-    margin-bottom: 2em;
-}
-
-.comment h2 {
-    margin: 0;
-}
-
-.comment h3 {
-    margin: 0;
-}
-
-.comment .rating {
-    margin: 0.1em 0 0.5em 0;
 }
 
 form {
@@ -753,10 +740,23 @@ div.pagination form select, div.pagination form select option {
     font-weight: bold;
 }
 
+#summary {
+    background: url(../../images/red-bullet.png) no-repeat 0 6px;
+    font-size: 110%;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    padding-left: 13px;
+}
+
+#entry-attribution {
+    font-style: italic;
+}
+
 #ratings-and-total {
     border: 1px solid #6aa41d;
     padding: 0.5em 0 1em 0;
     text-align: center;
+    width: 248px;
 }
 
 #rating-numbers {
@@ -785,6 +785,49 @@ div.pagination form select, div.pagination form select option {
 .image-attribution {
     font-size: 80%;
     font-style: italic;
+}
+
+#add-edit-images {
+    margin-top: 0.5em;
+}
+
+h3.comment-attribution {
+    border-top: 2px solid #8cc63f;
+    border-bottom: 2px solid #8cc63f;
+    font-weight: normal;
+    font-size: 100%;
+    margin: 0;
+    min-height: 40px;
+    padding: 0.5em 0 0.5em 0;
+}
+
+.comment-attribution .user-image {
+    float: left;
+    margin-right: 0.4em;
+}
+
+.comment-attribution .user-name {
+    font-weight: bold;
+}
+
+.comment-attribution .user-name, .comment-attribution .comment-date {
+    font-variant: small-caps;
+}
+
+.comment-body {
+    margin-top: 0.5em;
+    margin-bottom: 2em;
+}
+
+#hours {
+    margin-bottom: 0.5em;
+}
+
+#hours label {
+    display: inline-block;
+    font-weight: bold;
+    margin-left: 1em;
+    width: 6em;
 }
 
 .rounded-corners-container, .rounded-corners-container * {
