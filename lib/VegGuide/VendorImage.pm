@@ -122,10 +122,12 @@ EOF
     }
 }
 
-
+my @Sizes;
 BEGIN
 {
-    for my $size ( qw( original small large ) )
+    @Sizes = qw( original small large );
+
+    for my $size (@Sizes)
     {
         my $filename_method =
             sub { return $_[0]->base_filename() . q{-} . $size . q{.} . $_[0]->extension() };
@@ -219,7 +221,13 @@ sub delete
     my $order = $self->display_order();
     my $vendor_id = $self->vendor_id();
 
+    my @files = map { my $meth = $_ . '_path'; $self->$meth() } @Sizes;
+
     $self->SUPER::delete();
+
+    for my $file (@files) {
+        unlink $file or warn "Cannot unlink $file: $!";
+    }
 
     my $schema = VegGuide::Schema->Connect();
 
