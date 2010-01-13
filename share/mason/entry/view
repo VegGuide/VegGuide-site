@@ -122,6 +122,8 @@
 %   }
 % }
 
+<& .supplementary, vendor => $vendor &>
+
   </div>
 
   <div class="yui-u">
@@ -133,8 +135,6 @@
 
   </div>
 </div>
-
-<& .supplementary, vendor => $vendor &>
 
 <%args>
 $vendor
