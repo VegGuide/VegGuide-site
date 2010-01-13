@@ -127,7 +127,7 @@ EOF
 my @Sizes;
 BEGIN
 {
-    @Sizes = qw( original small large );
+    @Sizes = qw( original mini small large );
 
     for my $size (@Sizes)
     {
