@@ -792,7 +792,7 @@ div.pagination form select, div.pagination form select option {
     margin-top: 0.5em;
 }
 
-h3.comment-attribution {
+h2.comment-attribution, h3.comment-attribution {
     border-top: 2px solid #8cc63f;
     border-bottom: 2px solid #8cc63f;
     font-weight: normal;
