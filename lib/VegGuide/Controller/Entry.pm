@@ -348,6 +348,8 @@ sub reviews_GET_html : Private
     my $self = shift;
     my $c    = shift;
 
+    $c->tab_by_id('reviews')->set_is_selected(1);
+
     my $vendor = $c->stash()->{vendor};
 
     $c->stash()->{comments} = $vendor->comments()
