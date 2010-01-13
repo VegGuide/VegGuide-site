@@ -33,15 +33,7 @@ for my $dir ( sort File::Find::Rule->directory()->name( qr/\d$/)->in($image_dir)
         next if $image->vendor_id() == $vendor_id;
 
         print "FILE: $file - vendor_id mismatch\n";
-
-        if ( grep { $_ ne $file && -s $_ == -s $file } @originals ) {
-            print "  has a matching file\n";
-            unlink_all($file);
-            @originals = grep { $_ ne $file } @originals;
-        }
-        else {
-            print "  may be a lost image\n";
-        }
+        unlink_all($file);
     }
 }
 
