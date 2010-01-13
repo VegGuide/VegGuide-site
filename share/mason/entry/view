@@ -128,6 +128,9 @@
     <& /entry/ratings.mas, vendor => $vendor &>
 
     <& /entry/images.mas, vendor => $vendor &>
+
+    <& /entry/hours.mas, vendor => $vendor &>
+
   </div>
 </div>
 
@@ -184,21 +187,6 @@ $vendor
 <%def .supplementary>
 <hr />
 
-<h3>Hours</h3>
-% if ( $vendor->has_hours_info() ) {
-<& /lib/hours-listing.mas, descriptions => [ $vendor->hours_as_descriptions() ], mark_today => 1 &>
-
-<p>
-  <a href="<% entry_uri( vendor => $vendor, path => 'edit_hours_form' ) | h %>"
-     class="content-button-small">Edit Hours</a>
-</p>
-% } else {
-<p>
-  We don't have any info on this entry's hours.
-  Please <a href="entry_uri( vendor => $vendor, path => 'edit_hours_form' ) %>">add them if you can</a>.
-</p>
-% }
-
 % if ( defined $directions ) {
 <h3>Directions</h3>
 <% VegGuide::Util::text_to_html( text => $directions, class => 'compact' ) %>
@@ -240,6 +228,8 @@ my $directions = $vendor->directions();
 my @cuisines = $vendor->cuisines();
 
 my @attributes = $vendor->attributes();
+
+return unless defined $directions || @cuisines || @attributes;
 </%init>
 </%def>
 

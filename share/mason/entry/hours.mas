@@ -1,0 +1,18 @@
+<h2 id="hours-heading">Hours</h2>
+% if ( $vendor->has_hours_info() ) {
+<& /lib/hours-listing.mas, descriptions => [ $vendor->hours_as_descriptions() ], mark_today => 1 &>
+
+<p>
+  <a href="<% entry_uri( vendor => $vendor, path => 'edit_hours_form' ) | h %>"
+     class="content-button-small">Edit Hours</a>
+</p>
+% } else {
+<p>
+  We don't have any info on this entry's hours.
+  Please <a href="entry_uri( vendor => $vendor, path => 'edit_hours_form' ) %>">add them if you can</a>.
+</p>
+% }
+
+<%args>
+$vendor
+</%args>

@@ -33,7 +33,7 @@ a:hover {
 }
 
 a:visited {
-    color: red;
+    color: #d00;
 }
 
 ul {
@@ -779,6 +779,7 @@ div.pagination form select, div.pagination form select option {
 }
 
 #main-image {
+    display: block;
     margin-bottom: 4px;
 }
 
@@ -819,15 +820,19 @@ h3.comment-attribution {
     margin-bottom: 2em;
 }
 
+#hours-heading {
+    margin-bottom: 0.2em;
+}
+
 #hours {
-    margin-bottom: 0.5em;
+    margin-bottom: 1em;
 }
 
 #hours label {
     display: inline-block;
     font-weight: bold;
     margin-left: 1em;
-    width: 6em;
+    width: 5.5em;
 }
 
 .rounded-corners-container, .rounded-corners-container * {
