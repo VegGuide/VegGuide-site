@@ -92,18 +92,18 @@ a.action-button:visited, a.action-button-medium:visited, a.action-button-small:v
 .content-button, .action-button {
     font-size: 120%;
     *font-size: 110%;
-    padding: 0.2em;
+    padding: 0.3em;
     *padding: 0.05em;
 }
 
 .content-button-medium, .action-button-medium {
     font-size: 100%;
-    padding: 0.2em;
+    padding: 0.3em;
 }
 
 .content-button-small, .action-button-small {
     font-size: 90%;
-    padding: 0.1em 0.2em;
+    padding: 0.1em 0.3em;
 }
 
 a.content-button:visited, a.action-button:visited,
