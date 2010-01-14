@@ -11,6 +11,10 @@
     <% $first_image->caption() | h %>
   </p>
 %   }
+% } else {
+  <a href="<% entry_uri( vendor => $vendor, path => 'images_form' ) | h %>"
+     ><img id="main-image" class="add-an-image"
+           src="/images/upload-an-image.png" height="150" width="150" /></a>
 % }
 
 % while ( my ( $i1, $i2 ) = splice @images, 0, 2 ) {
@@ -51,8 +55,7 @@ $vendor
 </%args>
 
 <%init>
-my @images = $vendor->images()
-    or return;
+my @images = $vendor->images();
 
 my $first_image = shift @images;
 

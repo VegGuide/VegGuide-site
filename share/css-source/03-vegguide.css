@@ -391,15 +391,21 @@ form {
     margin-bottom: 1em;
 }
 
+form.complex fieldset {
+    border-top: 2px solid #8CC63F;
+    margin-top: 1em;
+    margin-bottom: 0;
+}
+
 form legend {
     background-color: #8CC63F;
     color: white;
     font-size: 120%;
+    font-variant: small-caps;
     font-weight: bold;
     letter-spacing: 0.1em;
     padding: 0.1em 0.2em;
 }
-
 
 form label {
     display: block;
@@ -411,6 +417,15 @@ form label {
 form label.sub-label {
     display: inline;
     font-weight: normal;
+}
+
+form.complex ul {
+    margin-top: 0.5em;
+    margin-bottom: 0;
+}
+
+form.complex ul li {
+    list-style: none;
 }
 
 form input.text,
@@ -453,7 +468,7 @@ form select optgroup {
     color: #000000;
 }
 
-form input.text {
+form .text {
     width: 20em;
 }
 
@@ -781,6 +796,12 @@ div.pagination form select, div.pagination form select option {
 #main-image {
     display: block;
     margin-bottom: 4px;
+}
+
+#main-image.add-an-image {
+    border: 1px solid black;
+    margin-bottom: 1em;
+    padding: 0 10px;
 }
 
 .image-attribution {

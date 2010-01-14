@@ -103,11 +103,11 @@ VegGuide.Widget.PairedMultiSelect.resizeWPMS = function (select1, select2, conte
         if (option) {
             var styles;
 
-            var multiplier = 1.08;
+            var multiplier = 1.4;
             /* IE */
             if ( option.currentStyle ) {
                 styles = option.currentStyle;
-                multiplier = 1.2;
+                multiplier = 1.5;
             }
             /* Safari */
             else if ( option.style ) {
