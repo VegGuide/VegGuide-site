@@ -56,7 +56,11 @@
 % if (@cuisines) {
 <h3>Cuisines</h3>
 
-<p><% join ', ', map { $_->name() } @cuisines | h %></p>
+<ul class="no-top-margin">
+%   for my $cuisine (@cuisines) {
+  <li><% $cuisine->name() | h %></li>
+%   }
+</ul>
 % }
 
 % if (@attributes) {
