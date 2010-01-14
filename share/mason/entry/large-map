@@ -1,24 +1,19 @@
-  <div id="body-and-boxes-container">
-
-   <div id="right-container-20">
-    <div id="google-maps-directions-text"></div>
-   </div>
-
-   <div id="body">
+<div class="yui-ge">
+  <div class="yui-u first">
 
 % if ( defined $vendor->latitude() && defined $vendor->longitude() ) {
-    <div id="large-entry-google-map" style="display: none">
-       
+    <div id="large-entry-google-map">
+
     </div>
 
     <p>
-     <a href="<% $vendor->map_uri() | h %>" title="Go to Google Maps">See this entry at Google Maps</a>
+      <a href="<% $vendor->map_uri() | h %>" title="Go to Google Maps">See this entry at Google Maps</a>
     </p>
 
 <script type="text/javascript">
 DOM.Ready.onDOMDone( function () {
     DOM.Element.show("large-entry-google-map");
-    map = new VegGuide.GoogleMap( "large-entry-google-map", false );
+    map = new VegGuide.GoogleMap("large-entry-google-map");
 
     map.addMarkers(
 <% VegGuide::JSON->Encode( [ $marker ] ) %>
@@ -28,16 +23,16 @@ DOM.Ready.onDOMDone( function () {
 } );
 </script>
 
-<div class="map-info" id="map-entry-info" style="display: none">
- <h3><% $vendor->name() | h %></h3>
- <address>
+    <div class="map-info" id="map-entry-info" style="display: none">
+      <h3><% $vendor->name() | h %></h3>
+      <address>
 % for my $piece (@address_pieces) {
-  <% $piece | h %>
+      <% $piece | h %>
 %   if ( $piece ne $address_pieces[-1] ) {
-  <br />
+      <br />
 %   }
 % }
- </address>
+      </address>
 
 <%doc>
 It seems that with a Google map, it's not possible to use modern event
@@ -45,20 +40,26 @@ listeners, since it seems that the map or the info window or something
 ends up eating the event.
 </%doc>
 
+      <form action="#" method="post" id="directions-form" onsubmit="map.showDirectionsFromForm(this); return false">
+        <label for="from">Directions from:</label>
+        <input type="text" class="text short" name="from" id="from" />
+        <input type="hidden" name="to" value="<% $address_for_directions | h %>" />
+        <input type="submit" class="submit" value="Get Directions" />
+        <br />
+      </form>
+    </div>
+  </div>
 
- <form action="#" method="post" id="directions-form" onsubmit="map.showDirectionsFromForm(this); return false">
-  <label for="from">Directions from:</label>
-  <input type="text" class="text short" name="from" id="from" />
-  <input type="hidden" name="to" value="<% $address_for_directions | h %>" />
-
-  <input type="submit" class="submit" value="Get Directions" />
- </form>
-</div>
-% } else {
-    We can't map this entry. Sorry.
-% }
+  <div id="google-maps-directions-text" class="yui-u">
 
   </div>
+% } else {
+<p>
+We can't map this entry. Sorry.
+</p>
+% }
+
+</div>
 
 <%args>
 $vendor
