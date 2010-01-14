@@ -1,0 +1,109 @@
+<hr />
+
+% if ( defined $neighborhood ) {
+<h3>Neighborhood</h3>
+<% $vendor->neighborhood() | h %>
+%   if ( $c->client()->show_localized_content() && $vendor->localized_neighborhood() ) {
+- <% $vendor->localized_neighborhood() | h %>
+%   }
+% }
+
+% if ( defined $directions ) {
+<h3>Directions</h3>
+<% VegGuide::Util::text_to_html( text => $directions, class => 'compact' ) %>
+% }
+
+% if ( defined $smoking ) {
+<h3><% $smoking ? 'Allows Smoking' : 'Non-Smoking' %></h3>
+% }
+
+% if ( defined $reservations ) {
+<h3><% $reservations ? 'Accepts Reservations' : 'No Reservations' %></h3>
+% }
+
+% if ( defined $wheelchair ) {
+<h3><% $wheelchair ? 'Wheelchair Accessible' : 'Not Wheelchair Accessible' %></h3>
+% }
+
+% if ( $vendor->is_restaurant() ) {
+<h3>Prices</h3>
+
+<p><% $vendor->price_range()->description() | h %></p>
+% }
+
+% if ($payment) {
+%   if ( $vendor->is_cash_only() ) {
+<h3>Cash Only</h3>
+%   } else {
+<h3>Payment</h3>
+<ul id="accepts">
+%     if ( $vendor->accepts_checks() ) {
+  <li>Checks</li>
+%     }
+%     if ( my @cc = $vendor->accepted_credit_cards() ) {
+  <li>
+%       for my $cc ( sort { lc $a->name() cmp lc $b->name() } @cc ) {
+    <img src="<% static_uri( path => '/images/' . $cc->image_name() . '.png' ) %>"
+         height="25" width="38"
+         alt="<% $cc->name() | h %>" title="<% $cc->name() | h %>" />
+%       }
+  </li>
+%     }
+</ul>
+%   }
+% }
+
+% if (@cuisines) {
+<h3>Cuisines</h3>
+
+<p><% join ', ', map { $_->name() } @cuisines | h %></p>
+% }
+
+% if (@attributes) {
+<h3>Features</h3>
+
+<ul id="features" class="no-top-margin">
+%   for my $att (@attributes) {
+  <li><% $att->name() | h %></li>
+%   }
+</ul>
+% }
+
+<p>
+  <a href="<% entry_uri( vendor => $vendor, path => 'edit_form' ) | h %>"
+     class="content-button-small">Edit</a>
+</p>
+<%args>
+$vendor
+</%args>
+
+<%init>
+my $neighborhood = $vendor->neighborhood();
+
+my $directions = $vendor->directions();
+
+my $payment = $vendor->accepts_checks() || $vendor->is_cash_only() || $vendor->accepted_credit_cards();
+
+my @cuisines = $vendor->cuisines();
+
+my @attributes = $vendor->attributes();
+
+my $smoking;
+$smoking = $vendor->allows_smoking() if $vendor->smoking_is_relevant();
+
+my $reservations;
+$reservations = $vendor->accepts_reservations() if $vendor->is_restaurant();
+
+my $wheelchair = $vendor->is_wheelchair_accessible();
+
+return
+    unless $neighborhood
+        || $vendor->is_restaurant()
+        || defined $directions
+        || $payment
+        || @cuisines
+        || @attributes
+        || defined $smoking
+        || defined $reservations
+        || defined $wheelchair;
+</%init>

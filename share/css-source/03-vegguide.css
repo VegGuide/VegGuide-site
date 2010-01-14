@@ -841,6 +841,15 @@ h2.comment-attribution, h3.comment-attribution {
     margin-bottom: 2em;
 }
 
+#accepts {
+    margin: 0;
+}
+
+#accepts li {
+    list-style: none;
+    margin: 0;
+}
+
 #hours-heading {
     margin-bottom: 0.2em;
 }

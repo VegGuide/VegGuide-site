@@ -122,7 +122,7 @@
 %   }
 % }
 
-<& .supplementary, vendor => $vendor &>
+<& /entry/supplementary.mas, vendor => $vendor &>
 
   </div>
 
@@ -182,55 +182,6 @@ if ( $c->client()->show_localized_content() )
 $vendor
 @address
 </%args>
-</%def>
-
-<%def .supplementary>
-<hr />
-
-% if ( defined $directions ) {
-<h3>Directions</h3>
-<% VegGuide::Util::text_to_html( text => $directions, class => 'compact' ) %>
-% }
-
-% if ( $vendor->is_restaurant() ) {
-<h3>Prices</h3>
-
-<p><% $vendor->price_range()->description() | h %></p>
-% }
-
-% if (@cuisines) {
-<h3>Cuisines</h3>
-
-<p><% join ', ', map { $_->name() } @cuisines | h %></p>
-% }
-
-% if (@attributes) {
-<h3>Features</h3>
-
-<ul id="features" class="no-top-margin">
-%   for my $att (@attributes) {
-  <li><% $att->name() | h %></li>
-%   }
-</ul>
-% }
-
-<p>
-  <a href="<% entry_uri( vendor => $vendor, path => 'edit_form' ) | h %>"
-     class="content-button-small">Edit</a>
-</p>
-<%args>
-$vendor
-</%args>
-
-<%init>
-my $directions = $vendor->directions();
-
-my @cuisines = $vendor->cuisines();
-
-my @attributes = $vendor->attributes();
-
-return unless defined $directions || @cuisines || @attributes;
-</%init>
 </%def>
 
 <%attr>
