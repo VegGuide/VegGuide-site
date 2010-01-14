@@ -541,6 +541,33 @@ div.form-item ul li label {
     font-size: 95%;
 }
 
+#hours-form p {
+    margin-top: 0.5em;
+}
+
+#hours-form fieldset {
+    margin-bottom: 0;
+}
+
+#hours-form ul {
+    margin-bottom: 0;
+}
+
+form input.hours {
+    margin-top: 0.1em;
+    width: 15em;
+}
+
+.secondary-hours {
+    display: inline;
+}
+
+.hours-description {
+    color: #68AA11;
+    font-size: 90%;
+    margin-left: 1em;
+}
+
 div.pagination ul {
     margin: 0 1.5em 0 0;
     padding: 0;
@@ -858,11 +885,25 @@ h2.comment-attribution, h3.comment-attribution {
     margin-bottom: 1em;
 }
 
+/* from YUI grids */
+.hours-set:after {
+    content:".";
+    display:block;
+    height:0;
+    clear:both;
+    visibility:hidden;
+}
+
 #hours label {
-    display: inline-block;
+    float: left;
     font-weight: bold;
     margin-left: 1em;
-    width: 5.5em;
+    width: 30%;
+}
+
+#hours .hours-times {
+    float: right;
+    width: 63%;
 }
 
 .rounded-corners-container, .rounded-corners-container * {

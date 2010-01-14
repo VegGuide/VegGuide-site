@@ -2,7 +2,7 @@
 % if ( $vendor->has_hours_info() ) {
 <& /lib/hours-listing.mas, descriptions => [ $vendor->hours_as_descriptions() ], mark_today => 1 &>
 
-<p>
+<p style="clear: both">
   <a href="<% entry_uri( vendor => $vendor, path => 'edit_hours_form' ) | h %>"
      class="content-button-small">Edit Hours</a>
 </p>

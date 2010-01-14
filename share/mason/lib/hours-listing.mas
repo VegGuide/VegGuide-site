@@ -2,10 +2,12 @@
 %   foreach my $desc (@descriptions) {
   <div class="hours-set">
     <label><% $desc->{days} | h %></label>
-    <% $desc->{hours}[0] | h %>
+    <span class="hours-times">
+      <% $desc->{hours}[0] | h %>\
 %     if ( $desc->{hours}[1] ) {
-    ; <% $desc->{hours}[1] | h %>
+;<br /> <% $desc->{hours}[1] | h %>
 %     }
+    </span>
   </div>
 %   }
 </div>
