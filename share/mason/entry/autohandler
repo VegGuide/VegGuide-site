@@ -4,10 +4,6 @@
 $vendor
 </%args>
 
-<%init>
-my $show_all_info = $m->request_comp()->attr('show_all_info');
-</%init>
-
 <%method title>
 VegGuide.Org | <& /lib/l10n/vendor-name.mas, vendor => $m->caller_args(1)->{vendor} &>
 </%method>
@@ -23,5 +19,4 @@ $vendor
 
 <%attr>
 layout => '3.5'
-show_all_info => 0
 </%attr>

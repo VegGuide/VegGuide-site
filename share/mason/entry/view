@@ -185,6 +185,5 @@ $vendor
 </%def>
 
 <%attr>
-show_all_info => 1
 load_google_maps => 1
 </%attr>
