@@ -36,7 +36,7 @@
 
 % if ($more_count) {
     <p id="image-count">
-      This entry has <a href="#" class="activate-slideshow"><% $more_count %>
+      This entry has <a href="#" class="activate-slideshow js-display-order-1"><% $more_count %>
       more <% PL( 'image', $more_count ) %></a>.
     </p>
 % }
