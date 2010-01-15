@@ -1,6 +1,6 @@
 <div id="entry-images">
 % if ($first_image) {
-  <a href="#" class="activate-slideshow">
+  <a href="#" class="activate-slideshow js-display-order-1">
     <img id="main-image" src="<% $first_image->small_uri() | h %>"
          alt="<% $first_image->caption() || 'main image for ' . $vendor->name() | h %>"
          title="Uploaded by <% $first_image->user()->real_name() | h %> - click for slideshow"
@@ -18,14 +18,14 @@
 % }
 
 % while ( my ( $i1, $i2 ) = splice @images, 0, 2 ) {
-  <a href="#" class="activate-slideshow">
+  <a href="#" class="activate-slideshow js-display-order-<% $i1->display_order() %>">
     <img src="<% $i1->mini_uri() | h %>"
          alt="<% $i1->caption() || 'image for ' . $vendor->name() | h %>"
          title="Uploaded by <% $i1->user()->real_name() | h %> - click for slideshow"
          height="<% $i1->mini_height() %>" width="<% $i1->mini_width() %>" />
   </a>
 %   if ($i2) {
-  <a href="#" class="activate-slideshow">
+  <a href="#" class="activate-slideshow js-display-order-<% $i2->display_order() %>">
     <img src="<% $i2->mini_uri() | h %>"
          alt="<% $i2->caption() || 'image for ' . $vendor->name() | h %>"
          title="Uploaded by <% $i2->user()->real_name() | h %> - click for slideshow"

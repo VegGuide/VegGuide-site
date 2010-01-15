@@ -34,8 +34,32 @@ VegGuide.EntryImageSlideshow.instrumentPage = function () {
 
     var show = new VegGuide.EntryImageSlideshow (lb);
 
+    var links =
+        DOM.Find.getElementsByAttributes( { tagName:   "A",
+                                            className: /activate-slideshow/
+                                          },
+                                          $("entry-images") );
+
+    for ( var i = 0; i < links.length; i++ ) {
+        var matches = links[i].className.match( /js-display-order-(\d+)/ );
+
+        var show_func =
+            VegGuide.EntryImageSlideshow._makeShowFunction( show, matches[1] );
+
+        DOM.Events.addListener(
+            links[i],
+            "click",
+            show_func
+        );
+    }
+};
+
+VegGuide.EntryImageSlideshow._makeShowFunction = function ( show, order ) {
+    var s = show;
+    var o = order;
+
     var show_func = function (e) {
-        show.start();
+        s.start(o);
 
         e.preventDefault();
         if ( e.stopPropogation ) {
@@ -43,19 +67,7 @@ VegGuide.EntryImageSlideshow.instrumentPage = function () {
         }
     };
 
-    var links =
-        DOM.Find.getElementsByAttributes( { tagName:   "A",
-                                            className: "activate-slideshow"
-                                          },
-                                          $("entry-images") );
-
-    for ( var i = 0; i < links.length; i++ ) {
-        DOM.Events.addListener(
-            links[i],
-            "click",
-            show_func
-        );
-    }
+    return show_func;
 };
 
 VegGuide.EntryImageSlideshow.prototype._init = function (lb) {
@@ -76,17 +88,16 @@ VegGuide.EntryImageSlideshow.prototype._init = function (lb) {
     this.vendor_id = matches[1];
 
     this.images = [];
-    this.currentImage = 1;
 };
 
-VegGuide.EntryImageSlideshow.prototype.start = function () {
+VegGuide.EntryImageSlideshow.prototype.start = function (order) {
     if ( ! this.vendor_id ) {
         return;
     }
 
     this.lb.show();
 
-    this._showImage( this.currentImage );
+    this._showImage(order);
 };
 
 VegGuide.EntryImageSlideshow.prototype._showImage = function (imageNumber) {
@@ -180,8 +191,6 @@ VegGuide.EntryImageSlideshow.prototype._getImage = function (imageNumber) {
 
         this.images[ imageNumber - 1 ] = image;
     }
-
-    this.currentImage = imageNumber;
 
     return this.images[ imageNumber - 1 ];
 };
