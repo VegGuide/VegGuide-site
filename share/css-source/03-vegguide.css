@@ -906,12 +906,10 @@ h2.comment-attribution, h3.comment-attribution {
     width: 63%;
 }
 
-#large-entry-google-map {
-    height: 100%;
-}
-
-#map-entry-info {
-    margin-top: -6%;
+.map-info {
+    margin-top: -2%;
+    min-height: 12em;
+    min-width: 20em;
 }
 
 #google-maps-directions-text {

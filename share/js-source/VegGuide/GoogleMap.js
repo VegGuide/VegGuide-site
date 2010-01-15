@@ -18,7 +18,7 @@ VegGuide.GoogleMap = function (div_id) {
 }
 
 VegGuide.GoogleMap.prototype._createGoogleMap = function (map_div) {
-    var map_opts = { "zoom": 13,
+    var map_opts = { "zoom": 15,
                      "mapTypeId": google.maps.MapTypeId.ROADMAP };
 
     /* There's no sane way to get the div to fill the available height with
@@ -42,11 +42,14 @@ VegGuide.GoogleMap.prototype._createGoogleMap = function (map_div) {
     this.map = map;
     this.directions_display = directions_display;
     this.directions_service = directions_service;
-    this.info_width = 400;
     this.markers = [];
 };
 
 VegGuide.GoogleMap.prototype.addMarkers = function (points) {
+    if ( points.length > 1 ) {
+        this.map.setZoom(13);
+    }
+
     this.map.setCenter( new google.maps.LatLng( points[0].latitude, points[0].longitude ) );
 
     for ( var i = 0; i < points.length; i++ ) {
@@ -158,13 +161,16 @@ VegGuide.GoogleMap.prototype._createMarker = function ( ll, point, div ) {
         marker = new google.maps.Marker( { map: this.map, position: ll, title: point.title } );
     }
 
-    var width = this.info_width;
-
     var self = this;
 
     if (div) {
-        var window = new google.maps.InfoWindow( { content: div,
-                                                   maxWidth: this.info_width } );
+        var window =
+            new google.maps.InfoWindow(
+                { content: div,
+                  pixelOffset: new google.maps.Size( 1, 5 ),
+                  maxWidth: 500
+                }
+            );
 
         var map = this.map;
 
@@ -179,8 +185,6 @@ VegGuide.GoogleMap.prototype._createMarker = function ( ll, point, div ) {
 };
 
 VegGuide.GoogleMap.prototype._instrumentShowLink = function ( link, marker ) {
-    var width = this.info_width;
-
     var self = this;
 
     DOM.Events.addListener(
