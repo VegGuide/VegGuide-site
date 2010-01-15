@@ -60,46 +60,45 @@ sub _set_vendor : Chained('/') : PathPart('entry') : CaptureArgs(1)
 
     $c->stash()->{vendor} = $vendor;
 
-    if ( $c->request()->looks_like_browser() && $c->request()->method() eq 'GET' )
-    {
-        my $location = $vendor->location();
+    return unless $c->request()->looks_like_browser() && $c->request()->method() eq 'GET';
 
-        $c->add_tab(
-            {
-                uri     => entry_uri( vendor => $vendor ),
-                label   => 'Info',
-                tooltip => 'About ' . $vendor->name(),
-                id      => 'info',
-            }
-        );
+    my $location = $vendor->location();
 
-        $c->add_tab(
-            {
-                uri     => entry_uri( vendor => $vendor, path => 'reviews' ),
-                label   => 'Reviews',
-                tooltip => 'Reviews and ratings for ' . $vendor->name(),
-                id      => 'reviews',
-            }
-        );
-
-        if ( $vendor->map_uri() ) {
-            $c->add_tab(
-                {
-                    uri   => entry_uri( vendor => $vendor, path => 'map' ),
-                    label => 'Map',
-                    tooltip => 'Map for ' . $vendor->name(),
-                    id      => 'map',
-                }
-            );
+    $c->add_tab(
+        {
+            uri     => entry_uri( vendor => $vendor ),
+            label   => 'Info',
+            tooltip => 'About ' . $vendor->name(),
+            id      => 'info',
         }
+    );
 
-        $c->response()->breadcrumbs()->add_region_breadcrumbs($location);
+    $c->add_tab(
+        {
+            uri   => entry_uri( vendor => $vendor, path => 'reviews' ),
+            label => 'Reviews',
+            tooltip => 'Reviews and ratings for ' . $vendor->name(),
+            id      => 'reviews',
+        }
+    );
 
-        $c->response()->breadcrumbs()->add
-            ( uri   => entry_uri( vendor => $vendor ),
-              label => $vendor->name(),
-            );
+    if ( $vendor->map_uri() ) {
+        $c->add_tab(
+            {
+                uri   => entry_uri( vendor => $vendor, path => 'map' ),
+                label => 'Map',
+                tooltip => 'Map for ' . $vendor->name(),
+                id      => 'map',
+            }
+        );
     }
+
+    $c->response()->breadcrumbs()->add_region_breadcrumbs($location);
+
+    $c->response()->breadcrumbs()->add(
+        uri   => entry_uri( vendor => $vendor ),
+        label => $vendor->name(),
+    );
 }
 
 sub entry : Chained('_set_vendor') : PathPart('') : Args(0) : ActionClass('+VegGuide::Action::REST') { }
