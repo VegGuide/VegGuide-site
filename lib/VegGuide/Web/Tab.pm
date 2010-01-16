@@ -9,7 +9,7 @@ use MooseX::SemiAffordanceAccessor;
 use MooseX::StrictConstructor;
 
 has uri => (
-    is       => 'ro',
+    is       => 'rw',
     isa      => 'Str',
     required => 1,
 );
