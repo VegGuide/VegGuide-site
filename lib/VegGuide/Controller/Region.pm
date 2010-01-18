@@ -229,6 +229,10 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1)
 
         my $search = $c->stash()->{search};
 
+        return unless $search;
+
+        return unless $c->tab_by_id('map');
+
         $c->tab_by_id('entries')->set_uri( $search->uri() );
         $c->tab_by_id('map')->set_uri( $search->map_uri() );
         $c->tab_by_id('printable')->set_uri( $search->printable_uri() );

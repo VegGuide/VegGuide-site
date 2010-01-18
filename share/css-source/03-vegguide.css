@@ -654,15 +654,15 @@ div.pagination form select, div.pagination form select option {
 }
 
 #entries-table .name {
-    width: 30%;
+    width: 35%;
 }
 
 #entries-table.with-distance .name {
-    width: 24%;
+    width: 29%;
 }
 
 #entries-table .name address {
-    font-size: 90%;
+    font-size: 85%;
 }
 
 #entries-table.with-distance .distance {
@@ -670,11 +670,11 @@ div.pagination form select, div.pagination form select option {
 }
 
 #entries-table .summary {
-    width: 30%;
+    width: 40%;
 }
 
 #entries-table.with-distance .summary {
-    width: 24%;
+    width: 39%;
 }
 
 #entries-table .summary span.summary-text {
@@ -682,7 +682,7 @@ div.pagination form select, div.pagination form select option {
 }
 
 #entries-table .summary span.category {
-    font-size: 90%;
+    font-size: 85%;
     font-style: italic;
 }
 
@@ -691,41 +691,16 @@ div.pagination form select, div.pagination form select option {
 }
 
 #entries-table .how-veg {
+    font-size: 100%;
     width: 15%;
 }
 
-#entries-table .price-range {
-    width: 10%;
-}
-
-#entries-table .info {
-    width: 10%;
-}
-
-#entries-table th, #entries-table td.rating, #entries-table td.price-range, #entries-table td.info {
+#entries-table th, #entries-table td.rating, #entries-table td.how-veg {
     white-space: nowrap;
-}
-
-#entries-table td.rating img {
-    vertical-align: -15%;
 }
 
 #entries-table div.closed {
     font-weight: bold;
-}
-
-#entries-table td.info ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
-
-#entries-table td.info ul li {
-    display: inline;
-}
-
-#entries-table td.info img { 
-    border: none;
 }
 
 #user-image {
@@ -752,32 +727,32 @@ div.pagination form select, div.pagination form select option {
     color: #888;
 }
 
-#veg-level {
+.how-veg {
     font-size: 120%;
     font-variant: small-caps;
     font-weight: normal;
     margin: 0;
 }
 
-#veg-level.veg-level-1 {
+.veg-level-1 {
     color: #8cc63f;
 }
 
-#veg-level.veg-level-2 {
+.veg-level-2 {
     color: #68aa11;
 }
 
-#veg-level.veg-level-3 {
+.veg-level-3 {
     color: #8cc63f;
     font-weight: bold;
 }
 
-#veg-level.veg-level-4 {
+.veg-level-4 {
     color: #68aa11;
     font-weight: bold;
 }
 
-#veg-level.veg-level-5 {
+.veg-level-5 {
     color: #68aa11;
     font-weight: bold;
 }
@@ -909,7 +884,7 @@ h2.comment-attribution, h3.comment-attribution {
 .map-info {
     margin-top: -2%;
     min-height: 12em;
-    min-width: 20em;
+    min-width: 30em;
 }
 
 #google-maps-directions-text {

@@ -164,6 +164,8 @@ VegGuide.GoogleMap.prototype._createMarker = function ( ll, point, div ) {
     var self = this;
 
     if (div) {
+        div.style.display = '';
+
         var window =
             new google.maps.InfoWindow(
                 { content: div,

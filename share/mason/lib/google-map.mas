@@ -1,38 +1,48 @@
 % if ($count) {
-<div id="map-key">
- <ul>
+<div class="yui-ge">
+  <div class="yui-u first">
+    <div id="listing-google-map">
+
+    </div>
+  </div>
+
+%   if ( $search->can('address') ) {
+  <div id="search-center-info" style="display: none">
+    You searched for "<% $search->address() %>".
+  </div>
+%   }
+
+  <div class="yui-u">
+    <ul>
 %   while ( my $vendor = $vendors->next() ) {
 <& .one-vendor, vendor => $vendor &>
 %   }
- </ul>
+    </ul>
+  </div>
 </div>
 
-% if ( $search->can('address') ) {
-<div id="search-center-info" style="display: none">
- You searched for "<% $search->address() %>".
-</div>
-% }
+<h3>Map icon key</h3>
+<div class="yui-g">
 
-<div id="listing-google-map-container"><div id="listing-google-map"></div></div>
-
-<div id="google-map-icon-key">
- <h4>Map icon key</h4>
-
- <ul class="right-list">
+  <div class="yui-u first">
+    <ul class="no-top-margin">
 %   for my $icon (@I2) {
-  <li><img src="<% static_uri( path => "/images/map-icons/$icon->[1].png" ) %>" height="40" width="29" />
-      <% $icon->[2] | h %>
-  </li>
+      <li><img src="<% static_uri( path => "/images/map-icons/$icon->[1].png" ) %>" height="40" width="29" />
+          <% $icon->[2] | h %>
+      </li>
 %   }
- </ul>
+    </ul>
+  </div>
 
- <ul class="left-list">
+  <div class="yui-u">
+    <ul class="no-top-margin">
 %   for my $icon (@I1) {
-  <li><img src="<% static_uri( path => "/images/map-icons/$icon->[1].png" ) %>" height="40" width="29" />
-      <% $icon->[2] | h %>
-  </li>
+      <li><img src="<% static_uri( path => "/images/map-icons/$icon->[1].png" ) %>" height="40" width="29" />
+          <% $icon->[2] | h %>
+      </li>
 %   }
- </ul>
+    </ul>
+  </div>
 
 </div>
 
@@ -73,7 +83,6 @@ $mid++ if int( @Icons / 2 ) != @Icons / 2;
 
 my @I1 = @Icons[ 0 .. $mid - 1 ];
 my @I2 = @Icons[ $mid .. $#Icons ];
-
 </%once>
 
 <%shared>
@@ -136,7 +145,6 @@ my ( $weighted_average, $total_ratings )
 
 <%def .info_div>
 <div class="map-info" id="entry-info-<% $vendor->vendor_id() %>" style="display: none">
-
 <h3><% $vendor->name() | h %></h3>
 
 % unless ( $vendor->is_organization() ) {
@@ -166,7 +174,6 @@ my ( $weighted_average, $total_ratings )
      english_only => 1,
   &>more on <% $vendor->name() | h %></&>
 </div>
-
 <%args>
 $vendor
 </%args>

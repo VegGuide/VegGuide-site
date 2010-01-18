@@ -50,8 +50,7 @@
 % }
 
 % unless ( $vendor->is_organization() ) {
-<h3 id="veg-level"
-    class="veg-level-<% $vendor->veg_level() %>"><% $vendor->veg_description | h %></h3>
+<h3 class="how-veg veg-level-<% $vendor->veg_level() %>"><% $vendor->veg_description | h %></h3>
 % }
 
 <p id="summary"><% $vendor->short_description() | h %>

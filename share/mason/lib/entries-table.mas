@@ -2,12 +2,6 @@
   <thead>
     <tr>
       <td colspan="<% $show_add_entry ? $colspan - 2 : $colspan %>">
-        <div class="entries-links">
-% if ( $search->has_addresses() && $search->has_mappable_vendors() ) {
-          <a href="<% $search->map_uri() | h %>" class="map-link" title="An interactive Google map of this entry list">Map this list</a> |
-% }
-          <a href="<% $search->printable_uri() | h %>" class="" title="A printable version of this list">Print this list</a>
-        </div>
         <% $pagination %>
       </td>
 % if ($show_add_entry) {
