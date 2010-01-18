@@ -89,14 +89,18 @@ sub ShareDir
 {
     my $class = shift;
 
-    return $class->IsProduction() ? '/usr/local/share/vegguide' : Cwd::abs_path('share');
+    return '/usr/local/share/vegguide' if $class->IsProduction();
+    return Cwd::abs_path(
+        dirname( $INC{'VegGuide/Config.pm'} ) . '/../../share' );
 }
 
 sub EtcDir
 {
     my $class = shift;
 
-    return $class->IsProduction() ? '/etc/vegguide' : Cwd::abs_path('etc');
+    return '/etc/vegguie' if $class->IsProduction();
+    return Cwd::abs_path(
+        dirname( $INC{'VegGuide/Config.pm'} ) . '/../../etc' );
 }
 
 sub CacheDir

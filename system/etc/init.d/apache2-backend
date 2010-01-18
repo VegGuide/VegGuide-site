@@ -30,8 +30,13 @@ fi
 test -f /etc/default/rcS && . /etc/default/rcS
 test -f /etc/default/apache2 && . /etc/default/apache2
 
+if [ -x system/usr/sbin/apache2ctl-backend ] ; then
+    APACHE2CTL="$ENV system/usr/sbin/apache2ctl-backend"
+else
+    APACHE2CTL="$ENV /usr/sbin/apache2ctl-backend"
+fi
+
 APACHE2="$ENV /usr/sbin/apache2"
-APACHE2CTL="$ENV /usr/sbin/apache2ctl-backend"
 HTCACHECLEAN="$ENV /usr/sbin/htcacheclean"
 
 check_htcacheclean() {
@@ -66,8 +71,14 @@ pidof_apache() {
 
     PIDS2=""
 
-    for PFILE in `grep ^PidFile /etc/apache2-backend/* -r | awk '{print $2}'`; do
-	[ -e $PFILE ] && PIDS2="$PIDS2 `cat $PFILE`"
+    if [ -d system/etc ] ; then
+        ETC_DIR=system/etc
+    else
+        ETC_DIR=/etc
+    fi
+
+    for PFILE in `grep ^PidFile $ETC_DIR/apache2-backend/* -r | awk '{print $2}'`; do
+	    [ -e $PFILE ] && PIDS2="$PIDS2 `cat $PFILE`"
     done
 
     # if there is a pid we need to verify that belongs to apache2
