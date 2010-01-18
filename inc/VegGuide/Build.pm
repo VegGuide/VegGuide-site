@@ -256,14 +256,14 @@ sub ACTION_copy_system_files
 
     for my $file ( File::Find::Rule->new()->file()->in( '/etc/apache2/mods-available' ) )
     {
-	my $to = File::Spec->catfile( '/etc/apache2-backend/mods-available',
-				      basename($file) );
+        my $to = File::Spec->catfile( '/etc/apache2-backend/mods-available',
+                                      basename($file) );
 
-	if ($FAKE)
-	{
-	    $self->log_info("Copying $file -> $to\n");
-	    next;
-	}
+        if ($FAKE)
+        {
+            $self->log_info("Copying $file -> $to\n");
+            next;
+        }
 
         $self->copy_if_modified( from => $file,
                                  to   => $to,
