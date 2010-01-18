@@ -39,6 +39,8 @@ my %Requires =
       'Chart::OFC'                               => '0.07',
       'Class::AlzaboWrapper'                     => '0.14',
       'Class::Trait'                             => '0.22',
+      # For SSL-enabled openid URIs
+      'Crypt::SSLeay'                            => '0',
       'CSS::Minifier'                            => '0',
       'Data::Dump::Streamer'                     => '0',
       'Data::Pageset'                            => '0',
