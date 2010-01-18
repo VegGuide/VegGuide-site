@@ -41,7 +41,19 @@ ARGV="$@"
 # --------------------                              --------------------
 # 
 # the path to your httpd binary, including options if necessary
-HTTPD='/usr/sbin/apache2 -f /etc/apache2-backend/apache2.conf'
+
+if [ -d system/etc ] ; then
+    RUN_DIR=~/run
+    ETC_DIR=system/etc
+    DEFINE="-D Testing"
+    PERL5LIB=$PWD/lib
+else
+    RUN_DIR=/var/run
+    ETC_DIR=/etc
+    DEFINE=
+fi
+
+HTTPD="/usr/sbin/apache2 -f $ETC_DIR/apache2-backend/apache2.conf $DEFINE"
 #
 # pick up any necessary environment variables
 if test -f /etc/apache2-backend/envvars; then
@@ -79,11 +91,11 @@ fi
 
 case $ARGV in
 start)
-    mkdir -p /var/run/apache2-backend
+    mkdir -p $RUN_DIR/apache2-backend
     install -d -o www-data /var/lock/apache2-backend
     # ssl_scache shouldn't be here if we're just starting up.
     # (this is bad if there are several apache2 instances running)
-    rm -f /var/run/apache2-backend/*ssl_scache*
+    rm -f $RUN_DIR/apache2-backend/*ssl_scache*
     $HTTPD -k $ARGV
     ERROR=$?
     ;;

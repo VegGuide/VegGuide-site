@@ -39,6 +39,8 @@ my %Requires =
       'Chart::OFC'                               => '0.07',
       'Class::AlzaboWrapper'                     => '0.14',
       'Class::Trait'                             => '0.22',
+      # For SSL-enabled openid URIs
+      'Crypt::SSLeay'                            => '0',
       'CSS::Minifier'                            => '0',
       'Data::Dump::Streamer'                     => '0',
       'Data::Pageset'                            => '0',
@@ -256,14 +258,14 @@ sub ACTION_copy_system_files
 
     for my $file ( File::Find::Rule->new()->file()->in( '/etc/apache2/mods-available' ) )
     {
-	my $to = File::Spec->catfile( '/etc/apache2-backend/mods-available',
-				      basename($file) );
+        my $to = File::Spec->catfile( '/etc/apache2-backend/mods-available',
+                                      basename($file) );
 
-	if ($FAKE)
-	{
-	    $self->log_info("Copying $file -> $to\n");
-	    next;
-	}
+        if ($FAKE)
+        {
+            $self->log_info("Copying $file -> $to\n");
+            next;
+        }
 
         $self->copy_if_modified( from => $file,
                                  to   => $to,

@@ -26,8 +26,22 @@
 #                Allow from all
 #        </Proxy>
 
-<VirtualHost _default_:80>
-    CustomLog /var/log/apache2/access.log combined
+<IfDefine Testing>
+    <Proxy http://localhost:*/*>
+            Order deny,allow
+            Allow from all
+    </Proxy>
+</IfDefine>
+
+<VirtualHost _default_>
+    <IfDefine !Testing>
+        CustomLog /var/log/apache2/access.log combined
+    </IfDefine>
+
+    <IfDefine Testing>
+        CustomLog /home/autarch/.vegguide/var/log/apache2/access.log combined
+    </IfDefine>
+
     ServerSignature On
 
     RewriteEngine On
@@ -45,9 +59,10 @@
     # had a .mhtml extension.
     RewriteRule   (.+)\.mhtml$            $1.html                                                     [R=permanent,L]
 
-    RewriteCond  %{HTTP_HOST}             ^vegguide\.org
-    RewriteRule  (.*)                     http://www.vegguide.org$1                                   [R,L]
-
+    <IfDefine !Testing>
+        RewriteCond  %{HTTP_HOST}             ^vegguide\.org
+        RewriteRule  (.*)                     http://www.vegguide.org$1                                   [R,L]
+    </IfDefine>
 
     # Some brain-damaged crawler is requesting URIs like this
     RewriteRule   ^(.+\.rss)%3[Ff]                            /                                       [R=permanent,L]
@@ -140,19 +155,37 @@
         SetOutputFilter DEFLATE
     </Location>
 
-    AliasMatch   (/\d+)?/css/vegguide-combined.css       /var/lib/vegguide/css/vegguide-combined.css
-    AliasMatch   (/\d+)?/css(.+)       /usr/local/share/vegguide/css$2
-    AliasMatch   (/\d+)?/images(.+)    /usr/local/share/vegguide/images$2
-    Alias        /static/rss           /var/cache/vegguide/rss
-    Alias        /static               /usr/local/share/vegguide/static
-    Alias        /w3c                  /usr/local/share/vegguide/w3c
+    <IfDefine !Testing>
+        AliasMatch   (/\d+)?/css/vegguide-combined.css       /var/lib/vegguide/css/vegguide-combined.css
+        AliasMatch   (/\d+)?/css(.+)       /usr/local/share/vegguide/css$2
+        AliasMatch   (/\d+)?/images(.+)    /usr/local/share/vegguide/images$2
+        Alias        /static/rss           /var/cache/vegguide/rss
+        Alias        /static               /usr/local/share/vegguide/static
+        Alias        /w3c                  /usr/local/share/vegguide/w3c
 
-    Alias        /robots.txt           /usr/local/share/vegguide/static/robots.txt
+        Alias        /robots.txt           /usr/local/share/vegguide/static/robots.txt
 
-    Alias        /entry-images         /var/lib/vegguide/entry-images
-    Alias        /user-images          /var/lib/vegguide/user-images
-    AliasMatch   (/\d+)?/js(.+)        /var/lib/vegguide/js$2
-    Alias        /skin-images          /var/lib/vegguide/skin-images
+        Alias        /entry-images         /var/lib/vegguide/entry-images
+        Alias        /user-images          /var/lib/vegguide/user-images
+        AliasMatch   (/\d+)?/js(.+)        /var/lib/vegguide/js$2
+        Alias        /skin-images          /var/lib/vegguide/skin-images
+    </IfDefine>
+
+    <IfDefine Testing>
+        AliasMatch   (/\d+)?/css/vegguide-combined.css       /home/autarch/.vegguide/var/lib/css/vegguide-combined.css
+        AliasMatch   (/\d+)?/css(.+)       ${PWD}/share/css$2
+        AliasMatch   (/\d+)?/images(.+)    ${PWD}/share/images$2
+        Alias        /static/rss           /var/cache/vegguide/rss
+        Alias        /static               ${PWD}/share/static
+        Alias        /w3c                  ${PWD}/share/w3c
+
+        Alias        /robots.txt           ${PWD}/share/static/robots.txt
+
+        Alias        /entry-images         /home/autarch/.vegguide/var/lib/entry-images
+        Alias        /user-images          /home/autarch/.vegguide/var/lib/user-images
+        AliasMatch   (/\d+)?/js(.+)        /home/autarch/.vegguide/var/lib/js$2
+        Alias        /skin-images          /home/autarch/.vegguide/var/lib/skin-images
+    </IfDefine>
 
     <LocationMatch "^/\d+/(css|images|js)">
         ExpiresActive On
@@ -162,6 +195,7 @@
     ErrorDocument 503  /static/503.html
 </VirtualHost>
 
+<IfDefine !Testing>
 <VirtualHost _default_:443>
     SSLEngine on
     SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
@@ -182,3 +216,4 @@
     RewriteEngine On
     RewriteRule   ^/mailman/?$         /mailman/listinfo/  [R,L]
 </VirtualHost>
+</IfDefine>
