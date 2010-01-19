@@ -164,20 +164,17 @@ VegGuide.GoogleMap.prototype._createMarker = function ( ll, point, div ) {
     var self = this;
 
     if (div) {
-        div.style.display = '';
-
-        var window =
+        var info =
             new google.maps.InfoWindow(
                 { content: div,
-                  pixelOffset: new google.maps.Size( 1, 5 ),
-                  maxWidth: 500
+                  pixelOffset: new google.maps.Size( 1, 5 )
                 }
             );
 
         var map = this.map;
 
         var on_click = function() {
-            window.open( map, marker );
+            info.open( map, marker );
         };
 
         google.maps.event.addListener( marker, 'click', on_click );
