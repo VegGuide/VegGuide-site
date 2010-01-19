@@ -24,7 +24,7 @@ DOM.Ready.onDOMDone( function () {
 </script>
 
     <div class="map-info" id="map-entry-info" style="display: none">
-      <h3><% $vendor->name() | h %></h3>
+      <h2><% $vendor->name() | h %></h2>
       <address>
 % for my $piece (@address_pieces) {
         <% $piece | h %>

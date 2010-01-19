@@ -771,7 +771,6 @@ div.pagination form select, div.pagination form select option {
 
 #ratings-and-total {
     text-align: center;
-    width: 11em;
 }
 
 #rating-numbers {
@@ -787,10 +786,6 @@ div.pagination form select, div.pagination form select option {
 
 #write-your-review {
     margin-top: 0.3em;
-}
-
-#entry-images {
-    margin-top: 1em;
 }
 
 #main-image {
@@ -879,10 +874,17 @@ h2.comment-attribution, h3.comment-attribution {
     width: 63%;
 }
 
+#large-entry-google-map {
+    /* These must be set to something, though height ends up
+       getting reset in VegGuide.GoogleMap */
+    height: 500px;
+    width: 100%;
+}
+
 .map-info {
-    margin-top: -2%;
-    min-height: 12em;
-    min-width: 30em;
+    height: 11.5em;
+    margin-top: -3%;
+    width: 30em;
 }
 
 #google-maps-directions-text {

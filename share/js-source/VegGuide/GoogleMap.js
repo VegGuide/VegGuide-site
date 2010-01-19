@@ -6,23 +6,19 @@ if ( typeof VegGuide == "undefined" ) {
     VegGuide = {};
 }
 
-VegGuide.GoogleMap = function (div_id) {
+VegGuide.GoogleMap = function ( div_id ) {
     var map_div = $(div_id);
 
-    if ( ! map_div ) {
+    if ( ! ( map_div && GBrowserIsCompatible() ) ) {
         return;
     }
 
     VegGuide.GoogleMap._makeIcons();
-    this._createGoogleMap(map_div);
+    this._createGoogleMap( map_div );
 }
 
-VegGuide.GoogleMap.prototype._createGoogleMap = function (map_div) {
-    var map_opts = { "zoom": 15,
-                     "mapTypeId": google.maps.MapTypeId.ROADMAP };
-
-    /* There's no sane way to get the div to fill the available height with
-     * just CSS. 60% of the viewport seems to produce a reasonable height. */
+VegGuide.GoogleMap.prototype._createGoogleMap = function ( map_div ) {
+    var map = new GMap2(map_div);
 
     var height = window.innerHeight * 0.6;
     if ( height < 350 ) {
@@ -30,32 +26,20 @@ VegGuide.GoogleMap.prototype._createGoogleMap = function (map_div) {
     }
     map_div.style.height = height + "px";
 
-
-    var map = new google.maps.Map( map_div, map_opts );
-
-    var directions_display = new google.maps.DirectionsRenderer();
-    directions_display.setMap(map);
-    directions_display.setPanel( $("google-maps-directions-text") );
-
-    var directions_service = new google.maps.DirectionsService();
+    map.addControl( new GSmallMapControl() );
+    map.addControl( new GMapTypeControl() );
 
     this.map = map;
-    this.directions_display = directions_display;
-    this.directions_service = directions_service;
     this.markers = [];
 };
 
 VegGuide.GoogleMap.prototype.addMarkers = function (points) {
-    if ( points.length > 1 ) {
-        this.map.setZoom(13);
-    }
-
-    this.map.setCenter( new google.maps.LatLng( points[0].latitude, points[0].longitude ) );
+    this.map.setCenter( new GLatLng( points[0].latitude, points[0].longitude ), 13 );
 
     for ( var i = 0; i < points.length; i++ ) {
         var point = points[i];
 
-        var ll = new google.maps.LatLng( point.latitude, point.longitude );
+        var ll = new GLatLng ( point.latitude, point.longitude );
 
         if ( point.info_div ) {
             var div = $( point.info_div ).cloneNode(true);
@@ -71,35 +55,29 @@ VegGuide.GoogleMap.prototype.addMarkers = function (points) {
             }
         }
 
+        this.map.addOverlay(marker);
+
         this.markers.push(marker);
     }
 };
 
 VegGuide.GoogleMap.prototype.showFirstInfoWindow = function () {
-    google.maps.event.trigger( this.markers[0], "click" );
+    GEvent.trigger( this.markers[0], "click" );
 };
 
 VegGuide.GoogleMap._Icons = {};
 
-
 VegGuide.GoogleMap._makeIcons = function () {
-/*
+    var base_icon = new GIcon();
+
     base_icon.iconSize = new GSize( 29, 40 );
     base_icon.iconAnchor = new GPoint( 15, 40 );
     base_icon.infoWindowAnchor = new GPoint( 5, 1 );
     base_icon.shadow = "/images/map-icons/shadow.png";
     base_icon.shadowSize = new GSize( 60, 40 );
-*/
-    VegGuide.GoogleMap._shadow =
-        new google.maps.MarkerImage(
-            "/images/map-icons/shadow.png",
-            new google.maps.Size( 60, 40 ),
-            new google.maps.Point( 0, 0 ),
-            new google.maps.Point( 15, 40 )
-        );
 
     /* The first element in each pair is the key and the second is the
-       icon name. The keys are category ids, and things like "c1.1"
+       icon name. The keys are category ids, and things like "1.1"
        mean category_id = 1, veg_level = 1 */
     var icons = [ [ "c1",   "restaurant" ],
                   [ "c1.1", "restaurant1" ],
@@ -123,15 +101,8 @@ VegGuide.GoogleMap._makeIcons = function () {
         var name = icons[i][1];
 
         var image_uri = "/images/map-icons/" + name + ".png";
-        VegGuide.GoogleMap._Icons[key] =
-            new google.maps.MarkerImage(
-                image_uri,
-                new google.maps.Size( 29, 40 ),
-                new google.maps.Point( 0, 0 ),
-                new google.maps.Point( 15, 40 )
-            );
+        VegGuide.GoogleMap._Icons[key] = new GIcon( base_icon, image_uri );
     }
-
 };
 
 VegGuide.GoogleMap.prototype._createMarker = function ( ll, point, div ) {
@@ -149,35 +120,19 @@ VegGuide.GoogleMap.prototype._createMarker = function ( ll, point, div ) {
             }
         }
 
-        marker = new google.maps.Marker(
-            { map: this.map,
-              position: ll,
-              icon: icon,
-              shadow: VegGuide.GoogleMap._shadow
-            }
-        );
+        marker = new GMarker( ll, { icon: icon } );
     }
     else {
-        marker = new google.maps.Marker( { map: this.map, position: ll, title: point.title } );
+        marker = new GMarker( ll, { title: point.title } );
     }
 
     var self = this;
 
     if (div) {
-        var info =
-            new google.maps.InfoWindow(
-                { content: div,
-                  pixelOffset: new google.maps.Size( 1, 5 )
-                }
-            );
+        var new_div = div.cloneNode(true);
+        new_div.id = "";
 
-        var map = this.map;
-
-        var on_click = function() {
-            info.open( map, marker );
-        };
-
-        google.maps.event.addListener( marker, 'click', on_click );
+        marker.bindInfoWindow(new_div);
     }
 
     return marker;
@@ -190,7 +145,7 @@ VegGuide.GoogleMap.prototype._instrumentShowLink = function ( link, marker ) {
         link,
         "click",
         function (e) {
-            google.maps.event.trigger( marker, "click" );
+            GEvent.trigger( marker, "click" );
 
             e.preventDefault();
             if ( e.stopPropogation ) {
@@ -201,17 +156,18 @@ VegGuide.GoogleMap.prototype._instrumentShowLink = function ( link, marker ) {
 };
 
 VegGuide.GoogleMap.prototype.showDirectionsFromForm = function (form) {
-    var request =  { origin: form.elements["from"].value,
-                     destination: form.elements["to"].value,
-                     travelMode: google.maps.DirectionsTravelMode.DRIVING
-                   };
+    var directions = new GDirections( this.map, $("google-maps-directions-text") );
 
-    var self = this;
-    var on_response = function ( response, status ) {
-        if ( status == google.maps.DirectionsStatus.OK ) {
-            self.directions_display.setDirections(response);
-        }
-    };
-
-    this.directions_service.route( request, on_response );
+    var query = "from: " + form.elements["from"].value + " to: " + form.elements["to"].value;
+    directions.load(query);
 };
+
+DOM.Ready.onDOMDone( function () {
+    if ( window.GUnload ) {
+        DOM.Events.addListener(
+            window,
+            "unload",
+            window.GUnload
+        );
+    }
+} );

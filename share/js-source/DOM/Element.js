@@ -74,7 +74,7 @@ DOM.Element = {
         for (var i = 0; i < arguments.length; i++) {
             var element = $(arguments[i]);
             if ( element && element.nodeType == 1 )
-                element.style.display = 
+                element.style.display =
                     (element.style.display == 'none' ? '' : 'none');
         }
     }
@@ -96,7 +96,7 @@ DOM.Element = {
                 element.parentNode.removeChild(element);
         }
     }
-   
+
     /*
 
     =item * getHeight()
@@ -112,7 +112,7 @@ DOM.Element = {
    ,getHeight: function(element) {
         element = $(element);
         if ( !element ) return;
-        return element.offsetHeight; 
+        return element.offsetHeight;
     }
 
     /*
@@ -182,7 +182,7 @@ DOM.Element = {
         }
         element.className = newClassnames.join(' ');
     }
-  
+
     /*
 
     =item * cleanWhitespace()
@@ -200,7 +200,7 @@ DOM.Element = {
         if ( !element ) return;
         for (var i = 0; i < element.childNodes.length; i++) {
             var node = element.childNodes[i];
-            if (node.nodeType == 3 && !/\S/.test(node.nodeValue)) 
+            if (node.nodeType == 3 && !/\S/.test(node.nodeValue))
                 DOM.Element.remove(node);
         }
     }
