@@ -770,10 +770,8 @@ div.pagination form select, div.pagination form select option {
 }
 
 #ratings-and-total {
-    border: 1px solid #6aa41d;
-    padding: 0.5em 0 1em 0;
     text-align: center;
-    width: 248px;
+    width: 11em;
 }
 
 #rating-numbers {
