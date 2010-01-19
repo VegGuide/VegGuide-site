@@ -1,6 +1,8 @@
 <div class="yui-gc">
   <div class="yui-u first">
 
+    <div class="yui-gc">
+      <div class="yui-u first">
 % if ( $vendor->is_closed ) {
     <h2 id="closed">
       Closed as of <& /lib/format/date.mas, date => $vendor->close_date_object &>
@@ -28,6 +30,7 @@
     </div>
 % }
 
+
 % if ( $vendor->location()->has_addresses() && $c->vg_user()->is_admin() ) {
     <div id="lat-long">
 %   if ( defined $vendor->latitude() ) {
@@ -44,6 +47,11 @@
 %   }
     </div>
 % }
+    </div>
+      <div class="yui-u">
+    <& /entry/ratings.mas, vendor => $vendor &>
+      </div>
+    </div>
 
 % if ( $vendor->categories > 1 || ! $vendor->is_restaurant ) {
 <div id="entry-categories"><% join ', ', map { $_->name } $vendor->categories | h %></div>
@@ -126,8 +134,6 @@
   </div>
 
   <div class="yui-u">
-    <& /entry/ratings.mas, vendor => $vendor &>
-
     <& /entry/images.mas, vendor => $vendor &>
 
     <& /entry/hours.mas, vendor => $vendor &>
