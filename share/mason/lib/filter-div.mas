@@ -13,6 +13,7 @@
 %   $clear->delete_all();
 <p>
   <a class="action-button-small"
+     title="Remove all filters that are currently in place"
      href="<% $clear->$search_uri_method() | h %>">Show everything</a>
 </p>
 % }
