@@ -2,6 +2,7 @@
 #   auth_basic
 #   authz_default
 #   authz_host  (order, deny)
+#   mime ?
 #   perl
 
 <IfDefine !Testing>
