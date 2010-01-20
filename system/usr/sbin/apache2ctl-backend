@@ -42,7 +42,7 @@ ARGV="$@"
 # 
 # the path to your httpd binary, including options if necessary
 
-if [ -d system/etc ] ; then
+if [ `id -nu` != "root" ] && [ -d system/etc ] ; then
     RUN_DIR=~/run
     ETC_DIR=system/etc
     DEFINE="-D Testing"
