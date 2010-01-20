@@ -98,7 +98,7 @@ sub EtcDir
 {
     my $class = shift;
 
-    return '/etc/vegguie' if $class->IsProduction();
+    return '/etc/vegguide' if $class->IsProduction();
     return Cwd::abs_path(
         dirname( $INC{'VegGuide/Config.pm'} ) . '/../../etc' );
 }
