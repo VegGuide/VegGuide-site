@@ -30,7 +30,7 @@ fi
 test -f /etc/default/rcS && . /etc/default/rcS
 test -f /etc/default/apache2 && . /etc/default/apache2
 
-if [ -x system/usr/sbin/apache2ctl-backend ] ; then
+if [ `id -nu` != "root" ] && [ -x system/usr/sbin/apache2ctl-backend ] ; then
     APACHE2CTL="$ENV system/usr/sbin/apache2ctl-backend"
 else
     APACHE2CTL="$ENV /usr/sbin/apache2ctl-backend"
@@ -71,7 +71,7 @@ pidof_apache() {
 
     PIDS2=""
 
-    if [ -d system/etc ] ; then
+    if [ `id -nu` != "root" ] && [ -d system/etc ] ; then
         ETC_DIR=system/etc
     else
         ETC_DIR=/etc
