@@ -5,9 +5,8 @@
 <& "/layout/$layout/page.mas", %ARGS &>
 
 % if ( $m->request_comp()->attr('load_google_maps')) {
- <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<% VegGuide::Config->GoogleMapsAPIKey( $c->request()->uri()->host() ) | h %>"
-         type="text/javascript"></script>
-
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<% VegGuide::Config->GoogleMapsAPIKey( $c->request()->uri()->host() ) | h %>"
+        type="text/javascript"></script>
 % }
 
 % if ( VegGuide::Config->IsProduction() ) {

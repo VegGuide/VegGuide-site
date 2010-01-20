@@ -1,18 +1,20 @@
-   <div id="body" class="one-column">
-
-    <h2>Your Skins</h2>
-
-    <ul>
+<ul>
 % while ( my $skin = $skins->next() ) {
-     <li>
-       <a href="/skin/<% $skin->skin_id() %>/edit_form" title="Edit this skin"
-          ><% $skin->hostname() | h %></a>
-     </li>
+  <li>
+    <a href="/skin/<% $skin->skin_id() %>/edit_form" title="Edit this skin"
+       ><% $skin->hostname() | h %></a>
+  </li>
 % }
-    </ul>
-
-   </div>
+</ul>
 
 <%args>
 $skins
 </%args>
+
+<%method page_title>
+Your Skins
+</%method>
+
+<%attr>
+layout => '3.5'
+</%attr>

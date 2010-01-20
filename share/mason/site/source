@@ -8,6 +8,10 @@ The VegGuide source code is distributed under the same terms as Perl
 itself. Please see the LICENSE file in repository for details.
 </p>
 
+<%attr>
+layout => '3.5'
+</%attr>
+
 <%method page_title>
 VegGuide.Org Source Code
 </%method>

@@ -13,7 +13,7 @@
     </ul>
 
     <&| /lib/filter/fill-in-form.mas, data => \%form_data, objects => [ $vendor ] &>
-    <form action="<% $uri %>" method="post" id="entry-form">
+    <form action="<% $uri %>" method="post" id="entry-form" class="complex">
 % if ( $vendor->is_live() ) {
      <input type="hidden" name="x-tunneled-method" value="PUT" />
 % }

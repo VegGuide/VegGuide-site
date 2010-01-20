@@ -1,7 +1,3 @@
-   <div id="body" class="one-column">
-
-    <h2>Entries created by <% $user->real_name() | h %></h2>
-
 % if ($vendors) {
     <ul>
 %   while ( my $vendor = $vendors->next() ) {
@@ -11,11 +7,23 @@
 %   }
     </ul>
 % } else {
-    This user has not created any entries.
+    <p>
+      This user has not created any entries.
+    </p>
 % }
-   </div>
 
 <%args>
 $user
 $vendors => undef
 </%args>
+
+<%attr>
+layout => '3.5'
+</%attr>
+
+<%method page_title>
+Entries created by <% $user->real_name() | h %>
+<%args>
+$user
+</%args>
+</%method>

@@ -1,93 +1,88 @@
-   <&| /lib/filter/fill-in-form.mas, objects => [ $user ] &>
-   <form action="<% $path | h %>" method="post">
+<&| /lib/filter/fill-in-form.mas, objects => [ $user ] &>
+<form action="<% $path | h %>" method="post">
 % if ( $user->user_id() ) {
-    <input type="hidden" name="x-tunneled-method" value="PUT" />
+  <input type="hidden" name="x-tunneled-method" value="PUT" />
 % }
 
-    <& /lib/form/errors.mas &>
-    <fieldset>
-     <legend>User info</legend>
+  <& /lib/form/errors.mas &>
+  <div class="form-item">
+    <label for="real_name">Name:</label>
+    <input id="real_name" class="text" type="text" name="real_name" value="" />
+    <p>This can be a nickname or pseudonym.</p>
+  </div>
 
-     <div class="form-item">
-      <label for="real_name">Name:</label>
-      <input id="real_name" class="text" type="text" name="real_name" value="" />
-      <p>This can be a nickname or pseudonym.</p>
-     </div>
+  <div class="form-item">
+    <label for="email_address">Email:</label>
+    <input id="email_address" class="text" type="text" name="email_address" value="" />
+  </div>
 
-     <div class="form-item">
-      <label for="email_address">Email:</label>
-      <input id="email_address" class="text" type="text" name="email_address" value="" />
-     </div>
+  <div class="form-item">
+    <label for="password">Password:</label>
+    <input id="password" class="text" type="password" name="password" value="" autocomplete="off" />
+  </div>
 
-     <div class="form-item">
-      <label for="password">Password:</label>
-      <input id="password" class="text" type="password" name="password" value="" autocomplete="off" />
-     </div>
+  <div class="form-item">
+    <label for="password2">Repeat password:</label>
+    <input id="password2" class="text" type="password" name="password2" value="" autocomplete="off" />
+  </div>
 
-     <div class="form-item">
-      <label for="password2">Repeat password:</label>
-      <input id="password2" class="text" type="password" name="password2" value="" autocomplete="off" />
-     </div>
+  <div class="form-item">
+    <label for="openid_uri">OpenID URL:</label>
+    <input id="openid_uri" class="text medium" type="text" name="openid_uri" value="" />
+    <p>This is optional. Learn more <a href="http://openid.net/">about OpenID</a>.</p>
+  </div>
 
-     <div class="form-item">
-      <label for="openid_uri">OpenID URL:</label>
-      <input id="openid_uri" class="text medium" type="text" name="openid_uri" value="" />
-      <p>This is optional. Learn more <a href="http://openid.net/">about OpenID</a>.</p>
-     </div>
+  <div class="form-item">
+    <label for="home_page">Your blog or website:</label>
+    <input id="home_page" class="text medium" type="text" name="home_page" value="" />
+  </div>
 
-     <div class="form-item">
-      <label for="home_page">Your blog or website:</label>
-      <input id="home_page" class="text medium" type="text" name="home_page" value="" />
-     </div>
+  <div class="form-item">
+    <label for="bio">Your bio:</label>
+    <textarea id="bio" name="bio" class="text long"></textarea>
+    <p>
+      Tell us something about yourself. What do you like to do?
+      <br /> How did you get interested in this site? What should
+      other people know about you?
+    </p>
+  </div>
 
-     <div class="form-item">
-      <label for="bio">Your bio:</label>
-      <textarea id="bio" name="bio" class="text long"></textarea>
-      <p>
-       Tell us something about yourself. What do you like to do?
-       <br /> How did you get interested in this site? What should
-       other people know about you?
-      </p>
-     </div>
-
-     <div class="form-item">
-      <label for="how_veg">How veg are you?</label>
-      <select id="how_veg" name="how_veg">
+  <div class="form-item">
+    <label for="how_veg">How veg are you?</label>
+    <select id="how_veg" name="how_veg">
 % for my $x (0..4) {
-       <option value="<% $x %>">I'm <% VegGuide::User->VegLevelDescription($x) | h %></option>
+      <option value="<% $x %>">I'm <% VegGuide::User->VegLevelDescription($x) | h %></option>
 % }
-      </select>
-     </div>
-       
+    </select>
+  </div>
+     
 
-     <div class="form-item">
-      <label for="allows_email">Allow email from the guide?</label>
-      <& /lib/form/boolean.mas, name => 'allows_email' &>
-      <p>If you check select "Yes" you'll get email from us very infrequently.</p>
-     </div>
+  <div class="form-item">
+    <label for="allows_email">Allow email from the guide?</label>
+    <& /lib/form/boolean.mas, name => 'allows_email' &>
+    <p>If you select "Yes" you'll get email from us very infrequently.</p>
+  </div>
 
 % if ( $c->vg_user()->is_admin() ) {
-     <div class="form-item">
-      <label for="is_admin">Is an admin?</label>
-      <& /lib/form/boolean.mas, name => 'is_admin' &>
-     </div>
+  <div class="form-item">
+    <label for="is_admin">Is an admin?</label>
+    <& /lib/form/boolean.mas, name => 'is_admin' &>
+  </div>
 % }
 
 % if ($captcha_html) {
-     <div class="form-item">
-      <label>Annoying but sadly necessary spam check:</label>
-      <% $captcha_html %>
-     </div>
+  <div class="form-item">
+    <label>Annoying but sadly necessary spam check:</label>
+    <% $captcha_html %>
+  </div>
 % }
 
-    </fieldset>
+  <div class="form-item">
+    <input class="submit" type="submit" value="Submit" />
+  </div>
 
-    <div class="form-item">
-     <input class="submit" type="submit" value="Submit" />
-    </div>
-
-   </form>
-   </&>
+</form>
+</&>
 
 <%args>
 $user

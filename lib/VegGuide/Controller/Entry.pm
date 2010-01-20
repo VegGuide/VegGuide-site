@@ -60,17 +60,45 @@ sub _set_vendor : Chained('/') : PathPart('entry') : CaptureArgs(1)
 
     $c->stash()->{vendor} = $vendor;
 
-    if ( $c->request()->looks_like_browser() && $c->request()->method() eq 'GET' )
-    {
-        my $location = $vendor->location();
+    return unless $c->request()->looks_like_browser() && $c->request()->method() eq 'GET';
 
-        $c->response()->breadcrumbs()->add_region_breadcrumbs($location);
+    my $location = $vendor->location();
 
-        $c->response()->breadcrumbs()->add
-            ( uri   => entry_uri( vendor => $vendor ),
-              label => $vendor->name(),
-            );
+    $c->add_tab(
+        {
+            uri     => entry_uri( vendor => $vendor ),
+            label   => 'Info',
+            tooltip => 'About ' . $vendor->name(),
+            id      => 'info',
+        }
+    );
+
+    $c->add_tab(
+        {
+            uri   => entry_uri( vendor => $vendor, path => 'reviews' ),
+            label => 'Reviews',
+            tooltip => 'Reviews and ratings for ' . $vendor->name(),
+            id      => 'reviews',
+        }
+    );
+
+    if ( $vendor->map_uri() ) {
+        $c->add_tab(
+            {
+                uri   => entry_uri( vendor => $vendor, path => 'map' ),
+                label => 'Map',
+                tooltip => 'Map for ' . $vendor->name(),
+                id      => 'map',
+            }
+        );
     }
+
+    $c->response()->breadcrumbs()->add_region_breadcrumbs($location);
+
+    $c->response()->breadcrumbs()->add(
+        uri   => entry_uri( vendor => $vendor ),
+        label => $vendor->name(),
+    );
 }
 
 sub entry : Chained('_set_vendor') : PathPart('') : Args(0) : ActionClass('+VegGuide::Action::REST') { }
@@ -80,19 +108,17 @@ sub entry_GET_html : Private
     my $self = shift;
     my $c    = shift;
 
+    $c->tab_by_id('info')->set_is_selected(1);
+
     my $vendor = $c->stash()->{vendor};
 
     my $review_count = $vendor->review_count();
 
     my $comments;
-    $comments = $vendor->comments() if $review_count;
-
-    my $ratings;
-    $ratings = $vendor->ratings_without_reviews()
-        if $vendor->ratings_without_review_count();
+    $comments = $vendor->comments( limit => 2 )
+        if $review_count;
 
     $c->stash()->{comments} = $comments;
-    $c->stash()->{ratings}  = $ratings;
 
     $c->stash()->{template} = '/entry/view';
 }
@@ -158,6 +184,8 @@ sub map : Chained('_set_vendor') : PathPart('map') : Args(0)
 {
     my $self = shift;
     my $c    = shift;
+
+    $c->tab_by_id('map')->set_is_selected(1);
 
     $c->stash()->{template} = '/entry/large-map';
 }
@@ -312,7 +340,25 @@ sub new_review_form : Chained('_set_vendor') : PathPart('review_form') : Args(0)
     $c->stash()->{template} = '/entry/review-form';
 }
 
-sub reviews : Chained('_set_vendor') : PathPart('review') : Args(0) : ActionClass('+VegGuide::Action::REST') { }
+sub reviews : Chained('_set_vendor') : PathPart('reviews') : Args(0) : ActionClass('+VegGuide::Action::REST') { }
+
+sub reviews_GET_html : Private
+{
+    my $self = shift;
+    my $c    = shift;
+
+    $c->tab_by_id('reviews')->set_is_selected(1);
+
+    my $vendor = $c->stash()->{vendor};
+
+    $c->stash()->{comments} = $vendor->comments()
+        if $vendor->review_count();
+
+    $c->stash()->{ratings} = $vendor->ratings_without_reviews()
+        if $vendor->ratings_without_review_count();
+
+    $c->stash()->{template} = '/entry/reviews';
+}
 
 sub reviews_POST : Private
 {

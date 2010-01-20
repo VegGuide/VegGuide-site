@@ -1,223 +1,221 @@
-<div id="filters">
-
- <div class="current-filters">
 % if ( $search->has_filters() ) {
-  <h3 id="current-filters-heading">Currently showing entries ...</h3>
+<h2>Showing entries ...</h2>
 
-  <ul>
+<ul class="no-top-margin">
 %   for my $desc ( $search->long_descriptions() ) {
-   <li>... <% $desc | h %></li>
+  <li>... <% $desc | h %></li>
 %   }
-  </ul>
+</ul>
 % }
 
- </div>
-
- <a id="filter-toggle" class="action-button-medium" href="#" title="Limit which entries are shown">Filter this list<% $search->has_filters() ? ' further' : '' %></a>
 % if ( $search->has_filters() ) {
- <a class="action-button-medium" href="<% $clone->$search_uri_method() | h %>">Show everything</a>
-% } else {
-%   $clone->add( category_id => VegGuide::Category->Restaurant()->category_id() );
- <a class="action-button-medium" href="<% $clone->$search_uri_method() | h %>" title="Only show restaurants">Just restaurants</a>
+%   my $clear = $search->clone();
+%   $clear->delete_all();
+<p>
+  <a class="action-button-small"
+     title="Remove all filters that are currently in place"
+     href="<% $clear->$search_uri_method() | h %>">Show everything</a>
+</p>
+% }
+% unless ( @{ $search->category_id() } ) {
+%   my $just_rest = $search->clone();
+%   $just_rest->add( category_id => VegGuide::Category->Restaurant()->category_id() );
+<p>
+  <a class="action-button-small"
+     href="<% $just_rest->$search_uri_method() | h %>" title="Only show restaurants">Just restaurants</a>
+</p>
+% }
+% unless ( $search->veg_level() ) {
+%   my $vegan_friendly = $search->clone();
+%   $vegan_friendly->add( veg_level => 2 );
+<p>
+  <a class="action-button-small"
+     href="<% $vegan_friendly->$search_uri_method() | h %>"
+     title="Show places which are at least vegan-friendly">Vegan-friendly</a>
+</p>
 % }
 
- <div id="region-filter-lightbox" style="display: none;">
+<h3>Filter listings by ...</h3>
 
-  <a href="#" class="lightbox2-close" title="close the filter tool"><img src="/images/close-button.png" alt="close button" /></a>
+<ul>
+  <li class="current"><a class="filter-toggle" id="category-toggle" href="#">Category</a></li>
+  <li><a class="filter-toggle" id="cuisines-toggle" href="#">Cuisines</a></li>
+  <li><a class="filter-toggle" id="how-veg-toggle" href="#">How Veg?</a></li>
 
-  <h3>Currently showing entries ...</h3>
-
-  <ul id="current-lightbox-filters">
-   <li></li>
-  </ul>
-
-  <h4>Filter listings by ...</h4>
-
-  <div class="filter-tabs">
-   <ul>
-    <li class="current"><a class="filter-toggle" id="category-toggle" href="#">Category</a></li>
-    <li><a class="filter-toggle" id="cuisines-toggle" href="#">Cuisines</a></li>
-    <li><a class="filter-toggle" id="how-veg-toggle" href="#">How Veg?</a></li>
-
-    <li><a class="filter-toggle" id="allows-smoking-toggle" href="#">Smoking?</a></li>
-    <li><a class="filter-toggle" id="wheelchair-accessible-toggle" href="#">Wheelchair Access?</a></li>
-    <li><a class="filter-toggle" id="rating-toggle" href="#">Rating</a></li>
+  <li><a class="filter-toggle" id="allows-smoking-toggle" href="#">Smoking?</a></li>
+  <li><a class="filter-toggle" id="wheelchair-accessible-toggle" href="#">Wheelchair Access?</a></li>
+  <li><a class="filter-toggle" id="rating-toggle" href="#">Rating</a></li>
 % if ($location) {
-    <li><a class="filter-toggle" id="open-until-toggle" href="#">Open Until</a></li>
+  <li><a class="filter-toggle" id="open-until-toggle" href="#">Open Until</a></li>
 %   if (@hoods) {
-    <li><a class="filter-toggle" id="neighborhood-toggle" href="#">Neighborhood</a></li>
+  <li><a class="filter-toggle" id="neighborhood-toggle" href="#">Neighborhood</a></li>
 %   }
 % }
-    <li><a class="filter-toggle" id="features-toggle" href="#">Features</a></li>
+  <li><a class="filter-toggle" id="features-toggle" href="#">Features</a></li>
 
-    <li><a class="filter-toggle" id="accepts-reservations-toggle" href="#">Reservations?</a></li>
-    <li><a class="filter-toggle" id="price-range-toggle" href="#">Price</a></li>
+  <li><a class="filter-toggle" id="accepts-reservations-toggle" href="#">Reservations?</a></li>
+  <li><a class="filter-toggle" id="price-range-toggle" href="#">Price</a></li>
 % if ($show_city) {
-    <li><a class="filter-toggle" id="city-toggle" href="#">City</a></li>
+  <li><a class="filter-toggle" id="city-toggle" href="#">City</a></li>
 % }
-    <li><a class="filter-toggle" id="age-toggle" href="#">Age</a></li>
-   </ul>
+  <li><a class="filter-toggle" id="age-toggle" href="#">Age</a></li>
+</ul>
 
-   <div class="force-clear"></div>
+<&| /lib/filter/fill-in-form.mas, objects => [ $search ] &>
+
+<&| .filter_form, uri => $filter_form_uri, id => 'category-form' &>
+  <label class="title">Category</label>
+
+  <div id="category_id-wpms">
+    <& /lib/form/entry/category.mas &>
   </div>
 
-  <&| /lib/filter/fill-in-form.mas, objects => [ $search ] &>
-  <form class="filter-form" action="<% $search->$search_uri_method() | h %>" method="post" id="category-form">
-   <label class="title">Category</label>
+  <button type="submit" class="action-button-small">Filter</button>
+</&>
 
-   <div id="category_id-wpms">
-    <& /lib/form/entry/category.mas &>
-   </div>
+<&| .filter_form, uri => $filter_form_uri, id => 'cuisines-form' &>
+  <label class="title">Cuisines</label>
 
-   <button type="submit" class="action-button-small">Filter</button>
-  </form>
-
-  <form class="filter-form" action="<% $search->$search_uri_method() | h %>" method="post" id="cuisines-form">
-   <label class="title">Cuisines</label>
-
-   <div id="cuisine_id-wpms">
+  <div id="cuisine_id-wpms">
     <& /lib/form/entry/cuisine.mas &>
-   </div>
+  </div>
 
-   <button type="submit" class="action-button-small">Filter</button>
-  </form>
+  <button type="submit" class="action-button-small">Filter</button>
+</&>
 
-  <form class="filter-form" action="<% $search->$search_uri_method() | h %>" method="post" id="how-veg-form">
-   <label class="title">How Veg?</label>
+<&| .filter_form, uri => $filter_form_uri, id => 'how-veg-form' &>
+  <label class="title">How Veg?</label>
 
-   <& /lib/form/entry/how-veg.mas &>
+  <& /lib/form/entry/how-veg.mas &>
 
-   <button type="submit" class="action-button-small">Filter</button>
-  </form>
+  <button type="submit" class="action-button-small">Filter</button>
+</&>
 
-  <form class="filter-form" action="<% $search->$search_uri_method() | h %>" method="post" id="allows-smoking-form">
-   <label class="title">Allows Smoking?</label>
+<&| .filter_form, uri => $filter_form_uri, id => 'allows-smoking-form' &>
+  <label class="title">Allows Smoking?</label>
 
-   <& /lib/form/boolean.mas, name => 'allows_smoking' &>
+  <& /lib/form/boolean.mas, name => 'allows_smoking' &>
 
-   <button type="submit" class="action-button-small">Filter</button>
-  </form>
+  <button type="submit" class="action-button-small">Filter</button>
+</&>
 
-  <form class="filter-form" action="<% $search->$search_uri_method() | h %>" method="post" id="wheelchair-accessible-form">
-   <label class="title">Wheelchair Accessible?</label>
+<&| .filter_form, uri => $filter_form_uri, id => 'wheelchair-accessible-form' &>
+  <label class="title">Wheelchair Accessible?</label>
 
-   <& /lib/form/boolean.mas, name => 'is_wheelchair_accessible' &>
+  <& /lib/form/boolean.mas, name => 'is_wheelchair_accessible' &>
 
-   <button type="submit" class="action-button-small">Filter</button>
-  </form>
+  <button type="submit" class="action-button-small">Filter</button>
+</&>
 
-  <form class="filter-form" action="<% $search->$search_uri_method() | h %>" method="post" id="rating-form">
-   <label class="title" for="rating">Rating of at least ...</label>
-   <div>
+<&| .filter_form, uri => $filter_form_uri, id => 'rating-form' &>
+  <label class="title" for="rating">Rating of at least ...</label>
+  <div>
     <select id="rating" name="rating">
 % for my $num ( 1..4 ) {
-    <option value="<% $num %>"><% $num %></option>
+      <option value="<% $num %>"><% $num %></option>
 % }
     </select>
-   </div>
+  </div>
 
-   <button type="submit" class="action-button-small">Filter</button>
-  </form>
+  <button type="submit" class="action-button-small">Filter</button>
+</&>
 
 % if ( $location && $location->time_zone() ) {
-%  my $local_now = DateTime->now( time_zone => $location->time_zone() );
-%  my $round_min = 15 - ( $local_now->minute() % 15 );
-%  $local_now->add( minutes => $round_min );
-  <form class="filter-form" action="<% $search->$search_uri_method() | h %>" method="post" id="open-until-form">
-   <label class="title" for="open_minutes">Open Until ...</label>
+%   my $local_now = DateTime->now( time_zone => $location->time_zone() );
+%   my $round_min = 15 - ( $local_now->minute() % 15 );
+%   $local_now->add( minutes => $round_min );
+<&| .filter_form, uri => $filter_form_uri, id => 'open-until-form' &>
+  <label class="title" for="open_minutes">Open Until ...</label>
 
-   <div>
+  <div>
     <select id="open_minutes" name="open_for">
 %  for my $min ( 30, 60, 90, 120 ) {
-    <option value="<% $min %>"><% $local_now->clone()->add( minutes => $min )->strftime( '%I:%M %P' ) | h %></option>
+      <option value="<% $min %>"><% $local_now->clone()->add( minutes => $min )->strftime( '%I:%M %P' ) | h %></option>
 %  }
     </select>
-   </div>
+  </div>
 
-   <button type="submit" class="action-button-small">Filter</button>
-  </form>
-
-%  if (@hoods) {
-  <form class="filter-form" action="<% $search->$search_uri_method() | h %>" method="post" id="neighborhood-form">
-   <label class="title" for="neighborhood">Neighborhood</label>
-
-   <div>
-    <select id="neighborhood" name="neighborhood">
-%    for my $hood (@hoods) {
-    <option value="<% $hood | h %>"><% $hood | h %></option>
-%    }
-    </select>
-   </div>
-
-   <button type="submit" class="action-button-small">Filter</button>
-  </form>
-%  }
+  <button type="submit" class="action-button-small">Filter</button>
+</&>
 % }
 
-  <form class="filter-form" action="<% $search->$search_uri_method() | h %>" method="post" id="features-form">
-   <label class="title">Features</label>
+%if (@hoods) {
+<&| .filter_form, uri => $filter_form_uri, id => 'neighborhood-form' &>
+  <label class="title" for="neighborhood">Neighborhood</label>
 
-    <& /lib/form/entry/attribute.mas &>
+  <div>
+    <select id="neighborhood" name="neighborhood">
+%    for my $hood (@hoods) {
+      <option value="<% $hood | h %>"><% $hood | h %></option>
+%    }
+    </select>
+  </div>
 
-   <button type="submit" class="action-button-small">Filter</button>
-  </form>
+  <button type="submit" class="action-button-small">Filter</button>
+</&>
+% }
 
-  <form class="filter-form" action="<% $search->$search_uri_method() | h %>" method="post" id="accepts-reservations-form">
-   <label class="title">Accepts Reservations?</label>
+<&| .filter_form, uri => $filter_form_uri, id => 'features-form' &>
+  <label class="title">Features</label>
 
-   <& /lib/form/boolean.mas, name => 'accepts_reservations' &>
+  <& /lib/form/entry/attribute.mas &>
 
-   <button type="submit" class="action-button-small">Filter</button>
-  </form>
+  <button type="submit" class="action-button-small">Filter</button>
+</&>
 
-  <form class="filter-form" action="<% $search->$search_uri_method() | h %>" method="post" id="price-range-form">
-   <label class="title">Where Prices are ...</label>
+<&| .filter_form, uri => $filter_form_uri, id => 'accepts-reservations-form' &>
+  <label class="title">Accepts Reservations?</label>
 
-   <div>
+  <& /lib/form/boolean.mas, name => 'accepts_reservations' &>
+
+  <button type="submit" class="action-button-small">Filter</button>
+</&>
+
+<&| .filter_form, uri => $filter_form_uri, id => 'price-range-form' &>
+  <label class="title">Where Prices are ...</label>
+
+  <div>
     <& /lib/form/entry/prices.mas &>
-   </div>
+  </div>
 
-   <button type="submit" class="action-button-small">Filter</button>
-  </form>
+  <button type="submit" class="action-button-small">Filter</button>
+</&>
 
 % if ($show_city) {
-  <form class="filter-form" action="<% $search->$search_uri_method() | h %>" method="post" id="city-form">
-   <label class="title" for="city">City</label>
+<&| .filter_form, uri => $filter_form_uri, id => 'city-form' &>
+  <label class="title" for="city">City</label>
 
-   <div>
+  <div>
 %   if ($location) {
     <select id="city" name="city">
 %     for my $city ( $location->current_cities() ) {
-    <option value="<% $city | h %>"><% $city | h %></option>
+      <option value="<% $city | h %>"><% $city | h %></option>
 %     }
     </select>
 %   } else {
     <input id="city" name="city" type="text" class="text" />
 %   }
-   </div>
+  </div>
+
+  <button type="submit" class="action-button-small">Filter</button>
+</&>
 % }
 
-   <button type="submit" class="action-button-small">Filter</button>
-  </form>
+<&| .filter_form, uri => $filter_form_uri, id => 'age-form' &>
+  <label class="title" for="days">Added within the last</label>
 
-  <form class="filter-form" action="<% $search->$search_uri_method() | h %>" method="post" id="age-form">
-   <label class="title" for="days">Added within the last</label>
-
-   <div>
+  <div>
     <select id="days" name="days">
 %    foreach my $d ( 1, 2, 4, 7, 14, 30, 90 ) {
-    <option value="<% $d %>"><% $d %> day<% $d > 1 ? 's' : '' %></option>
+      <option value="<% $d %>"><% $d %> day<% $d > 1 ? 's' : '' %></option>
 %    }
     </select>
-   </div>
+  </div>
 
-   <button type="submit" class="action-button-small">Filter</button>
-  </form>
-  </&>
+  <button type="submit" class="action-button-small">Filter</button>
+</&>
 
- </div>
-
-</div>
+</&>
 
 <%args>
 $location => undef
@@ -236,6 +234,20 @@ my $show_city = 1;
 $show_city = 0
     if $location && ! $location->has_addresses();
 
-my $clone = $search->clone();
-$clone->delete_all();
+my $filter_form_uri = $search->$search_uri_method();
 </%init>
+
+<%def .filter_form>
+<form id="category-form"
+      class="filter-form"
+      action="<% $uri | h %>"
+      method="post"
+      style="display: none">
+<% $m->content() %>
+</form>
+<%args>
+$uri
+$id
+</%args>
+</%def>
+

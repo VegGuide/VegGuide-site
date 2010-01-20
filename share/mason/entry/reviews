@@ -1,0 +1,34 @@
+<div class="yui-gc">
+  <div class="yui-u first">
+% if ($comments) {
+    <h2>Reviews</h2>
+
+    <& /lib/comments.mas, comments => $comments, vendor => $vendor &>
+% } else {
+    <p>
+      This entry has no reviews,
+      why not <a href="<% entry_uri( vendor => $vendor, path => 'review_form' ) %>">write one</a>?
+    </p>
+% }
+  </div>
+  <div class="yui-u">
+% if ($ratings) {
+    <h2>Ratings Without Reviews</h2>
+
+    <ul id="ratings-list" class="no-top-margin">
+%   while ( my ( $rating, $user ) = $ratings->next() ) {
+      <li><a name="user-id-<% $user->user_id() %>"></a>
+          <& /lib/link/user.mas, user => $user &>:
+          <& /lib/stars-for-rating.mas, rating => $rating->rating(), color => 'green' &>
+      </li>
+%   }
+    </ul>
+  </div>
+% }
+</div>
+
+<%args>
+$vendor
+$comments => undef
+$ratings => undef
+</%args>
