@@ -1,0 +1,32 @@
+#!/usr/bin/perl -w
+
+use strict;
+use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../../../lib";
+
+use VegGuide::VendorImage;
+
+my $images = VegGuide::VendorImage->All();
+
+while ( my $image = $images->next() ) {
+    make_mini($image);
+}
+
+sub make_mini {
+    my $vendor_image = shift;
+
+    return unless -f $vendor_image->original_path();
+
+    my $image_file = eval { VegGuide::Image->new( file => $vendor_image->original_path() ) };
+    unless ( $image_file ) {
+        warn "Cannot make a VegGuide::Image for ", $vendor_image->original_path(), "\n";
+        return;
+    }
+
+    return if -f $vendor_image->mini_path();
+
+    $image_file->resize( 123, 123, $vendor_image->mini_path() );
+}
+

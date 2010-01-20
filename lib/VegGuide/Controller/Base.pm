@@ -58,7 +58,7 @@ sub begin : Private
 
     my $response = $c->response();
     $response->breadcrumbs()->add( uri  => '/',
-                                   label => 'VegGuide.Org',
+                                   label => 'Home',
                                  );
 
     for my $type ( 'RSS', 'Atom' )

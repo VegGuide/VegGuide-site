@@ -57,12 +57,10 @@ VegGuide.RatingStars._makeStars = function () {
 VegGuide.RatingStarSet = function ( container, stars ) {
     this.original_image = stars;
 
-    this.help_span =
-        DOM.Find.getElementsByAttributes( { tagName: "SPAN",
-                                            className: "rating-help" }, container )[0];
+    this.help_div = $("rating-help");
 
-    if ( this.help_span ) {
-        this.original_help_text = this.help_span.innerHTML;
+    if ( this.help_div ) {
+        this.original_help_text = this.help_div.innerHTML;
     }
 
     var match = stars.className.match( /rate-(\d+)/ );
@@ -169,18 +167,18 @@ VegGuide.RatingStarSet.prototype._showRating = function (e) {
         e.target.style.filter = blue.style.filter;
     }
 
-    if ( this.help_span ) {
+    if ( this.help_div ) {
         var desc = VegGuide.RatingStars._ratingsDescriptions[ rating - 1 ];
 
-        this.help_span.innerHTML = desc.substring( 0, 1 ).toUpperCase() + desc.substring(1);
+        this.help_div.innerHTML = desc.substring( 0, 1 ).toUpperCase() + desc.substring(1);
     }
 };
 
 VegGuide.RatingStarSet.prototype._mouseOut = function () {
     this._restoreImage();
 
-    if ( this.help_span ) {
-        this.help_span.innerHTML = this.original_help_text;
+    if ( this.help_div ) {
+        this.help_div.innerHTML = this.original_help_text;
     }
 };
 
@@ -207,7 +205,7 @@ VegGuide.RatingStarSet.prototype._submitRating = function (rating) {
     req.request(uri);
 
     var response = eval( "(" + req.transport.responseText + ")" );
-    
+
     if ( response.uri ) {
         window.location.href = response.uri;
         return;
@@ -232,7 +230,7 @@ VegGuide.RatingStarSet.prototype._submitRating = function (rating) {
 
     this._restoreImage();
 
-    if ( this.help_span ) {
-        this.help_span.innerHTML = this.original_help_text;
+    if ( this.help_div ) {
+        this.help_div.innerHTML = this.original_help_text;
     }
 };

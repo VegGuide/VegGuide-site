@@ -193,6 +193,10 @@ free to ignore this, it's just for our reference.
 
 </ul>
 
+<%attr>
+layout => '3.5'
+</%attr>
+
 <%method page_title>
 Todo List
 </%method>

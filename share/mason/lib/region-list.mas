@@ -1,26 +1,29 @@
-   <div id="region-lists">
+<div class="yui-g">
 
-    <ul class="right-list">
-% foreach my $location (@l2) {
-%   my $count = $location->descendants_vendor_count();
-     <li>
-      <& /lib/link/location.mas, location => $location &>
-      (<% $count %>)
-     </li>
-% }
-    </ul>
-
-    <ul class="left-list">
+  <div class="yui-g first">
+    <ul class="no-top-margin">
 % foreach my $location (@l1) {
 %   my $count = $location->descendants_vendor_count();
-     <li>
-      <& /lib/link/location.mas, location => $location &>
-      (<% $count %>)
-     </li>
+      <li>
+        <& /lib/link/location.mas, location => $location &>
+        (<% $count %>)
+      </li>
 % }
     </ul>
+  </div>
 
-   </div>
+  <div class="yui-g">
+    <ul class="no-top-margin">
+% foreach my $location (@l2) {
+%   my $count = $location->descendants_vendor_count();
+      <li>
+        <& /lib/link/location.mas, location => $location &>
+        (<% $count %>)
+      </li>
+% }
+    </ul>
+  </div>
+</div>
 
 <%args>
 $location => undef

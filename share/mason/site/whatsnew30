@@ -105,7 +105,9 @@ This fairly minor feature is gone, but may return in a more robust
 form in the future.
 </p>
 
-
+<%attr>
+layout => '3.5'
+</%attr>
 
 <%method page_title>
 What's New in VegGuide 3.0?

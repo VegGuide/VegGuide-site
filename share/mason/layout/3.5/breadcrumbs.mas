@@ -6,9 +6,8 @@ page does not change with or without breadcrumbs being shown.
  <div id="breadcrumbs">
 % if ( @crumbs > 1 ) {
   <ul>
-   <li><strong>You are here:</strong></li>
 %   foreach my $crumb (@crumbs) {
-   <li>
+   <li class="<% $crumb eq $crumbs[0] ? 'first' : q{} %>">
 %     if ( $crumb ne $crumbs[0] ) {
      &gt;
 %     }

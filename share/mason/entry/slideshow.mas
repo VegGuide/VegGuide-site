@@ -3,7 +3,7 @@
  <a href="#" class="lightbox2-close" title="close"
     ><img src="/images/close-button.png" alt="close button" /></a>
 
- <h3>Images of <% $vendor->name () | h %></h3>
+ <h2>Images for <% $vendor->name () | h %></h2>
 
  <div id="slideshow-controls-container">
 
@@ -21,6 +21,9 @@
  </div>
 
  <div id="slideshow-caption-container">
+ </div>
+
+ <div id="slideshow-attribution-container">
  </div>
 
 </div>

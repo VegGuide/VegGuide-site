@@ -34,23 +34,61 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1)
 
     $c->stash()->{location} = $location;
 
-    if ( $c->request()->looks_like_browser() && $c->request()->method() eq 'GET' )
-    {
-        for my $type ( 'RSS', 'Atom' )
-        {
-            my $ct = 'application/' . lc $type . '+xml';
+    return unless $c->request()->looks_like_browser() && $c->request()->method() eq 'GET';
 
-            $c->response()->alternate_links()->add
-                ( mime_type => $ct,
-                  title     => 'VegGuide.Org: Recent Changes for ' . $location->name(),
-                  uri       => region_uri( location => $location,
-                                           path     => 'recent.' . lc $type,
-                                         ),
-                );
-        }
+    for my $type ( 'RSS', 'Atom' ) {
+        my $ct = 'application/' . lc $type . '+xml';
 
-        $c->response()->breadcrumbs()->add_region_breadcrumbs($location);
+        $c->response()->alternate_links()->add(
+            mime_type => $ct,
+            title => 'VegGuide.Org: Recent Changes for ' . $location->name(),
+            uri   => region_uri(
+                location => $location,
+                path     => 'recent.' . lc $type,
+            ),
+        );
     }
+
+    $c->response()->breadcrumbs()->add_region_breadcrumbs($location);
+
+    $c->add_tab(
+        {
+            uri     => region_uri( location => $location ),
+            label   => 'Entries/Regions',
+            tooltip => 'Entries and regions in ' . $location->name(),
+            id      => 'entries',
+        }
+    );
+
+    if ( $location->vendor_count() ) {
+        $c->add_tab(
+            {
+                uri   => region_uri( location => $location, path => 'map' ),
+                label => 'Map',
+                tooltip => 'Map of ' . $location->name(),
+                id      => 'map',
+            }
+        );
+
+        $c->add_tab(
+            {
+                uri =>
+                    region_uri( location => $location, path => 'printable' ),
+                label   => 'Printable',
+                tooltip => 'Printable entry list for ' . $location->name(),
+                id      => 'printable',
+            }
+        );
+    }
+
+    $c->add_tab(
+        {
+            uri     => region_uri( location => $location, path => 'feeds' ),
+            label   => 'Feeds',
+            tooltip => 'Atom & RSS feeds for ' . $location->name(),
+            id      => 'feeds',
+        }
+    );
 }
 
 {
@@ -69,6 +107,10 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1)
 
         $self->_set_search_in_stash( $c, %SearchConfig );
 
+        $c->tab_by_id('entries')->set_is_selected(1);
+
+        $self->_set_uris_for_search($c);
+
         $c->stash()->{template} = '/region/view';
     }
 
@@ -78,6 +120,8 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1)
     {
         my $self = shift;
         my $c    = shift;
+
+        $c->tab_by_id('entries')->set_is_selected(1);
 
         $c->detach('filter');
     }
@@ -93,6 +137,10 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1)
         $self->_set_search_in_stash( $c, %SearchConfig, path_query => $path );
 
         return unless $c->stash()->{search};
+
+        $c->tab_by_id('entries')->set_is_selected(1);
+
+        $self->_set_uris_for_search($c);
 
         $c->stash()->{template} = '/region/view';
     }
@@ -111,6 +159,10 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1)
         my $self = shift;
         my $c    = shift;
 
+        $c->tab_by_id('map')->set_is_selected(1);
+
+        $self->_set_uris_for_search($c);
+
         $c->detach('map');
     }
 
@@ -125,6 +177,10 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1)
         $self->_set_map_search_in_stash( $c, %SearchConfig, path_query => $path );
 
         return unless $c->stash()->{search};
+
+        $c->tab_by_id('map')->set_is_selected(1);
+
+        $self->_set_uris_for_search($c);
 
         $c->stash()->{template} = '/region/map';
     }
@@ -143,6 +199,10 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1)
         my $self = shift;
         my $c    = shift;
 
+        $c->tab_by_id('printable')->set_is_selected(1);
+
+        $self->_set_uris_for_search($c);
+
         $c->detach('printable');
     }
 
@@ -156,7 +216,28 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1)
 
         return unless $c->stash()->{search};
 
+        $c->tab_by_id('printable')->set_is_selected(1);
+
+        $self->_set_uris_for_search($c);
+
         $c->stash()->{template} = '/shared/printable-entry-list';
+    }
+
+    sub _set_uris_for_search {
+        my $self = shift;
+        my $c    = shift;
+
+        my $search = $c->stash()->{search};
+
+        return unless $search;
+
+        return unless $c->tab_by_id('map');
+
+        $c->tab_by_id('entries')->set_uri( $search->uri() );
+        $c->tab_by_id('map')->set_uri( $search->map_uri() );
+        $c->tab_by_id('printable')->set_uri( $search->printable_uri() );
+
+        return;
     }
 }
 
