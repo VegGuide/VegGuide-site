@@ -35,6 +35,7 @@
 </p>
 % }
 
+% if ( $location->active_vendor_count() > 10 ) {
 <h3>Filter listings by ...</h3>
 
 <ul>
@@ -216,6 +217,7 @@
 </&>
 
 </&>
+% }
 
 <%args>
 $location => undef

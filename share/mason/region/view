@@ -42,9 +42,7 @@
   </div>
 
   <div class="yui-u">
-%   if ( $active_vendor_count > 10 ) {
     <& /lib/filter-div.mas, location => $location, search => $search &>
-%   }
   </div>
 </div>
 % }
