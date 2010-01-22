@@ -34,7 +34,7 @@ layout => '3.5'
 
  <li>
   We have <strong><% $review_count %> <% PL( 'review', $review_count ) %></strong>
-  and <strong><% $rating_count %> <% PL( 'rating', $rating_count ) %></strong>
+  and <strong><% $rating_count %> <% PL( 'rating', $rating_count ) %></strong>.
  </li>
 
 </ul>
@@ -63,7 +63,7 @@ my $rating_count = VegGuide::Vendor->RatingCount();
   and <% $leaf_location_count %> <% PL( 'region', $leaf_location_count ) %>
   do not.
   We have <strong><% $active_location_count %> <% PL( 'region', $active_location_count ) %>
-  with entries</strong>
+  with entries</strong>.
  </li>
 
  <li>
@@ -73,7 +73,7 @@ my $rating_count = VegGuide::Vendor->RatingCount();
 
  <li>
   Of the <% $active_location_count %>  <% PL( 'region', $active_location_count ) %>
-  with entries, each one has an average (mean) of
+  with entries, each region has an average (mean) of
   <strong><% $average_vendor_count %>
   <% PL( 'entry', $average_vendor_count ) %></strong> each. 
   The median number of entries per
