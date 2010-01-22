@@ -84,7 +84,7 @@ sub GrowthOverTime
     my $user_ds =
         Chart::OFC::Dataset::Line->new( values => \@user_count,
                                         label  => 'Users',
-                                        color => '#08B000',
+                                        color => '#6aa41d',
                                       );
 
     my $vendor_ds =
@@ -94,7 +94,7 @@ sub GrowthOverTime
                                       );
 
     my $chart = Chart::OFC::Grid->new( title       => 'Growth over time',
-                                       title_style => '{ font-size: 25px; font-weight: bold; color: #9B000A }',
+                                       title_style => '{ font-size: 25px; font-weight: bold; color: black }',
                                        datasets    => [ $user_ds, $vendor_ds ],
                                        x_axis      => $xaxis,
                                        y_axis      => $yaxis,
