@@ -121,7 +121,8 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1)
         my $self = shift;
         my $c    = shift;
 
-        $c->tab_by_id('entries')->set_is_selected(1);
+        $c->tab_by_id('entries')->set_is_selected(1)
+            if $c->request()->looks_like_browser() && $c->request()->method() eq 'GET';
 
         $c->detach('filter');
     }
@@ -138,7 +139,8 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1)
 
         return unless $c->stash()->{search};
 
-        $c->tab_by_id('entries')->set_is_selected(1);
+        $c->tab_by_id('entries')->set_is_selected(1)
+            if $c->request()->looks_like_browser() && $c->request()->method() eq 'GET';
 
         $self->_set_uris_for_search($c);
 
@@ -159,7 +161,8 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1)
         my $self = shift;
         my $c    = shift;
 
-        $c->tab_by_id('map')->set_is_selected(1);
+        $c->tab_by_id('map')->set_is_selected(1)
+            if $c->request()->looks_like_browser() && $c->request()->method() eq 'GET';
 
         $self->_set_uris_for_search($c);
 
@@ -178,7 +181,8 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1)
 
         return unless $c->stash()->{search};
 
-        $c->tab_by_id('map')->set_is_selected(1);
+        $c->tab_by_id('map')->set_is_selected(1)
+            if $c->request()->looks_like_browser() && $c->request()->method() eq 'GET';
 
         $self->_set_uris_for_search($c);
 
@@ -199,7 +203,8 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1)
         my $self = shift;
         my $c    = shift;
 
-        $c->tab_by_id('printable')->set_is_selected(1);
+        $c->tab_by_id('printable')->set_is_selected(1)
+            if $c->request()->looks_like_browser() && $c->request()->method() eq 'GET';
 
         $self->_set_uris_for_search($c);
 
@@ -216,7 +221,8 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1)
 
         return unless $c->stash()->{search};
 
-        $c->tab_by_id('printable')->set_is_selected(1);
+        $c->tab_by_id('printable')->set_is_selected(1)
+            if $c->request()->looks_like_browser() && $c->request()->method() eq 'GET';
 
         $self->_set_uris_for_search($c);
 

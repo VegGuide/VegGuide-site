@@ -419,12 +419,12 @@ form label.sub-label {
     font-weight: normal;
 }
 
-form.complex ul {
+form ul {
     margin-top: 0.5em;
     margin-bottom: 0;
 }
 
-form.complex ul li {
+form ul li {
     list-style: none;
 }
 
@@ -523,20 +523,19 @@ div.form-item p {
     margin: 0.1em 0 0 0;
 }
 
-div.form-item ul.radio-boolean {
-    margin: 0;g
+form ul.radio-boolean {
     width: 5em;
 }
 
-div.form-item ul.radio-boolean li {
+form ul.radio-boolean li {
     background: none;
 }
 
-div.form-item ul li input.radio {
+form ul li input.radio {
     display: inline;
 }
 
-div.form-item ul li label {
+form ul li label {
     display: inline;
     font-size: 95%;
 }
@@ -757,7 +756,7 @@ div.pagination form select, div.pagination form select option {
     font-weight: bold;
 }
 
-#summary {
+p.summary {
     background: url(../../images/red-bullet.png) no-repeat 0 6px;
     font-size: 110%;
     margin-top: 0.5em;
@@ -874,7 +873,7 @@ h2.comment-attribution, h3.comment-attribution {
     width: 63%;
 }
 
-#large-entry-google-map {
+#large-entry-google-map, #listing-google-map {
     /* These must be set to something, though height ends up
        getting reset in VegGuide.GoogleMap */
     height: 500px;
@@ -882,9 +881,37 @@ h2.comment-attribution, h3.comment-attribution {
 }
 
 .map-info {
-    height: 11.5em;
+    height: 13em;
     margin-top: -3%;
     width: 30em;
+}
+
+/* This is a hack to force content to stay inside the info window. Otherwise
+   Google fucks up and content sometimes overflows to the right */
+.map-info * {
+    width: 80%;
+}
+
+.map-info .summary {
+    font-size: 100%;
+}
+
+#map-icon-key ul li {
+    list-style: none;
+}
+
+#map-icon-key img {
+    margin-right: 0.3em;
+    vertical-align: top;
+}
+
+#vendor-list {
+    overflow: auto;
+    padding-right: 0.5em;
+}
+
+#vendor-list p {
+    margin-bottom: 0.5em;
 }
 
 #google-maps-directions-text {
@@ -892,6 +919,10 @@ h2.comment-attribution, h3.comment-attribution {
     margin: 0;
     padding: 0.5em;
     overflow: auto;
+}
+
+button.filter {
+    margin-top: 0.5em;
 }
 
 .rounded-corners-container, .rounded-corners-container * {

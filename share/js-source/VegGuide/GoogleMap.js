@@ -24,13 +24,18 @@ VegGuide.GoogleMap.prototype._createGoogleMap = function ( map_div ) {
     if ( height < 350 ) {
         height = 350;
     }
+
     map_div.style.height = height + "px";
+
+    var vendor_list = $("vendor-list");
+    if (vendor_list) {
+        vendor_list.style.height = height + "px";
+    }
 
     map.addControl( new GSmallMapControl() );
     map.addControl( new GMapTypeControl() );
 
     this.map = map;
-    this.markers = [];
 };
 
 VegGuide.GoogleMap.prototype.addMarkers = function (points) {
@@ -51,18 +56,20 @@ VegGuide.GoogleMap.prototype.addMarkers = function (points) {
         if ( point.info_div ) {
             var show_link = $( "show-" + point.info_div );
             if (show_link) {
-                this._instrumentShowLink( show_link, marker, div );
+                this._instrumentShowLink( show_link, marker );
             }
         }
 
         this.map.addOverlay(marker);
 
-        this.markers.push(marker);
+        if ( ! this.marker ) {
+            this.marker = marker;
+        }
     }
 };
 
 VegGuide.GoogleMap.prototype.showFirstInfoWindow = function () {
-    GEvent.trigger( this.markers[0], "click" );
+    GEvent.trigger( this.marker, "click" );
 };
 
 VegGuide.GoogleMap._Icons = {};

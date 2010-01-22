@@ -8,6 +8,8 @@
 </ul>
 % }
 
+<h2>Filter listings by ...</h2>
+
 % if ( $search->has_filters() ) {
 %   my $clear = $search->clone();
 %   $clear->delete_all();
@@ -36,7 +38,6 @@
 % }
 
 % if ( $location->active_vendor_count() > 10 ) {
-<h3>Filter listings by ...</h3>
 
 <ul>
   <li class="current"><a class="filter-toggle" id="category-toggle" href="#">Category</a></li>
@@ -71,7 +72,7 @@
     <& /lib/form/entry/category.mas &>
   </div>
 
-  <button type="submit" class="action-button-small">Filter</button>
+  <button type="submit" class="action-button-small filter">Filter</button>
 </&>
 
 <&| .filter_form, uri => $filter_form_uri, id => 'cuisines-form' &>
@@ -81,7 +82,7 @@
     <& /lib/form/entry/cuisine.mas &>
   </div>
 
-  <button type="submit" class="action-button-small">Filter</button>
+  <button type="submit" class="action-button-small filter">Filter</button>
 </&>
 
 <&| .filter_form, uri => $filter_form_uri, id => 'how-veg-form' &>
@@ -89,7 +90,7 @@
 
   <& /lib/form/entry/how-veg.mas &>
 
-  <button type="submit" class="action-button-small">Filter</button>
+  <button type="submit" class="action-button-small filter">Filter</button>
 </&>
 
 <&| .filter_form, uri => $filter_form_uri, id => 'allows-smoking-form' &>
@@ -97,7 +98,7 @@
 
   <& /lib/form/boolean.mas, name => 'allows_smoking' &>
 
-  <button type="submit" class="action-button-small">Filter</button>
+  <button type="submit" class="action-button-small filter">Filter</button>
 </&>
 
 <&| .filter_form, uri => $filter_form_uri, id => 'wheelchair-accessible-form' &>
@@ -105,7 +106,7 @@
 
   <& /lib/form/boolean.mas, name => 'is_wheelchair_accessible' &>
 
-  <button type="submit" class="action-button-small">Filter</button>
+  <button type="submit" class="action-button-small filter">Filter</button>
 </&>
 
 <&| .filter_form, uri => $filter_form_uri, id => 'rating-form' &>
@@ -118,7 +119,7 @@
     </select>
   </div>
 
-  <button type="submit" class="action-button-small">Filter</button>
+  <button type="submit" class="action-button-small filter">Filter</button>
 </&>
 
 % if ( $location && $location->time_zone() ) {
@@ -136,7 +137,7 @@
     </select>
   </div>
 
-  <button type="submit" class="action-button-small">Filter</button>
+  <button type="submit" class="action-button-small filter">Filter</button>
 </&>
 % }
 
@@ -152,7 +153,7 @@
     </select>
   </div>
 
-  <button type="submit" class="action-button-small">Filter</button>
+  <button type="submit" class="action-button-small filter">Filter</button>
 </&>
 % }
 
@@ -161,7 +162,7 @@
 
   <& /lib/form/entry/attribute.mas &>
 
-  <button type="submit" class="action-button-small">Filter</button>
+  <button type="submit" class="action-button-small filter">Filter</button>
 </&>
 
 <&| .filter_form, uri => $filter_form_uri, id => 'accepts-reservations-form' &>
@@ -169,7 +170,7 @@
 
   <& /lib/form/boolean.mas, name => 'accepts_reservations' &>
 
-  <button type="submit" class="action-button-small">Filter</button>
+  <button type="submit" class="action-button-small filter">Filter</button>
 </&>
 
 <&| .filter_form, uri => $filter_form_uri, id => 'price-range-form' &>
@@ -179,7 +180,7 @@
     <& /lib/form/entry/prices.mas &>
   </div>
 
-  <button type="submit" class="action-button-small">Filter</button>
+  <button type="submit" class="action-button-small filter">Filter</button>
 </&>
 
 % if ($show_city) {
@@ -198,7 +199,7 @@
 %   }
   </div>
 
-  <button type="submit" class="action-button-small">Filter</button>
+  <button type="submit" class="action-button-small filter">Filter</button>
 </&>
 % }
 
@@ -213,7 +214,7 @@
     </select>
   </div>
 
-  <button type="submit" class="action-button-small">Filter</button>
+  <button type="submit" class="action-button-small filter">Filter</button>
 </&>
 
 </&>
@@ -240,7 +241,7 @@ my $filter_form_uri = $search->$search_uri_method();
 </%init>
 
 <%def .filter_form>
-<form id="category-form"
+<form id="<% $id %>"
       class="filter-form"
       action="<% $uri | h %>"
       method="post"

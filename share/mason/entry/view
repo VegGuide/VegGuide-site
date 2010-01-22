@@ -61,7 +61,8 @@
 <h3 class="how-veg veg-level-<% $vendor->veg_level() %>"><% $vendor->veg_description | h %></h3>
 % }
 
-<p id="summary"><% $vendor->short_description() | h %>
+<p class="summary">
+  <% $vendor->short_description() | h %>
 % if ( $c->client()->show_localized_content() && defined $vendor->localized_short_description() ) {
   - <% $c->client()->encode( $vendor->localized_short_description() ) | h %>
 % }
