@@ -24,7 +24,7 @@
 
 % if ($is_clickable) {
       </div>
-      <div id="rating-help">&nbsp;</div>
+      <div id="rating-help">Click a star to rate this entry</div>
 % }
 
       <div id="write-your-review">
