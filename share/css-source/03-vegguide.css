@@ -42,8 +42,7 @@ ul {
 }
 
 ul li {
-    list-style-position: inside;
-    margin-left: 0.2em;
+    margin-left: 1.1em;
 }
 
 .no-top-margin {
@@ -263,6 +262,7 @@ a.action-button-medium:visited, a.action-button-small:visited {
     background: none;
     display: inline;
     list-style: none;
+    margin-left: 0.3em;
 }
 
 #tabs li a {
@@ -326,7 +326,7 @@ a.action-button-medium:visited, a.action-button-small:visited {
 }
 
 .column-content ul li {
-    margin-left: 0;
+    margin-left: 0.9em;
 }
 
 .column-content h3.date {
@@ -575,6 +575,7 @@ div.pagination ul {
 div.pagination ul li {
     background: none;
     display: inline;
+    margin-left: 0;
     padding: 0.1em;
 }
 
@@ -923,6 +924,10 @@ h2.comment-attribution, h3.comment-attribution {
 
 button.filter {
     margin-top: 0.5em;
+}
+
+#top-restaurants .rating {
+    font-weight: bold;
 }
 
 .rounded-corners-container, .rounded-corners-container * {

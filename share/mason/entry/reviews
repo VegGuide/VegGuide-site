@@ -1,7 +1,7 @@
 <div class="yui-gc">
   <div class="yui-u first">
 % if ($comments) {
-    <h2>Reviews</h2>
+    <h2 class="no-top-margin">Reviews</h2>
 
     <& /lib/comments.mas, comments => $comments, vendor => $vendor &>
 % } else {
@@ -13,7 +13,7 @@
   </div>
   <div class="yui-u">
 % if ($ratings) {
-    <h2>Ratings Without Reviews</h2>
+    <h2 class="no-top-margin">Ratings Without Reviews</h2>
 
     <ul id="ratings-list" class="no-top-margin">
 %   while ( my ( $rating, $user ) = $ratings->next() ) {

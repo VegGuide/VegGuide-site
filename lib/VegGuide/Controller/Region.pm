@@ -79,6 +79,15 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1)
                 id      => 'printable',
             }
         );
+
+        $c->add_tab(
+            {
+                uri   => region_uri( location => $location, path => 'stats' ),
+                label => 'Stats',
+                tooltip => 'Stats for ' . $location->name(),
+                id      => 'stats',
+            }
+        );
     }
 
     $c->add_tab(
@@ -589,6 +598,8 @@ sub stats : Chained('_set_location') : PathPart('stats') : Args(0)
     my $self = shift;
     my $c    = shift;
 
+    $c->tab_by_id('stats')->set_is_selected(1);
+
     $c->stash()->{template} = '/region/stats';
 }
 
@@ -596,6 +607,8 @@ sub feeds : Chained('_set_location') : PathPart('feeds') : Args(0)
 {
     my $self = shift;
     my $c    = shift;
+
+    $c->tab_by_id('feeds')->set_is_selected(1);
 
     $c->stash()->{template} = '/region/feeds';
 }

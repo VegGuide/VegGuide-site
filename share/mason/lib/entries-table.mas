@@ -1,3 +1,13 @@
+% if ( $search->has_filters() ) {
+<h2 class="no-top-margin">Showing entries ...</h2>
+
+<ul class="no-top-margin">
+%   for my $desc ( $search->long_descriptions() ) {
+  <li>... <% $desc | h %></li>
+%   }
+</ul>
+% }
+
 <table id="entries-table" class="standard-table <% $search->can('latitude') ? 'with-distance' : '' %>">
   <thead>
     <tr>

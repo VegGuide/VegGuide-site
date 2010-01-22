@@ -1,14 +1,4 @@
-% if ( $search->has_filters() ) {
-<h2>Showing entries ...</h2>
-
-<ul class="no-top-margin">
-%   for my $desc ( $search->long_descriptions() ) {
-  <li>... <% $desc | h %></li>
-%   }
-</ul>
-% }
-
-<h2>Filter listings by ...</h2>
+<h2 class="no-top-margin">Filter listings by ...</h2>
 
 % if ( $search->has_filters() ) {
 %   my $clear = $search->clone();
@@ -37,8 +27,10 @@
 </p>
 % }
 
-% if ( $location->active_vendor_count() > 10 ) {
+<a href="#">More filters ...</a>
 
+% if ( $location->active_vendor_count() > 10 ) {
+<div style="display: none">
 <ul>
   <li class="current"><a class="filter-toggle" id="category-toggle" href="#">Category</a></li>
   <li><a class="filter-toggle" id="cuisines-toggle" href="#">Cuisines</a></li>
@@ -218,6 +210,7 @@
 </&>
 
 </&>
+</div>
 % }
 
 <%args>

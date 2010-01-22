@@ -42,7 +42,9 @@
   </div>
 
   <div class="yui-u">
-    <& /lib/filter-div.mas, location => $location, search => $search &>
+    <& /lib/search-filter-column.mas, location => $location, search => $search &>
+    <& /region/top-restaurants.mas, %ARGS &>
+    <& /region/recent-entries.mas, %ARGS &>
   </div>
 </div>
 % }
