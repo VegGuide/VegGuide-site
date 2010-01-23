@@ -1,44 +1,40 @@
-    <&| /lib/filter/fill-in-form.mas, data => \%form_data, objects => [ $comment ] &>
-    <form action="<% $action_uri | h %>" method="post" id="comment-form">
-     <input type="hidden" name="user_id" value="<% $comment->user_id() || $c->vg_user()->user_id() %>" />
+<&| /lib/filter/fill-in-form.mas, data => \%form_data, objects => [ $comment ] &>
+<form action="<% $action_uri | h %>" method="post" id="comment-form">
+  <input type="hidden" name="user_id" value="<% $comment->user_id() || $c->vg_user()->user_id() %>" />
 
-     <& /lib/form/errors.mas &>
-
-     <fieldset>
-      <legend>Share Your Thoughts</legend>
+  <& /lib/form/errors.mas &>
 
 % if ($show_rating_input) {
-      <div class="form-item">
-       <label>Rating:</label>
-       <input id="rating-none" name="rating" type="radio" value="">
-       <label class="sub-label" for="rating-none">no rating</label>
+  <div class="form-item">
+    <label>Rating:</label>
+    <input id="rating-none" name="rating" type="radio" value="">
+    <label class="sub-label" for="rating-none">no rating</label>
 %   for my $val ( 1..5 ) {
-       <input id="rating-<% $val %>" name="rating" type="radio" value="<% $val %>">
-       <label class="sub-label" for="rating-<% $val %>"><% VegGuide::Vendor->RatingDescription($val) %></label>
+    <input id="rating-<% $val %>" name="rating" type="radio" value="<% $val %>">
+    <label class="sub-label" for="rating-<% $val %>"><% VegGuide::Vendor->RatingDescription($val) %></label>
 %   }
+  </div>
 % }
 
-      <div class="form-item">
-       <label for="comment"><% ucfirst $type | h %>:</label>
-       <textarea id="comment" class="text long high" rows="" cols="" name="comment"></textarea>
+  <div class="form-item">
+    <label for="comment"><% ucfirst $type | h %>:</label>
+    <textarea id="comment" class="text long high" rows="" cols="" name="comment"></textarea>
 
-       <p>
-        You can add <&| /lib/link/help.mas, name => 'wiki-formatting' &>simple formatting</&>
-        to your <% $type %>s.
-       </p>
+    <p>
+      You can add <&| /lib/link/help.mas, name => 'wiki-formatting' &>simple formatting</&>
+      to your <% $type %>s.
+    </p>
 
-      </div>
+  </div>
 
-     </fieldset>
+  <div class="form-item">
+    <input class="submit" type="submit" value="Submit" />
+  </div>
 
-     <div class="form-item">
-      <input class="submit" type="submit" value="Submit" />
-     </div>
+</form>
+</&>
 
-    </form>
-    </&>
-
-    <& /lib/form/copyright.mas &>
+<& /lib/form/copyright.mas &>
 
 <%args>
 $action_uri
