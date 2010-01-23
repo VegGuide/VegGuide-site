@@ -5,6 +5,17 @@
 </div>
 % }
 
+% if ( $c->vg_user()->can_edit_location($location) ) {
+<p class="content-buttons">
+  <a class="content-button-small" href="<% region_uri( location => $location, path => 'edit_form' ) | h %>"
+     >Edit</a>
+%   if ( $c->vg_user()->can_delete_location($location) ) {
+  <a class="action-button-small" href="<% region_uri( location => $location, path => 'deletion_confirmation_form' ) | h %>"
+     >Delete</a>
+%   }
+</p>
+% }
+
 % if (@children) {
 <& /lib/region-list.mas, location => $location, locations => \@children &>
 % }

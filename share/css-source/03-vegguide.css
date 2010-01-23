@@ -742,7 +742,7 @@ div.pagination form select, div.pagination form select option {
     font-weight: bold;
 }
 
-#region-creation-info, #lat-long, #canonical-address {
+#lat-long, #canonical-address {
     color: #888;
 }
 
@@ -951,6 +951,11 @@ h2.comment-attribution, h3.comment-attribution {
 
 #watch-list-link img {
     border: 0;
+}
+
+#region-creation-info {
+    color: #888;
+    margin-bottom: 0.2em;
 }
 
 #more-filters {

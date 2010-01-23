@@ -31,9 +31,9 @@ VegGuide.Org | <& /lib/l10n/location-name.mas, location => $m->caller_args(1)->{
 </form>
 % }
 % if ( my $parent = $location->parent() ) {
-<div id="link-to-parent"><&| /lib/link/location.mas,
-                             location => $parent
-                          &>&lt; <& /lib/l10n/location-name.mas, location => $parent &></&></div>\
+<div id="link-to-parent"><& /lib/link/location.mas,
+                            location => $parent
+                          &></div>
 % }
 </h1>
 <%args>

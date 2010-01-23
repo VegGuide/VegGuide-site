@@ -11,10 +11,19 @@ VegGuide.Org | <& /lib/l10n/vendor-name.mas, vendor => $m->caller_args(1)->{vend
 <%method page_title>
 <h1 id="page-title"
     class="<% $vendor->is_closed ? 'closed' : q{} %>"
-    ><& /lib/l10n/vendor-name.mas, vendor => $vendor &></h1>
+    ><& /lib/l10n/vendor-name.mas, vendor => $vendor &>
+    <div id="link-to-parent"><& /lib/link/location-and-parent.mas,
+                                location => $location,
+                              &></div>
+</h1>
 <%args>
 $vendor
 </%args>
+
+<%init>
+my $location = $vendor->location();
+</%init>
+
 </%method>
 
 <%attr>
