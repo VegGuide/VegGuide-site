@@ -268,7 +268,7 @@
        <& /lib/form/entry/troolean.mas, name => 'is_wheelchair_accessible' &>
       </div>
 
-      <div class="form-item">
+      <div class="form-item" id="attribute_id-wpms">
        <label for="attribute_id">Features:</label>
 
        <& /lib/form/entry/attribute.mas &>

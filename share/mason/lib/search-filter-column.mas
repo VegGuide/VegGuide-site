@@ -27,32 +27,32 @@
 </p>
 % }
 
-<a href="#">More filters ...</a>
+<a id="more-filters-toggle" href="#">More filters ...</a>
 
 % if ( $location->active_vendor_count() > 10 ) {
-<div style="display: none">
-<ul>
-  <li class="current"><a class="filter-toggle" id="category-toggle" href="#">Category</a></li>
-  <li><a class="filter-toggle" id="cuisines-toggle" href="#">Cuisines</a></li>
-  <li><a class="filter-toggle" id="how-veg-toggle" href="#">How Veg?</a></li>
+<div id="more-filters" style="display: none">
+<ul id="toggle-b>
+  <li><a class="filter-toggle action-button-small" id="category-toggle" href="#">Category</a></li>
+  <li><a class="filter-toggle action-button-small" id="cuisines-toggle" href="#">Cuisines</a></li>
+  <li><a class="filter-toggle action-button-small" id="how-veg-toggle" href="#">How Veg?</a></li>
 
-  <li><a class="filter-toggle" id="allows-smoking-toggle" href="#">Smoking?</a></li>
-  <li><a class="filter-toggle" id="wheelchair-accessible-toggle" href="#">Wheelchair Access?</a></li>
-  <li><a class="filter-toggle" id="rating-toggle" href="#">Rating</a></li>
+  <li><a class="filter-toggle action-button-small" id="allows-smoking-toggle" href="#">Smoking?</a></li>
+  <li><a class="filter-toggle action-button-small" id="wheelchair-accessible-toggle" href="#">Wheelchair Access?</a></li>
+  <li><a class="filter-toggle action-button-small" id="rating-toggle" href="#">Rating</a></li>
 % if ($location) {
-  <li><a class="filter-toggle" id="open-until-toggle" href="#">Open Until</a></li>
+  <li><a class="filter-toggle action-button-small" id="open-until-toggle" href="#">Open Until</a></li>
 %   if (@hoods) {
-  <li><a class="filter-toggle" id="neighborhood-toggle" href="#">Neighborhood</a></li>
+  <li><a class="filter-toggle action-button-small" id="neighborhood-toggle" href="#">Neighborhood</a></li>
 %   }
 % }
-  <li><a class="filter-toggle" id="features-toggle" href="#">Features</a></li>
+  <li><a class="filter-toggle action-button-small" id="features-toggle" href="#">Features</a></li>
 
-  <li><a class="filter-toggle" id="accepts-reservations-toggle" href="#">Reservations?</a></li>
-  <li><a class="filter-toggle" id="price-range-toggle" href="#">Price</a></li>
+  <li><a class="filter-toggle action-button-small" id="accepts-reservations-toggle" href="#">Reservations?</a></li>
+  <li><a class="filter-toggle action-button-small" id="price-range-toggle" href="#">Price</a></li>
 % if ($show_city) {
-  <li><a class="filter-toggle" id="city-toggle" href="#">City</a></li>
+  <li><a class="filter-toggle action-button-small" id="city-toggle" href="#">City</a></li>
 % }
-  <li><a class="filter-toggle" id="age-toggle" href="#">Age</a></li>
+  <li><a class="filter-toggle action-button-small" id="age-toggle" href="#">Age</a></li>
 </ul>
 
 <&| /lib/filter/fill-in-form.mas, objects => [ $search ] &>
@@ -60,9 +60,7 @@
 <&| .filter_form, uri => $filter_form_uri, id => 'category-form' &>
   <label class="title">Category</label>
 
-  <div id="category_id-wpms">
-    <& /lib/form/entry/category.mas &>
-  </div>
+  <& /lib/form/entry/category.mas, wpms => 0 &>
 
   <button type="submit" class="action-button-small filter">Filter</button>
 </&>
@@ -70,9 +68,7 @@
 <&| .filter_form, uri => $filter_form_uri, id => 'cuisines-form' &>
   <label class="title">Cuisines</label>
 
-  <div id="cuisine_id-wpms">
-    <& /lib/form/entry/cuisine.mas &>
-  </div>
+  <& /lib/form/entry/cuisine.mas, wpms => 0 &>
 
   <button type="submit" class="action-button-small filter">Filter</button>
 </&>
@@ -152,7 +148,7 @@
 <&| .filter_form, uri => $filter_form_uri, id => 'features-form' &>
   <label class="title">Features</label>
 
-  <& /lib/form/entry/attribute.mas &>
+  <& /lib/form/entry/attribute.mas, wpms => 0 &>
 
   <button type="submit" class="action-button-small filter">Filter</button>
 </&>
