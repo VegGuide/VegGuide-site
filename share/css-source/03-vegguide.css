@@ -451,7 +451,13 @@ form input.text,
 form input.file,
 form textarea,
 form select {
-    border: 1px solid #68AA11;
+    border-top: 2px solid #68aa11;
+    border-left: 2px solid #68aa11;
+    border-right: 1px solid #8acc33;
+    border-bottom: 1px solid #8acc33;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
     color: #0072B0;
     font-weight: bold;
     padding: 0.2em;
