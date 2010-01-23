@@ -28,7 +28,7 @@
 %   if ($vendor) {
 <& .rating, vendor => $vendor, user => $user &>
 %   }
-       <% VegGuide::Util::text_to_html( text => $comment->comment(), first_class => 'first' ) %>
+       <% VegGuide::Util::text_to_html( text => $comment->comment() ) %>
 
 %   if ( $c->vg_user()->$edit_meth($comment) ) {
        <div>
