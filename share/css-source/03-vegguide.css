@@ -78,29 +78,47 @@ ul li {
     text-decoration: none;
 }
 
+.green-action-button, .green-action-button-medium, .green-action-button-small {
+    background-color: #8cc63f;
+    border-top: 1px solid #a9ef4c;
+    border-left: 1px solid #a9ef4c;
+    border-bottom: 2px solid #5f862b;
+    border-right: 2px solid #5f862b;
+    color: white;
+    font-weight: bold;
+    font-family: sans-serif;
+    text-decoration: none;
+}
+
 .action-button:hover, .action-button-medium:hover, .action-button-small:hover {
     background-color: #de5f43;
     text-decoration: none;
 }
 
+.green-action-button:hover, .green-action-button-medium:hover, .green-action-button-small:hover {
+    background-color: #9cdd46;
+    text-decoration: none;
+}
+
 a.content-button:visited, a.content-button-medium:visited, a.content-button-small:visited,
-a.action-button:visited, a.action-button-medium:visited, a.action-button-small:visited {
+a.action-button:visited, a.action-button-medium:visited, a.action-button-small:visited,
+a.green-action-button:visited, a.green-action-button-medium:visited, a.green-action-button-small:visited {
     color: white;
 }
 
-.content-button, .action-button {
+.content-button, .action-button, .green-action-button {
     font-size: 120%;
     *font-size: 110%;
     padding: 0.3em;
     *padding: 0.05em;
 }
 
-.content-button-medium, .action-button-medium {
+.content-button-medium, .action-button-medium, .green-action-button-medium {
     font-size: 100%;
     padding: 0.3em;
 }
 
-.content-button-small, .action-button-small {
+.content-button-small, .action-button-small, .green-action-button-small {
     font-size: 90%;
     padding: 0.1em 0.3em;
 }
@@ -335,7 +353,7 @@ a.action-button-medium:visited, a.action-button-small:visited {
 }
 
 #ft {
-    border-top: 1px solid #8CC63F;
+    border-top: 1px solid #8cc63f;
 }
 
 #footer-nav {
@@ -392,13 +410,13 @@ form {
 }
 
 form.complex fieldset {
-    border-top: 2px solid #8CC63F;
+    border-top: 2px solid #8cc63f;
     margin-top: 1em;
     margin-bottom: 0;
 }
 
 form legend {
-    background-color: #8CC63F;
+    background-color: #8cc63f;
     color: white;
     font-size: 120%;
     font-variant: small-caps;
@@ -426,6 +444,7 @@ form ul {
 
 form ul li {
     list-style: none;
+    margin-left: 0;
 }
 
 form input.text,
@@ -452,7 +471,7 @@ form p.error {
 }
 
 div.form-item p.error {
-    border: 1px solid #8CC63F;
+    border: 1px solid #8cc63f;
     margin-top: 0.3em;
     padding: 0.1em;
 }
@@ -611,7 +630,7 @@ div.pagination form select, div.pagination form select option {
 }
 
 .standard-table th {
-    background-color: #8CC63F;
+    background-color: #8cc63f;
     border-right: 1px dotted white;
     color: white;
     font-size: 110%;
@@ -920,6 +939,24 @@ h2.comment-attribution, h3.comment-attribution {
     margin: 0;
     padding: 0.5em;
     overflow: auto;
+}
+
+#more-filters {
+    background-color: #f0f0f0;
+    opacity: 0.96;
+    padding: 0.2em 0.5em;
+    position: absolute;
+    width: 15em;
+}
+
+#toggle-buttons {
+    margin-top: 0;
+}
+
+#toggle-buttons li {
+    list-style: none;
+    margin-top: 0.5em;
+    margin-left: 0;
 }
 
 button.filter {

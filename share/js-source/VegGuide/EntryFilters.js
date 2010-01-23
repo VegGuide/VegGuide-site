@@ -13,33 +13,38 @@ if ( typeof VegGuide == "undefined" ) {
 VegGuide.EntryFilters = {};
 
 VegGuide.EntryFilters.instrumentPage = function () {
-    if ( ! $("category-toggle") ) {
+    var toggle = $("more-filters-toggle");
+
+    if (! toggle) {
         return;
     }
 
+    VegGuide.EntryFilters._instrumentMoreFiltersToggle();
     VegGuide.EntryFilters._instrumentFilterToggles();
 };
 
-VegGuide.EntryFilters._hideAllFilterForms = function () {
-    var toggles = document.getElementsByClassName("filter-toggle");
-    for ( var i = 0; i < toggles.length; i++ ) {
-        toggles[i].parentNode.className = "";
-    }
+VegGuide.EntryFilters._instrumentMoreFiltersToggle = function () {
+    var toggle = $("more-filters-toggle");
 
-    var forms = VegGuide.EntryFilters._getForms();
+    var more_div = $("more-filters");
 
-    for ( var i = 0; i < forms.length; i++ ) {
-        DOM.Element.hide( forms[i] );
-    }
+    var orig_text = toggle.innerHTML;
+
+    DOM.Events.addListener(
+        toggle,
+        "click",
+        function () {
+            if ( more_div.style.display ) {
+                DOM.Element.show(more_div);
+                toggle.innerHTML = "Hide filters";
+            }
+            else {
+                DOM.Element.hide(more_div);
+                toggle.innerHTML = orig_text;
+            }
+        }
+    );
 };
-
-VegGuide.EntryFilters._getForms = function () {
-    if ( ! VegGuide.EntryFilters._filterForms ) {
-        VegGuide.EntryFilters._filterForms = document.getElementsByClassName("filter-form");
-    }
-
-    return VegGuide.EntryFilters._filterForms;
-}
 
 VegGuide.EntryFilters._instrumentFilterToggles = function () {
     var toggles = document.getElementsByClassName("filter-toggle");
@@ -55,6 +60,10 @@ VegGuide.EntryFilters._instrumentFilterToggles = function () {
             VegGuide.EntryFilters._makeShowFunction(form_id)
        );
     }
+
+    var forms = VegGuide.EntryFilters._getForms();
+
+    DOM.Element.show( forms[0] );
 };
 
 /* For some reason this needs to be done in a separate function in
@@ -84,6 +93,22 @@ VegGuide.EntryFilters._showForm = function( e, form_id ) {
         e.stopPropagation();
     }
 };
+
+VegGuide.EntryFilters._hideAllFilterForms = function () {
+    var forms = VegGuide.EntryFilters._getForms();
+
+    for ( var i = 0; i < forms.length; i++ ) {
+        DOM.Element.hide( forms[i] );
+    }
+};
+
+VegGuide.EntryFilters._getForms = function () {
+    if ( ! VegGuide.EntryFilters._filterForms ) {
+        VegGuide.EntryFilters._filterForms = document.getElementsByClassName("filter-form");
+    }
+
+    return VegGuide.EntryFilters._filterForms;
+}
 
 VegGuide.EntryFilters._makeDeleteFilterButton = function (uri) {
     var button = document.createElement("button");

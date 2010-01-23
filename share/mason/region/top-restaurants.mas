@@ -11,14 +11,17 @@
   </li>
 %   }
 </ol>
+% }
 
 <p>
 Only includes restaurants with at least six ratings.
-% } else {
-<br />
-There are no restaurants with at least six ratings. Why not rate some?
-% }
 </p>
+
+% unless (@vendors) {
+<p>
+There are no restaurants with at least six ratings. Why not rate some?
+</p>
+% }
 
 <%args>
 $location

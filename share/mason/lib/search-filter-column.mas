@@ -31,28 +31,28 @@
 
 % if ( $location->active_vendor_count() > 10 ) {
 <div id="more-filters" style="display: none">
-<ul id="toggle-b>
-  <li><a class="filter-toggle action-button-small" id="category-toggle" href="#">Category</a></li>
-  <li><a class="filter-toggle action-button-small" id="cuisines-toggle" href="#">Cuisines</a></li>
-  <li><a class="filter-toggle action-button-small" id="how-veg-toggle" href="#">How Veg?</a></li>
+<ul id="toggle-buttons">
+  <li><a class="filter-toggle green-action-button-small" id="category-toggle" href="#">Category</a></li>
+  <li><a class="filter-toggle green-action-button-small" id="cuisines-toggle" href="#">Cuisines</a></li>
+  <li><a class="filter-toggle green-action-button-small" id="how-veg-toggle" href="#">How Veg?</a></li>
 
-  <li><a class="filter-toggle action-button-small" id="allows-smoking-toggle" href="#">Smoking?</a></li>
-  <li><a class="filter-toggle action-button-small" id="wheelchair-accessible-toggle" href="#">Wheelchair Access?</a></li>
-  <li><a class="filter-toggle action-button-small" id="rating-toggle" href="#">Rating</a></li>
+  <li><a class="filter-toggle green-action-button-small" id="allows-smoking-toggle" href="#">Smoking?</a></li>
+  <li><a class="filter-toggle green-action-button-small" id="wheelchair-accessible-toggle" href="#">Wheelchair Access?</a></li>
+  <li><a class="filter-toggle green-action-button-small" id="rating-toggle" href="#">Rating</a></li>
 % if ($location) {
-  <li><a class="filter-toggle action-button-small" id="open-until-toggle" href="#">Open Until</a></li>
+  <li><a class="filter-toggle green-action-button-small" id="open-until-toggle" href="#">Open Until</a></li>
 %   if (@hoods) {
-  <li><a class="filter-toggle action-button-small" id="neighborhood-toggle" href="#">Neighborhood</a></li>
+  <li><a class="filter-toggle green-action-button-small" id="neighborhood-toggle" href="#">Neighborhood</a></li>
 %   }
 % }
-  <li><a class="filter-toggle action-button-small" id="features-toggle" href="#">Features</a></li>
+  <li><a class="filter-toggle green-action-button-small" id="features-toggle" href="#">Features</a></li>
 
-  <li><a class="filter-toggle action-button-small" id="accepts-reservations-toggle" href="#">Reservations?</a></li>
-  <li><a class="filter-toggle action-button-small" id="price-range-toggle" href="#">Price</a></li>
+  <li><a class="filter-toggle green-action-button-small" id="accepts-reservations-toggle" href="#">Reservations?</a></li>
+  <li><a class="filter-toggle green-action-button-small" id="price-range-toggle" href="#">Price</a></li>
 % if ($show_city) {
-  <li><a class="filter-toggle action-button-small" id="city-toggle" href="#">City</a></li>
+  <li><a class="filter-toggle green-action-button-small" id="city-toggle" href="#">City</a></li>
 % }
-  <li><a class="filter-toggle action-button-small" id="age-toggle" href="#">Age</a></li>
+  <li><a class="filter-toggle green-action-button-small" id="age-toggle" href="#">Age</a></li>
 </ul>
 
 <&| /lib/filter/fill-in-form.mas, objects => [ $search ] &>
