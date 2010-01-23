@@ -1,101 +1,96 @@
-   <&| /lib/filter/fill-in-form.mas, objects => [ $location ] &>
-   <form id="region-form" action="<% $path | h %>" method="post">
+<&| /lib/filter/fill-in-form.mas, objects => [ $location ] &>
+<form id="region-form" action="<% $path | h %>" method="post">
 % if ( $location->location_id() ) {
-    <input type="hidden" name="x-tunneled-method" value="PUT" />
+  <input type="hidden" name="x-tunneled-method" value="PUT" />
 % }
 
 % if ( $location->parent_location_id() ) {
-    <input type="hidden" name="parent_location_id" value="<% $location->parent_location_id() || '' %>" />
+  <input type="hidden" name="parent_location_id" value="<% $location->parent_location_id() || '' %>" />
 % }
 
-    <& /lib/form/errors.mas &>
-    <fieldset>
-     <legend>Region info</legend>
-
-     <div class="form-item">
-      <label for="name">Name:</label>
-      <input id="name" class="text" type="text" name="name" value="" />
-     </div>
+  <& /lib/form/errors.mas &>
+  <div class="form-item">
+    <label for="name">Name:</label>
+    <input id="name" class="text" type="text" name="name" value="" />
+  </div>
 
 % if ( $c->vg_user()->is_admin() ) {
-     <div class="form-item">
-      <label for="localized_name">Localized Name:</label>
-      <input id="localized_name" class="text" type="text" name="localized_name" value="" />
-     </div>
+  <div class="form-item">
+    <label for="localized_name">Localized Name:</label>
+    <input id="localized_name" class="text" type="text" name="localized_name" value="" />
+  </div>
 % }
 
-     <div class="form-item">
-      <label for="is_country">Is this region a country?</label>
-      <& /lib/form/boolean.mas, name => 'is_country' &>
-     </div>
+  <div class="form-item">
+    <label for="is_country">Is this region a country?</label>
+    <& /lib/form/boolean.mas, name => 'is_country' &>
+  </div>
 
 % if ( $c->vg_user()->is_admin() ) {
-     <div class="form-item">
-      <label for="time_zone_name">Time zone name:</label>
-      <input id="time_zone_name" class="text" type="text" name="time_zone_name" value="" />
+  <div class="form-item">
+    <label for="time_zone_name">Time zone name:</label>
+    <input id="time_zone_name" class="text" type="text" name="time_zone_name" value="" />
 %   if ($ancestor_for_tz) {
-      <p>
-       Ancestor (<% $ancestor_for_tz->name() | h %>) is <% $ancestor_for_tz->time_zone_name() %>.
-      </p>
+    <p>
+      Ancestor (<% $ancestor_for_tz->name() | h %>) is <% $ancestor_for_tz->time_zone_name() %>.
+    </p>
 %   }
-     </div>
+  </div>
 
-     <div class="form-item">
-      <label for="locale_id">Locale:</label>
-      <select name="locale_id">
-       <option value="">-- none --</option>
+  <div class="form-item">
+    <label for="locale_id">Locale:</label>
+    <select name="locale_id">
+      <option value="">-- none --</option>
 %   while ( my $locale = $locales->next() ) {
-       <option value="<% $locale->locale_id() %>"><% $locale->locale_code() %> (<% $locale->name() | h %>)</option>
+      <option value="<% $locale->locale_id() %>"><% $locale->locale_code() %> (<% $locale->name() | h %>)</option>
 %   }
-      </select>
+    </select>
 %   if ($ancestor_for_locale) {
-      <p>
-       Ancestor (<% $ancestor_for_locale->name() | h %>) is <% $ancestor_for_locale->locale()->locale_code() %>.
-      </p>
+    <p>
+      Ancestor (<% $ancestor_for_locale->name() | h %>) is <% $ancestor_for_locale->locale()->locale_code() %>.
+    </p>
 %   }
-     </div>
+  </div>
 
-     <div class="form-item" id="maintainers">
-      <label>Current maintainers</label>
+  <div class="form-item" id="maintainers">
+    <label>Current maintainers</label>
 %   if ( $location->owner_count() ) {
-      <ul>
+    <ul>
 %     while ( my $user = $owners->next() ) {
-       <li>
+      <li>
         <input type="checkbox" name="remove-maintainer"
                id="remove-maintainer-<% $user->user_id() %>"
                value="<% $user->user_id() %>" />
         <label for="remove-maintainer-<% $user->user_id() %>"><% $user->real_name() | h %></label>
-       </li>
+      </li>
 %     }
-      </ul>
-      <p>
-       Check a box to remove user's maintainer privileges.
-      </p>
+    </ul>
+    <p>
+      Check a box to remove user's maintainer privileges.
+    </p>
 %   }
-     </div>
+  </div>
 
-     <div>
-      <& /lib/form/user-search.mas, label => 'New maintainer' &>
-     </div>
+  <div>
+    <& /lib/form/user-search.mas, label => 'New maintainer' &>
+  </div>
 
-     <div class="form-item">
-      <label for="can_have_vendors">Can have entries?</label>
-      <& /lib/form/boolean.mas, name => 'can_have_vendors' &>
-      <p>
-       Normally, a region can have entries if it's a leaf node in the
-       region tree. Setting this to true overrides this check.
-      </p>
-     </div>
+  <div class="form-item">
+    <label for="can_have_vendors">Can have entries?</label>
+    <& /lib/form/boolean.mas, name => 'can_have_vendors' &>
+    <p>
+      Normally, a region can have entries if it's a leaf node in the
+      region tree. Setting this to true overrides this check.
+    </p>
+  </div>
 % }
 
-    </fieldset>
+  <div class="form-item">
+    <input class="submit" type="submit" value="Submit" />
+  </div>
 
-    <div class="form-item">
-     <input class="submit" type="submit" value="Submit" />
-    </div>
-
-   </form>
-   </&>
+</form>
+</&>
 
 <%args>
 $location
