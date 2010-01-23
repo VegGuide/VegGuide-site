@@ -19,6 +19,11 @@
       </div>
 
       <div class="form-item">
+        <label for="openid_uri">OpenID:</label>
+        <input id="openid_uri" class="text" type="text" name="openid_uri" />
+      </div>
+
+      <div class="form-item">
         <label for="remember">Remember me:</label>
         <input id="remember" class="checkbox" type="checkbox" name="remember" />
       </div>
