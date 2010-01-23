@@ -941,6 +941,18 @@ h2.comment-attribution, h3.comment-attribution {
     overflow: auto;
 }
 
+#link-to-parent {
+    font-size: 50%;
+}
+
+#watch-list {
+    display: inline;
+}
+
+#watch-list-link img {
+    border: 0;
+}
+
 #more-filters {
     background-color: #f0f0f0;
     opacity: 0.96;
