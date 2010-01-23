@@ -742,7 +742,7 @@ div.pagination form select, div.pagination form select option {
     font-weight: bold;
 }
 
-#lat-long, #canonical-address {
+#region-creation-info, #lat-long, #canonical-address {
     color: #888;
 }
 

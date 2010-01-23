@@ -1,3 +1,10 @@
+% if ( $c->vg_user()->is_admin() ) {
+<div id="region-creation-info">
+  Created on <& /lib/format/datetime.mas, datetime => $location->creation_datetime_object() &>
+  by <& /lib/link/user.mas, user => $location->creator() &>
+</div>
+% }
+
 % if (@children) {
 <& /lib/region-list.mas, location => $location, locations => \@children &>
 % }
