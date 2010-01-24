@@ -6,7 +6,7 @@
 
     <ul>
      <li><strong>One address per entry</strong>.  If a vendor has multiple
-     locations, use the <&| /lib/link/help.mas, name => 'cloning' &>cloning feature</&>
+     locations, use the <&| /lib/link/help.mas, name => 'cloning' &>cloning feature</&></li>
      <li><strong>Please use correct grammar and capitalization.  Never use ALL CAPS!</strong></li>
      <li><strong>If you don't know something, leave that field blank, don't put "n/a" or any other text.</strong></li>
      <li><strong>Only enter what is being asked. Please don't put something like "many locations" in the city field or add "(maybe)" in the address field.</strong></li>
