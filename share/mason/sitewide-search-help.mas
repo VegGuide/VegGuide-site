@@ -1,5 +1,6 @@
   <div id="sitewide-search-help" style="display: none">
-   <a href="#" id="sitewide-search-help-close" title="Hide this help box"><img src="/images/close-button.png" height="15" width="15" /></a>
+   <a href="#" id="sitewide-search-help-close"
+      title="Hide this help box"><img src="/images/close-button.png" height="15" width="15" alt="close button" /></a>
 
    Simple search terms such as a city, zip, or restaurant name:
 

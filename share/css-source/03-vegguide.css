@@ -958,14 +958,6 @@ h2.comment-attribution, h3.comment-attribution {
     font-size: 50%;
 }
 
-#watch-list {
-    display: inline;
-}
-
-#watch-list-link img {
-    border: 0;
-}
-
 #region-creation-info {
     color: #888;
     margin-bottom: 0.2em;

@@ -16,12 +16,13 @@
             alt="Image for <% $user->real_name() %>" />
        </&>
 %   }
-       <div class="user-name">
+       <span class="user-name">
          <& /lib/link/user.mas, user => $user &>
-       </div>
-       <div class="comment-date">
+       </span>
+       <span class="comment-date">
+         <br />
          <& /lib/format/date.mas, date => $comment->last_modified_datetime() &>
-       </div>
+       </span>
      </h3>
 
      <div class="comment-body">

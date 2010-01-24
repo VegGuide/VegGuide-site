@@ -9,31 +9,12 @@ VegGuide.Org | <& /lib/l10n/location-name.mas, location => $m->caller_args(1)->{
 </%method>
 
 <%method page_title>
-<h1 id="page-title"><& /lib/l10n/location-name.mas, location => $location &>\
-% if ( $c->vg_user()->is_logged_in() ) {
-<form id="watch-list"
-      action="<% $watch_list_form_uri | h %>" method="post">
-  <input type="hidden" name="location_id" value="<% $location->location_id() %>" />
-%   if ($is_subscribed) {
-  <input type="hidden" name="x-tunneled-method" value="DELETE" />
-  <input type="hidden" name="return_to" value="<% $c->request()->uri() %>" />
-
-  <input type="image" id="watch-list-link"
-         name="submit"
-         title="Remove <% $location->name() %> from your watch list"
-         src="/images/close-button.png" />
-%   } else {
-  <input type="image" id="watch-list-link"
-         name="submit"
-         title="Add <% $location->name() %> to your watch list"
-         src="/images/eye.png" />
-%   }
-</form>
-% }
+<h1 id="page-title"><& /lib/l10n/location-name.mas, location => $location &>
 % if ( my $parent = $location->parent() ) {
-<div id="link-to-parent"><& /lib/link/location.mas,
-                            location => $parent
-                          &></div>
+<br />
+<span id="link-to-parent"><& /lib/link/location.mas,
+                             location => $parent
+                           &></span>
 % }
 </h1>
 <%args>
