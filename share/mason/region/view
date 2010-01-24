@@ -32,6 +32,8 @@
 % }
 
 % if ( $active_vendor_count ) {
+<& /lib/current-filters.mas, search => $search &>
+
 <div class="yui-ge">
   <div class="yui-u first">
     <& /lib/entries-table.mas, search => $search, pager => $pager &>

@@ -1,3 +1,5 @@
+<& /lib/current-filters.mas, search => $search &>
+
 <div class="yui-ge">
   <div class="yui-u first">
     <& /lib/entries-table.mas, show_radius_change => 1, search => $search, pager => $pager &>

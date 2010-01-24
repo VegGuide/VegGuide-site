@@ -1,16 +1,14 @@
-<& /lib/current-filters.mas, search => $search &>
-
 % if ($show_radius_change) {
 <& /lib/radius-change.mas, search => $search &>
 % }
 <table id="entries-table" class="standard-table <% $search->can('latitude') ? 'with-distance' : '' %>">
   <thead>
     <tr>
-      <td colspan="<% $show_add_entry ? $colspan - 1 : $colspan %>">
+      <td colspan="2">
         <% $pagination %>
       </td>
 % if ($show_add_entry) {
-      <td>
+      <td colspan="<% $colspan - 2 %>">
         <a class="content-button" href="<% region_uri( location => $search->location(), path => 'entry_form' ) %>" title="add a new entry to this region">Add Entry</a>
       </td>
 % }
