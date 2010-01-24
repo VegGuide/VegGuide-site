@@ -3,6 +3,7 @@
 % if ($title) {
            title="<% $title | h %>"
 % }
+           alt="rating star"
            height="<% $small ? 12 : 18 %>" width="<% $small ? 60 : 90 %>" />
 
 <%args>
