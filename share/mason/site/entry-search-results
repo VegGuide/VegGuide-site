@@ -1,13 +1,21 @@
-<& /lib/radius-change.mas, search => $search &>
+<div class="yui-ge">
+  <div class="yui-u first">
+    <& /lib/entries-table.mas, show_radius_change => 1, search => $search, pager => $pager &>
+  </div>
 
-<& /lib/filter-div.mas, search => $search &>
-
-<& /lib/entries-table.mas, search => $search, pager => $pager &>
+  <div class="yui-u">
+    <& /lib/search-filter-column.mas, search => $search &>
+  </div>
+</div>
 
 <%args>
 $search
 $pager
 </%args>
+
+<%attr>
+layout => '3.5'
+</%attr>
 
 <%method page_title>
 <% $m->caller_args(-1)->{search}->title() | h %>

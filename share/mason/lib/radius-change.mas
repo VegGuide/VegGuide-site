@@ -1,19 +1,19 @@
-<div id="radius">
- <label>Search distance in <% PL( $search->unit() ) %>:</label>
+<div>
+  <label>Search distance in <% PL( $search->unit() ) %>:</label>
 % for my $val (@Distances) {
 %   if ( $val == $search->distance() ) {
- <strong><% $val %></strong>
+  <strong><% $val %></strong>
 %   } else {
 %     my $clone = $search->clone(); $clone->set_distance($val); $clone->set_cursor_params();
- <a href="<% $clone->$uri_method() | h %>"><% $val %></a>
+  <a href="<% $clone->$uri_method() | h %>"><% $val %></a>
 %   }
 %   unless ( $val == $Distances[-1] ) {
- |
+  |
 %   }
 % }
 
 % my $clone = $search->clone(); $clone->set_unit($other_unit);
-| <a href="<% $clone->$uri_method() | h %>">switch to <% PL( $other_unit ) %></a>
+  | <a href="<% $clone->$uri_method() | h %>">switch to <% PL( $other_unit ) %></a>
 </div>
 
 <%once>

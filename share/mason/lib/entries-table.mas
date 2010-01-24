@@ -1,5 +1,8 @@
 <& /lib/current-filters.mas, search => $search &>
 
+% if ($show_radius_change) {
+<& /lib/radius-change.mas, search => $search &>
+% }
 <table id="entries-table" class="standard-table <% $search->can('latitude') ? 'with-distance' : '' %>">
   <thead>
     <tr>
@@ -43,6 +46,7 @@
 <%args>
 $search
 $pager
+$show_radius_change => 0
 </%args>
 
 <%init>
