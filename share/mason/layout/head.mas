@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head profile="http://a9.com/-/spec/opensearch/1.1/">
     <meta name="verify-v1" content="S8S8dgpeS5UYctqac1Xv4fsG+sYdS77Qtni99/Y9wds=" />
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" /> 
     <title><% $title %></title>
 
     <& .rss_link, %ARGS &>
