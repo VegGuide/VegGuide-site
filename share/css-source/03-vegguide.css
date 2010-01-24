@@ -224,7 +224,13 @@ a.action-button-medium:visited, a.action-button-small:visited {
 }
 
 #sitewide-search input.text {
-    border: 1px solid #00527B;
+    border-top: 2px solid #333;
+    border-left: 2px solid #333;
+    border-right: 1px solid #999;
+    border-bottom: 1px solid #999;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
     color: #0072B0;
     font-size: 130%;
     font-weight: bold;
