@@ -197,12 +197,6 @@ a.action-button-medium:visited, a.action-button-small:visited {
     text-align: center;
 }
 
-.front-page #sitewide-search {
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-    float: none;
-}
-
 #sitewide-search {
     margin: 0;
 }
@@ -213,6 +207,13 @@ a.action-button-medium:visited, a.action-button-small:visited {
 
 #logo {
     float: left;
+}
+
+.front-page #sitewide-search {
+    float: none;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    text-align: center;
 }
 
 #sitewide-search {
@@ -229,10 +230,6 @@ a.action-button-medium:visited, a.action-button-small:visited {
     font-weight: bold;
     padding: 0.2em;
     width: 24em;
-}
-
-.front-page #sitewide-search {
-    text-align: center;
 }
 
 #sitewide-search .action-button {
