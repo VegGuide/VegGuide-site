@@ -3,9 +3,10 @@
 <h2 class="comment-attribution">
   <& /lib/link/vendor.mas, vendor => $vendor &>
   in <& /lib/link/location-and-parent.mas, location => $vendor->location() &>
-  <div class="comment-date">
+  <br />
+  <span class="comment-date">
     <& /lib/format/date.mas, date => $comment->last_modified_datetime() &>
-  </div>
+  </span>
 </h2>
 
 <div class="comment-body">
