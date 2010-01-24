@@ -440,12 +440,12 @@ form label.sub-label {
     font-weight: normal;
 }
 
-form ul {
+form ul.radio-list {
     margin-top: 0.5em;
     margin-bottom: 0;
 }
 
-form ul li {
+form ul.radio-list li {
     list-style: none;
     margin-left: 0;
 }

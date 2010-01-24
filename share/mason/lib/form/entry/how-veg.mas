@@ -1,4 +1,4 @@
-<ul>
+<ul class="radio-list">
   <li>
     <input class="radio" type="radio" name="veg_level" value="5" id="veg-level-5" />
     <label for="veg-level-5">100% <&| /lib/link/help.mas &>vegan</&></label>
@@ -6,7 +6,7 @@
 
   <li>  
     <input class="radio" type="radio" name="veg_level" value="4" id="veg-level-4" />
-         <label for="veg-level-4">100% <&| /lib/link/help.mas &>vegetarian</&></label>
+    <label for="veg-level-4">100% <&| /lib/link/help.mas &>vegetarian</&></label>
   </li>
 
   <li>

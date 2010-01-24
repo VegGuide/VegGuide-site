@@ -224,7 +224,7 @@
       <div class="form-item" id="is_cash_only">
        <label id="is_cash_only-label">Cash only?</label>
 
-       <ul>
+       <ul class="radio-list">
         <li>
          <input class="radio" type="radio" name="is_cash_only" value="1" id="is_cash_only-yes" />
          <label for="is_cash_only-yes" id="is_cash_only-longest" >Yes</label>

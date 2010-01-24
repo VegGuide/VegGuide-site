@@ -1,4 +1,4 @@
- <ul>
+ <ul class="radio-list">
   <li>
    <input class="radio" type="radio" name="<% $name | h %>" value="<% $reverse_values ? 0 : 1 %>" id="<% $name | h %>-yes" />
    <label for="<% $name | h %>-yes">Yes</label>
