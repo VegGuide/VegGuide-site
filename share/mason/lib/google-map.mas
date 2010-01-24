@@ -126,10 +126,9 @@ if ( $search->can('address') )
     -
     <% $vendor->city() | h %>
 % }
-
-    <& .info_div, vendor => $vendor &>
-
   </p>
+
+  <& .info_div, vendor => $vendor &>
 
 <%args>
 $vendor
