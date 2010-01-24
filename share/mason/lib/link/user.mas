@@ -2,8 +2,9 @@
 % if ( $text ) {
 <% $text %>\
 % } else {
-<% $user->real_name() | h %></a>\
+<% $user->real_name() | h %>\
 % }
+</a>
 <%args>
 $user
 $path => undef
