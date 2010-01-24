@@ -669,6 +669,10 @@ div.pagination form select, div.pagination form select option {
     border-bottom: 2px solid #8cc63f;
 }
 
+.standard-table thead td {
+    vertical-align: middle;
+}
+
 .standard-table tfoot {
     border-top: 2px solid #8cc63f;
     border-bottom: 1px dotted #8cc63f;
@@ -907,7 +911,7 @@ h2.comment-attribution, h3.comment-attribution {
 }
 
 .map-info {
-    height: 13em;
+    height: 14.5em;
     margin-top: -3%;
     width: 30em;
 }
@@ -936,7 +940,7 @@ h2.comment-attribution, h3.comment-attribution {
     padding-right: 0.5em;
 }
 
-#vendor-list p {
+#vendor-list p.vendor {
     margin-bottom: 0.5em;
 }
 

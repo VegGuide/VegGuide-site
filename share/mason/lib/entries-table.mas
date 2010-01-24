@@ -1,21 +1,13 @@
-% if ( $search->has_filters() ) {
-<h2 class="no-top-margin">Showing entries ...</h2>
-
-<ul class="no-top-margin">
-%   for my $desc ( $search->long_descriptions() ) {
-  <li>... <% $desc | h %></li>
-%   }
-</ul>
-% }
+<& /lib/current-filters.mas, search => $search &>
 
 <table id="entries-table" class="standard-table <% $search->can('latitude') ? 'with-distance' : '' %>">
   <thead>
     <tr>
-      <td colspan="<% $show_add_entry ? $colspan - 2 : $colspan %>">
+      <td colspan="<% $show_add_entry ? $colspan - 1 : $colspan %>">
         <% $pagination %>
       </td>
 % if ($show_add_entry) {
-      <td colspan="2">
+      <td>
         <a class="content-button" href="<% region_uri( location => $search->location(), path => 'entry_form' ) %>" title="add a new entry to this region">Add Entry</a>
       </td>
 % }

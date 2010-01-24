@@ -29,7 +29,7 @@
 
 <a id="more-filters-toggle" href="#">More filters ...</a>
 
-% if ( $location->active_vendor_count() > 10 ) {
+% if ( ! $location || ( $location && $location->active_vendor_count() > 10 ) ) {
 <div id="more-filters" style="display: none">
 <ul id="toggle-buttons">
   <li><a class="filter-toggle green-action-button-small" id="category-toggle" href="#">Category</a></li>

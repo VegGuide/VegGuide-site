@@ -13,7 +13,13 @@
 %   }
 
   <div class="yui-u">
-    <div id="vendor-list"
+   
+    <div id="vendor-list">
+
+      <& /lib/search-filter-column.mas, %ARGS, search_uri_method => 'map_uri' &>
+
+      <h3>Showing <% $count %> entr<% $count != 1 ? 'ies' : 'y' %></h3>
+
 %   while ( my $vendor = $vendors->next() ) {
 <& .one-vendor, vendor => $vendor, search => $search &>
 %   }
@@ -111,7 +117,7 @@ if ( $search->can('address') )
 
 <%def .one-vendor>
 
-  <p>
+  <p class="vendor">
     <a href="#" id="show-entry-info-<% $vendor->vendor_id() %>"><% $vendor->name() | h %></a>
 % if ( $search->can('city') && $search->city() ) {
     -

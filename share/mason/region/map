@@ -1,10 +1,4 @@
-<h2>Map of <% $location->name() %> Entries</h2>
-
-<p>
-  Showing <% $count %> entr<% $count != 1 ? 'ies' : 'y' %>
-</p>
-
-<& /lib/filter-div.mas, location => $location, search => $search, search_uri_method => 'map_uri' &>
+<& /lib/current-filters.mas, search => $search &>
 
 <p>
   <a href="<% $search->uri() %>">Return to the entry listing</a>
@@ -16,10 +10,6 @@
 $location
 $search
 </%args>
-
-<%init>
-my $count = $search->count();
-</%init>
 
 <%attr>
 load_google_maps => 1

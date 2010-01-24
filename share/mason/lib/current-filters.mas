@@ -1,0 +1,15 @@
+<h2 class="no-top-margin">Showing entries ...</h2>
+
+<ul class="no-top-margin">
+% for my $desc ( $search->long_descriptions() ) {
+  <li>... <% $desc | h %></li>
+% }
+</ul>
+
+<%args>
+$search
+</%args>
+
+<%init>
+return unless $search->has_filters();
+</%init>
