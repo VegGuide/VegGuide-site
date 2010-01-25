@@ -119,7 +119,7 @@
 % if ($comments) {
 <hr />
 
-<h2>Latest Reviews</h2>
+<h2>Most Recent Reviews</h2>
 
 <& /lib/comments.mas, comments => $comments, vendor => $vendor &>
 
