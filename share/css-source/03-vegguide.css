@@ -188,6 +188,17 @@ a.action-button-medium:visited, a.action-button-small:visited {
     padding: 0.4em;
 }
 
+#errors {
+    background-color: #fc7;
+    border: 1px solid #EEE;
+    margin-bottom: 0.5em;
+    padding: 0.4em;
+}
+
+#errors ul {
+    margin: 0;
+}
+
 #front-page-logo {
     margin-bottom: 1em;
 }

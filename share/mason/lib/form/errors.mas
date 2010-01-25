@@ -1,13 +1,10 @@
-      <fieldset id="errors">
-       <legend>Errors</legend>
-
-       <ul>
+<div id="errors">
+  <ul>
 %   for my $e (@errors) {
-        <li><% $e | h %></li>
+    <li><% $e | h %></li>
 %   }
-       </ul>
-
-      </fieldset>
+  </ul>
+</div>
 
 <%init>
 my @errors = @{ $c->session()->{errors} || [] };
