@@ -54,7 +54,7 @@ Edit hours for\
   </ul>
 
 % if ($is_suggestion) {
-  <& /lib/form/suggestion-fieldset.mas &>
+  <& /lib/form/suggestion.mas &>
 % }
 
   <div class="form-item">
