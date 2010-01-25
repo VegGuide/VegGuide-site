@@ -794,6 +794,10 @@ sub images_POST
 
         return unless $search;
 
+        $self->_add_search_tabs( $c, $search );
+
+        $c->tab_by_id('results')->set_is_selected(1);
+
         $c->response()->breadcrumbs()->add
             ( uri   => $search->uri(),
               label => $search->title(),
@@ -822,6 +826,10 @@ sub images_POST
         my $search = $c->stash()->{search};
 
         return unless $search;
+
+        $self->_add_search_tabs( $c, $search );
+
+        $c->tab_by_id('map')->set_is_selected(1);
 
         $c->response()->breadcrumbs()->add
             ( uri   => $search->uri(),
@@ -874,6 +882,10 @@ sub images_POST
 
         return unless $search;
 
+        $self->_add_search_tabs( $c, $search );
+
+        $c->tab_by_id('results')->set_is_selected(1);
+
         $c->response()->breadcrumbs()->add
             ( uri   => $search->uri(),
               label => $search->title(),
@@ -903,6 +915,10 @@ sub images_POST
 
         return unless $search;
 
+        $self->_add_search_tabs( $c, $search );
+
+        $c->tab_by_id('map')->set_is_selected(1);
+
         $c->response()->breadcrumbs()->add
             ( uri   => $search->uri(),
               label => $search->title(),
@@ -930,6 +946,39 @@ sub images_POST
 
         $c->stash()->{template} = '/shared/printable-entry-list';
     }
+}
+
+sub _add_search_tabs {
+    my $self   = shift;
+    my $c      = shift;
+    my $search = shift;
+
+    $c->add_tab(
+        {
+            uri     => $search->uri(),
+            label   => 'Results',
+            tooltip => 'Search results',
+            id      => 'results',
+        }
+    );
+
+    $c->add_tab(
+        {
+            uri     => $search->map_uri(),
+            label   => 'Map',
+            tooltip => 'Map of results',
+            id      => 'map',
+        }
+    );
+
+    $c->add_tab(
+        {
+            uri     => $search->printable_uri(),
+            label   => 'Printable',
+            tooltip => 'Printable list of results',
+            id      => 'printable',
+        }
+    );
 }
 
 sub ungeocoded : Local : ActionClass('+VegGuide::Action::REST') { }
