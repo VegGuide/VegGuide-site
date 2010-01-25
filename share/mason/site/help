@@ -345,6 +345,7 @@ probably no reason to think it's exceptional.
 For the mathematically minded, the algorithm used for weighting is the
 same one used by <a href="http://www.imdb.com/">IMDB</a> (as of
 October, 2007):
+</p>
 
 <pre>
 weighted rating (WR) = (v ÷ (v+m)) × R + (m ÷ (v+m)) × C
@@ -738,8 +739,6 @@ site layout may look pretty strange.  We recommend upgrading to the
 latest version of <a href="http://www.getfirefox.com/">Firefox</a>
 available, or at least to IE7 if you cannot use Firefox.
 </p>
-</%def>
-
 </%def>
 
 <%def .browser_localization>
