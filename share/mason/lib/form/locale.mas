@@ -26,7 +26,7 @@
 
    <div class="form-item">
     <label>Address format:</label>
-    <ul>
+    <ul class="radio-list">
 % for my $format (@Formats) {
      <li>
       <input class="radio" type="radio" name="address_format_id" value="<% $format->address_format_id() %>"

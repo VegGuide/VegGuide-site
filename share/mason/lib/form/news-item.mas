@@ -1,31 +1,26 @@
-    <&| /lib/filter/fill-in-form.mas, objects => [ $item ] &>
-    <form action="<% $action | h %>" method="post">
+<&| /lib/filter/fill-in-form.mas, objects => [ $item ] &>
+<form action="<% $action | h %>" method="post">
 
 % if ( $item->item_id() ) {
-     <input type="hidden" name="x-tunneled-method" value="PUT" />
+  <input type="hidden" name="x-tunneled-method" value="PUT" />
 % }
 
-     <fieldset>
-      <legend>News Item</legend>
+  <div class="form-item">
+    <label for="title">Title:</label>
+    <input id="title" class="text" type="text" name="title" value="" />
+  </div>
 
-      <div class="form-item">
-       <label for="title">Title:</label>
-       <input id="title" class="text" type="text" name="title" value="" />
-      </div>
+  <div class="form-item">
+    <label for="body">Body:</label>
+    <textarea id="body" class="long" name="body" value="" /></textarea>
+  </div>
 
-      <div class="form-item">
-       <label for="body">Body:</label>
-       <textarea id="body" class="long" name="body" value="" /></textarea>
-      </div>
+  <div class="form-item">
+    <input class="submit" type="submit" value="Submit" />
+  </div>
 
-      <div class="form-item">
-       <input class="submit" type="submit" value="Submit" />
-      </div>
-
-     </fieldset>
-
-    </form>
-    </&>
+</form>
+</&>
 
 <%args>
 $item => VegGuide::NewsItem->potential()
