@@ -19,12 +19,6 @@
 %   }
 % }
 
-% if ( $m->request_comp()->attr('requires_js') ) {
-          <div id="requires-js">
-            This page requires that you have Javascript enabled in your browser.
-          </div>
-% }
-
 % $m->call_next();
 
         </div>

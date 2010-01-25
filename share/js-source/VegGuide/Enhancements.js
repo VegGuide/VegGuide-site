@@ -25,8 +25,6 @@ if ( typeof VegGuide == "undefined" ) {
 VegGuide.Enhancements = {};
 
 VegGuide.Enhancements.instrumentAll = function () {
-    DOM.Element.hide("requires-js");
-
     VegGuide.IEPngFilter.instrumentPage();
 
     VegGuide.EntryForm.instrumentPage();

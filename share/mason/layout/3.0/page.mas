@@ -1,11 +1,5 @@
 <& header.mas, %ARGS &>
 
-% if ( $m->request_comp()->attr('requires_js') ) {
-  <div id="requires-js">
-   This page requires that you have Javascript enabled in your browser.
-  </div>
-% }
-
 % if (@messages) {
   <div id="messages" class="<% $m->request_comp()->attr('is_front_page') ? 'front-page' : '' %>">
 %   for my $msg (@messages) {

@@ -13,5 +13,4 @@ $search
 
 <%attr>
 load_google_maps => 1
-requires_js => 1
 </%attr>

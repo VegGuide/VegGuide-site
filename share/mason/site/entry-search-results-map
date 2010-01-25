@@ -22,7 +22,6 @@ my $count = $search->count();
 
 <%attr>
 load_google_maps => 1
-requires_js => 1
 </%attr>
 
 <%method page_title>

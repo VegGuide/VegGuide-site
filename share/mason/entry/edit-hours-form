@@ -99,7 +99,3 @@ for my $day ( 0..$#sets )
     }
 }
 </%init>
-
-<%attr>
-requires_js => 1
-</%attr>

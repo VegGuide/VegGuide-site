@@ -35,7 +35,6 @@ my $layout = $m->request_comp()->attr('layout');
 
 <%attr>
 load_google_maps => 0
-requires_js => 0
 layout => '3.0'
 is_front_page => 0
 </%attr>

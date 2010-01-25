@@ -268,5 +268,4 @@ Suggestions you can review
 
 <%attr>
 layout => '3.5'
-requires_js => 1
 </%attr>
