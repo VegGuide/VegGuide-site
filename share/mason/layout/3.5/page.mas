@@ -8,6 +8,8 @@
       <div class="yui-b">
         <div id="content">
 
+          <& /lib/messages.mas &>
+
 % if ( $m->request_comp()->method_exists('page_title') ) {
 %   my $title = $m->request_comp()->scall_method( 'page_title', %ARGS );
 %   if ( $title =~ /<h1/ ) {
