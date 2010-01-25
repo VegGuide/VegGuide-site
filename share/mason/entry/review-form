@@ -4,8 +4,7 @@
     <h2>Write a review of <& /lib/l10n/vendor-name.mas, vendor => $vendor &></h2>
 
     <p>
-    Please see our <&| /lib/link/help.mas, name => 'review-guidelines' &>review guidelines</&> if this is your first time writing a review
-    here</a>.
+    Please see our <&| /lib/link/help.mas, name => 'review-guidelines' &>review guidelines</&> if this is your first time writing a review here.
     </p>
 
     <p>
