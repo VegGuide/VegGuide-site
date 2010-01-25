@@ -55,7 +55,7 @@
   <div class="form-item" id="maintainers">
     <label>Current maintainers</label>
 %   if ( $location->owner_count() ) {
-    <ul>
+    <ul class="radio-list">
 %     while ( my $user = $owners->next() ) {
       <li>
         <input type="checkbox" name="remove-maintainer"
