@@ -255,10 +255,6 @@ a.action-button-medium:visited, a.action-button-small:visited {
     z-index: 10;
 }
 
-#sitewide-search-help ul, #sitewide-search-help ul li {
-    background: url(../../images/red-bullet-small.png) no-repeat 0 4px;
-}
-
 #sitewide-search-help-close {
     float: right;
 }
