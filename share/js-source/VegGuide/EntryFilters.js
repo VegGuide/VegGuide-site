@@ -76,6 +76,11 @@ VegGuide.EntryFilters._makeShowFunction = function (form_id) {
     /* Cannot return the function directly */
     var func = function (e) {
         VegGuide.EntryFilters._showForm( e, id );
+
+        e.preventDefault();
+        if ( e.stopPropogation ) {
+            e.stopPropagation();
+        }
     };
 
     return func;
