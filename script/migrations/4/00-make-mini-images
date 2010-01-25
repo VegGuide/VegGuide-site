@@ -30,3 +30,6 @@ sub make_mini {
     $image_file->resize( 123, 123, $vendor_image->mini_path() );
 }
 
+system( 'chown', '-R', 'www-data:www-data', VegGuide::Config->VarLibDir() . '/entry-images', )
+    unless $>;
+
