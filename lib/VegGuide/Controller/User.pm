@@ -377,7 +377,7 @@ sub edit_form : Chained('_set_user') : PathPart('edit_form') : Args(0)
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to edit a user.',
+                          q{You must be logged in to edit a user. If you don't have an account you can create one now.},
                         );
 
     $c->redirect_and_detach('/')
@@ -392,7 +392,7 @@ sub image_form : Chained('_set_user') : PathPart('image_form') : Args(0)
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to edit a user.',
+                          q{You must be logged in to edit a user. If you don't have an account you can create one now.},
                         );
 
     $c->redirect_and_detach('/')

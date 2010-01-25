@@ -129,7 +129,7 @@ sub entry_PUT : Private
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to edit an entry.',
+                          q{You must be logged in to edit an entry. If you don't have an account you can create one now.},
                         );
 
     my $vendor = $c->stash()->{vendor};
@@ -246,7 +246,7 @@ sub rating_POST : Private
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to rate an entry.',
+                          q{You must be logged in to rate an entry. If you don't have an account you can create one now.},
                         );
 
     my $vendor = $c->stash()->{vendor};
@@ -283,7 +283,7 @@ sub edit_form : Chained('_set_vendor') : PathPart('edit_form') : Args(0)
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to edit an entry.',
+                          q{You must be logged in to edit an entry. If you don't have an account you can create one now.},
                         );
 
     $c->stash()->{template} = '/entry/edit-form';
@@ -296,7 +296,7 @@ sub review_form : Chained('_set_vendor') : PathPart('review_form') : Args(1)
     my $user_id = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to write a review.',
+                          q{You must be logged in to write a review. If you don't have an account you can create one now.},
                         );
 
     my $user = VegGuide::User->new( user_id => $user_id );
@@ -329,7 +329,7 @@ sub new_review_form : Chained('_set_vendor') : PathPart('review_form') : Args(0)
     }
 
     $self->_require_auth( $c,
-                          'You must be logged in to write a comment.',
+                          q{You must be logged in to write a comment. If you don't have an account you can create one now.},
                         );
 
     $c->stash()->{comment} =
@@ -366,7 +366,7 @@ sub reviews_POST : Private
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to write a review.',
+                          q{You must be logged in to write a review. If you don't have an account you can create one now.},
                         );
 
     my $vendor = $c->stash()->{vendor};
@@ -411,7 +411,7 @@ sub review_confirm_deletion : Chained('_set_review') : PathPart('deletion_confir
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to delete a review.',
+                          q{You must be logged in to delete a review. If you don't have an account you can create one now.},
                         );
 
     my $comment = $c->stash()->{comment};
@@ -445,7 +445,7 @@ sub review_DELETE : Private
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to delete a review.',
+                          q{You must be logged in to delete a review. If you don't have an account you can create one now.},
                         );
 
     my $comment = $c->stash()->{comment};
@@ -474,7 +474,7 @@ sub edit_hours_form : Chained('_set_vendor') : PathPart('edit_hours_form') : Arg
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          q{You must be logged in to edit an entry's hours.},
+                          q{You must be logged in to edit an entry's hours. If you don't have an account you can create one now.},
                         );
 
     $c->stash()->{template} = '/entry/edit-hours-form';
@@ -488,7 +488,7 @@ sub hours_POST : Private
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          q{You must be logged in to update an entry's hours.},
+                          q{You must be logged in to update an entry's hours. If you don't have an account you can create one now.},
                         );
 
     my $vendor = $c->stash()->{vendor};
@@ -723,7 +723,7 @@ sub images_form : Chained('_set_vendor') : PathPart('images_form') : Args(0)
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to edit an entry.',
+                          q{You must be logged in to edit an entry. If you don't have an account you can create one now.},
                         );
 
     $c->stash()->{images} = [ $c->stash()->{vendor}->images() ];

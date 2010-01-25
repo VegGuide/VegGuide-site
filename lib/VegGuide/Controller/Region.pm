@@ -348,7 +348,7 @@ sub _new_entry_submit
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to submit a new entry.',
+                          q{You must be logged in to submit a new entry. If you don't have an account you can create one now.},
                         );
 
     my $location = $c->stash()->{location};
@@ -398,7 +398,7 @@ sub entry_form : Chained('_set_location') : PathPart('entry_form') : Args(0)
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to submit a new entry.',
+                          q{You must be logged in to submit a new entry. If you don't have an account you can create one now.},
                         );
 
     my $location = $c->stash()->{location};
@@ -452,7 +452,7 @@ sub comment_form : Chained('_set_location') : PathPart('comment_form') : Args(1)
     my $user_id = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to write a comment.',
+                          q{You must be logged in to write a comment. If you don't have an account you can create one now.},
                         );
 
     my $user = VegGuide::User->new( user_id => $user_id );
@@ -477,7 +477,7 @@ sub new_comment_form : Chained('_set_location') : PathPart('comment_form') : Arg
     my $c       = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to write a comment.',
+                          q{You must be logged in to write a comment. If you don't have an account you can create one now.},
                         );
 
     $c->stash()->{comment} = VegGuide::LocationComment->potential();
@@ -493,7 +493,7 @@ sub new_region_comment_POST : Private
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to write a comment.',
+                          q{You must be logged in to write a comment. If you don't have an account you can create one now.},
                         );
 
     my $location = $c->stash()->{location};
@@ -538,7 +538,7 @@ sub confirm_deletion : Chained('_set_comment') : PathPart('deletion_confirmation
     my $c       = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to delete a comment.',
+                          q{You must be logged in to delete a comment. If you don't have an account you can create one now.},
                         );
 
     my $comment = $c->stash()->{comment};
@@ -565,7 +565,7 @@ sub region_comment_DELETE : Private
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to delete a comment.',
+                          q{You must be logged in to delete a comment. If you don't have an account you can create one now.},
                         );
 
     my $comment = $c->stash()->{comment};
@@ -712,7 +712,7 @@ sub new_region_form : Chained('_set_location') : PathPart('new_region_form') : A
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to add a new region.',
+                          q{You must be logged in to add a new region. If you don't have an account you can create one now.},
                         );
 
     $c->stash()->{template} = '/region/new-region-form';
@@ -726,7 +726,7 @@ sub regions_POST
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to add a new region.',
+                          q{You must be logged in to add a new region. If you don't have an account you can create one now.},
                         );
 
     my %data = $c->request()->location_data();
