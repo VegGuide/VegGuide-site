@@ -1081,7 +1081,7 @@ a.lightbox2-close img {
     text-align: center;
 }
 
-#slideshow-lightbox #slideshow-prev-container, #slideshow-lightbox #slideshow-next-container {
+#slideshow-lightbox #slideshow-prev-container {
     float: left;
 }
 
