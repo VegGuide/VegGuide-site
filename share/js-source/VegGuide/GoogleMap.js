@@ -20,9 +20,12 @@ VegGuide.GoogleMap = function ( div_id ) {
 VegGuide.GoogleMap.prototype._createGoogleMap = function ( map_div ) {
     var map = new GMap2(map_div);
 
-    var height = window.innerHeight * 0.6;
-    if ( height < 350 ) {
-        height = 350;
+    var height;
+    if ( typeof window.innerHeight == "number" ) {
+        height = window.innerHeight * 0.6;
+    }
+    else {
+        height = document.documentElement.clientHeight * 0.6;
     }
 
     map_div.style.height = height + "px";
