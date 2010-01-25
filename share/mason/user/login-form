@@ -1,44 +1,73 @@
 <div class="yui-g">
   <div class="yui-u first">
 
-    <h2 class="no-top-margin">Log in</h2>
-    <&| /lib/filter/fill-in-form.mas &>
+    <div id="standard-log-in">
+      <h2 class="no-top-margin">Log in</h2>
+      <&| /lib/filter/fill-in-form.mas &>
 
-    <form action="/user/authentication" method="post">
-      <input type="hidden" name="return_to" value="<% $return_to | h %>" />
+      <form action="/user/authentication" method="post">
+        <input type="hidden" name="return_to" value="<% $return_to | h %>" />
 
-      <& /lib/form/errors.mas &>
-      <div class="form-item">
-        <label for="email_address">Email:</label>
-        <input id="email_address" class="text" type="text" name="email_address" value="" />
-      </div>
+        <& /lib/form/errors.mas &>
+        <div class="form-item">
+          <label for="email_address">Email:</label>
+          <input id="email_address" class="text" type="text" name="email_address" value="" />
+        </div>
 
-      <div class="form-item">
-        <label for="password">Password:</label>
-        <input id="password" class="text" type="password" name="password" />
-      </div>
+        <div class="form-item">
+          <label for="password">Password:</label>
+          <input id="password" class="text" type="password" name="password" />
+        </div>
 
-      <div class="form-item">
-        <label for="openid_uri">OpenID:</label>
-        <input id="openid_uri" class="text" type="text" name="openid_uri" />
-      </div>
+        <div class="form-item">
+          <label for="remember">Remember me:</label>
+          <input id="remember" class="checkbox" type="checkbox" name="remember" />
+        </div>
 
-      <div class="form-item">
-        <label for="remember">Remember me:</label>
-        <input id="remember" class="checkbox" type="checkbox" name="remember" />
-      </div>
+        <div class="form-item">
+          <input class="submit" type="submit" value="Log in" />
+        </div>
 
-      <div class="form-item">
-        <input class="submit" type="submit" value="Log in" />
-      </div>
+      </form>
+      </&>
 
-    </form>
-    </&>
+      <p>
+        <a href="/user/forgot_password_form?return_to=<% $return_to | uh %>">Forgot your password?</a>
+      </p>
+    </div>
+
+    <div id="openid-log-in" style="display: none">
+      <h2 class="no-top-margin">Log in with OpenID</h2>
+      <&| /lib/filter/fill-in-form.mas &>
+
+      <form action="/user/authentication" method="post">
+        <input type="hidden" name="return_to" value="<% $return_to | h %>" />
+
+        <& /lib/form/errors.mas &>
+        <div class="form-item">
+          <label for="openid_uri">OpenID:</label>
+          <input id="openid_uri" class="text" type="text" name="openid_uri" value="" />
+        </div>
+
+        <div class="form-item">
+          <label for="remember">Remember me:</label>
+          <input id="remember" class="checkbox" type="checkbox" name="remember" />
+        </div>
+
+        <div class="form-item">
+          <input class="submit" type="submit" value="Log in" />
+        </div>
+
+      </form>
+      </&>
+
+    </div>
 
     <p>
-      <a href="/user/forgot_password_form?return_to=<% $return_to | uh %>">Forgot your password?</a>
+      <a href="#" id="switch-log-in">Or log in with OpenId.</a>
     </p>
   </div>
+
   <div class="yui-u">
     <h2 class="no-top-margin">Register</h2>
 
