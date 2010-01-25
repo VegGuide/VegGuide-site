@@ -4,7 +4,7 @@
 % } else {
 <% $user->real_name() | h %>\
 % }
-</a>
+</a>\
 <%args>
 $user
 $path => undef
