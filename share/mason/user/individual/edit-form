@@ -10,7 +10,3 @@ Edit <% $c->vg_user()->user_id() == $user->user_id() ? 'your profile' : $user->r
 $user
 </%args>
 </%method>
-
-<%attr>
-layout => '3.5'
-</%attr>

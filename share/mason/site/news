@@ -33,10 +33,6 @@ $news
 $pager
 </%args>
 
-<%attr>
-layout => '3.5'
-</%attr>
-
 <%method page_title>
 VegGuide.Org Site News
 </%method>

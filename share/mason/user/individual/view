@@ -85,7 +85,3 @@ my $rating_count = $user->rating_count();
 my @top_vendors = $user->top_vendors()->all();
 my @bottom_vendors = $user->bottom_vendors()->all();
 </%init>
-
-<%attr>
-layout => '3.5'
-</%attr>

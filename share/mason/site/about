@@ -186,10 +186,6 @@ at <a href="mailto:guide@vegguide.org">guide@vegguide.org</a>.
 my $internet = VegGuide::Location->new( name => 'Internet' );
 </%init>
 
-<%attr>
-layout => '3.5'
-</%attr>
-
 <%method page_title>
 About VegGuide.Org
 </%method>

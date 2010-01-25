@@ -9,7 +9,3 @@
 <%init>
 my $user = VegGuide::User->potential();
 </%init>
-
-<%attr>
-layout => '3.5'
-</%attr>

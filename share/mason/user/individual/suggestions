@@ -265,7 +265,3 @@ $suggestion
 <%method page_title>
 Suggestions you can review
 </%method>
-
-<%attr>
-layout => '3.5'
-</%attr>

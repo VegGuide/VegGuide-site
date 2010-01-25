@@ -189,10 +189,6 @@ This section will attempt to evaluate this policy's compact policy against Micro
 <p><b>Satisfactory policy</b>: this compact policy is considered <em>satisfactory</em> according to the rules defined by Internet Explorer 6.
 IE6 will accept cookies accompanied by this policy under the High, Medium High, Medium, Low, and Accept All Cookies settings.</p>
 
-<%attr>
-layout => '3.5'
-</%attr>
-
 <%method page_title>
 VegGuide.Org Privacy Policy
 </%method>

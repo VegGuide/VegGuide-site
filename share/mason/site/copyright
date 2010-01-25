@@ -48,10 +48,6 @@ behalf of the owner of an exclusive right that is allegedly
 infringed.</li>
 </ol>
 
-<%attr>
-layout => '3.5'
-</%attr>
-
 <%method page_title>
 Copyright Policy
 </%method>

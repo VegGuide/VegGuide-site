@@ -14,7 +14,3 @@ $skins
 <%method page_title>
 Your Skins
 </%method>
-
-<%attr>
-layout => '3.5'
-</%attr>

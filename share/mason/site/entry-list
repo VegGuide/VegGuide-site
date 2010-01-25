@@ -97,7 +97,3 @@ my @address;
 <%method page_title>
 <% $m->caller_args(-1)->{search}->title() | h %>
 </%method>
-
-<%attr>
-layout => '3.5'
-</%attr>

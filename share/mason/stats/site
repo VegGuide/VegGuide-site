@@ -6,10 +6,6 @@ Numbers, lots of numbers ...
 <& .region_stats &>
 <& .user_stats &>
 
-<%attr>
-layout => '3.5'
-</%attr>
-
 <%def .site_stats>
 <h2>Overall Statistics</h2>
 

@@ -22,10 +22,6 @@ my $width = 700;
 my $height = 400;
 </%init>
 
-<%attr>
-layout => '3.5'
-</%attr>
-
 <%method page_title>
 Charts
 </%method>

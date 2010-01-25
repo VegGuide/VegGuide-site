@@ -85,7 +85,3 @@
 <%init>
 my $return_to = $c->request()->param('return_to') || $c->session()->{saved_params}{return_to} || '/';
 </%init>
-
-<%attr>
-layout => '3.5'
-</%attr>

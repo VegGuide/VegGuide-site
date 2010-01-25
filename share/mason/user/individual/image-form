@@ -36,8 +36,4 @@ $user
 </%args>
 </%method>
 
-<%attr>
-layout => '3.5'
-</%attr>
-
 

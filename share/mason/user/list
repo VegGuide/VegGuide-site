@@ -27,7 +27,3 @@ $search
 <%method page_title>
 VegGuide.Org Users
 </%method>
-
-<%attr>
-layout => '3.5'
-</%attr>

@@ -13,7 +13,6 @@ my $count = $search->count();
 </%init>
 
 <%attr>
-layout => '3.5'
 load_google_maps => 1
 </%attr>
 

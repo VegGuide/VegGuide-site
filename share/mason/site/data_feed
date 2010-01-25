@@ -282,10 +282,6 @@ Some sample code for retrieving and parsing the data feeds is available:
 Here is a <a href="/static/sample.rss">sample data feed</a>.
 </p>
 
-<%attr>
-layout => '3.5'
-</%attr>
-
 <%method page_title>
 RSS Data Feeds
 </%method>

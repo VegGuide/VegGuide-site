@@ -82,7 +82,3 @@ Reviews written by <% $user->real_name() | h %>
 $user
 </%args>
 </%method>
-
-<%attr>
-layout => '3.5'
-</%attr>

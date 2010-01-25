@@ -5,10 +5,6 @@
 
 <& /lib/feeds-list.mas, base_uri => '/site', thing => 'the entire site' &>
 
-<%attr>
-layout => '3.5'
-</%attr>
-
 <%method page_title>
 VegGuide.Org Site Feeds
 </%method>

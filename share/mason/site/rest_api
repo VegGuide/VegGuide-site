@@ -3,10 +3,6 @@ The site uses REST to do its dirty work, and an expanded, documented
 API will be coming eventually.
 </p>
 
-<%attr>
-layout => '3.5'
-</%attr>
-
 <%method page_title>
 REST API
 </%method>

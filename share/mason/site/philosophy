@@ -145,10 +145,6 @@ of you agree. If you don't, we're still working on making things better,
 so maybe you'll change your mind some time in the future.
 </p>
 
-<%attr>
-layout => '3.5'
-</%attr>
-
 <%method page_title>
 Philosophy of VegGuide.Org
 </%method>

@@ -17,10 +17,6 @@ $user
 $vendors => undef
 </%args>
 
-<%attr>
-layout => '3.5'
-</%attr>
-
 <%method page_title>
 Entries created by <% $user->real_name() | h %>
 <%args>

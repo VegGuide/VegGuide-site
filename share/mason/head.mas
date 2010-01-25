@@ -13,14 +13,7 @@
 
     <link rel="shortcut icon" href="/images/favicon.ico" mce_href="/images/favicon.ico" />
 
-% if ( $m->request_comp()->attr('layout') eq '3.0' ) {
-    <link rel="stylesheet" type="text/css" href="<% static_uri( path => '/css/3.0/vegguide.css' ) %>" />
-    <!--[if IE]>
-      <link rel="stylesheet" type="text/css" href="<% static_uri( path => '/css/3.0/ie.css' ) %>" />
-    <![endif]-->
-% } else {
     <link rel="stylesheet" type="text/css" href="<% static_uri( path => '/css/vegguide-combined.css' ) %>" />
-% }
 
     <script type="text/javascript">
       var JSAN = { "use": function () {} };
