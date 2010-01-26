@@ -112,8 +112,6 @@ sub client
 
 }
 
-__PACKAGE__->meta->add_before_method_modifier( redirect_and_detach => sub { Carp::cluck('redirecting') } );
-
 1;
 
 __END__
