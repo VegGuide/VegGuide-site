@@ -13,12 +13,12 @@
         <& .address, vendor => $vendor, address => \@address &>
 % }
 
-% if ( defined $vendor->phone() ) {
-        <div id="phone"><% $vendor->phone() %></div>
-% }
-
 % if ( $c->client()->show_localized_content() && $vendor->has_localized_address() ) {
         <& .address, vendor => $vendor, address => [ $vendor->localized_address_pieces() ] &>
+% }
+
+% if ( defined $vendor->phone() ) {
+        <div id="phone"><% $vendor->phone() %></div>
 % }
 
 % if ( $vendor->home_page() ) {
@@ -29,7 +29,6 @@
              ><% $vendor->external_uri() | h %></a>
         </div>
 % }
-
 
 % if ( $vendor->location()->has_addresses() && $c->vg_user()->is_admin() ) {
         <div id="lat-long">

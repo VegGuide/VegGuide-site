@@ -758,19 +758,19 @@ div.pagination form select, div.pagination form select option {
     margin: 0;
 }
 
-#phone {
-    font-weight: bold;
-}
-
 #lat-long, #canonical-address {
     color: #888;
+}
+
+#website {
+    margin: 0.3em 0 0 0;
 }
 
 .how-veg {
     font-size: 120%;
     font-variant: small-caps;
     font-weight: normal;
-    margin: 0;
+    margin: 0.3em 0 0 0;
 }
 
 .veg-level-1 {
