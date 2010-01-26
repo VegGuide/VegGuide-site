@@ -274,6 +274,8 @@ sub ACTION_copy_system_files
     }
 
     my $dir = '/var/log/apache2-backend';
+    mkpath( $dir, 0, 0750 )
+	unless -d $dir;
     chmod 0750, $dir
 	or die "Cannot chmod 0640 $dir: $!";
 
