@@ -4,7 +4,7 @@ if ( typeof DOM == "undefined" ) {
 
 DOM.Ready = {};
 
-DOM.Ready.VERSION = "0.16";
+DOM.Ready.VERSION = "0.17";
 
 DOM.Ready.finalTimeout = 15;
 DOM.Ready.timerInterval = 50;
@@ -15,7 +15,7 @@ DOM.Ready._checkDOMReady = function () {
     }
 
     if (    typeof document.getElementsByTagName != "undefined"
-         && typeof document.getElementById != "undefined" 
+         && typeof document.getElementById != "undefined"
          && ( document.getElementsByTagName("body")[0] !== null
               || document.body !== null ) ) {
 
@@ -32,8 +32,6 @@ DOM.Ready._checkDOMDone = function () {
         return DOM.Ready._isDone;
     }
 
-    /* Safari and Opera(?) only */
-
     /*@cc_on
        /*@if (@_win32)
     try {
@@ -41,8 +39,9 @@ DOM.Ready._checkDOMDone = function () {
         DOM.Ready._isDone = 1;
     } catch (e) {}
           @else @*/
+    /* Safari and Opera(?) only */
     if ( document.readyState
-         && ( /interactive|complete|loaded/.test( document.readyState ) )
+         && ( /complete|loaded/.test( document.readyState ) )
        ) {
         DOM.Ready._isDone = 1;
     }
