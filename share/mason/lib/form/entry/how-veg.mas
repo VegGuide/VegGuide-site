@@ -1,31 +1,31 @@
-       <ul>
-        <li>
-         <input class="radio" type="radio" name="veg_level" value="5" id="veg-level-5" />
-         <label for="veg-level-5">100% <&| /lib/link/help.mas &>vegan</&></label>
-        </li>
+<ul class="radio-list">
+  <li>
+    <input class="radio" type="radio" name="veg_level" value="5" id="veg-level-5" />
+    <label for="veg-level-5">100% <&| /lib/link/help.mas &>vegan</&></label>
+  </li>
 
-        <li>  
-         <input class="radio" type="radio" name="veg_level" value="4" id="veg-level-4" />
-         <label for="veg-level-4">100% <&| /lib/link/help.mas &>vegetarian</&></label>
-        </li>
+  <li>  
+    <input class="radio" type="radio" name="veg_level" value="4" id="veg-level-4" />
+    <label for="veg-level-4">100% <&| /lib/link/help.mas &>vegetarian</&></label>
+  </li>
 
-        <li>
-         <input class="radio" type="radio" name="veg_level" value="3" id="veg-level-3" />
-         <label for="veg-level-3" id="how-veg-longest">100% <&| /lib/link/help.mas &>vegetarian</&> but not <&| /lib/link/help.mas &>vegan-friendly</&></label>
-        </li>
+  <li>
+    <input class="radio" type="radio" name="veg_level" value="3" id="veg-level-3" />
+    <label for="veg-level-3" id="how-veg-longest">100% <&| /lib/link/help.mas &>vegetarian</&> but not <&| /lib/link/help.mas &>vegan-friendly</&></label>
+  </li>
 
-        <li>
-         <input class="radio" type="radio" name="veg_level" value="2" id="veg-level-2" />
-         <label for="veg-level-2"><&| /lib/link/help.mas &>Vegan-friendly</&></label>
-        </li>
+  <li>
+    <input class="radio" type="radio" name="veg_level" value="2" id="veg-level-2" />
+    <label for="veg-level-2"><&| /lib/link/help.mas &>Vegan-friendly</&></label>
+  </li>
 
-        <li>
-         <input class="radio" type="radio" name="veg_level" value="1" id="veg-level-1" />
-         <label for="veg-level-1"><&| /lib/link/help.mas &>Vegetarian-friendly</&></label>
-        </li>
+  <li>
+    <input class="radio" type="radio" name="veg_level" value="1" id="veg-level-1" />
+    <label for="veg-level-1"><&| /lib/link/help.mas &>Vegetarian-friendly</&></label>
+  </li>
 
-        <li>
-         <input class="radio" type="radio" name="veg_level" value="0" id="veg-level-0" />
-         <label for="veg-level-0">None of the above</label>
-        </li>
-       </ul>
+  <li>
+    <input class="radio" type="radio" name="veg_level" value="0" id="veg-level-0" />
+    <label for="veg-level-0">None of the above</label>
+  </li>
+</ul>

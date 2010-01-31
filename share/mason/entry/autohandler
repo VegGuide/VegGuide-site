@@ -1,120 +1,28 @@
- <div id="main" class="main-entry <% $vendor->is_closed ? 'closed' : q{} %>">
-
-  <div id="title-and-info-container"">
-   <& /lib/rounded-corners-top.mas &>
-
-% if ($show_all_info) {
-   <div id="rating-info">
-    <& /lib/ratings-div.mas, vendor => $vendor &>
-   </div>
-% }
-
-   <div id="<% $show_all_info ? 'page-title-and-all-info' : 'page-title-and-some-info' %>">
-    <h1 id="page-title"><& /lib/l10n/vendor-name.mas, vendor => $vendor &></h1>
-% if ( $vendor->is_closed ) {
-    <h2 id="closed">
-     Closed as of <& /lib/format/date.mas, date => $vendor->close_date_object &>
-    </h2>
-% }
-% if ( $vendor->categories > 1 || ! $vendor->is_restaurant ) {
-    <h2 id="entry-categories"><% join ', ', map { $_->name } $vendor->categories | h %></h2>
-% }
-    <div id="return-link"><& /lib/link/location-and-parent.mas, location => $vendor->location &></div>
-
-% if ( $m->request_comp()->attr('show_all_info') ) {
-    <div id="top-info">
-%   if ( $vendor->location()->has_addresses() ) {
-%     foreach my $line (@address) {
-     <div><% $line | h %></div>
-%     }
-%   }
-
-%   if ( $vendor->location()->has_addresses() && $c->vg_user()->is_admin() ) {
-     <div id="lat-long">
-%     if ( defined $vendor->latitude() ) {
-      <% $vendor->latitude() | h %> / <% $vendor->longitude() | h %>
-%     } else {
-      No lat/long
-%     }
-     </div>
-     <div id="canonical_address">
-%     if ( string_is_empty( $vendor->canonical_address() ) ) {
-      No canonical address from Google Maps
-%     } else {
-      <% $vendor->canonical_address() | h %>
-%     }
-     </div>
-%   }
-
-
-%   if ( $c->client()->show_localized_content() && $vendor->has_localized_address() ) {
-%     foreach my $line ( $vendor->localized_address_pieces() ) {
-     <div><% $line | h %></div>
-%     }
-%   }
-%   if ( defined $vendor->phone() ) {
-     <div id="phone"><% $vendor->phone() %></div>
-%   }
-
-% if ( $vendor->home_page() ) {
-     <div id="website">
-      <a class="external" href="<% $vendor->external_uri() | h %>" title="Go to this entry's home page"><% $vendor->external_uri() | h %></a>
-     </div>
-% }
-
-     <div class="content-buttons">
-      <a class="content-button" href="<% entry_uri( vendor => $vendor, path => 'edit_form' ) | h %>"
-         >Edit</a>
-%   if ( $c->vg_user()->can_delete_vendor($vendor) ) {
-      <a class="action-button" href="<% entry_uri( vendor => $vendor, path => 'deletion_confirmation_form' ) | h %>"
-         >Delete</a>
-%   }
-     </div>
-
-    </div>
-% }
-
-   </div>
-   <div class="force-clear">&nbsp;</div>
-
-  </div>
-
-  <div id="local-nav">
-%# whitespace between end of one list item and start of another shows up as gaps between menu items
-<&| /lib/filter/set-current-local-nav.mas &>
-<&| /lib/filter/remove-whitespace.mas &>
-   <ul>
-    <li><a href="<% entry_uri( vendor => $vendor ) | h %>" title="About <% $vendor->name() | h %>">info</a></li>
-% if ($is_mappable) {
-    <li><a href="<% entry_uri( vendor => $vendor, path => 'map' ) | h %>" title="Large Google map for this entry">map</a></li>
-% }
-   </ul>
-</&>
-</&>
-  </div>
-
 % $m->call_next( vendor => $vendor );
-
- </div>
 
 <%args>
 $vendor
 </%args>
 
-<%init>
-my $c_r_pc = $vendor->city_region_postal_code();
-my $localized_c_r_pc = $vendor->localized_city_region_postal_code();
-
-my @address = $vendor->address_pieces();
-my $is_mappable = $vendor->map_uri();
-
-my $show_all_info = $m->request_comp()->attr('show_all_info');
-</%init>
-
 <%method title>
 VegGuide.Org | <& /lib/l10n/vendor-name.mas, vendor => $m->caller_args(1)->{vendor} &>
 </%method>
 
-<%attr>
-show_all_info => 0
-</%attr>
+<%method page_title>
+<h1 id="page-title"
+    class="<% $vendor->is_closed ? 'closed' : q{} %>"
+    ><& /lib/l10n/vendor-name.mas, vendor => $vendor &>
+    <br />
+    <span id="link-to-parent"><& /lib/link/location-and-parent.mas,
+                                 location => $location,
+                               &></span>
+</h1>
+<%args>
+$vendor
+</%args>
+
+<%init>
+my $location = $vendor->location();
+</%init>
+
+</%method>

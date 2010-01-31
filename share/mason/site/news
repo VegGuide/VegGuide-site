@@ -1,32 +1,33 @@
 % if ( $pager->total_entries() ) {
 %   while ( my $item = $news->next() ) {
 <a name="item-<% $item->item_id() %>"></a>
-<h2><& /lib/format/date.mas, date => $item->creation_datetime_object() &></h2>
-
-<h3><% $item->title() | h %></h3>
+<h2><& /lib/format/date.mas, date => $item->creation_datetime_object() &> - <% $item->title() | h %></h2>
 
 <% $item->body() %>
 
 %     if ( $c->vg_user()->is_admin() ) {
-<div class="content-buttons">
- <a class="content-button-small" href="<% news_item_uri( item => $item, path => 'edit_form' ) | h %>" title="Edit this item">Edit</a>
- <a class="action-button-small" href="/site/news/<% $item->item_id() %>/deletion_confirmation_form" title="Delete this item">Delete</a>
-</div>
+<p>
+  <a class="content-button-small" href="<% news_item_uri( item => $item, path => 'edit_form' ) | h %>" title="Edit this item">Edit</a>
+  <a class="action-button-small" href="/site/news/<% $item->item_id() %>/deletion_confirmation_form" title="Delete this item">Delete</a>
+</p>
 %     }
 %   }
 
+<p>
 %   if ( $pager->previous_page() ) {
-<a href="/site/news?page=<% $pager->previous_page() %>" title="Read newer news">Newer news</a>
+  <a href="/site/news?page=<% $pager->previous_page() %>" title="Read newer news">Newer news</a>
 %   }
 %   if ( $pager->previous_page() && $pager->next_page() ) {
-|
+  |
 %   }
 %   if ( $pager->next_page() ) {
-<a href="/site/news?page=<% $pager->next_page() %>" title="Read older news">Older news</a>
+  <a href="/site/news?page=<% $pager->next_page() %>" title="Read older news">Older news</a>
 %   }
 % } else {
-No news. Is that good news?
+  No news. Is that good news?
 % }
+</p>
+
 <%args>
 $news
 $pager

@@ -12,7 +12,7 @@ bugs you find.
 <p>
 You can help this guide by keeping it up to date.
 % if ( $c->vg_user()->is_guest() ) {
-<a href="/user/registration_form">Sign up</a> for an account, and you
+<a href="/user/new_user_form">Sign up</a> for an account, and you
 % } else {
 You
 % }
@@ -20,9 +20,10 @@ can add new entries, ratings, and reviews.
 </p>
 
 <p>
-If you are interested in discussing this site and hearing about site
-updates, sign up on the <a href="/mailman/listinfo/community">VegGuide
-community email list</a>.
+If you are interested in discussing this site and hearing about site updates,
+sign up on the <a href="/mailman/listinfo/community">VegGuide community email
+list</a>. There is also an IRC
+channel, <a href="irc://irc.perl.org/#vegguide">irc.perl.org/#vegguide</a>.
 </p>
 
 <p>

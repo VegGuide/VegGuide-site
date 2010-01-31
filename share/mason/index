@@ -1,6 +1,5 @@
 <& /lib/front-page/page.mas, columns => [ 'region-list', 'nearby' ], %ARGS &>
 
 <%attr>
-layout => '3.5'
 is_front_page => 1
 </%attr>

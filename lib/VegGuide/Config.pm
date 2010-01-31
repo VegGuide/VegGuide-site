@@ -76,6 +76,17 @@ use Sys::Hostname qw( hostname );
     }
 }
 
+{
+    my @Roles =
+        qw( VegGuide::Role::Tabs
+          );
+
+    sub CatalystRoles
+    {
+        return @Roles;
+    }
+}
+
 sub VarLibDir
 {
     my $class = shift;
@@ -317,7 +328,7 @@ sub reCAPTCHAPublicKey
     return
         $class->IsProduction()
         ? '6LehbwAAAAAAAK0xSIX-jp96u7TVUwSJ9UmaOvIX'
-        : '6LefbwAAAAAAAKn5MAqAChKVasjtLYjywB9F8wSo';
+        : '6LfcIwoAAAAAAKjgOYnMpaOgAPCO8_zbC2Ii7elS';
 }
 
 {
@@ -331,7 +342,7 @@ sub reCAPTCHAPublicKey
         $Key =
             $class->IsProduction()
             ? read_file( File::Spec->catfile( $class->EtcDir(), 'recaptcha-key' ) )
-            : '6LefbwAAAAAAAIZduCwvBWVy7JUcsD-TOAOreKeL';
+            : '6LfcIwoAAAAAAI5hcFFgP9Yn1-ijRqdnLIRAjFui ';
 
         return $Key;
     }

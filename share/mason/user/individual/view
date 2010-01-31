@@ -1,76 +1,72 @@
-   <div id="body" class="one-column">
-
 % if ( $c->vg_user()->can_edit_user($user) ) {
-    <p>
-     <a href="<% user_uri( user => $user, path => 'edit_form' ) | h %>" class="content-button">Edit</a>
+<p>
+  <a href="<% user_uri( user => $user, path => 'edit_form' ) | h %>" class="content-button">Edit</a>
 %   if ( $c->vg_user()->can_delete_user($user) ) {
-     <a href="<% user_uri( user => $user, path => 'deletion_confirmation_form' ) | h %>" class="action-button">Delete</a>
+  <a href="<% user_uri( user => $user, path => 'deletion_confirmation_form' ) | h %>" class="action-button">Delete</a>
 %   }
-    </p>
-    <p>
-     <a href="<% user_uri( user => $user, path => 'image_form' ) | h %>">upload an image for <% lc $possessive %> profile</a>
-    </p>
+</p>
+<p>
+  <a href="<% user_uri( user => $user, path => 'image_form' ) | h %>">upload an image for <% lc $possessive %> profile</a>
+</p>
 % }
 
 % if ( my $bio = $user->bio() ) {
-    <h2>Bio</h2>
+<h2>Bio</h2>
 
-    <% VegGuide::Util::text_to_html( text => $bio ) %>
+<% VegGuide::Util::text_to_html( text => $bio ) %>
 % }
 
-    <h2>About <% $subject | h %> on VegGuide</h2>
+<h2>About <% $subject | h %> on VegGuide</h2>
 
-    <p>
-     <% $subject | h %> <% $has_verb %> added <% $vendor_count %> entr<% $vendor_count != 1 ? 'ies' : 'y' %>,
-     written <% $review_count %> review<% $review_count != 1 ? 's' : '' %>
-     and rated <% $rating_count %> entr<% $review_count != 1 ? 'ies' : 'y' %>.
-    </p>
+<p>
+  <% $subject | h %> <% $has_verb %> added <% $vendor_count %> entr<% $vendor_count != 1 ? 'ies' : 'y' %>,
+  written <% $review_count %> review<% $review_count != 1 ? 's' : '' %>
+  and rated <% $rating_count %> entr<% $review_count != 1 ? 'ies' : 'y' %>.
+</p>
 
 % if ($rating_count) {
-    <p>
-     <% $possessive | h %> average rating is <% sprintf( '%.1f', $user->average_rating() ) | h %>.
-    </p>
+<p>
+  <% $possessive | h %> average rating is <% sprintf( '%.1f', $user->average_rating() ) | h %>.
+</p>
 % }
 
 % if ($rating_count) {
-    <h3>Favorites</h3>
+<h3>Favorites</h3>
 
 %   if (@top_vendors) {
-     <ul>
+<ul>
 %     for my $vendor (@top_vendors) {
-      <li><& /lib/link/vendor-review.mas, vendor => $vendor, user => $user &>
-          in <& /lib/link/location-and-parent.mas, location => $vendor->location() &>
-      </li>
+  <li><& /lib/link/vendor-review.mas, vendor => $vendor, user => $user &>
+      in <& /lib/link/location-and-parent.mas, location => $vendor->location() &>
+  </li>
 %     }
-     </ul>
+</ul>
 %   } else {
-     <p>
-      <% $subject | h %> <% $has_verb %> rated some entries but <% $doesnot_verb %> seem
-      to love any of them.
-     </p>
+<p>
+  <% $subject | h %> <% $has_verb %> rated some entries but <% $doesnot_verb %> seem
+  to love any of them.
+</p>
 %   }
 % }
 
 % if ($rating_count) {
-    <h3>Most Disliked</h3>
+<h3>Most Disliked</h3>
 
 %   if (@bottom_vendors) {
-     <ul>
+<ul>
 %     for my $vendor (@bottom_vendors) {
-      <li><& /lib/link/vendor-review.mas, vendor => $vendor, user => $user &>
-          in <& /lib/link/location-and-parent.mas, location => $vendor->location() &>
-      </li>
+  <li><& /lib/link/vendor-review.mas, vendor => $vendor, user => $user &>
+      in <& /lib/link/location-and-parent.mas, location => $vendor->location() &>
+  </li>
 %     }
-     </ul>
+</ul>
 %   } else {
-     <p>
-      <% $subject | h %> <% $has_verb %> rated some entries but <% $doesnot_verb %> seem
-      to really dislike any of them.
-     </p>
+<p>
+  <% $subject | h %> <% $has_verb %> rated some entries but <% $doesnot_verb %> seem
+  to really dislike any of them.
+</p>
 %   }
 % }
-
-   </div>
 
 <%args>
 $user

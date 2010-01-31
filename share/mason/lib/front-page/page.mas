@@ -25,6 +25,7 @@
   </div>
 </div>
 
+
 % if ($new_vendor_count) {
 <p>
   There have been <strong><% $new_vendor_count %>

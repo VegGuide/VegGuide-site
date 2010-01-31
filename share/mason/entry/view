@@ -1,145 +1,158 @@
-  <div id="body-and-boxes-container">
+<div class="yui-gc">
+  <div class="yui-u first">
 
-<& /entry/profile-and-hours.mas, vendor => $vendor &>
+    <div class="yui-gc">
+      <div class="yui-u first">
+% if ( $vendor->is_closed ) {
+        <h2 id="closed">
+          Closed as of <& /lib/format/date.mas, date => $vendor->close_date_object &>
+        </h2>
+% }
 
-   <div id="body">
+% if ( $vendor->location()->has_addresses() ) {
+        <& .address, vendor => $vendor, address => \@address &>
+% }
 
-    <& /entry/map-and-images.mas, vendor => $vendor &>
+% if ( $c->client()->show_localized_content() && $vendor->has_localized_address() ) {
+        <& .address, vendor => $vendor, address => [ $vendor->localized_address_pieces() ] &>
+% }
 
-    <div id="description-and-reviews">
+% if ( defined $vendor->phone() ) {
+        <div id="phone"><% $vendor->phone() %></div>
+% }
+
+% if ( $vendor->home_page() ) {
+        <div id="website">
+          <a class="external" rel="nofollow"
+             href="<% $vendor->external_uri() | h %>"
+             title="<% $vendor->name() | h %> web site"
+             ><% $vendor->external_uri() | h %></a>
+        </div>
+% }
 
 % unless ( $vendor->is_organization() ) {
-     <div id="info-band">
-      <span class="how-veg veg-level-<% $vendor->veg_level() %>"><% $vendor->veg_description | h %></span>
-
-%   if ( $vendor->is_restaurant() ) {
-      <br />
-      <label>Prices:</label> <span class="price-range"><% $vendor->price_range()->description() | h %></span>
-%   }
-
-%   if ( my @cuisines = $vendor->cuisines() ) {
-      <br />
-      <label>Cuisines:</label> <span class="cuisines"><% join ', ', map { $_->name() } @cuisines | h %></span>
-%   }
-     </div>
+        <h3 class="how-veg veg-level-<% $vendor->veg_level() %>"><% $vendor->veg_description | h %></h3>
 % }
 
-     <p id="summary"><% $vendor->short_description() | h %>
+% if ( $vendor->location()->has_addresses() && $c->vg_user()->is_admin() ) {
+        <div id="lat-long">
+%   if ( defined $vendor->latitude() ) {
+          <% $vendor->latitude() | h %> / <% $vendor->longitude() | h %>
+%   } else {
+          No lat/long
+%   }
+        </div>
+        <div id="canonical-address">
+%   if ( string_is_empty( $vendor->canonical_address() ) ) {
+          No canonical address from Google Maps
+%   } else {
+          <% $vendor->canonical_address() | h %>
+%   }
+        </div>
+% }
+
+      </div>
+      <div class="yui-u">
+        <& /entry/ratings.mas, vendor => $vendor &>
+      </div>
+    </div>
+
+<p class="summary">
+  <% $vendor->short_description() | h %>
 % if ( $c->client()->show_localized_content() && defined $vendor->localized_short_description() ) {
-      - <% $c->client()->encode( $vendor->localized_short_description() ) | h %>
+  - <% $c->client()->encode( $vendor->localized_short_description() ) | h %>
 % }
-     </p>
+</p>
+
+% if ( $vendor->categories > 1 || ! $vendor->is_restaurant ) {
+<p id="entry-categories"><% join ', ', map { $_->name } $vendor->categories | h %></p>
+% }
 
 % if ( defined $description && length $description ) {
-     <% $description %>
+<% $description %>
 % }
 
 % if ( defined $localized_description && length $localized_description ) {
-     <% $localized_description %>
+<% $localized_description %>
 % }
 
 % if ( ! defined $description && ! defined $localized_description ) {
-     <p class="first">
-      <em>No description yet. Click on the Edit button to add one.</em>
-     </p>
+<p class="first">
+  <em>No description yet. Click on the Edit button to add one.</em>
+</p>
 % }
 
-     <p>
-      <a href="<% entry_uri( vendor => $vendor, path => 'edit_form' ) | h %>" class="content-button" title="Edit this entry">Edit</a>
-      <a href="/site/clone_entry_form?vendor_id=<% $vendor->vendor_id() %>" class="content-button" title="Make a new entry based on this one">Clone</a>
-% if ( $c->vg_user()->can_delete_vendor($vendor) ) {
-      <a href="<% entry_uri( vendor => $vendor, path => 'deletion_confirmation_form' ) | h %>" class="action-button" title="Delete this entry">Delete</a>
-% }
-     </p>
-
-% if ( defined $vendor->directions() ) {
-     <div id="directions">
-      <strong>Directions:</strong> <% VegGuide::Util::text_to_html( text => $vendor->directions(), class => 'compact' ) %>
-     </div>
-% }
-
-% if (@attributes) {
-     <div id="features-container">
-      <& /lib/rounded-corners-top.mas &>
-
-      <div id="features">
-
-       <ul>
-%   for my $att (@attributes) {
-        <li><% $att->name() | h %></li>
-%   }
-       </ul>
-
-      </div>
-
-      <& /lib/rounded-corners-bottom.mas &>
-     </div>
-% }
-
-     <p id="entry-attribution">
+<p id="entry-attribution">
 % if ( my $source = $vendor->vendor_source() ) {
-      Data provided by <a href="<% $source->display_uri() | h %>" title="Go to <% $source->name() | h %>"
-                          ><% $source->name() | h %></a>
+  Data provided by
+  <a href="<% $source->display_uri() | h %>"
+     title="Go to <% $source->name() | h %>"
+     ><% $source->name() | h %></a>
 % } else {
-      Added by
-      <& /lib/link/user.mas, user => $vendor->user() &>
+  Added by
+  <& /lib/link/user.mas, user => $vendor->user() &>
 % }
-      on <& /lib/format/date.mas, date => $vendor->creation_datetime() &>
+  on <& /lib/format/date.mas, date => $vendor->creation_datetime() &>
 % if ( $vendor->creation_datetime() ne $vendor->last_modified_datetime() ) {
-      (updated <& /lib/format/date.mas, date => $vendor->last_modified_datetime() &>)
+  (last updated <& /lib/format/date.mas, date => $vendor->last_modified_datetime() &>)
 % }
 
 % if ( $c->vg_user()->is_admin() && $vendor->external_unique_id() ) {
-      <br />
-      <span id="external-id">External id: <% $vendor->external_unique_id() | h %></span>
+  <br />
+  <span id="external-id">External id: <% $vendor->external_unique_id() | h %></span>
 % }
-     </p>
+</p>
 
-     <p>
-      <a href="<% entry_uri( vendor => $vendor, path => 'review_form' ) | h %>"
-         class="content-button">Write your review</a>
-     </p>
 
-% if ($comments || $ratings) {
-     <hr />
+<p>
+  <a href="<% entry_uri( vendor => $vendor, path => 'edit_form' ) | h %>"
+     class="content-button" title="Edit this entry">Edit</a>
+  <a href="/site/clone_entry_form?vendor_id=<% $vendor->vendor_id() %>"
+     class="content-button" title="Make a new entry based on this one">Clone</a>
+% if ( $c->vg_user()->can_delete_vendor($vendor) ) {
+  <a href="<% entry_uri( vendor => $vendor, path => 'deletion_confirmation_form' ) | h %>"
+     class="action-button" title="Delete this entry">Delete</a>
 % }
+</p>
 
 % if ($comments) {
-     <h2>Reviews</h2>
+<hr />
 
-     <& /lib/comments.mas, comments => $comments, vendor => $vendor &>
+<h2>Most Recent Reviews</h2>
 
-     <p>
-      <a href="<% entry_uri( vendor => $vendor, path => 'review_form' ) | h %>"
-         class="content-button">Write your review</a>
-     </p>
-% }
+<& /lib/comments.mas, comments => $comments, vendor => $vendor &>
 
-% if ($ratings) {
-     <h3>Ratings Without Reviews</h3>
-
-     <ul id="ratings-list">
-%   while ( my ( $rating, $user ) = $ratings->next() ) {
-      <li><a name="user-id-<% $user->user_id() %>"></a>
-          <& /lib/link/user.mas, user => $user &>:
-          <& /lib/stars-for-rating.mas, rating => $rating->rating(), color => 'green' &>
-      </li>
+%   if ( $vendor->review_count() > 2 ) {
+<p>
+  <a href="<% entry_uri( vendor => $vendor, path => 'reviews' ) | h %>"
+     >Read all <% $vendor->review_count() %> reviews</a>.
+</p>
 %   }
-     </ul>
 % }
 
-    </div>
+<& /entry/supplementary.mas, vendor => $vendor &>
 
-   </div>
   </div>
+
+  <div class="yui-u">
+    <& /entry/images.mas, vendor => $vendor &>
+
+    <& /entry/hours.mas, vendor => $vendor &>
+
+  </div>
+</div>
 
 <%args>
 $vendor
 $comments => undef
-$ratings => undef
 </%args>
 
 <%init>
+my $c_r_pc = $vendor->city_region_postal_code();
+my $localized_c_r_pc = $vendor->localized_city_region_postal_code();
+
+my @address = $vendor->address_pieces();
+
 my $description =
       VegGuide::Util::text_to_html( text        => $vendor->long_description(),
                                     first_class => 'first',
@@ -154,11 +167,29 @@ if ( $c->client()->show_localized_content() )
                                       first_class => $description ? '' : 'first',
                                     );
 }
-
-my @attributes = $vendor->attributes();
 </%init>
 
+<%def .address>
+  <address class="entry-address">
+% unless ( string_is_empty( $vendor->canonical_address() ) ) {
+    <a href="<% entry_uri( vendor => $vendor, path => 'map' ) %>" title="Google Map of this address">
+% }
+% foreach my $line (@address) {
+    <% $line | h %>
+%   if ( $line ne $address[-1] ) {
+    <br />
+%   }
+% }
+% unless ( string_is_empty( $vendor->canonical_address() ) ) {
+    </a>
+% }
+  </address>
+<%args>
+$vendor
+@address
+</%args>
+</%def>
+
 <%attr>
-show_all_info => 1
 load_google_maps => 1
 </%attr>

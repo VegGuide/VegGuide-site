@@ -1,28 +1,23 @@
-    <div class="info-box-container">
-     <h2>Recent entries</h2>
-
-     <div id="recent-entries" class="info-box">
+<h2>Recent entries</h2>
 
 % my $last_date = '';
 % while ( my $vendor = $vendors->next() ) {
 %   if ( $last_date ne $vendor->creation_date() ) {
 %     if ($last_date) {
-      </ul>
+</ul>
 %     }
 
-      <h3><& /lib/format/date.mas, date => $vendor->creation_datetime_object(), compact => 1 &></h3>
+<h3 class="no-top-margin"><& /lib/format/date.mas, date => $vendor->creation_datetime_object(), compact => 1 &></h3>
 %       $last_date = $vendor->creation_date();
 
-      <ul>
+<ul class="no-top-margin">
 %   }
 
-       <li>
-        <& /lib/link/vendor.mas, vendor => $vendor &>
-       </li>
+<li>
+  <& /lib/link/vendor.mas, vendor => $vendor &>
+</li>
 % }
-      </ul>
-     </div>
-    </div>
+</ul>
 <%args>
 $location
 </%args>

@@ -77,6 +77,7 @@ our @EXPORT_OK = qw( entry_uri entry_image_uri entry_review_uri
         my $user = delete $p{user};
 
         return entry_uri( %p,
+                          path     => 'reviews',
                           fragment => 'user-id-' . $user->user_id(),
                         );
     }

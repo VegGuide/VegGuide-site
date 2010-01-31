@@ -17,8 +17,7 @@ use VegGuide::SiteURI qw( region_uri site_uri user_uri );
 use VegGuide::Util qw( string_is_empty );
 
 
-sub _set_user : Chained('/') : PathPart('user') : CaptureArgs(1)
-{
+sub _set_user : Chained('/') : PathPart('user') : CaptureArgs(1) {
     my $self    = shift;
     my $c       = shift;
     my $user_id = shift;
@@ -30,12 +29,53 @@ sub _set_user : Chained('/') : PathPart('user') : CaptureArgs(1)
 
     $c->stash()->{user} = $user;
 
-    if ( $c->request()->looks_like_browser() )
-    {
-        $c->response()->breadcrumbs()->add
-            ( uri   => user_uri( user => $user ),
-              label => $user->real_name(),
+    if ( $c->request()->looks_like_browser() ) {
+        $c->add_tab($_)
+            for (
+            {
+                uri   => user_uri( user => $user ),
+                label => 'Profile',
+                tooltip => 'User profile for ' . $user->real_name(),
+                id      => 'profile',
+            }, {
+                uri   => user_uri( user => $user, path => 'entries' ),
+                label => 'Entries',
+                tooltip => 'All entries added ' . $user->real_name(),
+                id      => 'entries',
+            }, {
+                uri   => user_uri( user => $user, path => 'reviews' ),
+                label => 'Reviews',
+                tooltip => 'All reviews by ' . $user->real_name(),
+                id      => 'reviews',
+            },
             );
+
+        if ( $c->vg_user()->can_edit_user($user) ) {
+            $c->add_tab(
+                {
+                    uri   => user_uri( user => $user, path => 'watch_list' ),
+                    label => 'Watch list',
+                    tooltip => 'Watch list for ' . $user->real_name(),
+                    id      => 'watch_list',
+                }
+            );
+        }
+
+        if ( $c->vg_user()->is_admin() ) {
+            $c->add_tab(
+                {
+                    uri     => user_uri( user => $user, path => 'history' ),
+                    label   => 'History',
+                    tooltip => 'History for ' . $user->real_name(),
+                    id      => 'history',
+                }
+            );
+        }
+
+        $c->response()->breadcrumbs()->add(
+            uri   => user_uri( user => $user ),
+            label => $user->real_name(),
+        );
     }
 }
 
@@ -326,6 +366,8 @@ sub user_GET_html
     my $self = shift;
     my $c    = shift;
 
+    $c->tab_by_id('profile')->set_is_selected(1);
+
     $c->stash()->{template} = '/user/individual/view';
 }
 
@@ -335,7 +377,7 @@ sub edit_form : Chained('_set_user') : PathPart('edit_form') : Args(0)
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to edit a user.',
+                          q{You must be logged in to edit a user. If you don't have an account you can create one now.},
                         );
 
     $c->redirect_and_detach( site_uri( path => '/', with_host => 1 ) )
@@ -350,7 +392,7 @@ sub image_form : Chained('_set_user') : PathPart('image_form') : Args(0)
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to edit a user.',
+                          q{You must be logged in to edit a user. If you don't have an account you can create one now.},
                         );
 
     $c->redirect_and_detach( site_uri( path => '/', with_host => 1 ) )
@@ -663,6 +705,8 @@ sub entries : Chained('_set_user') : PathPart('entries') : Args(0)
     my $self = shift;
     my $c    = shift;
 
+    $c->tab_by_id('entries')->set_is_selected(1);
+
     if ( $c->stash()->{user}->vendor_count() )
     {
         $c->stash()->{vendors} = $c->stash()->{user}->vendors_by_location();
@@ -675,6 +719,8 @@ sub reviews : Chained('_set_user') : PathPart('reviews') : Args(0)
 {
     my $self = shift;
     my $c    = shift;
+
+    $c->tab_by_id('reviews')->set_is_selected(1);
 
     my $user = $c->stash()->{user};
 
@@ -701,6 +747,8 @@ sub history : Chained('_set_user') : PathPart('history') : Args(0)
     $c->redirect_and_detach( site_uri( path => '/', with_host => 1 ) )
         unless $c->vg_user()->is_admin();
 
+    $c->tab_by_id('history')->set_is_selected(1);
+
     $c->stash()->{logs} = $user->activity_logs()
         if $user->activity_log_count();
 
@@ -718,6 +766,8 @@ sub watch_list_GET_html : Private
 
     $c->redirect_and_detach( site_uri( path => '/', with_host => 1 ) )
         unless $c->vg_user()->can_edit_user($user);
+
+    $c->tab_by_id('watch_list')->set_is_selected(1);
 
     $c->stash()->{locations} = $user->subscribed_locations();
 

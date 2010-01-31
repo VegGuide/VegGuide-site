@@ -1,124 +1,38 @@
- <div id="main" class="main-region">
-
-  <div id="title-and-info-container" class="<% $one_column ? 'one-column' : '' %>">
-   <& /lib/rounded-corners-top.mas &>
-
-   <div id="page-title-and-info">
-    <h1 id="page-title">
-     <& /lib/l10n/location-name.mas, location => $location &>
-% if ( $c->vg_user()->is_logged_in() ) {
-     <form id="watch-list"
-           action="<% $watch_list_form_uri | h %>" method="post">
-      <input type="hidden" name="location_id" value="<% $location->location_id() %>" />
-%   if ($is_subscribed) {
-      <input type="hidden" name="x-tunneled-method" value="DELETE" />
-      <input type="hidden" name="return_to" value="<% $c->request()->uri() %>" />
-
-      <input type="image" id="watch-list-link"
-             name="submit"
-             title="Remove <% $location->name() %> from your watch list"
-             src="/images/close-button.png" />
-%   } else {
-      <input type="image" id="watch-list-link"
-             name="submit"
-             title="Add <% $location->name() %> to your watch list"
-             src="/images/eye.png" />
-% }
-     </form>
-% }
-    </h1>
-
-% if ( my $parent = $location->parent() ) {
-    <div id="link-to-parent">
-     <&| /lib/link/location.mas, location => $parent &>&lt; <& /lib/l10n/location-name.mas, location => $parent &></&>
-    </div>
-% }
-    <div id="entry-count">
-     <% $vendor_count ? $vendor_count : 'No' %> entr<% $vendor_count == 1 ? 'y' : 'ies' %>
-    </div>
-
-% if ( $c->vg_user()->is_admin() ) {
-    <div id="creation-info">
-      Created on <& /lib/format/datetime.mas, datetime => $location->creation_datetime_object() &>
-      by <& /lib/link/user.mas, user => $location->creator() &>
-    </div>
-% }
-
-% if ( $c->vg_user()->can_edit_location($location) ) {
-     <div class="content-buttons">
-      <a class="content-button" href="<% region_uri( location => $location, path => 'edit_form' ) | h %>"
-         >Edit</a>
-%   if ( $c->vg_user()->can_delete_location($location) ) {
-      <a class="action-button" href="<% region_uri( location => $location, path => 'deletion_confirmation_form' ) | h %>"
-         >Delete</a>
-%   }
-     </div>
-% }
-
-   </div>
-  </div>
-
-  <div id="local-nav" class="<% $one_column ? 'one-column' : '' %>">
-<&| /lib/filter/set-current-local-nav.mas &>
-<&| /lib/filter/remove-whitespace.mas &>
-   <ul>
-    <li><a href="<% region_uri( location => $location ) | h %>">entries</a></li>
-% if ( $location->open_vendor_count() ) {
-    <li><a href="<% region_uri( location => $location, path => 'stats' ) | h %>">stats</a></li>
-% }
-    <li><a class="feeds" href="<% region_uri( location => $location, path => 'feeds' ) | h %>">feeds</a></li>
-   </ul>
-</&>
-</&>
-  </div>
-
-  <div id="<% $one_column ? 'body' : 'body-and-boxes-container' %>"
-       class="<% $one_column ? 'one-column' : '' %>">
-
-% unless ($one_column) {
-   <& /region/right-side.mas, location => $location &>
-% }
-
-% $m->call_next();
-
-  </div>
-
- </div>
+% $m->call_next( location => $location );
 
 <%args>
 $location
 </%args>
 
-<%init>
-my $vendor_count = $location->active_vendor_count();
-
-my $one_column = $m->request_comp()->attr('is_one_column');
-
-my $is_subscribed = $c->vg_user()->is_subscribed_to_location( location => $location );
-
-my $watch_list_form_uri;
-if ($is_subscribed)
-{
-    $watch_list_form_uri =
-        user_uri( user => $c->vg_user(), path => 'watch_list/' . $location->location_id() );
-}
-else
-{
-    $watch_list_form_uri =
-        user_uri( user => $c->vg_user(), path => 'watch_list' );
-}
-</%init>
-
 <%method title>
-VegGuide.Org | <& /lib/l10n/location-name.mas, location => $location &>\
-% if ( $location->parent() ) {
-, <& /lib/l10n/location-name.mas, location => $location->parent() &>\
-% }
-<%init>
-my $location = $m->caller_args(-1)->{location};
-</%init>
+VegGuide.Org | <& /lib/l10n/location-name.mas, location => $m->caller_args(1)->{location} &>
 </%method>
 
-<%attr>
-is_one_column => 0
-</%attr>
+<%method page_title>
+<h1 id="page-title"><& /lib/l10n/location-name.mas, location => $location &>
+% if ( my $parent = $location->parent() ) {
+<br />
+<span id="link-to-parent"><& /lib/link/location.mas,
+                             location => $parent
+                           &></span>
+% }
+</h1>
+<%args>
+$location
+</%args>
+
+<%init>
+my $is_subscribed
+    = $c->vg_user()->is_subscribed_to_location( location => $location );
+
+my $watch_list_form_uri;
+if ($is_subscribed) {
+    $watch_list_form_uri = user_uri( user => $c->vg_user(),
+        path => 'watch_list/' . $location->location_id() );
+}
+else {
+    $watch_list_form_uri
+        = user_uri( user => $c->vg_user(), path => 'watch_list' );
+}
+</%init>
+</%method>

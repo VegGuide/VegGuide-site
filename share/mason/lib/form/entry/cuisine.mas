@@ -1,6 +1,8 @@
+% if ($wpms) {
    <select id="possible_cuisine_id" name="possible_cuisine_id"
            multiple="multiple" size="10" style="display: none">
    </select>
+% }
 
    <select id="cuisine_id" name="cuisine_id" multiple="multiple" size="10">
 % foreach my $cuisine (@Cuisines) {
@@ -11,6 +13,10 @@
 <%once>
 my @Cuisines = VegGuide::Cuisine->root_cuisines();
 </%once>
+
+<%args>
+$wpms => 1
+</%args>
 
 <%def .cuisine_option>
     <option value="<% $cuisine->cuisine_id() %>">\

@@ -1,0 +1,47 @@
+#!/usr/bin/perl
+
+use autodie qw( :all );
+use strict;
+use warnings;
+
+use File::Find::Rule;
+use File::Path qw( rmtree );
+use VegGuide::VendorImage;
+
+my $image_dir = shift || '/var/lib/vegguide/entry-images';
+
+DIR:
+for my $dir ( sort File::Find::Rule->directory()->name( qr/\d$/)->in($image_dir) ) {
+    my @originals =  File::Find::Rule->file()->name( qr/-original/ )->in($dir);
+
+    for my $file (@originals) {
+        my ( $vendor_id, $vendor_image_id ) = $file =~ /(\d+)-(\d+)-original/;
+
+        unless ( VegGuide::Vendor->new( vendor_id => $vendor_id ) ) {
+            print "DIR:  $dir - no vendor\n";
+            rmtree( $dir );
+            next DIR;
+        }
+
+        my $image = VegGuide::VendorImage->new( vendor_image_id => $vendor_image_id );
+        unless ($image) {
+            print "FILE: $file - no vendor image record\n";
+            unlink_all($file);
+            next;
+        }
+
+        next if $image->vendor_id() == $vendor_id;
+
+        print "FILE: $file - vendor_id mismatch\n";
+        unlink_all($file);
+    }
+}
+
+sub unlink_all {
+    ( my $glob = shift ) =~ s/\-original.+/-*/;
+
+    for my $file ( glob $glob ) {
+        print "  unlinking $file\n";
+        unlink $file;
+    }
+}

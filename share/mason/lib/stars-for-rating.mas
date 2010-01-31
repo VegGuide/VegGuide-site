@@ -3,13 +3,15 @@
 % if ($title) {
            title="<% $title | h %>"
 % }
-           height="18" width="90" />
+           alt="rating star"
+           height="<% $small ? 12 : 18 %>" width="<% $small ? 60 : 90 %>" />
 
 <%args>
 $rating
 $color
 $vendor_id => undef
 $title => undef
+$small => 0
 </%args>
 
 <%init>

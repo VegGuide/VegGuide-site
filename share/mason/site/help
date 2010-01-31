@@ -33,7 +33,7 @@ unless (@ordered_items)
         {
             $name = $1;
         }
-        elsif ( /<h3>([^<]+?)<\/h3>/ )
+        elsif ( /<h2>([^<]+?)<\/h2>/ )
         {
             die "Found a title ($1) outside a <%def> block"
                 unless $name;
@@ -54,7 +54,7 @@ unless (@ordered_items)
 </%init>
 
 <%def .editing>
-<h3>How do I add or edit an entry?</h3>
+<h2>How do I add or edit an entry?</h2>
 
 <p>
 Anyone can add new entries and reviews. You can also suggest changes
@@ -102,7 +102,7 @@ do it.
 </%def>
 
 <%def .entry_guidelines>
-<h3>What are the guidelines for new entries?</h3>
+<h2>What are the guidelines for new entries?</h2>
 
 <p>
 <strong>If a vendor has more than one location, please enter each location
@@ -117,7 +117,7 @@ people actually find places nearby.
 </p>
 
 <a name="cloning"></a>
-<h5>Cloning</h5>
+<h3>Cloning</h3>
 
 <p>
 In order to make handling of vendors with multiple locations easier,
@@ -128,7 +128,7 @@ phone information and hours.
 </p>
 
 <a name="grammar"></a>
-<h5>Grammar, punctuation, spelling, etc.</h5>
+<h3>Grammar, punctuation, spelling, etc.</h3>
 
 <p>
 Please use <strong>correct capitalization, grammar, and punctuation</strong>
@@ -138,7 +138,7 @@ TO READ ;)
 </p>
 
 <a name="required_data"></a>
-<h5>Required data</h5>
+<h3>Required data</h3>
 
 <p>
 When entering a new entry, the following data is required:
@@ -173,7 +173,7 @@ fields.</strong> If you cannot think of something for the "Long
 Description" field, it is okay to just leave it blank.
 </p>
 
-<h5>Is a given entry appropriate?</h5>
+<h3>Is a given entry appropriate?</h3>
 
 <p>
 We're pretty flexible.  If an entry is likely to be of interest to
@@ -187,7 +187,7 @@ which wouldn't be very useful to anyone.
 </%def>
 
 <%def .review_guidelines>
-<h3>What are the guidelines for reviews?</h3>
+<h2>What are the guidelines for reviews?</h2>
 
 <p>
 There are only a few things that are unacceptable in reviews.  First
@@ -217,7 +217,7 @@ Reviews that don't follow these guidelines may be edited or deleted.
 </%def>
 
 <%def .categories>
-<h3>What do the categories for entries mean?</h3>
+<h2>What do the categories for entries mean?</h2>
 
 <p>
 The categories which can be assigned are detailed below.  Remember, an
@@ -265,7 +265,7 @@ what things the vendor sells.
 </%def>
 
 <%def .add_region>
-<h3>How do I add a new region?</h3>
+<h2>How do I add a new region?</h2>
 
 <p>
 There is an <strong>"Add Region"</strong> button on most
@@ -277,7 +277,7 @@ region and click on "Add Region".
 </%def>
 
 <%def .address_search_countries>
-<h3>What countries are supported for address searches?</h3>
+<h2>What countries are supported for address searches?</h2>
 
 <p>
 The following countries are supported:
@@ -296,7 +296,7 @@ native language, not a romanized version.
 </%def>
 
 <%def .weighted_ratings>
-<h3>How do weighted ratings work?</h3>
+<h2>How do weighted ratings work?</h2>
 
 <p>
 When we say that ratings are weighted we mean that the average rating
@@ -345,6 +345,7 @@ probably no reason to think it's exceptional.
 For the mathematically minded, the algorithm used for weighting is the
 same one used by <a href="http://www.imdb.com/">IMDB</a> (as of
 October, 2007):
+</p>
 
 <pre>
 weighted rating (WR) = (v ÷ (v+m)) × R + (m ÷ (v+m)) × C
@@ -368,7 +369,7 @@ average is relatively minimal.
 </%def>
 
 <%def .data_localization>
-<h3>How does the guide handle entries for regions that use non-English languages?</h3>
+<h2>How does the guide handle entries for regions that use non-English languages?</h2>
 
 <p>
 When adding or editing an entry in some locations, the guide also
@@ -386,7 +387,7 @@ but this is a far more complex problem to solve.
 </%def>
 
 <%def .wiki_formatting>
-<h3>How do I add formatted text (headers, bold, lists, etc.) to my entries and reviews?</h3>
+<h2>How do I add formatted text (headers, bold, lists, etc.) to my entries and reviews?</h2>
 
 <p>
 An entry's long description, as well as user reviews and location
@@ -469,7 +470,7 @@ Four or more hyphens make a line
 </%def>
 
 <%def .suggestions>
-<h3>How are suggestions handled?</h3>
+<h2>How are suggestions handled?</h2>
 
 <p>
 When a user makes a suggestion for an entry, that suggestion is saved
@@ -485,7 +486,7 @@ default, no email is sent.
 </%def>
 
 <%def .bad_entries>
-<h3>Your entries for [region X] stinks, what are you going to do about it?</h3>
+<h2>Your entries for [region X] stinks, what are you going to do about it?</h2>
 
 <p>
 Nothing.  But you should feel free to add new entries and suggest
@@ -497,7 +498,7 @@ us know</a>.
 </%def>
 
 <%def .love_hate>
-<h3>I love/hate the guide.  Where can I discuss that with other users?</h3>
+<h2>I love/hate the guide.  Where can I discuss that with other users?</h2>
 
 <p>
 The place for this is the <a
@@ -506,7 +507,7 @@ href="/mailman/listinfo/community">VegGuide community email list</a>.
 </%def>
 
 <%def .syndicate>
-<h3>Can I use your database content for my website/leaflet/etc.?</h3>
+<h2>Can I use your database content for my website/leaflet/etc.?</h2>
 
 <p>
 Yes, that's why we offer a <a href="/site/rest_api/">REST API</a> for
@@ -526,7 +527,7 @@ us, <a href="/site/about">please contact us</a>.
 <%doc>
 
 <%def X.promo_cards>
-<h3X>How can I help promote the guide?</h3>
+<h2X>How can I help promote the guide?</h2>
 
 <p>
 Tell all your friends and family about it, and encourage them to add
@@ -539,7 +540,7 @@ area.
 </%doc>
 
 <%def .link_images>
-<h3>Do you have any nice images to use when linking?</h3>
+<h2>Do you have any nice images to use when linking?</h2>
 
 <!--
 <p>
@@ -565,7 +566,7 @@ Not right now, we need to make some from the current logo.
 </%def>
 
 <%def .admin_add>
-<h3>Will you add [some restaurant, store, whatever]?</h3>
+<h2>Will you add [some restaurant, store, whatever]?</h2>
 
 <p>
 No.  We're very, very lazy, and creating the site itself has
@@ -576,7 +577,7 @@ href="#add_or_edit">adding new entries</a> immediately.
 </%def>
 
 <%def .feature_request>
-<h3>Will you add feature X?</h3>
+<h2>Will you add feature X?</h2>
 
 <p>
 Probably.  Please see our <a href="/site/todo">todo list</a> first.
@@ -587,7 +588,7 @@ list</a>.
 </%def>
 
 <%def .access>
-<h3>Who can edit what?</h3>
+<h2>Who can edit what?</h2>
 
 <p>
 There are three levels of access to the Guide:
@@ -619,7 +620,7 @@ If you are interested in being a region maintainer for an area, please
 </%def>
 
 <%def .watch_list>
-<h3>What is the "watch list" feature?</h3>
+<h2>What is the "watch list" feature?</h2>
 
 <p>
 You can add regions to your personal watch list by clicking on the
@@ -643,14 +644,14 @@ href="<% user_uri( user => $c->vg_user(), path => 'watch_list' ) | h %>">watch l
 </%def>
 
 <%def .definitions>
-<h3>How are "vegan", "vegetarian", etc. defined on this site?</h3>
+<h2>How are "vegan", "vegetarian", etc. defined on this site?</h2>
 
 <p>
 The definitions are as follows ...
 </p>
 
 <a name="vegan"></a>
-<h4>Vegan</h4>
+<h3>Vegan</h3>
 <p>
 For the purposes of VegGuide.Org, a restaurant is considered vegan if
 it is possible to randomly order anything on the menu and still have
@@ -674,14 +675,14 @@ restaurants.
 </p>
 
 <a name="vegetarian"></a>
-<h4>Vegetarian</h4>
+<h3>Vegetarian</h3>
 <p>
 For the purposes of this web guide, a restaurant is considered
 vegetarian if it does not serve animal flesh in any form.
 </p>
 
 <a name="vegan-friendly"></a>
-<h4>Vegan-friendly</h4>
+<h3>Vegan-friendly</h3>
 <p>
 This categorization is far more flexible than the others, and should
 be influenced by the restaurants's locale.  For example, in places
@@ -698,7 +699,7 @@ minimal vegan-friendliness is worth noting.
 </p>
 
 <a name="vegetarian-friendly"></a>
-<h4>Vegetarian-friendly</h4>
+<h3>Vegetarian-friendly</h3>
 <p>
 Like vegan-friendly, the definition of this term varies by locale.  A
 restaurant need not be vegetarian-friendly to be added to the guide,
@@ -710,7 +711,7 @@ feel free to add it.
 </%def>
 
 <%def .who_pays>
-<h3>Who pays for this site?</h3>
+<h2>Who pays for this site?</h2>
 
 <p>
 This site has pretty low expenses at the moment.  XMission provides
@@ -723,11 +724,11 @@ Compassionate Action for Animals.
 </%def>
 
 <%def .browser_support>
-<h3>Why does this site look terrible in my browser?</h3>
+<h2>Why does this site look terrible in my browser?</h2>
 
 <p>
 This site was primarily designed to look good in Mozilla/Firefox and
-Internet Explorer 6.0+. It should also look okay in Safari, Konqueror,
+Internet Explorer 7.0+. It should also look okay in Safari, Konqueror,
 and Opera 7+. Because the site is standards-compliant, it should also
 be usable in text-only browsers.
 </p>
@@ -740,10 +741,8 @@ available, or at least to IE7 if you cannot use Firefox.
 </p>
 </%def>
 
-</%def>
-
 <%def .browser_localization>
-<h3>You said you have localized content, so why don't I see any?</h3>
+<h2>You said you have localized content, so why don't I see any?</h2>
 
 <p>
 You have to have your browser set to accept the language for the
@@ -786,7 +785,7 @@ everywhere.
 </%def>
 
 <%def .competition>
-<h3>Why are you competing with [site X]?</h3>
+<h2>Why are you competing with [site X]?</h2>
 
 <p>
 There's a number of answers to this question.  Some of our reasons for

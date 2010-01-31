@@ -1,43 +1,34 @@
-    <ul class="feeds-list">
+<h2>Recent entries and reviews</h2>
 
-     <li>
-      <strong>Recent entries and reviews</strong>
-      <ul>
-       <li><a class="feed" href="<% $base_uri %>/recent.rss"><img src="/images/rss-button.gif" /></a></li>
-       <li><a class="feed" href="<% $base_uri %>/recent.atom"><img src="/images/atom-button.gif" /></a></li>
-      </ul>
-     </li>
+<ul>
+  <li><a class="feed" href="<% $base_uri %>/recent.rss"><img src="/images/rss-button.gif" /></a></li>
+  <li><a class="feed" href="<% $base_uri %>/recent.atom"><img src="/images/atom-button.gif" /></a></li>
+</ul>
 
-     <li>
-      <strong>Just the recent entries</strong>
-      <ul>
-       <li><a class="feed" href="<% $base_uri %>/recent.rss?entries_only=1"><img src="/images/rss-button.gif" /></a></li>
-       <li><a class="feed" href="<% $base_uri %>/recent.atom?entries_only=1"><img src="/images/atom-button.gif" /></a></li>
-      </ul>
-     </li>
+<h2>Just the recent entries</h2>
+<ul>
+  <li><a class="feed" href="<% $base_uri %>/recent.rss?entries_only=1"><img src="/images/rss-button.gif" /></a></li>
+  <li><a class="feed" href="<% $base_uri %>/recent.atom?entries_only=1"><img src="/images/atom-button.gif" /></a></li>
+</ul>
 
-     <li>
-      <strong>Just the recent reviews</strong>
-      <ul>
-       <li><a class="feed" href="<% $base_uri %>/recent.rss?reviews_only=1"><img src="/images/rss-button.gif" /></a></li>
-       <li><a class="feed" href="<% $base_uri %>/recent.atom?reviews_only=1"><img src="/images/atom-button.gif" /></a></li>
-      </ul>
-     </li>
+<h2>Just the recent reviews</h2>
+<ul>
+  <li><a class="feed" href="<% $base_uri %>/recent.rss?reviews_only=1"><img src="/images/rss-button.gif" /></a></li>
+  <li><a class="feed" href="<% $base_uri %>/recent.atom?reviews_only=1"><img src="/images/atom-button.gif" /></a></li>
+</ul>
 
-    </ul>
+<h2>Data Feed</h2>
 
-    <h3>Data Feed</h3>
+<p>
+  The data feeds will let you pull the data for <% $thing %> and repurpose
+  it. They are in a <a href="/site/data_feed">highly extended RSS 1.0
+  dialect</a>. You may prefer to use our <a href="/site/rest_api">REST API</a>
+  instead.
+</p>
 
-    <p>
-     The data feeds will let you pull the data for <% $thing %>
-     and repurpose it. They are in
-     a <a href="/site/data_feed">highly extended RSS 1.0
-     dialect</a>. You may prefer to use
-     our <a href="/site/rest_api">REST API</a> instead.
-    </p>
-    
-    <a class="feed" href="<% $base_uri %>.rss"><img src="/images/rss-1-button.gif" /></a></li>
-
+<p>    
+  <a class="feed" href="<% $base_uri %>.rss"><img src="/images/rss-1-button.gif" /></a></li>
+</p>
 
 <%args>
 $base_uri

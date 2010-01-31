@@ -1,29 +1,10 @@
- <div id="main">
+<h1 id="page-title">Page Not Found</h1>
 
-  <div id="title-and-info-container" class="no-nav">
-   <& /lib/rounded-corners-top.mas &>
-
-   <div id="page-title-and-info">
-    <h1 id="page-title">Page Not Found</h1>
-   </div>
-
-  </div>
-
- </div>
-
- <div id="body-container">
-
-  <div id="body" class="one-column">
-
-   <p>
-    It seems that the page you were looking for was not found. Try
-    using the search form up top, or just browsing around.
-   </p>
+<p>
+  It seems that the page you were looking for was not found. Try
+  using the search form up top, or just browsing around.
+</p>
    
-   <p>
-    <a href="/">Back to the home page</a>.
-   </p>
-
-  </div>
-
- </div>
+<p>
+  <a href="/">Back to the home page</a>.
+</p>

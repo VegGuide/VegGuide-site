@@ -32,7 +32,7 @@
 
          Showing <% $pager->first() %> - <% $pager->last() %> of <% $pager->total_entries() %>
 % } elsif ( $pager->total_entries() ) {
-         Showing all <% $things | h %> (<% $pager->total_entries() %>)
+         Showing all <% $search->has_filters() ? 'matching' : q{} %> <% $things | h %> (<% $pager->total_entries() %>)
 % } else {
          No <% $things | h %>
 % }

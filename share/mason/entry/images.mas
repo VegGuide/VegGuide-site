@@ -1,0 +1,67 @@
+<div id="entry-images">
+% if ($first_image) {
+  <a href="#" class="activate-slideshow js-display-order-1">
+    <img id="main-image" src="<% $first_image->small_uri() | h %>"
+         alt="<% $first_image->caption() || 'main image for ' . $vendor->name() | h %>"
+         title="Uploaded by <% $first_image->user()->real_name() | h %> - click for slideshow"
+         height="<% $first_image->small_height() %>" width="<% $first_image->small_width() %>" />
+  </a>
+%   if ( $first_image->caption() ) {
+  <p class="caption">
+    <% $first_image->caption() | h %>
+  </p>
+%   }
+% } else {
+  <a href="<% entry_uri( vendor => $vendor, path => 'images_form' ) | h %>"
+     ><img id="main-image" class="add-an-image"
+           src="/images/upload-an-image.png" height="150" width="150" /></a>
+% }
+
+% while ( my ( $i1, $i2 ) = splice @images, 0, 2 ) {
+  <a href="#" class="activate-slideshow js-display-order-<% $i1->display_order() %>">
+    <img src="<% $i1->mini_uri() | h %>"
+         alt="<% $i1->caption() || 'image for ' . $vendor->name() | h %>"
+         title="Uploaded by <% $i1->user()->real_name() | h %> - click for slideshow"
+         height="<% $i1->mini_height() %>" width="<% $i1->mini_width() %>" />
+  </a>
+%   if ($i2) {
+  <a href="#" class="activate-slideshow js-display-order-<% $i2->display_order() %>">
+    <img src="<% $i2->mini_uri() | h %>"
+         alt="<% $i2->caption() || 'image for ' . $vendor->name() | h %>"
+         title="Uploaded by <% $i2->user()->real_name() | h %> - click for slideshow"
+         height="<% $i2->mini_height() %>" width="<% $i2->mini_width() %>" />
+  </a>
+%   }
+% }
+
+% if ($more_count) {
+    <p id="image-count">
+      This entry has <a href="#" class="activate-slideshow js-display-order-1"><% $more_count %>
+      more <% PL( 'image', $more_count ) %></a>.
+    </p>
+% }
+
+    <div id="add-edit-images">
+      <a class="content-button"
+         href="<% entry_uri( vendor => $vendor, path => 'images_form' ) | h %>"
+         >Add/edit images</a>
+    </div>
+
+    <& slideshow.mas, vendor => $vendor &>
+</div>
+
+<%args>
+$vendor
+</%args>
+
+<%init>
+my @images = $vendor->images();
+
+my $first_image = shift @images;
+
+@images = sort { $a->is_wide() ? 1 : $b->is_wide() ? -1 : 0 } @images;
+
+my $more_count = @images > 4 ? @images - 4 : 0;
+
+@images = splice @images, 0, 4;
+</%init>

@@ -1,13 +1,44 @@
-<& /layout/head.mas, title => $m->request_comp()->scall_method('title') &>
+<& /head.mas, title => $m->request_comp()->scall_method('title') &>
 
 <body>
 
-<& "/layout/$layout/page.mas", %ARGS &>
+<div id="<% $is_front_page ? 'front-page-doc' : 'doc4' %>"
+     class="<% $is_front_page ? 'front-page' : q{} %>">
+
+<& header.mas, %ARGS &>
+
+  <div id="bd">
+    <div id="yui-main">
+      <div class="yui-b">
+        <div id="content">
+
+          <& /lib/messages.mas &>
+
+% if ( $m->request_comp()->method_exists('page_title') ) {
+%   my $title = $m->request_comp()->scall_method( 'page_title', %ARGS );
+%   if ( $title =~ /<h1/ ) {
+<% $title %>
+%   } else {
+          <h1 id="page-title">
+            <% $title %>
+          </h1>
+%   }
+% }
+
+% $m->call_next();
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <& footer.mas &>
+
+</div>
 
 % if ( $m->request_comp()->attr('load_google_maps')) {
- <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<% VegGuide::Config->GoogleMapsAPIKey( $c->request()->uri()->host() ) | h %>"
-         type="text/javascript"></script>
-
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<% VegGuide::Config->GoogleMapsAPIKey( $c->request()->uri()->host() ) | h %>"
+        type="text/javascript"></script>
 % }
 
 % if ( VegGuide::Config->IsProduction() ) {
@@ -31,13 +62,11 @@
 </html>
 
 <%init>
-my $layout = $m->request_comp()->attr('layout');
+my $is_front_page = $m->request_comp()->attr('is_front_page');
 </%init>
 
 <%attr>
 load_google_maps => 0
-requires_js => 0
-layout => '3.0'
 is_front_page => 0
 </%attr>
 

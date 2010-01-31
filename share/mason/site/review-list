@@ -1,43 +1,38 @@
- <div id="main">
+<table id="reviews-table" class="standard-table <% $search->can('latitude') ? 'with-distance' : '' %>">
 
-    <table id="entries-table" class="standard-table <% $search->can('latitude') ? 'with-distance' : '' %>">
-
-     <thead>
-      <tr>
-       <td colspan="5">
+  <thead>
+    <tr>
+      <td colspan="5">
         <% $pagination %>
-       </td>
-      </tr>
+      </td>
+    </tr>
 
-      <tr class="table-heading">
-       <th class="user">Reviewer</th>
-       <th class="rating">Rating</th>
-       <th class="summary">Full Review</th>
-       <th class="region">Region</th>
-       <th class="updated"><&| /lib/sort-link.mas, search => $search &>Last Updated On</&></th>
-      </tr>
-     </thead>
+    <tr class="table-heading">
+      <th class="user">Reviewer</th>
+      <th class="rating">Rating</th>
+      <th class="summary">Full Review</th>
+      <th class="region">Region</th>
+      <th class="updated"><&| /lib/sort-link.mas, search => $search &>Last Updated On</&></th>
+    </tr>
+  </thead>
 
 % if ( $pager->total_entries() ) {
-     <tfoot>
-      <tr>
-       <td colspan="5">
+  <tfoot>
+    <tr>
+      <td colspan="5">
         <% $pagination %>
-       </td>
-      </tr>
-     </tfoot>
+      </td>
+    </tr>
+  </tfoot>
 % }
 
-     <tbody>
 %   while ( my ( $comment, $vendor, $user ) = $reviews->next ) {
-<& .one-review, search => $search, comment => $comment, vendor => $vendor, user => $user, count => $reviews->count() &>
+  <tbody>
+    <& .one-review, search => $search, comment => $comment, vendor => $vendor, user => $user, count => $reviews->count() &>
+  </tbody>
 %   }
 
-     </tbody>
-
-    </table>
-
- </div>
+</table>
 
 <%args>
 $search

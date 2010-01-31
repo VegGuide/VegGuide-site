@@ -1,38 +1,54 @@
 % if ($count) {
-<div id="map-key">
- <ul>
+<div class="yui-ge">
+  <div class="yui-u first">
+    <div id="listing-google-map">
+
+    </div>
+  </div>
+
+%   if ( $search->can('address') ) {
+  <div id="search-center-info" style="display: none">
+    You searched for "<% $search->address() %>".
+  </div>
+%   }
+
+  <div class="yui-u">
+   
+    <div id="vendor-list">
+
+      <& /lib/search-filter-column.mas, %ARGS, search_uri_method => 'map_uri' &>
+
+      <h3>Showing <% $count %> entr<% $count != 1 ? 'ies' : 'y' %></h3>
+
 %   while ( my $vendor = $vendors->next() ) {
-<& .one-vendor, vendor => $vendor &>
+<& .one-vendor, vendor => $vendor, search => $search &>
 %   }
- </ul>
+    </div>
+  </div>
 </div>
 
-% if ( $search->can('address') ) {
-<div id="search-center-info" style="display: none">
- You searched for "<% $search->address() %>".
-</div>
-% }
+<h3>Map icon key</h3>
 
-<div id="listing-google-map-container"><div id="listing-google-map"></div></div>
-
-<div id="google-map-icon-key">
- <h4>Map icon key</h4>
-
- <ul class="right-list">
-%   for my $icon (@I2) {
-  <li><img src="<% static_uri( path => "/images/map-icons/$icon->[1].png" ) %>" height="40" width="29" />
-      <% $icon->[2] | h %>
-  </li>
-%   }
- </ul>
-
- <ul class="left-list">
+<div class="yui-g" id="map-icon-key">
+  <div class="yui-u first">
+    <ul class="no-top-margin">
 %   for my $icon (@I1) {
-  <li><img src="<% static_uri( path => "/images/map-icons/$icon->[1].png" ) %>" height="40" width="29" />
-      <% $icon->[2] | h %>
-  </li>
+      <li><img src="<% static_uri( path => "/images/map-icons/$icon->[1].png" ) %>" height="40" width="29" />
+          <% $icon->[2] | h %>
+      </li>
 %   }
- </ul>
+    </ul>
+  </div>
+
+  <div class="yui-u">
+    <ul class="no-top-margin">
+%   for my $icon (@I2) {
+      <li><img src="<% static_uri( path => "/images/map-icons/$icon->[1].png" ) %>" height="40" width="29" />
+          <% $icon->[2] | h %>
+      </li>
+%   }
+    </ul>
+  </div>
 
 </div>
 
@@ -51,11 +67,11 @@ There are no matching entries so there is nothing to show on a map.
 % }
 
 <%once>
-my @Icons = ( [ '1.1', 'restaurant1',   'Restaurant (vegetarian-friendly)' ],
-              [ '1.2', 'restaurant2',   'Restaurant (vegan-friendly)' ],
-              [ '1.3', 'restaurant3',   'Restaurant (100% vegetarian)' ],
-              # not a typo ;)
+my @Icons = ( # not a typo ;)
               [ '1.5', 'restaurant5',   'Restaurant (100% vegan)' ],
+              [ '1.3', 'restaurant3',   'Restaurant (100% vegetarian)' ],
+              [ '1.2', 'restaurant2',   'Restaurant (vegan-friendly)' ],
+              [ '1.1', 'restaurant1',   'Restaurant (vegetarian-friendly)' ],
               [ '1',   'restaurant',    'Restaurant (not veg-friendly)' ],
               [ '2',   'grocery',       'Grocery' ],
               [ '3',   'catering',      'Caterer' ],
@@ -73,7 +89,6 @@ $mid++ if int( @Icons / 2 ) != @Icons / 2;
 
 my @I1 = @Icons[ 0 .. $mid - 1 ];
 my @I2 = @Icons[ $mid .. $#Icons ];
-
 </%once>
 
 <%shared>
@@ -102,21 +117,22 @@ if ( $search->can('address') )
 
 <%def .one-vendor>
 
-  <li>
-   <a href="#" id="show-entry-info-<% $vendor->vendor_id() %>"><% $vendor->name() | h %></a>
-   <br />
-%     if ( $total_ratings ) {
-   <% $weighted_average %> / <% $total_ratings %> <% PL( 'vote', $total_ratings ) %>
-%   } else {
-   no ratings
-%   }
+  <p class="vendor">
+    <a href="#" id="show-entry-info-<% $vendor->vendor_id() %>"><% $vendor->name() | h %></a>
+% if ( $search->can('city') && $search->city() ) {
+    -
+    <% $vendor->neighborhood() | h %>
+% } else {
+    -
+    <% $vendor->city() | h %>
+% }
+  </p>
 
-<& .info_div, vendor => $vendor &>
-
-  </li>
+  <& .info_div, vendor => $vendor &>
 
 <%args>
 $vendor
+$search
 </%args>
 
 <%init>
@@ -136,43 +152,42 @@ my ( $weighted_average, $total_ratings )
 
 <%def .info_div>
 <div class="map-info" id="entry-info-<% $vendor->vendor_id() %>" style="display: none">
-
-<h3><% $vendor->name() | h %></h3>
+  <h2><% $vendor->name() | h %></h2>
 
 % unless ( $vendor->is_organization() ) {
-<span class="how-veg veg-level-<% $vendor->veg_level() %>"><% $vendor->veg_description() %></span>
+  <span class="how-veg veg-level-<% $vendor->veg_level() %>"><% $vendor->veg_description() %></span>
 % }
 
-% my $rest_cat = join ', ', map { $_->name() } $vendor->categories();
-% if ($rest_cat) {
-<br /><span class="category"><% $rest_cat %></span>
-% }
-
- <address>
-% for my $piece (@address_pieces) {
-  <% $piece | h %>
-%   if ( $piece ne $address_pieces[-1] ) {
+% if ( @categories > 1 ) {
   <br />
+  <span class="category"><% join ', ', map { $_->name() } $vendor->categories() %></span>
+% }
+
+  <address>
+% for my $piece (@address_pieces) {
+    <% $piece | h %>
+%   if ( $piece ne $address_pieces[-1] ) {
+    <br />
 %   }
 % }
- </address>
+  </address>
 
- <p>
-  <% $vendor->short_description() | h %>
- </p>
+  <p class="summary">
+    <% $vendor->short_description() | h %>
+  </p>
 
- <&| /lib/link/vendor.mas,
-     vendor       => $vendor,
-     english_only => 1,
-  &>more on <% $vendor->name() | h %></&>
+  <&| /lib/link/vendor.mas,
+      vendor       => $vendor,
+      english_only => 1,
+   &>More about <% $vendor->name() | h %></&>
 </div>
-
 <%args>
 $vendor
 </%args>
 
 <%init>
 my @address_pieces = $vendor->address_pieces();
+my @categories = $vendor->categories();
 </%init>
 
 </%def>

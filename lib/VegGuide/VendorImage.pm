@@ -109,6 +109,7 @@ EOF
 }
 
 {
+    my @Mini  = ( 120, 120 );
     my @Small = ( 250, 250 );
     my @Large = ( 400, 620 );
 
@@ -117,6 +118,7 @@ EOF
         my $self  = shift;
         my $image = shift;
 
+        $image->resize( @Mini,  $self->mini_path() );
         $image->resize( @Small, $self->small_path() );
         $image->resize( @Large, $self->large_path() );
     }
@@ -125,7 +127,7 @@ EOF
 my @Sizes;
 BEGIN
 {
-    @Sizes = qw( original small large );
+    @Sizes = qw( original mini small large );
 
     for my $size (@Sizes)
     {
@@ -193,6 +195,13 @@ sub base_filename
     return join '-', $self->vendor_id(), $self->vendor_image_id();
 }
 
+sub is_wide
+{
+    my $self = shift;
+
+    return $self->original_height() >= $self->original_width();
+}
+
 sub make_image_first
 {
     my $self = shift;
@@ -246,12 +255,15 @@ sub rest_data
 {
     my $self = shift;
 
-    return ( uri          => $self->large_uri(),
-             caption      => $self->caption(),
-             height       => $self->large_height(),
-             width        => $self->large_width(),
-             original_uri => $self->original_uri(),
-           );
+    return (
+        uri            => $self->large_uri(),
+        caption        => $self->caption(),
+        height         => $self->large_height(),
+        width          => $self->large_width(),
+        original_uri   => $self->original_uri(),
+        user_id        => $self->user_id(),
+        user_real_name => $self->user()->real_name(),
+    );
 }
 
 sub vendor
@@ -261,6 +273,13 @@ sub vendor
     return $self->{vendor} ||= VegGuide::Vendor->new( vendor_id => $self->vendor_id() );
 }
 
+sub user
+{
+    my $self = shift;
+
+    return $self->{user} ||= VegGuide::User->new( user_id => $self->user_id );
+}
+
 sub AllVendorIds
 {
     my $class = shift;
@@ -268,6 +287,13 @@ sub AllVendorIds
     return $class->table()->function( select => $class->table()->vendor_id_c() );
 }
 
+sub All
+{
+    my $class = shift;
 
+    return
+        $class->cursor
+            ( $class->table->all_rows );
+}
 
 1;
