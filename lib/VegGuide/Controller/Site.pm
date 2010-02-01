@@ -61,7 +61,7 @@ sub duplicate_resolution_form : Local
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to add a new region.',
+                          q{You must be logged in to add a new region. If you don't have an account you can create one now.},
                         );
 
     my %data = $c->request()->location_data();
@@ -79,7 +79,7 @@ sub clone_entry_form : Local
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to clone an entry.',
+                          q{You must be logged in to clone an entry. If you don't have an account you can create one now.},
                         );
 
     my $vendor_id = $c->request()->param('vendor_id') || 0;

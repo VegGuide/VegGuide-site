@@ -60,17 +60,45 @@ sub _set_vendor : Chained('/') : PathPart('entry') : CaptureArgs(1)
 
     $c->stash()->{vendor} = $vendor;
 
-    if ( $c->request()->looks_like_browser() && $c->request()->method() eq 'GET' )
-    {
-        my $location = $vendor->location();
+    return unless $c->request()->looks_like_browser() && $c->request()->method() eq 'GET';
 
-        $c->response()->breadcrumbs()->add_region_breadcrumbs($location);
+    my $location = $vendor->location();
 
-        $c->response()->breadcrumbs()->add
-            ( uri   => entry_uri( vendor => $vendor ),
-              label => $vendor->name(),
-            );
+    $c->add_tab(
+        {
+            uri     => entry_uri( vendor => $vendor ),
+            label   => 'Info',
+            tooltip => 'About ' . $vendor->name(),
+            id      => 'info',
+        }
+    );
+
+    $c->add_tab(
+        {
+            uri   => entry_uri( vendor => $vendor, path => 'reviews' ),
+            label => 'Reviews',
+            tooltip => 'Reviews and ratings for ' . $vendor->name(),
+            id      => 'reviews',
+        }
+    );
+
+    if ( $vendor->map_uri() ) {
+        $c->add_tab(
+            {
+                uri   => entry_uri( vendor => $vendor, path => 'map' ),
+                label => 'Map',
+                tooltip => 'Map for ' . $vendor->name(),
+                id      => 'map',
+            }
+        );
     }
+
+    $c->response()->breadcrumbs()->add_region_breadcrumbs($location);
+
+    $c->response()->breadcrumbs()->add(
+        uri   => entry_uri( vendor => $vendor ),
+        label => $vendor->name(),
+    );
 }
 
 sub entry : Chained('_set_vendor') : PathPart('') : Args(0) : ActionClass('+VegGuide::Action::REST') { }
@@ -80,19 +108,17 @@ sub entry_GET_html : Private
     my $self = shift;
     my $c    = shift;
 
+    $c->tab_by_id('info')->set_is_selected(1);
+
     my $vendor = $c->stash()->{vendor};
 
     my $review_count = $vendor->review_count();
 
     my $comments;
-    $comments = $vendor->comments() if $review_count;
-
-    my $ratings;
-    $ratings = $vendor->ratings_without_reviews()
-        if $vendor->ratings_without_review_count();
+    $comments = $vendor->comments( limit => 2 )
+        if $review_count;
 
     $c->stash()->{comments} = $comments;
-    $c->stash()->{ratings}  = $ratings;
 
     $c->stash()->{template} = '/entry/view';
 }
@@ -103,7 +129,7 @@ sub entry_PUT : Private
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to edit an entry.',
+                          q{You must be logged in to edit an entry. If you don't have an account you can create one now.},
                         );
 
     my $vendor = $c->stash()->{vendor};
@@ -158,6 +184,8 @@ sub map : Chained('_set_vendor') : PathPart('map') : Args(0)
 {
     my $self = shift;
     my $c    = shift;
+
+    $c->tab_by_id('map')->set_is_selected(1);
 
     $c->stash()->{template} = '/entry/large-map';
 }
@@ -218,7 +246,7 @@ sub rating_POST : Private
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to rate an entry.',
+                          q{You must be logged in to rate an entry. If you don't have an account you can create one now.},
                         );
 
     my $vendor = $c->stash()->{vendor};
@@ -255,7 +283,7 @@ sub edit_form : Chained('_set_vendor') : PathPart('edit_form') : Args(0)
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to edit an entry.',
+                          q{You must be logged in to edit an entry. If you don't have an account you can create one now.},
                         );
 
     $c->stash()->{template} = '/entry/edit-form';
@@ -268,7 +296,7 @@ sub review_form : Chained('_set_vendor') : PathPart('review_form') : Args(1)
     my $user_id = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to write a review.',
+                          q{You must be logged in to write a review. If you don't have an account you can create one now.},
                         );
 
     my $user = VegGuide::User->new( user_id => $user_id );
@@ -301,7 +329,7 @@ sub new_review_form : Chained('_set_vendor') : PathPart('review_form') : Args(0)
     }
 
     $self->_require_auth( $c,
-                          'You must be logged in to write a comment.',
+                          q{You must be logged in to write a comment. If you don't have an account you can create one now.},
                         );
 
     $c->stash()->{comment} =
@@ -312,7 +340,25 @@ sub new_review_form : Chained('_set_vendor') : PathPart('review_form') : Args(0)
     $c->stash()->{template} = '/entry/review-form';
 }
 
-sub reviews : Chained('_set_vendor') : PathPart('review') : Args(0) : ActionClass('+VegGuide::Action::REST') { }
+sub reviews : Chained('_set_vendor') : PathPart('reviews') : Args(0) : ActionClass('+VegGuide::Action::REST') { }
+
+sub reviews_GET_html : Private
+{
+    my $self = shift;
+    my $c    = shift;
+
+    $c->tab_by_id('reviews')->set_is_selected(1);
+
+    my $vendor = $c->stash()->{vendor};
+
+    $c->stash()->{comments} = $vendor->comments()
+        if $vendor->review_count();
+
+    $c->stash()->{ratings} = $vendor->ratings_without_reviews()
+        if $vendor->ratings_without_review_count();
+
+    $c->stash()->{template} = '/entry/reviews';
+}
 
 sub reviews_POST : Private
 {
@@ -320,7 +366,7 @@ sub reviews_POST : Private
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to write a review.',
+                          q{You must be logged in to write a review. If you don't have an account you can create one now.},
                         );
 
     my $vendor = $c->stash()->{vendor};
@@ -365,7 +411,7 @@ sub review_confirm_deletion : Chained('_set_review') : PathPart('deletion_confir
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to delete a review.',
+                          q{You must be logged in to delete a review. If you don't have an account you can create one now.},
                         );
 
     my $comment = $c->stash()->{comment};
@@ -399,7 +445,7 @@ sub review_DELETE : Private
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to delete a review.',
+                          q{You must be logged in to delete a review. If you don't have an account you can create one now.},
                         );
 
     my $comment = $c->stash()->{comment};
@@ -428,7 +474,7 @@ sub edit_hours_form : Chained('_set_vendor') : PathPart('edit_hours_form') : Arg
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          q{You must be logged in to edit an entry's hours.},
+                          q{You must be logged in to edit an entry's hours. If you don't have an account you can create one now.},
                         );
 
     $c->stash()->{template} = '/entry/edit-hours-form';
@@ -442,7 +488,7 @@ sub hours_POST : Private
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          q{You must be logged in to update an entry's hours.},
+                          q{You must be logged in to update an entry's hours. If you don't have an account you can create one now.},
                         );
 
     my $vendor = $c->stash()->{vendor};
@@ -677,7 +723,7 @@ sub images_form : Chained('_set_vendor') : PathPart('images_form') : Args(0)
     my $c    = shift;
 
     $self->_require_auth( $c,
-                          'You must be logged in to edit an entry.',
+                          q{You must be logged in to edit an entry. If you don't have an account you can create one now.},
                         );
 
     $c->stash()->{images} = [ $c->stash()->{vendor}->images() ];
@@ -748,6 +794,10 @@ sub images_POST
 
         return unless $search;
 
+        $self->_add_search_tabs( $c, $search );
+
+        $c->tab_by_id('results')->set_is_selected(1);
+
         $c->response()->breadcrumbs()->add
             ( uri   => $search->uri(),
               label => $search->title(),
@@ -776,6 +826,10 @@ sub images_POST
         my $search = $c->stash()->{search};
 
         return unless $search;
+
+        $self->_add_search_tabs( $c, $search );
+
+        $c->tab_by_id('map')->set_is_selected(1);
 
         $c->response()->breadcrumbs()->add
             ( uri   => $search->uri(),
@@ -828,6 +882,10 @@ sub images_POST
 
         return unless $search;
 
+        $self->_add_search_tabs( $c, $search );
+
+        $c->tab_by_id('results')->set_is_selected(1);
+
         $c->response()->breadcrumbs()->add
             ( uri   => $search->uri(),
               label => $search->title(),
@@ -857,6 +915,10 @@ sub images_POST
 
         return unless $search;
 
+        $self->_add_search_tabs( $c, $search );
+
+        $c->tab_by_id('map')->set_is_selected(1);
+
         $c->response()->breadcrumbs()->add
             ( uri   => $search->uri(),
               label => $search->title(),
@@ -884,6 +946,39 @@ sub images_POST
 
         $c->stash()->{template} = '/shared/printable-entry-list';
     }
+}
+
+sub _add_search_tabs {
+    my $self   = shift;
+    my $c      = shift;
+    my $search = shift;
+
+    $c->add_tab(
+        {
+            uri     => $search->uri(),
+            label   => 'Results',
+            tooltip => 'Search results',
+            id      => 'results',
+        }
+    );
+
+    $c->add_tab(
+        {
+            uri     => $search->map_uri(),
+            label   => 'Map',
+            tooltip => 'Map of results',
+            id      => 'map',
+        }
+    );
+
+    $c->add_tab(
+        {
+            uri     => $search->printable_uri(),
+            label   => 'Printable',
+            tooltip => 'Printable list of results',
+            id      => 'printable',
+        }
+    );
 }
 
 sub ungeocoded : Local : ActionClass('+VegGuide::Action::REST') { }

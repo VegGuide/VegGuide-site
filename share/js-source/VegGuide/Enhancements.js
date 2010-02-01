@@ -9,6 +9,7 @@ JSAN.use("VegGuide.HoursForm");
 JSAN.use("VegGuide.IEPngFilter");
 JSAN.use("VegGuide.LocaleList");
 JSAN.use("VegGuide.LocationSearch");
+JSAN.use("VegGuide.LoginForm");
 JSAN.use("VegGuide.Pagination");
 JSAN.use("VegGuide.RatingStars");
 JSAN.use("VegGuide.RegionForm");
@@ -25,8 +26,6 @@ if ( typeof VegGuide == "undefined" ) {
 VegGuide.Enhancements = {};
 
 VegGuide.Enhancements.instrumentAll = function () {
-    DOM.Element.hide("requires-js");
-
     VegGuide.IEPngFilter.instrumentPage();
 
     VegGuide.EntryForm.instrumentPage();
@@ -35,6 +34,7 @@ VegGuide.Enhancements.instrumentAll = function () {
     VegGuide.HoursForm.instrumentPage();
     VegGuide.LocaleList.instrumentPage();
     VegGuide.LocationSearch.instrumentPage();
+    VegGuide.LoginForm.instrumentPage();
     VegGuide.Pagination.instrumentPage();
     VegGuide.RatingStars.instrumentPage();
     VegGuide.RegionForm.instrumentPage();

@@ -81,7 +81,7 @@ my %Requires =
       'LWPx::ParanoidAgent'                      => '0',
       'LWP::Simple'                              => '0',
       'Math::Round'                              => '0',
-      'Net::OpenID::Consumer'                    => '0',
+      'Net::OpenID::Consumer'                    => '1.03',
       'Params::Validate'                         => '0',
       'Sys::Hostname'                            => '0',
       'Text::WikiFormat'                         => '0',
@@ -274,6 +274,8 @@ sub ACTION_copy_system_files
     }
 
     my $dir = '/var/log/apache2-backend';
+    mkpath( $dir, 0, 0750 )
+	unless -d $dir;
     chmod 0750, $dir
 	or die "Cannot chmod 0640 $dir: $!";
 

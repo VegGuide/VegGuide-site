@@ -196,7 +196,7 @@
 </VirtualHost>
 
 <IfDefine !Testing>
-<VirtualHost _default_:443>
+<VirtualHost www.vegguide.org:443>
     SSLEngine on
     SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
 

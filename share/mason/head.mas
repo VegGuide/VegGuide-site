@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head profile="http://a9.com/-/spec/opensearch/1.1/">
+    <meta name="verify-v1" content="S8S8dgpeS5UYctqac1Xv4fsG+sYdS77Qtni99/Y9wds=" />
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" /> 
+    <title><% $title %></title>
+
+    <& .rss_link, %ARGS &>
+
+    <link rel="search" type="application/opensearchdescription+xml"
+          href="/static/opensearch_desc.xml" title="VegGuide Search" />
+
+    <link rel="shortcut icon" href="/images/favicon.ico" mce_href="/images/favicon.ico" />
+
+    <link rel="stylesheet" type="text/css" href="<% static_uri( path => '/css/vegguide-combined.css' ) %>" />
+
+    <script type="text/javascript">
+      var JSAN = { "use": function () {} };
+    </script>
+
+    <script src="<% static_uri( path => '/js/vegguide-combined.js' ) %>" type="text/javascript"></script>
+
+  </head>
+
+<%args>
+$title
+</%args>
+
+<%def .rss_link>
+% for my $link (@links) {
+<link rel="alternate" type="<% $link->mime_type() | h %>"
+      title="<% $link->title() | h %>"
+      href="<% $link->uri() | h %>" />
+% }
+<%init>
+my @links = $c->response()->alternate_links()->all();
+return unless @links;
+</%init>
+</%def>

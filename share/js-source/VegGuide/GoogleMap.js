@@ -6,7 +6,7 @@ if ( typeof VegGuide == "undefined" ) {
     VegGuide = {};
 }
 
-VegGuide.GoogleMap = function ( div_id, is_tiny ) {
+VegGuide.GoogleMap = function ( div_id ) {
     var map_div = $(div_id);
 
     if ( ! ( map_div && GBrowserIsCompatible() ) ) {
@@ -14,20 +14,31 @@ VegGuide.GoogleMap = function ( div_id, is_tiny ) {
     }
 
     VegGuide.GoogleMap._makeIcons();
-    this._createGoogleMap( map_div, is_tiny );
+    this._createGoogleMap( map_div );
 }
 
-VegGuide.GoogleMap.prototype._createGoogleMap = function ( map_div, is_tiny ) {
+VegGuide.GoogleMap.prototype._createGoogleMap = function ( map_div ) {
     var map = new GMap2(map_div);
 
-    map.addControl( new GSmallMapControl() );
-    if (! is_tiny) {
-        map.addControl( new GMapTypeControl() );
+    var height;
+    if ( typeof window.innerHeight == "number" ) {
+        height = window.innerHeight * 0.6;
+    }
+    else {
+        height = document.documentElement.clientHeight * 0.6;
     }
 
+    map_div.style.height = height + "px";
+
+    var vendor_list = $("vendor-list");
+    if (vendor_list) {
+        vendor_list.style.height = height + "px";
+    }
+
+    map.addControl( new GSmallMapControl() );
+    map.addControl( new GMapTypeControl() );
+
     this.map = map;
-    this.info_width = is_tiny ? 130 : 400;
-    this.markers = [];
 };
 
 VegGuide.GoogleMap.prototype.addMarkers = function (points) {
@@ -48,18 +59,20 @@ VegGuide.GoogleMap.prototype.addMarkers = function (points) {
         if ( point.info_div ) {
             var show_link = $( "show-" + point.info_div );
             if (show_link) {
-                this._instrumentShowLink( show_link, marker, div );
+                this._instrumentShowLink( show_link, marker );
             }
         }
 
         this.map.addOverlay(marker);
 
-        this.markers.push(marker);
+        if ( ! this.marker ) {
+            this.marker = marker;
+        }
     }
 };
 
 VegGuide.GoogleMap.prototype.showFirstInfoWindow = function () {
-    GEvent.trigger( this.markers[0], "click" );
+    GEvent.trigger( this.marker, "click" );
 };
 
 VegGuide.GoogleMap._Icons = {};
@@ -123,20 +136,19 @@ VegGuide.GoogleMap.prototype._createMarker = function ( ll, point, div ) {
         marker = new GMarker( ll, { title: point.title } );
     }
 
-    var width = this.info_width;
-
     var self = this;
 
     if (div) {
-        marker.bindInfoWindow( div, { maxWidth: this.info_width } );
+        var new_div = div.cloneNode(true);
+        new_div.id = "";
+
+        marker.bindInfoWindow(new_div);
     }
 
     return marker;
 };
 
 VegGuide.GoogleMap.prototype._instrumentShowLink = function ( link, marker ) {
-    var width = this.info_width;
-
     var self = this;
 
     DOM.Events.addListener(

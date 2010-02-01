@@ -1,70 +1,68 @@
-  <div id="body-container">
-
 <&| /lib/filter/remove-empty-list.mas &>
-   <h2>Favorite Places</h2>
+<h2>Favorite Places</h2>
 
-   <p>
-    This list includes entries in all categories with 6 or more ratings.
-   </p>
+<p>
+  This list includes entries in all categories with 6 or more ratings.
+</p>
 
-   <ol>
+<ol>
 % while ( my $vendor = $best_rated->next() ) {
-    <li>
-     <& /lib/link/vendor.mas, vendor => $vendor &>,
-     in <% $vendor->city() | h %>
-     - <% $vendor->weighted_rating() %> / <% $vendor->rating_count() %>
-    </li>
+  <li>
+    <& /lib/link/vendor.mas, vendor => $vendor &>,
+    in <% $vendor->city() | h %>
+    - <% $vendor->weighted_rating() %> / <% $vendor->rating_count() %>
+  </li>
 % }
-   </ol>
+</ol>
 </&>
 
-   <h2>Top Entry Adders</h2>
+<&| /lib/filter/remove-empty-list.mas &>
+<h2>Top Entry Adders</h2>
 
-   <ol>
+<ol>
 % while ( my $user = $top_adders->next() ) {
-    <li><& /lib/link/user.mas, user => $user &> - <% $user->vendor_count( location => $location ) %></li>
+  <li><& /lib/link/user.mas, user => $user &> - <% $user->vendor_count( location => $location ) %></li>
 % }
-   </ol>
+</ol>
+</&>
 
 <&| /lib/filter/remove-empty-list.mas &>
-   <h2>Top Reviewers</h2>
+<h2>Top Reviewers</h2>
 
-   <ol>
+  <ol>
 % while ( my $user = $top_reviewers->next() ) {
     <li><& /lib/link/user.mas, user => $user &> - <% $user->review_count( location => $location ) %></li>
 % }
-   </ol>
+  </ol>
 </&>
 
 <&| /lib/filter/remove-empty-list.mas &>
-   <h2>Most Reviewed Entries</h2>
+<h2>Most Reviewed Entries</h2>
 
-   <ol>
+<ol>
 % while ( my $vendor = $most_reviewed->next() ) {
-    <li>
-     <& /lib/link/vendor.mas, vendor => $vendor &>,
-     in <% $vendor->city() | h %>
-     - <% $vendor->review_count() %> <% PL( 'review', $vendor->review_count() ) %>
-    </li>
+  <li>
+    <& /lib/link/vendor.mas, vendor => $vendor &>,
+    in <% $vendor->city() | h %>
+    - <% $vendor->review_count() %> <% PL( 'review', $vendor->review_count() ) %>
+  </li>
 % }
-   </ol>
+</ol>
 </&>
 
 <&| /lib/filter/remove-empty-list.mas &>
-   <h2>Most Rated Entries</h2>
+<h2>Most Rated Entries</h2>
 
-   <ol>
+<ol>
 % while ( my $vendor = $most_rated->next() ) {
-    <li>
-     <& /lib/link/vendor.mas, vendor => $vendor &>,
-     in <% $vendor->city() | h %>
-     - <% $vendor->weighted_rating() %> / <% $vendor->rating_count() %>
-    </li>
+  <li>
+    <& /lib/link/vendor.mas, vendor => $vendor &>,
+    in <% $vendor->city() | h %>
+    - <% $vendor->weighted_rating() %> / <% $vendor->rating_count() %>
+  </li>
 % }
-   </ol>
+</ol>
 </&>
-
-  </div>
 
 <%args>
 $location

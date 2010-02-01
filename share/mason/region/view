@@ -1,53 +1,81 @@
-   <div id="body">
+% if ( $c->vg_user()->is_admin() ) {
+<div id="region-creation-info">
+  Created on <& /lib/format/datetime.mas, datetime => $location->creation_datetime_object() &>
+  by <& /lib/link/user.mas, user => $location->creator() &>
+</div>
+% }
+
+% if ( $c->vg_user()->can_edit_location($location) ) {
+<p class="content-buttons">
+  <a class="content-button-small" href="<% region_uri( location => $location, path => 'edit_form' ) | h %>"
+     >Edit</a>
+%   if ( $c->vg_user()->can_delete_location($location) ) {
+  <a class="action-button-small" href="<% region_uri( location => $location, path => 'deletion_confirmation_form' ) | h %>"
+     >Delete</a>
+%   }
+</p>
+% }
 
 % if (@children) {
-    <& /lib/region-list.mas, location => $location, locations => \@children &>
+<& /lib/region-list.mas, location => $location, locations => \@children &>
 % }
 
 % if ( ( $c->vg_user()->is_admin() || $location->can_have_child_regions() ) && ! $active_vendor_count ) {
-     <div class="content-buttons">
-      <a class="content-button" href="<% region_uri( location => $location, path => 'new_region_form' ) | h %>"
-         >Add a new region</a>
-     </div>
+<p>
+  <a class="content-button" href="<% region_uri( location => $location, path => 'new_region_form' ) | h %>"
+     >Add a new region</a>
+</p>
 % }
 
 % if ( @children && $active_vendor_count ) {
-    <hr />
+<hr />
 % }
 
 % if ( $active_vendor_count ) {
-    <& /lib/filter-div.mas, location => $location, search => $search &>
-% }
+<& /lib/current-filters.mas, search => $search &>
 
-% if ( $active_vendor_count ) {
+<div class="yui-ge">
+  <div class="yui-u first">
     <& /lib/entries-table.mas, search => $search, pager => $pager &>
 % } elsif ( $c->vg_user()->is_admin() || $location->can_have_vendors() ) {
-    <div class="content-buttons">
-     <a class="content-button" href="<% region_uri( location => $location, path => 'entry_form' ) %>" title="add a new entry to this region">Add Entry</a>
-    </div>
+<p>
+  <a class="content-button"
+     href="<% region_uri( location => $location, path => 'entry_form' ) %>"
+     title="add a new entry to this region">Add Entry</a>
+</p>
 % }
 
 
 % if ($comment_count) {
-    <div id="region-comments">
-     <h2>Comments about <% $location->name() | h %></h2>
+<h2>Comments about <% $location->name() | h %></h2>
 
-     <& /lib/comments.mas, comments => $comments &>
-    </div>
+<& /lib/comments.mas, comments => $comments &>
 % }
+
+<p>
+  <a class="content-button"
+     href="<% region_uri( location => $location, path => 'comment_form' ) %>"
+     title="write a comment about this region">Add Comment</a>
+</p>
 
 % if ( ( $c->vg_user()->is_admin() || $location->can_have_child_regions() ) && $active_vendor_count ) {
-     <div class="content-buttons">
-      <a class="content-button" href="<% region_uri( location => $location, path => 'new_region_form' ) | h %>"
-         >Add a new region</a>
-     </div>
+<p>
+  <a class="content-button"
+     href="<% region_uri( location => $location, path => 'new_region_form' ) | h %>"
+     >Add a new region</a>
+</p>
 % }
 
-    <div class="content-buttons">
-     <a class="content-button" href="<% region_uri( location => $location, path => 'comment_form' ) %>" title="write a comment about this region">Add Comment</a>
-    </div>
+% if ( $active_vendor_count ) {
+  </div>
 
-   </div>
+  <div class="yui-u">
+    <& /lib/search-filter-column.mas, location => $location, search => $search &>
+    <& /region/top-restaurants.mas, %ARGS &>
+    <& /region/recent-entries.mas, %ARGS &>
+  </div>
+</div>
+% }
 
 <%args>
 $location

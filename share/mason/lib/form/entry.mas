@@ -6,14 +6,14 @@
 
     <ul>
      <li><strong>One address per entry</strong>.  If a vendor has multiple
-     locations, use the <&| /lib/link/help.mas, name => 'cloning' &>cloning feature</&>
+     locations, use the <&| /lib/link/help.mas, name => 'cloning' &>cloning feature</&></li>
      <li><strong>Please use correct grammar and capitalization.  Never use ALL CAPS!</strong></li>
      <li><strong>If you don't know something, leave that field blank, don't put "n/a" or any other text.</strong></li>
      <li><strong>Only enter what is being asked. Please don't put something like "many locations" in the city field or add "(maybe)" in the address field.</strong></li>
     </ul>
 
     <&| /lib/filter/fill-in-form.mas, data => \%form_data, objects => [ $vendor ] &>
-    <form action="<% $uri %>" method="post" id="entry-form">
+    <form action="<% $uri %>" method="post" id="entry-form" class="complex">
 % if ( $vendor->is_live() ) {
      <input type="hidden" name="x-tunneled-method" value="PUT" />
 % }
@@ -224,7 +224,7 @@
       <div class="form-item" id="is_cash_only">
        <label id="is_cash_only-label">Cash only?</label>
 
-       <ul>
+       <ul class="radio-list">
         <li>
          <input class="radio" type="radio" name="is_cash_only" value="1" id="is_cash_only-yes" />
          <label for="is_cash_only-yes" id="is_cash_only-longest" >Yes</label>
@@ -268,7 +268,7 @@
        <& /lib/form/entry/troolean.mas, name => 'is_wheelchair_accessible' &>
       </div>
 
-      <div class="form-item">
+      <div class="form-item" id="attribute_id-wpms">
        <label for="attribute_id">Features:</label>
 
        <& /lib/form/entry/attribute.mas &>
@@ -291,7 +291,7 @@
 % }
 
 % if ($is_suggestion) {
-     <& /lib/form/suggestion-fieldset.mas &>
+     <& /lib/form/suggestion.mas &>
 % }
 
      <div class="form-item">

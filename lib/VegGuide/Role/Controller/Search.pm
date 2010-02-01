@@ -221,53 +221,7 @@ sub _search_post
 
     my $uri_meth = $is_map ? 'map_uri' : 'uri';
 
-    if ( $c->request()->looks_like_browser() )
-    {
-        $c->response()->redirect( $search->$uri_meth() );
-    }
-    else
-    {
-        $self->_return_data_for_ajax_filter( $c, $search, $uri_meth );
-    }
+    $c->response()->redirect( $search->$uri_meth() );
 }
-
-sub _return_data_for_ajax_filter
-{
-    my $self     = shift;
-    my $c        = shift;
-    my $search   = shift;
-    my $uri_meth = shift;
-
-    my @filters;
-    for my $filter ( $search->filter_names() )
-    {
-        my $clone = $search->clone();
-        $clone->delete($filter);
-
-        push @filters, { description => $search->filter_description($filter),
-                         delete_uri  => $clone->$uri_meth(),
-                       };
-    }
-
-    $search->set_cursor_params( order_by   => 'name',
-                                sort_order => 'ASC',
-                                page       => 1,
-                                limit      => $c->vg_user()->entries_per_page(),
-                              );
-
-    my %response;
-    %response =
-        ( uri     => $search->$uri_meth(),
-          filters => \@filters,
-          count   => $search->count(),
-        );
-
-    return
-        $self->status_created( $c,
-                               location => $search->$uri_meth(),
-                               entity   => \%response,
-                             );
-}
-
 
 1;

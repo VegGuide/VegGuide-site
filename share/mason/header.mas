@@ -1,4 +1,6 @@
 <div id="hd">
+  <& breadcrumbs.mas, %ARGS &>
+
   <& global-nav.mas, %ARGS &>
 
 % if ( $m->request_comp()->attr('is_front_page') ) {
@@ -9,5 +11,9 @@
                                  <% html_imgsize( $c->skin()->image_file() ) %>
                                  alt="VegGuide.Org Logo" /></a>
   </div>
+
+  <& sitewide-search.mas &>
+
+  <& local-nav.mas &>
 % }
 </div>

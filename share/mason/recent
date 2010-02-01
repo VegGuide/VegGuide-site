@@ -2,5 +2,4 @@
 
 <%attr>
 is_front_page => 1
-layout => '3.5'
 </%attr>

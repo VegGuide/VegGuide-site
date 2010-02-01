@@ -1,36 +1,39 @@
-  <div id="body" class="one-column">
+<p>
+  Please make sure that you have rights to upload this image.
+</p>
 
-   <h2>Upload a photo for <% $c->vg_user()->user_id() == $user->user_id() ? 'your profile' : $user->real_name() | h %></h2>
+<p>
+  The photo you upload will be resized so that it is no bigger than
+  100x100 pixels.
+</p>
 
-    <p>
-     Please make sure that you have rights to upload this image.
-    </p>
+<form action="<% user_uri( user => $user, path => 'image' ) %>"
+      method="post" enctype="multipart/form-data">
 
-    <p>
-     The photo you upload will be resized so that it is no bigger than
-     100x100 pixels.
-    </p>
+<& /lib/form/errors.mas &>
 
-    <form action="<% user_uri( user => $user, path => 'image' ) %>"
-          method="post" enctype="multipart/form-data">
+<div class="form-item">
+  <label for="image">Pick an image:</label>
+  <input id="image" name="image" class="file" type="file" />
+</div>
 
-     <& /lib/form/errors.mas &>
+<div class="form-item">
+  <input type="submit" class="submit" value="Upload this photo" />
+</div>
 
-     <div class="form-item">
-      <label for="image">Pick an image:</label>
-      <input id="image" name="image" class="file" type="file" />
-     </div>
+</form>
 
-     <div class="form-item">
-      <input type="submit" class="submit" value="Upload this photo" />
-     </div>
-
-    </form>
-
-    <& /lib/form/copyright.mas &>
-
-  </div>
+<& /lib/form/copyright.mas &>
 
 <%args>
 $user
 </%args>
+
+<%method page_title>
+Upload a photo for <% $c->vg_user()->user_id() == $user->user_id() ? 'your profile' : $user->real_name() | h %>
+<%args>
+$user
+</%args>
+</%method>
+
+

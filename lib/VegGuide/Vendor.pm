@@ -1997,12 +1997,12 @@ sub _geocoder
 
 {
     my %Desc =
-        ( 5 => 'vegan',
-          4 => 'vegetarian',
-          3 => 'vegetarian (but not vegan-friendly)',
-          2 => 'vegan-friendly',
-          1 => 'vegetarian-friendly',
-          0 => 'not veg-friendly',
+        ( 5 => 'Vegan',
+          4 => 'Vegetarian',
+          3 => 'Vegetarian (But Not Vegan-Friendly)',
+          2 => 'Vegan-Friendly',
+          1 => 'Vegetarian-Friendly',
+          0 => 'Not Veg-Friendly',
         );
 
     sub VegLevelDescription

@@ -6,15 +6,6 @@ importance and feasibility.
 <ul class="todo">
 
  <li>
-  Redo listing filter so that some subset of common options is
-  selectable in right-side column.
- </li>
-
- <li>
-  Redo the local navigation "tabs" so they look like real tabs.
- </li>
-
- <li>
   Pull relevant event data from sites like Meetup.com and associate it
   with regions.
  </li>

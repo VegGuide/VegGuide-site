@@ -1,6 +1,8 @@
+% if ($wpms) {
    <select id="possible_category_id" name="possible_category_id" multiple="multiple"
            size="<% VegGuide::Category->Count() + 1 %>" style="display: none">
    </select>
+% }
 
    <select id="category_id" name="category_id" multiple="multiple" size="<% scalar @Categories + 1 %>">
 % foreach my $category (@Categories) {
@@ -11,3 +13,7 @@
 <%once>
 my @Categories = VegGuide::Category->All();
 </%once>
+
+<%args>
+$wpms => 1
+</%args>

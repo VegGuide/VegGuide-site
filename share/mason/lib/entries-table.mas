@@ -1,60 +1,50 @@
-    <table id="entries-table" class="standard-table <% $search->can('latitude') ? 'with-distance' : '' %>">
-
-     <thead>
-      <tr>
-       <td colspan="<% $show_add_entry ? $colspan - 2 : $colspan %>">
-        <div class="entries-links">
-% if ( $search->has_addresses() && $search->has_mappable_vendors() ) {
-         <a href="<% $search->map_uri() | h %>" class="map-link" title="An interactive Google map of this entry list">Map this list</a> |
+% if ($show_radius_change) {
+<& /lib/radius-change.mas, search => $search &>
 % }
-         <a href="<% $search->printable_uri() | h %>" class="" title="A printable version of this list">Print this list</a>
-        </div>
+<table id="entries-table" class="standard-table <% $search->can('latitude') ? 'with-distance' : '' %>">
+  <thead>
+    <tr>
+      <td colspan="2">
         <% $pagination %>
-       </td>
+      </td>
 % if ($show_add_entry) {
-       <td colspan="2">
-        <div class="content-buttons">
-         <a class="content-button" href="<% region_uri( location => $search->location(), path => 'entry_form' ) %>" title="add a new entry to this region">Add Entry</a>
-        </div>
-       </td>
+      <td colspan="<% $colspan - 2 %>">
+        <a class="content-button" href="<% region_uri( location => $search->location(), path => 'entry_form' ) %>" title="add a new entry to this region">Add Entry</a>
+      </td>
 % }
-      </tr>
+    </tr>
 
-      <tr class="table-heading">
-       <th class="name"><&| /lib/sort-link.mas, search => $search &>Name</&></th>
+    <tr class="table-heading">
+      <th class="name"><&| /lib/sort-link.mas, search => $search &>Name</&></th>
 %   if ( $search->can('latitude') ) {
-       <th class="distance"><&| /lib/sort-link.mas, search => $search &>Distance</&></th>
+      <th class="distance"><&| /lib/sort-link.mas, search => $search &>Distance</&></th>
 %   }
-       <th class="summary">Summary</th>
-       <th class="rating"><&| /lib/sort-link.mas, search => $search &>Rating</&></th>
-       <th class="how-veg"><&| /lib/sort-link.mas, search => $search &>How Veg?</&></th>
-       <th class="price-range"><&| /lib/sort-link.mas, search => $search &>Price</&></th>
-       <th class="info"></th>
-      </tr>
-     </thead>
+      <th class="summary">Summary</th>
+      <th class="rating"><&| /lib/sort-link.mas, search => $search &>Rating</&></th>
+      <th class="how-veg"><&| /lib/sort-link.mas, search => $search &>How Veg?</&></th>
+     </tr>
+   </thead>
 
 % if ( $pager->total_entries() ) {
-     <tfoot>
-      <tr>
+   <tfoot>
+     <tr>
        <td colspan="<% $colspan %>">
-        <% $pagination %>
+         <% $pagination %>
        </td>
-      </tr>
-     </tfoot>
+     </tr>
+   </tfoot>
 % }
 
-     <tbody>
 %   while ( my $vendor = $vendors->next ) {
 <& .one-vendor, search => $search, vendor => $vendor, count => $vendors->count() &>
 %   }
 
-     </tbody>
-
-    </table>
+</table>
 
 <%args>
 $search
 $pager
+$show_radius_change => 0
 </%args>
 
 <%init>
@@ -67,7 +57,7 @@ my $pagination =
                things => 'entries',
              );
 
-my $colspan = $search->can('latitude') ? 7 : 6;
+my $colspan = $search->can('latitude') ? 5 : 4;
 
 my $show_add_entry = 0;
 if ( $search->can('location') )
@@ -77,60 +67,54 @@ if ( $search->can('location') )
 </%init>
 
 <%def .one-vendor>
-      <tr class="<% $count % 2 ? 'odd' : 'even' %>">
-       <td class="name">
-        <& /lib/link/vendor.mas, vendor => $vendor &>
+<tbody>
+  <tr class="<% $count % 2 ? 'odd' : 'even' %>">
+    <td class="name">
+      <& /lib/link/vendor.mas, vendor => $vendor &>
 % if (@address) {
-        <address>
+      <address>
 %   for my $line (@address) {
-         <% $line | h %><% $line ne $address[-1] ? '<br/>' : '' %>
+        <% $line | h %><% $line ne $address[-1] ? '<br/>' : '' %>
 %   }
-        </address>
+      </address>
 % }
 % if ( $vendor->is_closed ) {
-        <div class="closed">Closed as of <& /lib/format/date.mas, date => $vendor->close_date_object &></div>
+      <div class="closed">Closed as of <& /lib/format/date.mas, date => $vendor->close_date_object &></div>
 % }
-       </td>
+    </td>
 % if ($distance) {
-       <td class="distance">
-        <% $distance %> <% PL( $search->unit(), $distance ) %>
-       </td>
+    <td class="distance">
+      <% $distance %> <% PL( $search->unit(), $distance ) %>
+    </td>
 % }
-
-       <td class="summary">
-        <span class="summary-text"><% $vendor->short_description | h %></span>
+    <td class="summary">
+      <span class="summary-text"><% $vendor->short_description | h %></span>
 % my $cat = join ', ', map { $_->name() } $vendor->categories();
 % if ( $cat ne 'Restaurant' ) {
-        <br /><span class="category"><% $cat %></span>
+      <br /><span class="category"><% $cat %></span>
 % }
-       </td>
+    </td>
 
-       <td class="rating">
+    <td class="rating">
 % unless ( $vendor->is_organization() ) {
 <& /lib/stars-for-rating.mas, rating => $weighted_rating, color => 'green', title => $rating_title &>
+<br />
 %   if ($user_rating) {
 <strong>\
 %   }
-(<% $rating_count %>)\
+<% $rating_count %> <% PL( 'rating', $rating_count ) %>\
 %   if ($user_rating) {
 </strong>
 %   }
 % }
-       </td>
-       <td class="how-veg veg-level-<% $vendor->veg_level() %>">
+    </td>
+    <td class="how-veg veg-level-<% $vendor->veg_level() %>">
 % unless ( $vendor->is_organization() ) {
-        <% $vendor->veg_description() | h %>
+      <% $vendor->veg_description() | h %>
 % }
-       </td>
-       <td class="price-range">
-% if ( $vendor->is_restaurant() ) {
-   <% $vendor->price_range()->symbols_only() | h %>
-% }
-       </td>
-       <td class="info">
-<& .info, vendor => $vendor &>
-       </td>
-      </tr>
+    </td>
+  </tr>
+</tbody>
 
 <%args>
 $search
@@ -169,39 +153,5 @@ if ( $search->can('latitude') )
               unit      => $search->unit(),
             );
 }
-</%init>
-</%def>
-
-<%def .info>
-        <ul>
-% if ($map_uri) {
-         <li><a href="<% $map_uri | h %>" title="Map to <& /lib/l10n/vendor-name.mas, vendor => $vendor &>"><& /lib/image/icon.mas, name => 'map' &></a></li>
-% }
-% if ($review_count) {
-         <li><&| /lib/link/vendor.mas, vendor => $vendor, title_prefix => 'Reviews for' &><& /lib/image/icon.mas, name => 'reviews' &></&></li>
-% }
-% if ($is_open) {
-         <li><& /lib/image/icon.mas, name => 'open', title => 'Open for the next hour' &></li>
-% }
-% if ($smoke_free) {
-         <li><& /lib/image/icon.mas, name => 'smoke-free', title => 'Smoke-free' &></li>
-% }
-% if ($has_images) {
-         <li><& /lib/image/icon.mas, name => 'photo', title => 'Has pictures' &></li>
-% }
-        </ul>
-
-<%args>
-$vendor
-</%args>
-
-<%init>
-my $map_uri = $vendor->map_uri();
-my $review_count = $vendor->review_count();
-my $is_open = $vendor->is_open( minute_margin => 60 );
-my $smoke_free = $vendor->is_smoke_free();
-my $has_images = $vendor->image_count();
-
-return unless $map_uri || $review_count || $is_open || $smoke_free || $has_images;
 </%init>
 </%def>

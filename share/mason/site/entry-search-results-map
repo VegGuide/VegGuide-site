@@ -1,14 +1,6 @@
+<& /lib/current-filters.mas, search => $search &>
+
 <& /lib/radius-change.mas, search => $search, uri_method => 'map_uri' &>
-
-    <p>
-     Showing <% $count %> entr<% $count != 1 ? 'ies' : 'y' %>
-    </p>
-
-<& /lib/filter-div.mas, search => $search, search_uri_method => 'map_uri' &>
-
-    <p>
-     <a href="<% $search->uri() %>">Return to the entry listing</a>
-    </p>
 
 <& /lib/google-map.mas, %ARGS &>
 
@@ -22,7 +14,6 @@ my $count = $search->count();
 
 <%attr>
 load_google_maps => 1
-requires_js => 1
 </%attr>
 
 <%method page_title>

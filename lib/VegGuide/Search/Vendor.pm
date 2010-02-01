@@ -65,10 +65,13 @@ sub delete_all
 
 sub add
 {
-    my $self = shift;
-    my %p    = validate( @_, { $self->SearchParams() });
+    my $self   = shift;
+    my %orig_p = @_;
+    my %p      = validate( @_, { $self->SearchParams() } );
 
-    %{ $self } = ( %{ $self }, %p );
+    for my $key ( keys %orig_p ) {
+        $self->{$key} = $p{$key};
+    }
 
     $self->_process_sql_query();
 }

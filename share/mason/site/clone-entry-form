@@ -8,12 +8,9 @@ You need to choose a region for this new entry.
 </p>
 
 <form id="clone-location" action="/region/entry_form" method="get">
- <input type="hidden" name="cloned_vendor_id" value="<% $vendor->vendor_id() %>" />
+  <input type="hidden" name="cloned_vendor_id" value="<% $vendor->vendor_id() %>" />
 
- <& /lib/form/errors.mas &>
-
- <fieldset>
-  <legend>Pick a Region</legend>
+  <& /lib/form/errors.mas &>
 
   <a class="content-button-medium"
      href="<% region_uri( location => $vendor->location(),
@@ -28,10 +25,8 @@ You need to choose a region for this new entry.
   <& /lib/form/region-search.mas, label => 'New region:' &>
 
   <div class="form-item">
-   <input class="submit" type="submit" value="Submit" />
+    <input class="submit" type="submit" value="Submit" />
   </div>
-
- </fieldset>
 
 </form>
 
