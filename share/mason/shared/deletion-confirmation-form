@@ -1,10 +1,4 @@
- <div id="main">
-
-  <div id="title-and-info-container" class="no-nav one-column">
-   <& /lib/rounded-corners-top.mas &>
-
-   <div id="page-title-and-info">
-    <h1 id="page-title">Really delete this <% $thing | h %>?</h1>
+    <h1 id="page-title"></h1>
    </div>
 
   </div>
@@ -34,3 +28,10 @@ $thing
 $name
 $uri
 </%args>
+
+<%method page_title>
+Really delete this <% $thing | h %>?
+<%args>
+$thing
+</%args>
+</%method>
