@@ -263,5 +263,5 @@ $suggestion
 </%def>
 
 <%method page_title>
-Suggestions you can review
+<h1 id="suggestions">Suggestions you can review</h1>
 </%method>

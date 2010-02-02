@@ -8,17 +8,15 @@ if ( typeof VegGuide == "undefined" ) {
 VegGuide.Suggestions = {};
 
 VegGuide.Suggestions.instrumentPage = function () {
-    var div = $("body");
-
-    if ( ! ( div && div.className.match( /suggestions/ ) ) ) {
+    if ( ! $("suggestions") ) {
         return;
     }
 
     var rejects = DOM.Find.getElementsByAttributes( { tagName: "INPUT",
-                                                      name:    "reject" }, div );
+                                                      name:    "reject" } );
     for ( var i = 0; i < rejects.length; i++ ) {
         VegGuide.Suggestions._instrumentRejectSubmit( rejects[i] );
-    }      
+    }
 };
 
 VegGuide.Suggestions._instrumentRejectSubmit = function (reject) {
