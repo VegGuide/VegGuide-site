@@ -1,27 +1,12 @@
-    <h1 id="page-title"></h1>
-   </div>
+<p>
+  <strong>Once you delete <% $name | h %>, this <% $thing | h %> will be gone forever!</strong>
+</p>
 
-  </div>
+<form action="<% $uri | h %>" method="post">
+  <input type="hidden" name="x-tunneled-method" value="DELETE" />
 
- </div>
-
- <div id="body-container">
-
-  <div id="body" class="one-column">
-
-   <p>
-    <strong>Once you delete <% $name | h %>, this <% $thing | h %> will be gone forever!</strong>
-   </p>
-
-   <form action="<% $uri | h %>" method="post">
-    <input type="hidden" name="x-tunneled-method" value="DELETE" />
-
-    <input class="submit" type="submit" value="Yes, delete this <% $thing | h %>" />
-   </form>
-
-  </div>
-
- </div>
+  <input class="submit" type="submit" value="Yes, delete this <% $thing | h %>" />
+</form>
 
 <%args>
 $thing
