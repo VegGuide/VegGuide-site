@@ -17,7 +17,7 @@
 %   }
 
         <li>
-          <& /lib/link/vendor-review.mas, vendor => $vendor, user => $user &>, 
+          <& /lib/link/vendor-review.mas, vendor => $vendor, user => $user, link_to_entry => 1 &>, 
           <& /lib/link/location.mas, location => $vendor->location &>
           (<& /lib/link/user.mas, user => $user &>)
         </li>

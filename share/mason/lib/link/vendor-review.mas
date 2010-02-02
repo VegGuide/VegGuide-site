@@ -1,4 +1,4 @@
-<a href="<% entry_review_uri( vendor => $vendor, user => $user ) | h %>" class="entry-review" title="<% $title | h %>">\
+<a href="<% entry_review_uri( vendor => $vendor, user => $user, link_to_entry => $link_to_entry ) | h %>" class="entry-review" title="<% $title | h %>">\
 % if ($text) {
 <% $text %>\
 % } elsif ($english_only) {
@@ -13,6 +13,7 @@ $user
 $english_only => 0
 $text => $m->content()
 $title_prefix => ''
+$link_to_entry => 0
 </%args>
 <%init>
 my $title = $title_prefix;

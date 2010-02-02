@@ -68,7 +68,8 @@ our @EXPORT_OK = qw( entry_uri entry_image_uri entry_review_uri
 {
     my $spec = { vendor    => VENDOR_TYPE,
                  user      => USER_TYPE,
-                 with_host => BOOLEAN_TYPE( default => 0 ),
+                 link_to_entry => BOOLEAN_TYPE( default => 0 ),
+                 with_host     => BOOLEAN_TYPE( default => 0 ),
                };
     sub entry_review_uri
     {
@@ -76,8 +77,10 @@ our @EXPORT_OK = qw( entry_uri entry_image_uri entry_review_uri
 
         my $user = delete $p{user};
 
+        my %path = delete $p{link_to_entry} ? () : ( path => 'reviews' );
+
         return entry_uri( %p,
-                          path     => 'reviews',
+                          %path,
                           fragment => 'user-id-' . $user->user_id(),
                         );
     }
