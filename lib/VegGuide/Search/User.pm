@@ -63,6 +63,15 @@ sub users
     return VegGuide::User->All(%p);
 }
 
+sub has_filters
+{
+    my $self = shift;
+
+    my %constraints = $self->_search_constraints();
+
+    return keys %constraints ? 1 : 0;
+}
+
 sub count
 {
     my $self = shift;
