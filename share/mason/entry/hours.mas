@@ -9,7 +9,7 @@
 % } else {
 <p>
   We don't have any info on this entry's hours.
-  Please <a href="entry_uri( vendor => $vendor, path => 'edit_hours_form' ) %>">add them if you can</a>.
+  Please <a href="<% entry_uri( vendor => $vendor, path => 'edit_hours_form' ) %>">add them if you can</a>.
 </p>
 % }
 
