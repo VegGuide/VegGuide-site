@@ -729,7 +729,7 @@ div.pagination form select, div.pagination form select option {
     width: 10%;
 }
 
-#entries-table .how-veg {
+#entries-table td.how-veg {
     font-size: 100%;
     width: 15%;
 }
