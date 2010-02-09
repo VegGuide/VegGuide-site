@@ -1,3 +1,6 @@
+body {
+    font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
+}
 
 /* custom 600px wide grid for front page */
 #front-page-doc { 
@@ -12,7 +15,7 @@
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: Bitstream Vera Sans, Verdana, sans-serif;
+    font-family: Verdana, Geneva, sans-serif;
 }
 
 h1, h2, h3 {
@@ -57,7 +60,6 @@ ul li {
     border-right: 2px solid #00527B;
     color: white;
     font-weight: bold;
-    font-family: sans-serif;
     text-decoration: none;
 }
 
@@ -74,7 +76,6 @@ ul li {
     border-right: 2px solid #A7280C;
     color: white;
     font-weight: bold;
-    font-family: sans-serif;
     text-decoration: none;
 }
 
@@ -86,7 +87,6 @@ ul li {
     border-right: 2px solid #5f862b;
     color: white;
     font-weight: bold;
-    font-family: sans-serif;
     text-decoration: none;
 }
 
