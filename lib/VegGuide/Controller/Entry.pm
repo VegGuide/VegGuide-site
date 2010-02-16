@@ -185,6 +185,7 @@ sub map : Chained('_set_vendor') : PathPart('map') : Args(0)
     my $self = shift;
     my $c    = shift;
 
+    my $vendor = $c->stash()->{vendor};
     unless ( $vendor->map_uri() )
     {
         $c->redirect_and_detach( entry_uri( vendor => $vendor ) );
