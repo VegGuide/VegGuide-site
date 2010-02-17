@@ -8,6 +8,7 @@
 #   authz_user ?
 #   cgi (for mailman?)
 #   deflate
+#   dir
 #   env (for ssl?)
 #   expires
 #   headers
