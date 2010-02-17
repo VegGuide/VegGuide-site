@@ -209,6 +209,8 @@
          nokeepalive ssl-unclean-shutdown \
          downgrade-1.0 force-response-1.0
 
+    DirectoryIndex index.html
+
     ScriptAlias   /mailman/          /usr/lib/cgi-bin/mailman/
     Alias         /pipermail/        /var/lib/mailman/archives/public/
     Alias         /images/mailman/   /usr/share/images/mailman/
