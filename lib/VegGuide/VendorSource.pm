@@ -197,6 +197,9 @@ sub _excluded_ids
                   vendor_source_id   => $self->vendor_source_id(),
                 );
 
+        $self->_set_location_for_item($item)
+            or return;
+
         unless ($vendor)
         {
             # XXX - is it likely that we will ever have non-US feeds?
@@ -250,9 +253,6 @@ sub _excluded_ids
 
             return;
         }
-
-        $self->_set_location_for_item($item)
-            or return;
 
         eval
         {

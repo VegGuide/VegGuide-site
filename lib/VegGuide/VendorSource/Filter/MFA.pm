@@ -84,6 +84,8 @@ sub _merge_categories
 
         $item->{name} = delete $item->{title};
 
+        $item->{name} =~ s/\Q&#8206;//g;
+
         $item->{external_unique_id} = delete $item->{'foreign-id'};
 
         if ( string_is_empty( $item->{'long-description'} )
@@ -133,25 +135,43 @@ sub _merge_categories
     my $states = Geography::States->new('USA');
 
 
-    my %RegionMap = ( # IL
-                      ( map { lc $_ => 'Champaign-Urbana' } qw( Champaign Urbana ) ),
-                      ( map { lc $_ => 'Bloomington-Normal' } qw( Bloomington Normal ) ),
+    my %RegionMap = (    # IL
+        Illinois => {
+            ( map { lc $_ => 'Champaign-Urbana' } qw( Champaign Urbana ) ),
+            (
+                map { lc $_ => 'Bloomington-Normal' } qw( Bloomington Normal )
+            ),
+        },
 
-                      # NJ
-                      ( map { lc $_ => 'Cherry Hill Area' }
-                        'Cherry Hill', qw( Barrington Collingswood Marlton Merchantville Voorhees ) ),
-                      ( map { lc $_ => 'Mount Laurel' } 'Mt Laurel', 'Mt. Laurel' ),
-                      ( map { lc $_ => 'Mount Holly' } 'Mt Holly', 'Mt. Holly' ),
-                      ( lc 'Hohokus' => 'Ho-Ho-Kus' ),
-                      ( lc 'Lindenwald' => 'Lindenwold' ),
-                      ( lc 'Ramsey' => 'Ramsey Area' ),
-                      ( map { lc $_ => 'Parsippany Area' } qw( Parsippany Wayne ) ),
-                      ( map { lc $_ => 'Hackensack Area' } qw( Hackensack Rutherford Teaneck ) ),
-                      'all nj - catering' => $NJ,
+        'New Jersey' => {
+            (
+                map { lc $_ => 'Cherry Hill Area' } 'Cherry Hill',
+                qw( Barrington Collingswood Marlton Merchantville Voorhees )
+            ),
+            ( map { lc $_ => 'Mount Laurel' } 'Mt Laurel', 'Mt. Laurel' ),
+            ( map { lc $_ => 'Mount Holly' } 'Mt Holly',   'Mt. Holly' ),
+            ( lc 'Hohokus'    => 'Ho-Ho-Kus' ),
+            ( lc 'Lindenwald' => 'Lindenwold' ),
+            ( lc 'Ramsey'     => 'Ramsey Area' ),
+            ( map { lc $_ => 'Parsippany Area' } qw( Parsippany Wayne ) ),
+            (
+                map { lc $_ => 'Hackensack Area' }
+                    qw( Hackensack Rutherford Teaneck )
+            ),
+            'all nj - catering' => $NJ,
+        },
 
-                      # NC
-                      ( map { lc $_ => 'Triangle Area' } qw( Raleigh Durham Cary ), 'Chapel Hill' ),
-                    );
+        # NC
+        'North Carolina' => {
+            (
+                map { lc $_ => 'Triangle Area' } qw( Raleigh Durham Cary ),
+                'Chapel Hill'
+            )
+        },
+
+        # IN
+        Indiana => { ( lc 'Mishawaka' => 'South Bend' ), },
+    );
 
     sub _location_for_item
     {
@@ -177,20 +197,19 @@ sub _merge_categories
             return;
         }
 
+        my $region = $item->{region};
+
         if ( $item->{region} =~ /^Philadelphia/ )
         {
-            $item->{region} = 'Philadelphia Metro';
+            $region = 'Philadelphia Metro';
         }
 
-        if ( $RegionMap{ lc $item->{region} } )
+        if ( $RegionMap{ $parent->name() }{ lc $item->{region} } )
         {
-            my $region = $RegionMap{ lc $item->{region} };
+            $region = $RegionMap{ $parent->name() }{ lc $item->{region} };
             return $region if ref $region;
-
-            $item->{region} = $region;
         }
 
-        my $region = $item->{region};
         # apparently the NJ folks thought it'd "stand out more" if the
         # regions were in all caps - fucking brilliant
         if ( $parent->name() eq 'New Jersey' )
