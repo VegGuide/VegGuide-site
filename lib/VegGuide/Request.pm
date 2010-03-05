@@ -5,6 +5,7 @@ use warnings;
 
 use base 'Catalyst::Request::REST::ForBrowsers';
 
+use DateTime::Format::Natural;
 use HTTP::Headers::Util qw(split_header_words);
 use List::MoreUtils qw( all );
 use Scalar::Util qw( looks_like_number );
@@ -30,6 +31,7 @@ sub location_data
     return %data;
 }
 
+my $parser = DateTime::Format::Natural->new( format => 'mm-dd-yyyy' );
 sub vendor_data
 {
     my $self = shift;
@@ -45,7 +47,7 @@ sub vendor_data
             if defined $params->{$k};
     }
 
-    for my $k ( qw( cuisine_id payment_option_id attribute_id ) )
+    for my $k ( grep { exists $params->{$_} } qw( cuisine_id payment_option_id attribute_id ) )
     {
         $data{$k} = defined $params->{$k} ? $params->{$k} : [];
     }
@@ -53,9 +55,22 @@ sub vendor_data
     $data{payment_option_id} = []
         if $data{is_cash_only};
 
-    if ( $data{close_date} && $data{close_date} eq 'open' )
+    if ( $data{close_date} )
     {
-        $data{close_date} = undef;
+        if ( $data{close_date} eq 'open' )
+        {
+            $data{close_date} = undef;
+        }
+        else
+        {
+            my $dt = $parser->parse_datetime( $data{close_date} );
+            if ($dt) {
+                $data{close_date} = $dt->ymd();
+            }
+            else {
+                delete $data{close_date};
+            }
+        }
     }
 
     delete $data{vendor_id};

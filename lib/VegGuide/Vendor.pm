@@ -3587,6 +3587,15 @@ sub text_changes
     return \%changes;
 }
 
+sub close_date
+{
+    my $self = shift;
+
+    return unless defined $self->{thawed}{close_date};
+
+    return $self->{thawed}{close_date};
+}
+
 sub is_cash_only
 {
     my $self = shift;

@@ -136,7 +136,7 @@ sub entry_PUT : Private
 
     my %data = $c->request()->vendor_data();
 
-    delete @data{ 'location_id', 'close_date' }
+    delete $data{location_id}
         unless $c->vg_user()->is_admin();
 
     my @msg;
@@ -153,7 +153,7 @@ sub entry_PUT : Private
                 push @msg, $vendor->name() . ' has been moved to ' . $vendor->location()->name() . q{.};
             }
         }
-        else
+        elsif ( keys %data )
         {
             $vendor->save_core_suggestion
                 ( suggestion              => \%data,
@@ -293,6 +293,18 @@ sub edit_form : Chained('_set_vendor') : PathPart('edit_form') : Args(0)
                         );
 
     $c->stash()->{template} = '/entry/edit-form';
+}
+
+sub closed_form : Chained('_set_vendor') : PathPart('closed_form') : Args(0)
+{
+    my $self = shift;
+    my $c    = shift;
+
+    $self->_require_auth( $c,
+                          q{You must be logged in to edit an entry. If you don't have an account you can create one now.},
+                        );
+
+    $c->stash()->{template} = '/entry/closed-form';
 }
 
 sub review_form : Chained('_set_vendor') : PathPart('review_form') : Args(1)

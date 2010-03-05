@@ -164,6 +164,14 @@ $suggestions
     </tr>
 % }
 
+% if ( $suggestion->change_exists('close_date') ) {
+    <tr>
+      <td class="first"><label>Closed?</label></td>
+      <td></td>
+      <td class="last"><% $suggestion->close_date() %></td>
+    </tr>
+% }
+
   </&>
 
   </tbody>

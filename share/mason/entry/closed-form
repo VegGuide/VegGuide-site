@@ -1,0 +1,37 @@
+<p>
+Is this vendor no longer in business?
+</p>
+
+<&| /lib/filter/fill-in-form.mas &>
+<form action="<% entry_uri( vendor => $vendor ) %>" method="post">
+  <input type="hidden" name="x-tunneled-method" value="PUT" />
+
+  <div class="form-item">
+    <label for="close_date">Closed as of:</label>
+    <input id="close_date" type="text" class="text short" name="close_date" value="" />
+    <p>
+      YYYY-MM-DD or MM-DD-YYYY<br />
+      If you're not sure when they closed, just enter your best guess.
+    </p>
+  </div>
+
+% if ($is_suggestion) {
+  <& /lib/form/suggestion.mas &>
+% }
+
+  <div class="form-item">
+    <input class="submit" type="submit" value="Submit" />
+  </div>
+
+</form>
+</&>
+
+<& /lib/form/copyright.mas &>
+
+<%args>
+$vendor
+</%args>
+
+<%init>
+my $is_suggestion = $c->vg_user()->can_edit_vendor($vendor) ? 0 : 1;
+</%init>
