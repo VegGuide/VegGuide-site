@@ -32,7 +32,7 @@
       </&>
 
       <p>
-        <a href="/user/forgot_password_form?return_to=<% $return_to | uh %>">Forgot your password?</a>
+        <a href="/user/forgot_password_form?return_to=<% $return_to | uh %>">Forgot your password</a>?
       </p>
     </div>
 
@@ -64,7 +64,7 @@
     </div>
 
     <p>
-      <a href="#" id="switch-log-in">Or log in with OpenId.</a>
+      <a href="#" id="switch-log-in">Or log in with OpenId</a>.
     </p>
   </div>
 
@@ -77,7 +77,7 @@
     </p>
 
     <p>
-      <a class="action-button" href="/user/new_user_form">Create an account</a>
+      <a class="action-button" href="/user/new_user_form">Create an account</a>.
     </p>
   </div>
 </div>
