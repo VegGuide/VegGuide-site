@@ -45,7 +45,7 @@ VegGuide.LoginForm.prototype._switchForms = function () {
         DOM.Element.hide( this.standard );
         DOM.Element.show( this.openid );
 
-        this.toggle.innerHTML = "Or log with your email address and password.";
+        this.toggle.innerHTML = "Or log with your email address and password";
 
         this.is_standard = 0;
     }
