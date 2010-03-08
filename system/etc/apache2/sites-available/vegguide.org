@@ -62,9 +62,9 @@
 
     <IfDefine !Testing>
         RewriteCond  %{HTTP_HOST}             ^vegguide\.org
-        RewriteRule  (.*)                     http://www.vegguide.org$1                                   [R,L]
+        RewriteRule  (.*)                     http://www.vegguide.org$1                                   [R,L,NE]
         RewriteCond  %{HTTP_HOST}             ^.*\.regveg\.org
-        RewriteRule  (.*)                     http://www.vegguide.org$1                                   [R,L]
+        RewriteRule  (.*)                     http://www.vegguide.org$1                                   [R,L,NE]
     </IfDefine>
 
     # Some brain-damaged crawler is requesting URIs like this
