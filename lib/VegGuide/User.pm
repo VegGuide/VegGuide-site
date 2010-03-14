@@ -44,16 +44,15 @@ sub _new_row
     my @where;
     if ( exists $p{email_address} )
     {
-	push @where,
-	    [ $schema->User_t->email_address_c, '=', $p{email_address} ];
+        push @where,
+            [ $schema->User_t->email_address_c, '=', $p{email_address} ];
 
-	if ( exists $p{password} )
-	{
-	    my $sha1 = Digest::SHA1::sha1_base64( Encode::encode( 'utf-8', $p{password} ) );
-	    push @where,
-		[ $schema->User_t->password_c, '=', $sha1 ];
-	}
-
+        if ( exists $p{password} )
+        {
+            my $sha1 = Digest::SHA1::sha1_base64( Encode::encode( 'utf-8', $p{password} ) );
+            push @where,
+                [ $schema->User_t->password_c, '=', $sha1 ];
+        }
     }
     elsif ( exists $p{openid_uri} )
     {
