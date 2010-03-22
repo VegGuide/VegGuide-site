@@ -560,7 +560,7 @@ sub hours_POST : Private
 }
 
 {
-    my @Days = @{ DateTime::Locale->load('en_US')->day_names() };
+    my @Days = @{ DateTime::Locale->load('en_US')->day_stand_alone_wide() };
     sub _parse_submitted_hours
     {
         my $self = shift;

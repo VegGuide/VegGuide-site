@@ -69,7 +69,7 @@ Edit hours for\
 <%once>
 use List::MoreUtils qw( all pairwise );
 
-my $days = DateTime::Locale->load('en_US')->day_names();
+my $days = DateTime::Locale->load('en_US')->day_stand_alone_wide();
 </%once>
 
 <%args>

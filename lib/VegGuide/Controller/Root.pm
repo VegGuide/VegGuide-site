@@ -133,7 +133,7 @@ sub home : Path('/home')
 }
 
 {
-    my @Days = @{ DateTime::Locale->load('en_US')->day_names() };
+    my @Days = @{ DateTime::Locale->load('en_US')->day_stand_alone_wide() };
     sub hours_descriptions : Path('/hours-descriptions')
     {
         my $self = shift;
