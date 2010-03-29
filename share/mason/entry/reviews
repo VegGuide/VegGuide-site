@@ -4,6 +4,11 @@
     <h2 class="no-top-margin">Reviews</h2>
 
     <& /lib/comments.mas, comments => $comments, vendor => $vendor &>
+
+    <p>
+      <a href="<% entry_uri( vendor => $vendor, path => 'review_form' ) | h %>"
+         class="content-button-small">Write your review</a>
+    </p>
 % } else {
     <p>
       This entry has no reviews,

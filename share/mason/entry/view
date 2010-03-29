@@ -128,6 +128,11 @@
 
 <& /lib/comments.mas, comments => $comments, vendor => $vendor &>
 
+<p>
+  <a href="<% entry_uri( vendor => $vendor, path => 'review_form' ) | h %>"
+     class="content-button-small">Write your review</a>
+</p>
+
 %   if ( $vendor->review_count() > 2 ) {
 <p>
   <a href="<% entry_uri( vendor => $vendor, path => 'reviews' ) | h %>"
