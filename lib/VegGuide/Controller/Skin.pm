@@ -8,15 +8,12 @@ use base 'VegGuide::Controller::Base';
 use VegGuide::SiteURI qw( user_uri );
 use VegGuide::Vendor;
 
-
-sub _set_skin : Chained('/') : PathPart('skin') : CaptureArgs(1)
-{
+sub _set_skin : Chained('/') : PathPart('skin') : CaptureArgs(1) {
     my $self    = shift;
     my $c       = shift;
     my $skin_id = shift;
 
-    my $skin =
-        VegGuide::Skin->new( skin_id => $skin_id );
+    my $skin = VegGuide::Skin->new( skin_id => $skin_id );
 
     $c->redirect_and_detach('/')
         unless $skin && $c->vg_user()->can_edit_skin($skin);
@@ -24,18 +21,18 @@ sub _set_skin : Chained('/') : PathPart('skin') : CaptureArgs(1)
     $c->stash()->{skin} = $skin;
 }
 
-sub edit_form : Chained('_set_skin') : PathPart('edit_form') : Args(0)
-{
+sub edit_form : Chained('_set_skin') : PathPart('edit_form') : Args(0) {
     my $self = shift;
     my $c    = shift;
 
     $c->stash()->{template} = '/site/skin-edit-form';
 }
 
-sub skin : Chained('_set_skin') : PathPart('') : Args(0) : ActionClass('+VegGuide::Action::REST') { }
+sub skin : Chained('_set_skin') : PathPart('') : Args(0) :
+    ActionClass('+VegGuide::Action::REST') {
+}
 
-sub skin_PUT
-{
+sub skin_PUT {
     my $self = shift;
     my $c    = shift;
 
@@ -60,6 +57,5 @@ sub skin_PUT
 
     $c->redirect_and_detach( '/skin/' . $skin->skin_id() . '/edit_form' );
 }
-
 
 1;

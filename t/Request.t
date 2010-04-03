@@ -6,7 +6,6 @@ use Test::More tests => 6;
 use HTTP::Headers;
 use VegGuide::Request;
 
-
 {
     my $request = VegGuide::Request->new();
     $request->{_context} = 'MockContext';
@@ -15,8 +14,10 @@ use VegGuide::Request;
     $request->method('GET');
     $request->headers->header( 'Accept' => 'text/xml' );
 
-    ok( ! $request->looks_like_browser(),
-        'request does not want html display' );
+    ok(
+        !$request->looks_like_browser(),
+        'request does not want html display'
+    );
 }
 
 {
@@ -27,12 +28,15 @@ use VegGuide::Request;
     $request->method('GET');
     $request->headers->header(
         'Accept' =>
-        # From Firefox 2.0 when it requests an html page
-        'text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5',
+
+            # From Firefox 2.0 when it requests an html page
+            'text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5',
     );
 
-    ok( $request->looks_like_browser(),
-        'request does want html display' );
+    ok(
+        $request->looks_like_browser(),
+        'request does want html display'
+    );
 }
 
 {
@@ -43,12 +47,15 @@ use VegGuide::Request;
     $request->method('GET');
     $request->headers->header(
         'Accept' =>
-        # From Firefox 2.0 when it requests an html page
-        'text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5',
+
+            # From Firefox 2.0 when it requests an html page
+            'text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5',
     );
 
-    ok( ! $request->looks_like_browser(),
-        'request does want html display' );
+    ok(
+        !$request->looks_like_browser(),
+        'request does want html display'
+    );
 }
 
 {
@@ -58,8 +65,10 @@ use VegGuide::Request;
     $request->parameters( { 'x-tunneled-method' => 'PUT' } );
     $request->method('GET');
 
-    is( $request->method(), 'PUT',
-        'use x-tunneled-method param for GET request' );
+    is(
+        $request->method(), 'PUT',
+        'use x-tunneled-method param for GET request'
+    );
 }
 
 {
@@ -69,8 +78,10 @@ use VegGuide::Request;
     $request->parameters( {} );
     $request->method('PUT');
 
-    is( $request->method(), 'PUT',
-        'request method is PUT' );
+    is(
+        $request->method(), 'PUT',
+        'request method is PUT'
+    );
 }
 
 {
@@ -80,10 +91,11 @@ use VegGuide::Request;
     $request->parameters( { 'x-tunneled-method' => 'PUT' } );
     $request->method('POST');
 
-    is( $request->method(), 'PUT',
-        'request method is PUT (tunneled via POST)' );
+    is(
+        $request->method(), 'PUT',
+        'request method is PUT (tunneled via POST)'
+    );
 }
-
 
 package MockContext;
 

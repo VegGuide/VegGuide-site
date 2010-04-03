@@ -5,9 +5,7 @@ use warnings;
 
 use base 'VegGuide::Controller::Base';
 
-
-sub auto : Private
-{
+sub auto : Private {
     my $self = shift;
     my $c    = shift;
 
@@ -17,18 +15,17 @@ sub auto : Private
 
     my $uri = $c->request()->uri();
 
-    $c->response()->breadcrumbs()->add
-        ( uri   => $uri,
-          label => $self->_breadcrumb_title($uri),
-        );
+    $c->response()->breadcrumbs()->add(
+        uri   => $uri,
+        label => $self->_breadcrumb_title($uri),
+    );
 
     return 1;
 }
 
 sub _add_tabs { }
 
-sub _breadcrumb_title
-{
+sub _breadcrumb_title {
     my $self = shift;
     my $uri  = shift;
 
@@ -42,24 +39,20 @@ sub _breadcrumb_title
     return ucfirst $path;
 }
 
-sub default : Private
-{
+sub default : Private {
     my $self = shift;
     my $c    = shift;
 
     my $path = $c->request()->uri()->path();
 
-    if ( $c->view()->has_template_for_path($path) )
-    {
+    if ( $c->view()->has_template_for_path($path) ) {
         $c->stash()->{template} = $path;
     }
-    else
-    {
+    else {
         $c->response()->redirect('/');
     }
 
     return 1;
 }
-
 
 1;

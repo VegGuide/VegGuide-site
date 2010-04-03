@@ -5,32 +5,34 @@ use warnings;
 
 use Class::Trait 'base';
 
-our @REQUIRES = qw( creation_datetime_object feed_title feed_uri feed_template_params );
+our @REQUIRES
+    = qw( creation_datetime_object feed_title feed_uri feed_template_params );
 
 use HTML::Mason::Interp;
 use VegGuide::Config;
 use VegGuide::Util;
 use XML::Feed::Entry;
 
-
 {
-    my $Interp =
-        HTML::Mason::Interp->new
-            ( comp_root => File::Spec->catdir( VegGuide::Config->ShareDir(), 'feed-templates' ),
-              data_dir  => File::Spec->catdir( VegGuide::Config->CacheDir(), 'mason', 'feeds' ),
-              error_mode => 'fatal',
-              in_package => 'VegGuide::Mason::Feed',
-            );
+    my $Interp = HTML::Mason::Interp->new(
+        comp_root => File::Spec->catdir(
+            VegGuide::Config->ShareDir(), 'feed-templates'
+        ),
+        data_dir => File::Spec->catdir(
+            VegGuide::Config->CacheDir(), 'mason', 'feeds'
+        ),
+        error_mode => 'fatal',
+        in_package => 'VegGuide::Mason::Feed',
+    );
 
     VegGuide::Util::chown_files_for_server( $Interp->files_written() );
 
-    sub as_xml_feed_entry
-    {
+    sub as_xml_feed_entry {
         my $self = shift;
 
         my $entry = XML::Feed::Entry->new();
         $entry->title( $self->feed_title() );
-        $entry->link( $self->feed_uri()  );
+        $entry->link( $self->feed_uri() );
         $entry->id( $entry->link() );
         $entry->issued( $self->creation_datetime_object() );
         $entry->modified( $self->creation_datetime_object() );
@@ -46,6 +48,5 @@ use XML::Feed::Entry;
         return $entry;
     }
 }
-
 
 1;

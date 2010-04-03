@@ -11,18 +11,14 @@ use List::MoreUtils qw( all );
 use Scalar::Util qw( looks_like_number );
 use VegGuide::Util qw( string_is_empty );
 
-use VegGuide::Validate
-    qw( validate validate_pos
-        HASHREF_TYPE BOOLEAN_TYPE
-        SCALAR_OR_ARRAYREF_TYPE );
+use VegGuide::Validate qw( validate validate_pos
+    HASHREF_TYPE BOOLEAN_TYPE
+    SCALAR_OR_ARRAYREF_TYPE );
 
-
-sub location_data
-{
+sub location_data {
     my $self = shift;
 
-    my %data =
-        $self->_params_for_classes( classes => 'VegGuide::Location' );
+    my %data = $self->_params_for_classes( classes => 'VegGuide::Location' );
 
     $data{skip_duplicate_check} = $self->param('skip_duplicate_check');
 
@@ -32,37 +28,33 @@ sub location_data
 }
 
 my $parser = DateTime::Format::Natural->new( format => 'mm-dd-yyyy' );
-sub vendor_data
-{
+
+sub vendor_data {
     my $self = shift;
 
-    my %data =
-        $self->_params_for_classes( classes => 'VegGuide::Vendor' );
+    my %data = $self->_params_for_classes( classes => 'VegGuide::Vendor' );
 
     my $params = $self->parameters();
 
-    for my $k ( qw( new_neighborhood new_localized_neighborhood category_id ) )
+    for my $k (qw( new_neighborhood new_localized_neighborhood category_id ))
     {
         $data{$k} = $params->{$k}
             if defined $params->{$k};
     }
 
-    for my $k ( grep { exists $params->{$_} } qw( cuisine_id payment_option_id attribute_id ) )
-    {
+    for my $k ( grep { exists $params->{$_} }
+        qw( cuisine_id payment_option_id attribute_id ) ) {
         $data{$k} = defined $params->{$k} ? $params->{$k} : [];
     }
 
     $data{payment_option_id} = []
         if $data{is_cash_only};
 
-    if ( $data{close_date} )
-    {
-        if ( $data{close_date} eq 'open' )
-        {
+    if ( $data{close_date} ) {
+        if ( $data{close_date} eq 'open' ) {
             $data{close_date} = undef;
         }
-        else
-        {
+        else {
             my $dt = $parser->parse_datetime( $data{close_date} );
             if ($dt) {
                 $data{close_date} = $dt->ymd();
@@ -78,12 +70,10 @@ sub vendor_data
     return %data;
 }
 
-sub user_data
-{
+sub user_data {
     my $self = shift;
 
-    my %data =
-        $self->_params_for_classes( classes => 'VegGuide::User' );
+    my %data = $self->_params_for_classes( classes => 'VegGuide::User' );
 
     my $params = $self->parameters();
     $data{password2} = $params->{password2}
@@ -95,22 +85,19 @@ sub user_data
     return %data;
 }
 
-sub locale_data
-{
+sub locale_data {
     my $self = shift;
 
     return $self->_params_for_classes( classes => 'VegGuide::Locale' );
 }
 
-sub vendor_source_data
-{
+sub vendor_source_data {
     my $self = shift;
 
     return $self->_params_for_classes( classes => 'VegGuide::VendorSource' );
 }
 
-sub skin_data
-{
+sub skin_data {
     my $self = shift;
 
     my %data = $self->_params_for_classes( classes => 'VegGuide::Skin' );
@@ -121,22 +108,22 @@ sub skin_data
 }
 
 {
-    my $spec = { classes    => SCALAR_OR_ARRAYREF_TYPE,
-                 include_pk => BOOLEAN_TYPE( default => 0 ),
-               };
-    sub _params_for_classes
-    {
+    my $spec = {
+        classes    => SCALAR_OR_ARRAYREF_TYPE,
+        include_pk => BOOLEAN_TYPE( default => 0 ),
+    };
+
+    sub _params_for_classes {
         my $self = shift;
-        my %p    = validate( @_, $spec );
+        my %p = validate( @_, $spec );
 
         my $params = $self->parameters();
 
         my @c = ref $p{classes} ? @{ $p{classes} } : $p{classes};
 
         my %data;
-        foreach my $col ( map { $_->columns() } @c )
-        {
-            next if $col->is_primary_key() && ! $p{include_pk};
+        foreach my $col ( map { $_->columns() } @c ) {
+            next if $col->is_primary_key() && !$p{include_pk};
 
             my $name = $col->name();
 
@@ -144,18 +131,18 @@ sub skin_data
 
             $data{$name} = $params->{$name};
 
-            if ( defined $data{$name} && $data{$name} eq '' )
-            {
-                if ( $col->is_character() || $col->is_date() || $col->is_datetime() )
-                {
+            if ( defined $data{$name} && $data{$name} eq '' ) {
+                if (   $col->is_character()
+                    || $col->is_date()
+                    || $col->is_datetime() ) {
                     $data{$name} = undef;
                 }
-                elsif ( $col->type() eq 'TINYINT' && $col->length() == 1 && $col->nullable() )
-                {
+                elsif ($col->type() eq 'TINYINT'
+                    && $col->length() == 1
+                    && $col->nullable() ) {
                     $data{$name} = undef;
                 }
-                else
-                {
+                else {
                     $data{$name} = 0;
                 }
             }
@@ -177,7 +164,7 @@ sub accepted_content_types {
     $types{ $self->content_type } = 3
         if $self->content_type;
 
-    if ($self->method eq "GET" && $self->param('content-type')) {
+    if ( $self->method eq "GET" && $self->param('content-type') ) {
 
         $types{ $self->param('content-type') } = 2;
     }
@@ -204,9 +191,8 @@ sub accepted_content_types {
         }
     }
 
-    return $self->{content_types} =
-        [ sort { $types{$b} <=> $types{$a} } keys %types ];
+    return $self->{content_types}
+        = [ sort { $types{$b} <=> $types{$a} } keys %types ];
 }
-
 
 1;

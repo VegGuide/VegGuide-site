@@ -5,30 +5,24 @@ use warnings;
 
 use Tie::IxHash;
 
-
-sub new
-{
+sub new {
     my $class = shift;
 
     return bless { hash => Tie::IxHash->new() }, $class;
 }
 
-sub push
-{
+sub push {
     my $self = shift;
 
-    for my $v (@_)
-    {
+    for my $v (@_) {
         return if $self->{hash}->EXISTS($v);
 
         $self->{hash}->Push( $v, 1 );
     }
 }
 
-sub values
-{
+sub values {
     return $_[0]->{hash}->Keys();
 }
-
 
 1;

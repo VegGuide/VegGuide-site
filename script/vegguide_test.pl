@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
 use Catalyst::ScriptRunner;
-Catalyst::ScriptRunner->run('VegGuide', 'Test');
+Catalyst::ScriptRunner->run( 'VegGuide', 'Test' );
 
 1;
 

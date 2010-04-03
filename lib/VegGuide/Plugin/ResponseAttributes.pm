@@ -8,9 +8,7 @@ use VegGuide::AlternateLinks;
 use VegGuide::Breadcrumbs;
 use VegGuide::Keywords;
 
-
-sub prepare
-{
+sub prepare {
     my $class = shift;
 
     my $c = $class->next::method(@_);
@@ -21,6 +19,5 @@ sub prepare
 
     return $c;
 }
-
 
 1;

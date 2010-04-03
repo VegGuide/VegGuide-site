@@ -10,7 +10,6 @@ use lib "$FindBin::Bin/../lib";
 use VegGuide::Config;
 use VegGuide::Schema;
 
-
 my %c = VegGuide::Config->DBConnectParams();
 delete $c{dsn};
 

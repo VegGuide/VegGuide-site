@@ -16,7 +16,6 @@ use VegGuide::Search::User;
 use VegGuide::SiteURI qw( region_uri site_uri user_uri );
 use VegGuide::Util qw( string_is_empty );
 
-
 sub _set_user : Chained('/') : PathPart('user') : CaptureArgs(1) {
     my $self    = shift;
     my $c       = shift;
@@ -64,8 +63,8 @@ sub _set_user : Chained('/') : PathPart('user') : CaptureArgs(1) {
         if ( $c->vg_user()->is_admin() ) {
             $c->add_tab(
                 {
-                    uri     => user_uri( user => $user, path => 'history' ),
-                    label   => 'History',
+                    uri   => user_uri( user => $user, path => 'history' ),
+                    label => 'History',
                     tooltip => 'History for ' . $user->real_name(),
                     id      => 'history',
                 }
@@ -79,8 +78,7 @@ sub _set_user : Chained('/') : PathPart('user') : CaptureArgs(1) {
     }
 }
 
-sub login_form : Local
-{
+sub login_form : Local {
     my $self = shift;
     my $c    = shift;
 
@@ -90,28 +88,25 @@ sub login_form : Local
 # This is all rather un-RESTful, from what I can tell, but the only
 # RESTful way to do auth is using HTTP auth, which completely sucks in
 # too many ways.
-sub authentication : Local : ActionClass('+VegGuide::Action::REST') { }
+sub authentication : Local : ActionClass('+VegGuide::Action::REST') {
+}
 
-sub authentication_GET_html
-{
+sub authentication_GET_html {
     my $self = shift;
     my $c    = shift;
 
     my $method = $c->request()->param('x-tunneled-method');
 
-    if ( $method && $method eq 'DELETE' )
-    {
+    if ( $method && $method eq 'DELETE' ) {
         $self->authentication_DELETE($c);
         return;
     }
-    else
-    {
-        $c->redirect_and_detach( '/user/login_form' );
+    else {
+        $c->redirect_and_detach('/user/login_form');
     }
 }
 
-sub authentication_POST
-{
+sub authentication_POST {
     my $self = shift;
     my $c    = shift;
 
@@ -121,8 +116,7 @@ sub authentication_POST
 
     my $user;
 
-    if ( ! string_is_empty($uri) )
-    {
+    if ( !string_is_empty($uri) ) {
         $self->_authenticate_openid( $c, $uri );
         return;
     }
@@ -134,175 +128,169 @@ sub authentication_POST
     push @errors, 'You must provide a password.'
         if string_is_empty($pw);
 
-    unless (@errors)
-    {
-        $user = VegGuide::User->new( email_address => $email,
-                                     password      => $pw,
-                                   );
+    unless (@errors) {
+        $user = VegGuide::User->new(
+            email_address => $email,
+            password      => $pw,
+        );
 
-        if ( ! $user || $user->email_address() ne $email )
-        {
-            push @errors,
-                'The email or password you provided was not valid.';
+        if ( !$user || $user->email_address() ne $email ) {
+            push @errors, 'The email or password you provided was not valid.';
         }
     }
 
-    if (@errors)
-    {
-        $c->_redirect_with_error
-            ( error  => \@errors,
-              uri    => '/user/login_form',
-              params => { email_address => $email,
-                          return_to     => $c->request()->parameters()->{return_to},
-                        },
-            );
+    if (@errors) {
+        $c->_redirect_with_error(
+            error  => \@errors,
+            uri    => '/user/login_form',
+            params => {
+                email_address => $email,
+                return_to     => $c->request()->parameters()->{return_to},
+            },
+        );
     }
 
     $self->_login_user( $c, $user );
 }
 
 {
-    my %OpenIDErrors =
-        ( no_identity_server => 'Could not contact an identity server for %s',
-          bogus_url          => 'The OpenID URL you provided (%s) is not valid',
-          no_head_tag        => 'Got bad data when trying to check your identity server',
-          url_fetch_error    => 'Got an error when trying to check your identity server',
-        );
+    my %OpenIDErrors = (
+        no_identity_server => 'Could not contact an identity server for %s',
+        bogus_url          => 'The OpenID URL you provided (%s) is not valid',
+        no_head_tag =>
+            'Got bad data when trying to check your identity server',
+        url_fetch_error =>
+            'Got an error when trying to check your identity server',
+    );
 
-    sub _authenticate_openid
-    {
+    sub _authenticate_openid {
         my $self = shift;
         my $c    = shift;
         my $uri  = shift;
 
-        my $csr =
-            Net::OpenID::Consumer->new
-                ( ua              => LWPx::ParanoidAgent->new(),
-                  args            => $c->request()->params(),
-                  consumer_secret => sub { $_[0] },
-                );
+        my $csr = Net::OpenID::Consumer->new(
+            ua              => LWPx::ParanoidAgent->new(),
+            args            => $c->request()->params(),
+            consumer_secret => sub { $_[0] },
+        );
 
         my $identity = $csr->claimed_identity($uri);
 
-        unless ($identity)
-        {
+        unless ($identity) {
             my $error = sprintf( $OpenIDErrors{ $csr->errcode() }, $uri );
 
-            $c->_redirect_with_error
-                ( error  => $error,
-                  uri    => '/user/login_form',
-                  params => { openid_uri => $uri },
-                );
+            $c->_redirect_with_error(
+                error  => $error,
+                uri    => '/user/login_form',
+                params => { openid_uri => $uri },
+            );
         }
 
         my %query = ( return_to => $c->request()->param('return_to') );
         $query{remember} = 1
             if $c->request()->param('remember');
 
-        my $return_to =
-            site_uri( path      => '/user/openid_authentication',
-                      query     => \%query,
-                      with_host => 1,
-                    );
+        my $return_to = site_uri(
+            path      => '/user/openid_authentication',
+            query     => \%query,
+            with_host => 1,
+        );
 
-        my $check_url =
-            $identity->check_url
-                ( return_to  => $return_to,
-                  trust_root => site_uri( path => '/', with_host => 1 ),
-                  delayed_return => 1,
-                );
+        my $check_url = $identity->check_url(
+            return_to      => $return_to,
+            trust_root     => site_uri( path => '/', with_host => 1 ),
+            delayed_return => 1,
+        );
 
         $c->redirect_and_detach($check_url);
     }
 }
 
-sub authentication_DELETE
-{
+sub authentication_DELETE {
     my $self = shift;
     my $c    = shift;
 
     $c->unset_authen_cookie();
 
-    $c->add_message( 'You have been logged out.' );
+    $c->add_message('You have been logged out.');
 
-    $c->redirect_and_detach( $c->request()->parameters()->{return_to} ||  site_uri( path => '/', with_host => 1 )  );
+    $c->redirect_and_detach( $c->request()->parameters()->{return_to}
+            || site_uri( path => '/', with_host => 1 ) );
 }
 
-sub openid_authentication : Local
-{
+sub openid_authentication : Local {
     my $self = shift;
     my $c    = shift;
 
-    my $csr =
-        Net::OpenID::Consumer->new
-            ( ua              => LWPx::ParanoidAgent->new(),
-              args            => $c->request()->params(),
-              consumer_secret => sub { $_[0] },
-            );
+    my $csr = Net::OpenID::Consumer->new(
+        ua              => LWPx::ParanoidAgent->new(),
+        args            => $c->request()->params(),
+        consumer_secret => sub { $_[0] },
+    );
 
-    if ( my $setup_url = $csr->user_setup_url() )
-    {
+    if ( my $setup_url = $csr->user_setup_url() ) {
         $c->redirect_and_detach($setup_url);
     }
-    elsif ( $csr->user_cancel() )
-    {
-        $c->_redirect_with_error
-            ( error  => 'You can still login without OpenID, or make a new account',
-              uri    => '/user/login_form',
-            );
+    elsif ( $csr->user_cancel() ) {
+        $c->_redirect_with_error(
+            error =>
+                'You can still login without OpenID, or make a new account',
+            uri => '/user/login_form',
+        );
     }
 
     my $identity = $csr->verified_identity();
-    unless ($identity)
-    {
-        $c->_redirect_with_error
-            ( error  => 'Something went mysteriously wrong trying to authenticate you with OpenID',
-              uri    => '/user/login_form',
-            );
+    unless ($identity) {
+        $c->_redirect_with_error(
+            error =>
+                'Something went mysteriously wrong trying to authenticate you with OpenID',
+            uri => '/user/login_form',
+        );
     }
 
     my $user = VegGuide::User->new( openid_uri => $identity->url() );
 
-    unless ($user)
-    {
-        $c->_redirect_with_error
-            ( error  => 'Now you need to create a VegGuide.Org account for your OpenID URL',
-              uri    => '/user/new_user_form',
-              params => { openid_uri => $identity->url() },
-            );
+    unless ($user) {
+        $c->_redirect_with_error(
+            error =>
+                'Now you need to create a VegGuide.Org account for your OpenID URL',
+            uri    => '/user/new_user_form',
+            params => { openid_uri => $identity->url() },
+        );
     }
 
     $self->_login_user( $c, $user );
 }
 
-sub _login_user
-{
+sub _login_user {
     my $self = shift;
     my $c    = shift;
     my $user = shift;
 
-    my %expires = $c->request()->param('remember') ? ( expires => '+1y' ) : ();
-    $c->set_authen_cookie( value => { user_id => $user->user_id() },
-                           %expires,
-                         );
+    my %expires
+        = $c->request()->param('remember') ? ( expires => '+1y' ) : ();
+    $c->set_authen_cookie(
+        value => { user_id => $user->user_id() },
+        %expires,
+    );
 
     $c->add_message( 'Welcome to the site, ' . $user->real_name() );
 
-    $c->redirect_and_detach( $c->request()->parameters()->{return_to} ||  site_uri( path => '/', with_host => 1 )  );
+    $c->redirect_and_detach( $c->request()->parameters()->{return_to}
+            || site_uri( path => '/', with_host => 1 ) );
 }
 
-sub forgot_password_form : Local
-{
+sub forgot_password_form : Local {
     my $self = shift;
     my $c    = shift;
 
     $c->stash()->{template} = '/user/forgot-password-form';
 }
 
-sub password_reminder : Local : ActionClass('+VegGuide::Action::REST') { }
+sub password_reminder : Local : ActionClass('+VegGuide::Action::REST') {
+}
 
-sub password_reminder_POST
-{
+sub password_reminder_POST {
     my $self = shift;
     my $c    = shift;
 
@@ -311,47 +299,51 @@ sub password_reminder_POST
     my $user;
 
     my @errors;
-    if ( string_is_empty($email) )
-    {
+    if ( string_is_empty($email) ) {
         push @errors, 'You must provide an email address.';
     }
-    else
-    {
+    else {
         $user = VegGuide::User->new( email_address => $email );
         push @errors, "There is no user with the address $email."
             unless $user;
     }
 
-    if (@errors)
-    {
-        $c->_redirect_with_error
-            ( error  => \@errors,
-              uri    => '/user/forgot_password_form',
-              params => { email_address => $email,
-                          return_to     => $c->request()->parameters()->{return_to},
-                        },
-            );
+    if (@errors) {
+        $c->_redirect_with_error(
+            error  => \@errors,
+            uri    => '/user/forgot_password_form',
+            params => {
+                email_address => $email,
+                return_to     => $c->request()->parameters()->{return_to},
+            },
+        );
     }
 
     $user->forgot_password();
 
-    $c->add_message( "A message telling you how to change your password has been sent to $email." );
+    $c->add_message(
+        "A message telling you how to change your password has been sent to $email."
+    );
 
-    $c->redirect_and_detach( uri( path => '/user/login_form',
-                                  query => { return_to => $c->request()->parameters()->{return_to} },
-                                )
-                           );
+    $c->redirect_and_detach(
+        uri(
+            path => '/user/login_form',
+            query =>
+                { return_to => $c->request()->parameters()->{return_to} },
+        )
+    );
 }
 
-sub change_password_form : Local
-{
+sub change_password_form : Local {
     my $self   = shift;
     my $c      = shift;
     my $digest = shift;
 
-    my $user = VegGuide::User->new( forgot_password_digest => ( $digest || '' ) );
+    my $user
+        = VegGuide::User->new( forgot_password_digest => ( $digest || '' ) );
 
-    $c->redirect_and_detach( site_uri( path => '/', with_host => 1 ) ) unless $user;
+    $c->redirect_and_detach( site_uri( path => '/', with_host => 1 ) )
+        unless $user;
 
     $c->stash()->{digest} = $digest;
     $c->stash()->{user}   = $user;
@@ -359,10 +351,11 @@ sub change_password_form : Local
     $c->stash()->{template} = '/user/change-password-form';
 }
 
-sub user : Chained('_set_user') : PathPart('') : Args(0) : ActionClass('+VegGuide::Action::REST') { }
+sub user : Chained('_set_user') : PathPart('') : Args(0) :
+    ActionClass('+VegGuide::Action::REST') {
+}
 
-sub user_GET_html
-{
+sub user_GET_html {
     my $self = shift;
     my $c    = shift;
 
@@ -371,14 +364,14 @@ sub user_GET_html
     $c->stash()->{template} = '/user/individual/view';
 }
 
-sub edit_form : Chained('_set_user') : PathPart('edit_form') : Args(0)
-{
+sub edit_form : Chained('_set_user') : PathPart('edit_form') : Args(0) {
     my $self = shift;
     my $c    = shift;
 
-    $self->_require_auth( $c,
-                          q{You must be logged in to edit a user. If you don't have an account you can create one now.},
-                        );
+    $self->_require_auth(
+        $c,
+        q{You must be logged in to edit a user. If you don't have an account you can create one now.},
+    );
 
     $c->redirect_and_detach( site_uri( path => '/', with_host => 1 ) )
         unless $c->vg_user()->can_edit_user( $c->stash()->{user} );
@@ -386,14 +379,14 @@ sub edit_form : Chained('_set_user') : PathPart('edit_form') : Args(0)
     $c->stash()->{template} = '/user/individual/edit-form';
 }
 
-sub image_form : Chained('_set_user') : PathPart('image_form') : Args(0)
-{
+sub image_form : Chained('_set_user') : PathPart('image_form') : Args(0) {
     my $self = shift;
     my $c    = shift;
 
-    $self->_require_auth( $c,
-                          q{You must be logged in to edit a user. If you don't have an account you can create one now.},
-                        );
+    $self->_require_auth(
+        $c,
+        q{You must be logged in to edit a user. If you don't have an account you can create one now.},
+    );
 
     $c->redirect_and_detach( site_uri( path => '/', with_host => 1 ) )
         unless $c->vg_user()->can_edit_user( $c->stash()->{user} );
@@ -401,8 +394,7 @@ sub image_form : Chained('_set_user') : PathPart('image_form') : Args(0)
     $c->stash()->{template} = '/user/individual/image-form';
 }
 
-sub user_PUT
-{
+sub user_PUT {
     my $self = shift;
     my $c    = shift;
 
@@ -411,26 +403,23 @@ sub user_PUT
     my $digest = $c->request()->param('digest');
 
     unless ( $c->vg_user()->can_edit_user($user)
-             || ( $digest && $user->forgot_password_digest() eq $digest )
-           )
-    {
+        || ( $digest && $user->forgot_password_digest() eq $digest ) ) {
         $c->redirect_and_detach( site_uri( path => '/', with_host => 1 ) );
     }
 
-    if ($digest)
-    {
+    if ($digest) {
         $self->_change_password( $c, $user );
     }
-    else
-    {
+    else {
         $self->_update_user( $c, $user );
     }
 }
 
-sub user_image : Chained('_set_user') : PathPart('image') : Args(0) : ActionClass('+VegGuide::Action::REST') { }
+sub user_image : Chained('_set_user') : PathPart('image') : Args(0) :
+    ActionClass('+VegGuide::Action::REST') {
+}
 
-sub user_image_POST
-{
+sub user_image_POST {
     my $self = shift;
     my $c    = shift;
 
@@ -441,23 +430,21 @@ sub user_image_POST
 
     my $file = $c->request()->upload('image');
 
-    eval
-    {
+    eval {
         die "You must pick a file.\n"
             unless $file && $file->tempname();
 
         $user->add_image_from_file( $file->tempname() );
     };
 
-    if ( my $e = $@ )
-    {
+    if ( my $e = $@ ) {
         my $params = $c->request()->parameters();
 
-        $c->_redirect_with_error
-            ( error  => $e,
-              uri    => user_uri( user => $user, path => 'image_form' ),
-              params => $params,
-            );
+        $c->_redirect_with_error(
+            error  => $e,
+            uri    => user_uri( user => $user, path => 'image_form' ),
+            params => $params,
+        );
     }
 
     $c->add_message('The image has been uploaded');
@@ -465,35 +452,33 @@ sub user_image_POST
     $c->redirect_and_detach( user_uri( user => $user ) );
 }
 
-sub _change_password
-{
+sub _change_password {
     my $self = shift;
     my $c    = shift;
     my $user = shift;
 
-    eval
-    {
-        $user->change_password( password  => $c->request()->param('password'),
-                                password2 => $c->request()->param('password2'),
-                              );
+    eval {
+        $user->change_password(
+            password  => $c->request()->param('password'),
+            password2 => $c->request()->param('password2'),
+        );
     };
 
-    if ( my $e = $@ )
-    {
-        $c->_redirect_with_error
-            ( error  => $e,
-              uri    => '/user/change_password_form/' . $user->forgot_password_digest(),
-            );
+    if ( my $e = $@ ) {
+        $c->_redirect_with_error(
+            error => $e,
+            uri   => '/user/change_password_form/'
+                . $user->forgot_password_digest(),
+        );
     }
 
     $c->add_message('Your password has been updated');
     $c->save_param( email_address => $user->email_address() );
 
-    $c->redirect_and_detach( '/user/login_form' );
+    $c->redirect_and_detach('/user/login_form');
 }
 
-sub _update_user
-{
+sub _update_user {
     my $self = shift;
     my $c    = shift;
     my $user = shift;
@@ -503,34 +488,33 @@ sub _update_user
     delete $user_data{is_admin}
         unless $c->vg_user()->is_admin();
 
-    eval
-    {
-        $user->update(%user_data);
-    };
+    eval { $user->update(%user_data); };
 
-    if ( my $e = $@ )
-    {
-        $c->_redirect_with_error
-            ( error  => $e,
-              uri    => user_uri( user => $user, path => 'edit_form' ),
-              params => \%user_data,
-            );
+    if ( my $e = $@ ) {
+        $c->_redirect_with_error(
+            error  => $e,
+            uri    => user_uri( user => $user, path => 'edit_form' ),
+            params => \%user_data,
+        );
     }
 
-    my $subject = $c->vg_user()->user_id() == $user->user_id() ? 'Your' : $user->real_name() . q{'s};
+    my $subject
+        = $c->vg_user()->user_id() == $user->user_id()
+        ? 'Your'
+        : $user->real_name() . q{'s};
 
-    my $redirect = $c->request()->parameters()->{return_to} || user_uri( user => $user );
+    my $redirect = $c->request()->parameters()->{return_to}
+        || user_uri( user => $user );
 
-    unless ( keys %user_data == 1 && $user_data{entries_per_page} )
-    {
+    unless ( keys %user_data == 1 && $user_data{entries_per_page} ) {
         $c->add_message( $subject . ' account has been updated' );
     }
 
     $c->redirect_and_detach($redirect);
 }
 
-sub user_confirm_deletion : Chained('_set_user') : PathPart('deletion_confirmation_form') : Args(0)
-{
+sub user_confirm_deletion : Chained('_set_user') :
+    PathPart('deletion_confirmation_form') : Args(0) {
     my $self = shift;
     my $c    = shift;
 
@@ -547,8 +531,7 @@ sub user_confirm_deletion : Chained('_set_user') : PathPart('deletion_confirmati
     $c->stash()->{template} = '/shared/deletion-confirmation-form';
 }
 
-sub user_DELETE
-{
+sub user_DELETE {
     my $self = shift;
     my $c    = shift;
 
@@ -560,72 +543,73 @@ sub user_DELETE
     my $name = $user->real_name();
     $user->delete( calling_user => $c->vg_user() );
 
-    $c->add_message( "The user $name has been deleted." );
+    $c->add_message("The user $name has been deleted.");
 
     $c->redirect_and_detach('/user');
 }
 
 my $Captcha = Captcha::reCAPTCHA->new();
-sub new_user_form : Local
-{
+
+sub new_user_form : Local {
     my $self = shift;
     my $c    = shift;
 
-    $c->stash()->{captcha_html} =
-        $Captcha->get_html( VegGuide::Config->reCAPTCHAPublicKey(),
-                            undef, undef, { theme => 'white' } );
+    $c->stash()->{captcha_html} = $Captcha->get_html(
+        VegGuide::Config->reCAPTCHAPublicKey(),
+        undef, undef, { theme => 'white' }
+    );
 
     $c->stash()->{template} = '/user/new-user-form';
 }
 
-sub users : Path('/user') : ActionClass('+VegGuide::Action::REST') { }
+sub users : Path('/user') : ActionClass('+VegGuide::Action::REST') {
+}
 
-sub users_GET
-{
+sub users_GET {
     my $self = shift;
     my $c    = shift;
 
-    my $search = VegGuide::Search::User->new( real_name => ( $c->request()->parameters()->{name} || '' ) );
-    $search->set_cursor_params( page  => 1,
-                                limit => 0,
-                              );
+    my $search = VegGuide::Search::User->new(
+        real_name => ( $c->request()->parameters()->{name} || '' ) );
+    $search->set_cursor_params(
+        page  => 1,
+        limit => 0,
+    );
 
     my $users = $search->users();
 
     my @users;
-    while ( my $user = $users->next() )
-    {
-        push @users, { user_id   => $user->user_id(),
-                       real_name => $user->real_name(),
-                     };
+    while ( my $user = $users->next() ) {
+        push @users, {
+            user_id   => $user->user_id(),
+            real_name => $user->real_name(),
+            };
     }
 
-    return
-        $self->status_ok( $c,
-                          entity => \@users,
-                        );
+    return $self->status_ok(
+        $c,
+        entity => \@users,
+    );
 }
 
-sub users_GET_html
-{
+sub users_GET_html {
     my $self = shift;
     my $c    = shift;
 
     my %search_p;
 
     my $params = $c->request()->parameters();
-    if ( $params->{real_name} )
-    {
+    if ( $params->{real_name} ) {
         $search_p{real_name} = $params->{real_name};
     }
 
-    if ( $c->vg_user()->is_admin() && $params->{email_address} )
-    {
+    if ( $c->vg_user()->is_admin() && $params->{email_address} ) {
         $search_p{email_address} = $params->{email_address};
     }
 
-    if ( $params->{order_by} && $params->{order_by} eq 'email_address' && ! $c->vg_user()->is_admin() )
-    {
+    if (   $params->{order_by}
+        && $params->{order_by} eq 'email_address'
+        && !$c->vg_user()->is_admin() ) {
         delete $params->{order_by};
     }
 
@@ -638,14 +622,14 @@ sub users_GET_html
     $c->stash()->{template} = '/user/list';
 }
 
-my %CaptchaError =
-    ( 'incorrect-challenge-sol' => 'You have to fill in the spam check field.',
-      'incorrect-captcha-sol'   => 'Looks like you typed the wrong thing in the spam check field.',
-      'generic'                 => 'Something went wrong with the spam protection check.',
-    );
+my %CaptchaError = (
+    'incorrect-challenge-sol' => 'You have to fill in the spam check field.',
+    'incorrect-captcha-sol' =>
+        'Looks like you typed the wrong thing in the spam check field.',
+    'generic' => 'Something went wrong with the spam protection check.',
+);
 
-sub users_POST
-{
+sub users_POST {
     my $self = shift;
     my $c    = shift;
 
@@ -654,69 +638,62 @@ sub users_POST
     delete $user_data{is_admin}
         unless $c->vg_user()->is_admin();
 
-    my $captcha_result =
-        $Captcha->check_answer( VegGuide::Config->reCAPTCHAPrivateKey(),
-                                $c->request()->address(),
-                                $c->request()->param('recaptcha_challenge_field'),
-                                $c->request()->param('recaptcha_response_field'),
-                              );
+    my $captcha_result = $Captcha->check_answer(
+        VegGuide::Config->reCAPTCHAPrivateKey(),
+        $c->request()->address(),
+        $c->request()->param('recaptcha_challenge_field'),
+        $c->request()->param('recaptcha_response_field'),
+    );
 
-    unless ( $captcha_result->{is_valid} )
-    {
+    unless ( $captcha_result->{is_valid} ) {
         my $error = $CaptchaError{ $captcha_result->{error} };
-        unless ($error)
-        {
+        unless ($error) {
+
             # XXX - need to log this!
             $error = $CaptchaError{generic};
         }
 
-        $c->_redirect_with_error
-            ( error  => $error,
-              uri    => '/user/new_user_form',
-              params => \%user_data,
-            );
+        $c->_redirect_with_error(
+            error  => $error,
+            uri    => '/user/new_user_form',
+            params => \%user_data,
+        );
     }
 
     my $user;
-    eval
-    {
-        $user = VegGuide::User->create(%user_data);
-    };
+    eval { $user = VegGuide::User->create(%user_data); };
 
-    if ( my $e = $@ )
-    {
-        $c->_redirect_with_error
-            ( error  => $e,
-              uri    => '/user/new_user_form',
-              params => \%user_data,
-            );
+    if ( my $e = $@ ) {
+        $c->_redirect_with_error(
+            error  => $e,
+            uri    => '/user/new_user_form',
+            params => \%user_data,
+        );
     }
 
     $c->set_authen_cookie( value => { user_id => $user->user_id() } );
 
-    $c->add_message( 'Your account has been created.' );
+    $c->add_message('Your account has been created.');
 
-    $c->redirect_and_detach( $c->request()->parameters()->{return_to} ||  site_uri( path => '/', with_host => 1 )  );
+    $c->redirect_and_detach( $c->request()->parameters()->{return_to}
+            || site_uri( path => '/', with_host => 1 ) );
 
 }
 
-sub entries : Chained('_set_user') : PathPart('entries') : Args(0)
-{
+sub entries : Chained('_set_user') : PathPart('entries') : Args(0) {
     my $self = shift;
     my $c    = shift;
 
     $c->tab_by_id('entries')->set_is_selected(1);
 
-    if ( $c->stash()->{user}->vendor_count() )
-    {
+    if ( $c->stash()->{user}->vendor_count() ) {
         $c->stash()->{vendors} = $c->stash()->{user}->vendors_by_location();
     }
 
     $c->stash()->{template} = '/user/individual/entries';
 }
 
-sub reviews : Chained('_set_user') : PathPart('reviews') : Args(0)
-{
+sub reviews : Chained('_set_user') : PathPart('reviews') : Args(0) {
     my $self = shift;
     my $c    = shift;
 
@@ -724,21 +701,18 @@ sub reviews : Chained('_set_user') : PathPart('reviews') : Args(0)
 
     my $user = $c->stash()->{user};
 
-    if ( $user->review_count() )
-    {
+    if ( $user->review_count() ) {
         $c->stash()->{reviews} = $user->reviews_by_location();
     }
 
-    if ( $user->ratings_without_review_count() )
-    {
+    if ( $user->ratings_without_review_count() ) {
         $c->stash()->{ratings} = $user->ratings_without_reviews_by_location();
     }
 
     $c->stash()->{template} = '/user/individual/reviews';
 }
 
-sub history : Chained('_set_user') : PathPart('history') : Args(0)
-{
+sub history : Chained('_set_user') : PathPart('history') : Args(0) {
     my $self = shift;
     my $c    = shift;
 
@@ -755,10 +729,11 @@ sub history : Chained('_set_user') : PathPart('history') : Args(0)
     $c->stash()->{template} = '/user/individual/history';
 }
 
-sub watch_list : Chained('_set_user') : PathPart('watch_list') : Args(0) : ActionClass('+VegGuide::Action::REST') { }
+sub watch_list : Chained('_set_user') : PathPart('watch_list') : Args(0) :
+    ActionClass('+VegGuide::Action::REST') {
+}
 
-sub watch_list_GET_html : Private
-{
+sub watch_list_GET_html : Private {
     my $self = shift;
     my $c    = shift;
 
@@ -774,15 +749,13 @@ sub watch_list_GET_html : Private
     $c->stash()->{template} = '/user/individual/watch_list';
 }
 
-sub watch_list_POST : Private
-{
+sub watch_list_POST : Private {
     my $self = shift;
     my $c    = shift;
 
     my $location_id = $c->request()->param('location_id') || 0;
 
-    my $location =
-        VegGuide::Location->new( location_id => $location_id );
+    my $location = VegGuide::Location->new( location_id => $location_id );
 
     my $user = $c->stash()->{user};
 
@@ -794,10 +767,11 @@ sub watch_list_POST : Private
     $c->redirect_and_detach( region_uri( location => $location ) );
 }
 
-sub watch_list_region : Chained('_set_user') : PathPart('watch_list') : Args(1) : ActionClass('+VegGuide::Action::REST') { }
+sub watch_list_region : Chained('_set_user') : PathPart('watch_list') :
+    Args(1) : ActionClass('+VegGuide::Action::REST') {
+}
 
-sub watch_list_region_DELETE : Private
-{
+sub watch_list_region_DELETE : Private {
     my $self        = shift;
     my $c           = shift;
     my $location_id = shift;
@@ -814,33 +788,34 @@ sub watch_list_region_DELETE : Private
 
     $user->unsubscribe_from_location( location => $location );
 
-    $c->redirect_and_detach( $c->request()->parameters()->{return_to} ||  site_uri( path => '/', with_host => 1 )  );
+    $c->redirect_and_detach( $c->request()->parameters()->{return_to}
+            || site_uri( path => '/', with_host => 1 ) );
 }
 
-sub suggestions : Chained('_set_user') : PathPart('suggestions') : Args(0)
-{
+sub suggestions : Chained('_set_user') : PathPart('suggestions') : Args(0) {
     my $self = shift;
     my $c    = shift;
 
     my $user = $c->stash()->{user};
 
     $c->redirect_and_detach( site_uri( path => '/', with_host => 1 ) )
-        unless $c->vg_user()->is_admin() || $c->vg_user()->user_id() == $user->user_id();
+        unless $c->vg_user()->is_admin()
+            || $c->vg_user()->user_id() == $user->user_id();
 
     $c->stash()->{suggestions} = $user->viewable_suggestions();
 
     $c->stash()->{template} = '/user/individual/suggestions';
 }
 
-sub skins : Chained('_set_user') : PathPart('skins') : Args(0)
-{
+sub skins : Chained('_set_user') : PathPart('skins') : Args(0) {
     my $self = shift;
     my $c    = shift;
 
     my $user = $c->stash()->{user};
 
     $c->redirect_and_detach( site_uri( path => '/', with_host => 1 ) )
-        unless $c->vg_user()->is_admin() || $c->vg_user()->user_id() == $user->user_id();
+        unless $c->vg_user()->is_admin()
+            || $c->vg_user()->user_id() == $user->user_id();
 
     $c->stash()->{skins} = $user->skins();
 

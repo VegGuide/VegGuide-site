@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 {
+
     package Catalyst::Engine;
 
     use HTML::Entities qw( encode_entities );
@@ -12,65 +13,65 @@ use warnings;
 
     no warnings 'redefine';
 
-sub finalize_error {
-    my ( $self, $c ) = @_;
+    sub finalize_error {
+        my ( $self, $c ) = @_;
 
-    $c->res->content_type('text/html; charset=utf-8');
-    my $name = $c->config->{name} || join(' ', split('::', ref $c));
+        $c->res->content_type('text/html; charset=utf-8');
+        my $name = $c->config->{name} || join( ' ', split( '::', ref $c ) );
 
-    my ( $title, $error, $infos );
-    if ( $c->debug ) {
+        my ( $title, $error, $infos );
+        if ( $c->debug ) {
 
-        # For pretty dumps
-        $error = join '', map {
-                '<p><code class="error">'
-              . encode_entities($_)
-              . '</code></p>'
-        } @{ $c->error };
-        $error ||= 'No output';
-        $error = qq{<pre wrap="">$error</pre>};
-        $title = $name = "$name on Catalyst $Catalyst::VERSION";
-        $name  = "<h1>$name</h1>";
+            # For pretty dumps
+            $error = join '', map {
+                      '<p><code class="error">'
+                    . encode_entities($_)
+                    . '</code></p>'
+            } @{ $c->error };
+            $error ||= 'No output';
+            $error = qq{<pre wrap="">$error</pre>};
+            $title = $name = "$name on Catalyst $Catalyst::VERSION";
+            $name  = "<h1>$name</h1>";
 
-        # Don't show context in the dump
-        delete $c->req->{_context};
-        delete $c->res->{_context};
+            # Don't show context in the dump
+            delete $c->req->{_context};
+            delete $c->res->{_context};
 
-        # Don't show body parser in the dump
-        delete $c->req->{_body};
+            # Don't show body parser in the dump
+            delete $c->req->{_body};
 
-        # Don't show response header state in dump
-        delete $c->res->{_finalized_headers};
+            # Don't show response header state in dump
+            delete $c->res->{_finalized_headers};
 
-        local *Alzabo::Runtime::Row::DDS_freeze = \&ARR_freeze;
-        local *Alzabo::Runtime::Table::DDS_freeze = \&ART_freeze;
-        local *Alzabo::Runtime::Schema::DDS_freeze = \&ARS_freeze;
+            local *Alzabo::Runtime::Row::DDS_freeze    = \&ARR_freeze;
+            local *Alzabo::Runtime::Table::DDS_freeze  = \&ART_freeze;
+            local *Alzabo::Runtime::Schema::DDS_freeze = \&ARS_freeze;
 
-        my @infos;
-        my $i = 0;
-        for my $dump ( $c->dump_these ) {
-            my $name  = $dump->[0];
+            my @infos;
+            my $i = 0;
+            for my $dump ( $c->dump_these ) {
+                my $name = $dump->[0];
 
-            my $value = '';
-            open my $fh, '>', \$value;
+                my $value = '';
+                open my $fh, '>', \$value;
 
-            Dump( $dump->[1] )->To($fh)->Out();
+                Dump( $dump->[1] )->To($fh)->Out();
 
-            $value = encode_entities($value);
-            push @infos, sprintf <<"EOF", $name, $value;
+                $value = encode_entities($value);
+                push @infos, sprintf <<"EOF", $name, $value;
 <h2><a href="#" onclick="toggleDump('dump_$i'); return false">%s</a></h2>
 <div id="dump_$i">
     <pre wrap="">%s</pre>
 </div>
 EOF
-            $i++;
+                $i++;
+            }
+            $infos = join "\n", @infos;
         }
-        $infos = join "\n", @infos;
-    }
-    else {
-        $title = $name;
-        $error = '';
-        $infos = <<"";
+        else {
+            $title = $name;
+            $error = '';
+            $infos = <<"";
 <pre>
 (en) Please come back later
 (fr) SVP veuillez revenir plus tard
@@ -81,10 +82,10 @@ EOF
 (pl) Prosze sprobowac pozniej
 </pre>
 
-        $name = '';
-    }
+            $name = '';
+        }
 
-    $c->res->body( <<"" );
+        $c->res->body( <<"" );
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -184,37 +185,35 @@ EOF
 </html>
 
 
-    # Trick IE
-    $c->res->{body} .= ( ' ' x 512 );
+        # Trick IE
+        $c->res->{body} .= ( ' ' x 512 );
 
-    # Return 500
-    $c->res->status(500);
-}
+        # Return 500
+        $c->res->status(500);
+    }
 
-sub ARR_freeze
-{
-    my $self = shift;
+    sub ARR_freeze {
+        my $self = shift;
 
-    return 'row: ' .
-        ( $self->is_potential()
-          ? 'potential ' . $self->table()->name()
-          : $self->id_as_string()
-        );
-}
+        return 'row: '
+            . (
+            $self->is_potential()
+            ? 'potential ' . $self->table()->name()
+            : $self->id_as_string()
+            );
+    }
 
-sub ART_freeze
-{
-    my $self = shift;
+    sub ART_freeze {
+        my $self = shift;
 
-    return 'table: ' . $self->name();
-}
+        return 'table: ' . $self->name();
+    }
 
-sub ARS_freeze
-{
-    my $self = shift;
+    sub ARS_freeze {
+        my $self = shift;
 
-    return 'schema: ' . $self->name();
-}
+        return 'schema: ' . $self->name();
+    }
 
 }
 

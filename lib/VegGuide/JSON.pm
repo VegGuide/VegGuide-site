@@ -5,7 +5,6 @@ use warnings;
 
 use JSON::XS;
 
-
 {
     my $json = JSON::XS->new();
     $json->pretty(1);
@@ -15,6 +14,5 @@ use JSON::XS;
 
     sub Decode { $json->decode( $_[1] ) }
 }
-
 
 1;

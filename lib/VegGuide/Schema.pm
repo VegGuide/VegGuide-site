@@ -4,14 +4,12 @@ use strict;
 use warnings;
 
 use Alzabo::Runtime::Schema;
-use File::Slurp ();
+use File::Slurp         ();
 use Lingua::EN::Inflect ();
 use VegGuide::Config;
 
-
 # Turns FooBar into foo_bar
-sub calm_form
-{
+sub calm_form {
     my $string = shift;
 
     $string =~ s/(^|.)([A-Z])/$1 ? "$1\L_$2" : "\L$2"/ge;
@@ -19,36 +17,28 @@ sub calm_form
     return $string;
 }
 
-sub is_linking_table
-{
+sub is_linking_table {
     my $t = shift;
 
-    return
-        ( $t->columns == 2 &&
-          $t->primary_key_size == 2 &&
-          ( my @temp = $t->all_foreign_keys ) == 2
-        );
+    return (   $t->columns == 2
+            && $t->primary_key_size == 2
+            && ( my @temp = $t->all_foreign_keys ) == 2 );
 }
 
-sub _namer
-{
+sub _namer {
     my %p = @_;
 
-    if ( $p{table} || $p{column} )
-    {
+    if ( $p{table} || $p{column} ) {
         my $table = $p{table} || $p{column}->table();
 
         return if $table->name() eq 'Session';
 
-        unless ( grep { $p{type} eq $_ }
-                 qw( table table_column ) )
-        {
+        unless ( grep { $p{type} eq $_ } qw( table table_column ) ) {
             return if is_linking_table($table);
         }
     }
 
-    if ( $p{type} eq 'table' )
-    {
+    if ( $p{type} eq 'table' ) {
         my $name = $p{table}->name() . '_t';
 
         return if defined &{"VegGuide::Alzabo::Schema::$name"};
@@ -56,31 +46,27 @@ sub _namer
         return $name;
     }
 
-    if ( $p{type} eq 'table_column' )
-    {
+    if ( $p{type} eq 'table_column' ) {
         my $table = $p{column}->table()->name();
-        my $name = $p{column}->name() . '_c';
+        my $name  = $p{column}->name() . '_c';
 
         return if defined &{"VegGuide::Alzabo::Table::${table}::$name"};
 
         return $name;
     }
 
-    if ( $p{type} eq 'foreign_key' )
-    {
-	my $name = $p{foreign_key}->table_to->name;
-	my $from = $p{foreign_key}->table_from->name;
-	$name =~ s/$from//;
+    if ( $p{type} eq 'foreign_key' ) {
+        my $name = $p{foreign_key}->table_to->name;
+        my $from = $p{foreign_key}->table_from->name;
+        $name =~ s/$from//;
 
         my $method;
-	if ($p{plural})
-	{
-	    $method = my_PL( calm_form($name) );
-	}
-	else
-	{
-	    $method = calm_form( $name );
-	}
+        if ( $p{plural} ) {
+            $method = my_PL( calm_form($name) );
+        }
+        else {
+            $method = calm_form($name);
+        }
 
         $method =~ s/date_time/datetime/;
 
@@ -89,15 +75,14 @@ sub _namer
         return $method;
     }
 
-    if ( $p{type} eq 'linking_table' )
-    {
-	my $method = $p{foreign_key}->table_to->name;
-	my $tname = $p{foreign_key}->table_from->name;
-	$method =~ s/$tname//;
+    if ( $p{type} eq 'linking_table' ) {
+        my $method = $p{foreign_key}->table_to->name;
+        my $tname  = $p{foreign_key}->table_from->name;
+        $method =~ s/$tname//;
 
-        my $name = my_PL( calm_form($method) );;
+        my $name = my_PL( calm_form($method) );
 
-	return if defined &{"VegGuide::Alzabo::Row::${tname}::$name"};
+        return if defined &{"VegGuide::Alzabo::Row::${tname}::$name"};
 
         return $name;
     }
@@ -105,8 +90,7 @@ sub _namer
     die "unknown type in call to naming sub: $p{type}\n";
 }
 
-sub my_PL
-{
+sub my_PL {
     my $name = shift;
 
     return 'hours' if $name eq 'hours';
@@ -114,34 +98,32 @@ sub my_PL
     return Lingua::EN::Inflect::PL($name);
 }
 
-BEGIN
-{
+BEGIN {
     Alzabo::Config::root_dir( VegGuide::Config->AlzaboRootDir() );
 }
 
 # needs to come after above sub definitions
-use Alzabo::MethodMaker ( schema => 'RegVeg',
-                          class_root => 'VegGuide::Alzabo',
-                          name_maker => \&_namer,
-                          tables         => 1,
-                          table_columns  => 1,
-                          foreign_keys   => 1,
-                          linking_tables => 1,
-                        );
+use Alzabo::MethodMaker (
+    schema         => 'RegVeg',
+    class_root     => 'VegGuide::Alzabo',
+    name_maker     => \&_namer,
+    tables         => 1,
+    table_columns  => 1,
+    foreign_keys   => 1,
+    linking_tables => 1,
+);
 
 {
     my $Schema;
     my $LastPid;
-    sub Connect
-    {
+
+    sub Connect {
         my $class = shift;
 
         # If we get a schema during server startup, but we want to
         # reconnect in Apache child processes.
-        if ( $Schema && $Schema->driver()->handle() )
-        {
-            unless ( $LastPid == $$ )
-            {
+        if ( $Schema && $Schema->driver()->handle() ) {
+            unless ( $LastPid == $$ ) {
                 $Schema->disconnect();
                 $Schema->connect();
 
@@ -151,10 +133,8 @@ use Alzabo::MethodMaker ( schema => 'RegVeg',
             }
         }
 
-        if ( $Schema && $Schema->driver()->handle() )
-        {
-            unless ( $Schema->driver()->handle()->ping() )
-            {
+        if ( $Schema && $Schema->driver()->handle() ) {
+            unless ( $Schema->driver()->handle()->ping() ) {
                 $Schema->disconnect();
                 $Schema->connect();
             }
@@ -171,8 +151,10 @@ use Alzabo::MethodMaker ( schema => 'RegVeg',
 
         $schema->connect();
 
-        $schema->VendorComment_t()->set_prefetch( $schema->VendorComment_t()->columns() );
-        $schema->LocationComment_t()->set_prefetch( $schema->LocationComment_t()->columns() );
+        $schema->VendorComment_t()
+            ->set_prefetch( $schema->VendorComment_t()->columns() );
+        $schema->LocationComment_t()
+            ->set_prefetch( $schema->LocationComment_t()->columns() );
 
         $schema->set_referential_integrity(1);
 
@@ -181,22 +163,20 @@ use Alzabo::MethodMaker ( schema => 'RegVeg',
         return $schema;
     }
 
-    sub Schema
-    {
-        return $Schema ||= Alzabo::Runtime::Schema->load_from_file( name => 'RegVeg' );
+    sub Schema {
+        return $Schema
+            ||= Alzabo::Runtime::Schema->load_from_file( name => 'RegVeg' );
     }
 }
 
-sub CreateSchema
-{
+sub CreateSchema {
     my $class = shift;
 
     require Alzabo::Create::Schema;
     return Alzabo::Create::Schema->load_from_file( name => 'RegVeg' );
 }
 
-sub ColumnNameAsLabel
-{
+sub ColumnNameAsLabel {
     shift;
     my $name = shift;
 
@@ -205,7 +185,6 @@ sub ColumnNameAsLabel
 
     return ucfirst $name;
 }
-
 
 1;
 

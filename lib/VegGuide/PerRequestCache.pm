@@ -3,18 +3,15 @@ package VegGuide::PerRequestCache;
 use strict;
 use warnings;
 
-
 my %Cache;
 
-sub Cache
-{
+sub Cache {
     return unless $ENV{MOD_PERL} || $ENV{CATALYST_ENGINE};
 
     return \%Cache;
 }
 
-sub ClearCache
-{
+sub ClearCache {
     %Cache = ();
 }
 

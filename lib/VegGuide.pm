@@ -26,8 +26,7 @@ use VegGuide::VendorSource;
 use namespace::autoclean;
 use Moose;
 
-BEGIN
-{
+BEGIN {
     extends 'Catalyst';
 
     Catalyst->import( VegGuide::Config->CatalystImports() );
@@ -35,35 +34,32 @@ BEGIN
 
 with( VegGuide::Config->CatalystRoles() );
 
-__PACKAGE__->config( name => 'VegGuide',
-                     VegGuide::Config->CatalystConfig(),
-                   );
+__PACKAGE__->config(
+    name => 'VegGuide',
+    VegGuide::Config->CatalystConfig(),
+);
 
-__PACKAGE__->request_class( 'VegGuide::Request' );
-__PACKAGE__->response_class( 'VegGuide::Response' );
+__PACKAGE__->request_class('VegGuide::Request');
+__PACKAGE__->response_class('VegGuide::Response');
 
 __PACKAGE__->setup();
 
-
-sub skin
-{
+sub skin {
     my $self = shift;
 
     return $self->{skin}
         if $self->{skin};
 
-    if ( $self->request()->param('skin_id') )
-    {
-        return $self->{skin} =
-            VegGuide::Skin->new( skin_id => $self->request()->param('skin_id' ) );
+    if ( $self->request()->param('skin_id') ) {
+        return $self->{skin} = VegGuide::Skin->new(
+            skin_id => $self->request()->param('skin_id') );
     }
 
-    return $self->{skin} =
-        VegGuide::Skin->SkinForHostname( ( $self->request()->uri()->host() || '' ) );
+    return $self->{skin} = VegGuide::Skin->SkinForHostname(
+        ( $self->request()->uri()->host() || '' ) );
 }
 
-sub client
-{
+sub client {
     my $self = shift;
 
     my $stash = $self->stash();
@@ -77,18 +73,19 @@ sub client
     my $locale;
     $locale = $location->locale() if $location;
 
-    return
-        $stash->{client} =
-            VegGuide::Client->new( $self->request(), $locale );
+    return $stash->{client}
+        = VegGuide::Client->new( $self->request(), $locale );
 }
 
 {
+
     package Devel::InnerPackage;
 
     no warnings 'redefine';
 
     sub list_packages {
-        my $pack = shift; $pack .= "::" unless $pack =~ m!::$!;
+        my $pack = shift;
+        $pack .= "::" unless $pack =~ m!::$!;
 
         no strict 'refs';
         my @packs;
@@ -98,16 +95,16 @@ sub client
         # up thinking VegGuide::View::Mason has an inner package of
         # VegGuide::View::Mason::SUPER. This only happens when the
         # full Catalyst stack is also loaded.
-        for my $cand ( grep { ! /SUPER::$/ } grep /::$/, @stuff)
-        {
+        for my $cand ( grep { !/SUPER::$/ } grep /::$/, @stuff ) {
             $cand =~ s!::$!!;
-            my @children = list_packages($pack.$cand);
+            my @children = list_packages( $pack . $cand );
 
-            push @packs, "$pack$cand" unless $cand =~ /^::/ ||
-                !__PACKAGE__->_loaded($pack.$cand); # or @children;
+            push @packs, "$pack$cand"
+                unless $cand =~ /^::/
+                    || !__PACKAGE__->_loaded( $pack . $cand ); # or @children;
             push @packs, @children;
         }
-        return grep {$_ !~ /::::ISA::CACHE/} @packs;
+        return grep { $_ !~ /::::ISA::CACHE/ } @packs;
     }
 
 }

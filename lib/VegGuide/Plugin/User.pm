@@ -5,18 +5,14 @@ use warnings;
 
 use base 'Class::Accessor::Fast';
 
-__PACKAGE__->mk_accessors( '_vg_user' );
+__PACKAGE__->mk_accessors('_vg_user');
 
-
-
-sub vg_user
-{
+sub vg_user {
     my $self = shift;
 
     my $user = $self->_vg_user();
 
-    unless ($user)
-    {
+    unless ($user) {
         $user = $self->_get_user_from_cookie();
         $self->_vg_user($user);
     }
@@ -24,8 +20,7 @@ sub vg_user
     return $user;
 }
 
-sub _get_user_from_cookie
-{
+sub _get_user_from_cookie {
     my $self = shift;
 
     my $cookie = $self->authen_cookie_value();

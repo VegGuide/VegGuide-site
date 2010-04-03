@@ -5,6 +5,5 @@ use warnings;
 
 use Class::Factory::Util;
 
-
 1;
 

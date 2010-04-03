@@ -7,44 +7,40 @@ use base 'VegGuide::Search';
 
 use VegGuide::SiteURI qw( site_uri );
 use VegGuide::VendorComment;
-use VegGuide::Validate
-    qw( validate SCALAR_TYPE );
-
+use VegGuide::Validate qw( validate SCALAR_TYPE );
 
 sub SearchParams { () }
 
 sub SearchKeys { () }
 
 {
-    my $spec = { order_by   => SCALAR_TYPE( default => undef ),
-                 sort_order => SCALAR_TYPE( default => undef ),
-                 page       => SCALAR_TYPE( default => 1 ),
-                 limit      => SCALAR_TYPE( default => 20 ),
-               };
-    sub set_cursor_params
-    {
-        my $self = shift;
-        my %p    = validate( @_, $spec );
+    my $spec = {
+        order_by   => SCALAR_TYPE( default => undef ),
+        sort_order => SCALAR_TYPE( default => undef ),
+        page       => SCALAR_TYPE( default => 1 ),
+        limit      => SCALAR_TYPE( default => 20 ),
+    };
 
-        $p{order_by} ||= $self->_default_order_by();
+    sub set_cursor_params {
+        my $self = shift;
+        my %p = validate( @_, $spec );
+
+        $p{order_by}   ||= $self->_default_order_by();
         $p{sort_order} ||= $self->_default_sort_order( $p{order_by} );
 
         $self->{cursor_params} = \%p;
     }
 }
 
-sub _default_order_by
-{
+sub _default_order_by {
     return 'modified';
 }
 
-sub count
-{
+sub count {
     return VegGuide::VendorComment->Count();
 }
 
-sub reviews
-{
+sub reviews {
     my $self = shift;
 
     my %p = $self->cursor_params();
@@ -55,57 +51,54 @@ sub reviews
     return $self->_cursor(%p);
 }
 
-sub _cursor
-{
+sub _cursor {
     my $self = shift;
 
     return VegGuide::VendorComment->All(@_);
 }
 
-sub title
-{
+sub title {
     my $self = shift;
 
     return 'All reviews';
 }
 
-sub uri
-{
+sub uri {
     my $self = shift;
     my $page = shift || $self->page();
 
-    return
-        site_uri
-            ( $self->_uri_base_params(),
-              query    => { page       => $page,
-                            limit      => $self->limit(),
-                            order_by   => $self->order_by(),
-                            sort_order => $self->sort_order(),
-                          },
-            );
+    return site_uri(
+        $self->_uri_base_params(),
+        query => {
+            page       => $page,
+            limit      => $self->limit(),
+            order_by   => $self->order_by(),
+            sort_order => $self->sort_order(),
+        },
+    );
 }
 
-sub base_uri
-{
+sub base_uri {
     my $self = shift;
 
     return site_uri( $self->_uri_base_params(@_) );
 }
 
-sub _uri_base_params
-{
-    my $self   = shift;
+sub _uri_base_params {
+    my $self = shift;
 
-    return ( path => '/review/',
-           );
+    return (
+        path => '/review/',
+    );
 }
 
 {
-    my %DefaultOrder = ( 'modified' => 'DESC',
-                       );
-    sub DefaultSortOrder
-    {
-        my $class = shift;
+    my %DefaultOrder = (
+        'modified' => 'DESC',
+    );
+
+    sub DefaultSortOrder {
+        my $class    = shift;
         my $order_by = shift;
 
         die "Invalid order by ($order_by)"

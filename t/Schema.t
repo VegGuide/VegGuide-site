@@ -5,11 +5,10 @@ use Test::More tests => 6;
 
 use VegGuide::Schema;
 
-
 {
     my $schema = VegGuide::Schema->Schema();
     isa_ok( $schema, 'Alzabo::Runtime::Schema' );
-    can_ok( $schema, 'Vendor_t' );
+    can_ok( $schema,             'Vendor_t' );
     can_ok( $schema->Vendor_t(), 'vendor_id_c' );
 }
 
@@ -25,6 +24,8 @@ use VegGuide::Schema;
 
     $schema = VegGuide::Schema->Connect();
 
-    isnt( $handle, $schema->driver()->handle(),
-          'automatically reconnects when pid changes' );
+    isnt(
+        $handle, $schema->driver()->handle(),
+        'automatically reconnects when pid changes'
+    );
 }

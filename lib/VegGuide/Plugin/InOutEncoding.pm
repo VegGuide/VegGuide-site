@@ -7,9 +7,7 @@ use Encode;
 use MRO::Compat;
 use VegGuide::Util qw( string_is_empty );
 
-
-sub prepare_parameters
-{
+sub prepare_parameters {
     my $self = shift;
 
     $self->maybe::next::method();
@@ -18,35 +16,29 @@ sub prepare_parameters
     # gross.
     my $p = $self->request->{parameters};
 
-    while ( my ( $k, $v ) = each %{$p} )
-    {
+    while ( my ( $k, $v ) = each %{$p} ) {
         next if $k =~ /_id$/;
         next if string_is_empty($v);
-        next if ref $v && ! eval { @$v };
+        next if ref $v && !eval {@$v};
 
-        if ( ref $v )
-        {
+        if ( ref $v ) {
             $p->{$k} = [ map { $self->client()->decode($_) } @$v ];
         }
-        else
-        {
+        else {
             $v =~ s/\r\n?/\n/gs;
             $p->{$k} = $self->client()->decode($v);
         }
     }
 }
 
-sub finalize
-{
+sub finalize {
     my $self = shift;
 
     my $body = $self->response()->body();
 
-    unless (    $body
-             && Encode::is_utf8($body)
-             && $self->response()->content_type() =~ /^text/
-           )
-    {
+    unless ( $body
+        && Encode::is_utf8($body)
+        && $self->response()->content_type() =~ /^text/ ) {
         return $self->maybe::next::method();
     }
 
@@ -55,7 +47,6 @@ sub finalize
 
     return $self->maybe::next::method();
 }
-
 
 1;
 

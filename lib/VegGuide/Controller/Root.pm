@@ -16,61 +16,60 @@ use VegGuide::Vendor;
 
 __PACKAGE__->config()->{namespace} = '';
 
-
-sub index : Path('/') : Args(0)
-{
+sub index : Path('/') : Args(0) {
     my $self = shift;
     my $c    = shift;
 
-    my $geo = Geo::IP->open( '/usr/share/GeoIP/GeoIPCity.dat', GEOIP_STANDARD );
+    my $geo
+        = Geo::IP->open( '/usr/share/GeoIP/GeoIPCity.dat', GEOIP_STANDARD );
 
     # There is a hack here to allow for this to work and show some sort of
     # local data even if the geoip city database is not installed
     my %geo_loc;
-    if ($geo)
-    {
-        my $ip =
-              VegGuide::Config->IsProduction()
+    if ($geo) {
+        my $ip
+            = VegGuide::Config->IsProduction()
             ? $c->request()->address()
             : ( $c->request()->params()->{ip} || $c->request()->address() );
 
         my $record = $geo->record_by_addr($ip);
-        %geo_loc =
-            map { $_ => $record->$_() }
+        %geo_loc
+            = map { $_ => $record->$_() }
             qw( city region_name country_code latitude longitude )
-                if $record;
+            if $record;
     }
-    else
-    {
+    else {
         die "It looks like GeoIPCity.dat is not installed\n"
             if VegGuide::Config->IsProduction();
 
-        %geo_loc = ( longitude    => '-93.3063',
-                     city         => 'Minneapolis',
-                     latitude     => '44.9823',
-                     country_code => 'US',
-                     region_name  => 'Minnesota'
-                   );
+        %geo_loc = (
+            longitude    => '-93.3063',
+            city         => 'Minneapolis',
+            latitude     => '44.9823',
+            country_code => 'US',
+            region_name  => 'Minnesota'
+        );
     }
 
-    if ( keys %geo_loc )
-    {
-        my $city = join ', ', uniq( grep { defined } $geo_loc{city}, $geo_loc{region_name} );
+    if ( keys %geo_loc ) {
+        my $city = join ', ',
+            uniq( grep {defined} $geo_loc{city}, $geo_loc{region_name} );
 
         $c->stash()->{city} = $city;
 
-        $c->stash()->{search} =
-            VegGuide::Search::Vendor::ByLatLong->new
-                ( address      => 'Your location',
-                  unit         => ( $geo_loc{country_code} eq 'US' ? 'mile' : 'km' ),
-                  latitude     => $geo_loc{latitude},
-                  longitude    => $geo_loc{longitude},
-                  category_id  => [ VegGuide::Category->Restaurant()->category_id() ],
-                  veg_level    => 2,
-                  allow_closed => 0,
-                );
+        $c->stash()->{search} = VegGuide::Search::Vendor::ByLatLong->new(
+            address   => 'Your location',
+            unit      => ( $geo_loc{country_code} eq 'US' ? 'mile' : 'km' ),
+            latitude  => $geo_loc{latitude},
+            longitude => $geo_loc{longitude},
+            category_id =>
+                [ VegGuide::Category->Restaurant()->category_id() ],
+            veg_level    => 2,
+            allow_closed => 0,
+        );
 
-        $c->stash()->{search}->set_cursor_params( limit => 10, order_by => 'rand' );
+        $c->stash()->{search}
+            ->set_cursor_params( limit => 10, order_by => 'rand' );
     }
 
     $c->stash()->{news_item} = VegGuide::NewsItem->MostRecent();
@@ -78,8 +77,7 @@ sub index : Path('/') : Args(0)
     $c->stash()->{template} = '/index';
 }
 
-sub recent : Local : Args(0)
-{
+sub recent : Local : Args(0) {
     my $self = shift;
     my $c    = shift;
 
@@ -89,19 +87,17 @@ sub recent : Local : Args(0)
 }
 
 # Used to exit gracefully for the benefit of profilers like FastProf
-sub exit : Path('/exit') : Args(0)
-{
+sub exit : Path('/exit') : Args(0) {
     my $self = shift;
     my $c    = shift;
 
-    VegGuide::Exception->throw( 'Naughty attempt to kill VegGuide server' )
+    VegGuide::Exception->throw('Naughty attempt to kill VegGuide server')
         if VegGuide::Config->IsProduction();
 
     exit 0;
 }
 
-sub warn : Path('/warn') : Args(0)
-{
+sub warn : Path('/warn') : Args(0) {
     my $self = shift;
     my $c    = shift;
 
@@ -111,8 +107,7 @@ sub warn : Path('/warn') : Args(0)
 }
 
 # This should only be callable in a dev environment
-sub robots_txt : Path('/robots.txt') : Args(0)
-{
+sub robots_txt : Path('/robots.txt') : Args(0) {
     my $self = shift;
     my $c    = shift;
 
@@ -120,8 +115,7 @@ sub robots_txt : Path('/robots.txt') : Args(0)
     $c->response()->body("User-agent: *\nDisallow: /\n");
 }
 
-sub home : Path('/home')
-{
+sub home : Path('/home') {
     my $self = shift;
     my $c    = shift;
 
@@ -134,76 +128,76 @@ sub home : Path('/home')
 
 {
     my @Days = @{ DateTime::Locale->load('en_US')->day_stand_alone_wide() };
-    sub hours_descriptions : Path('/hours-descriptions')
-    {
+
+    sub hours_descriptions : Path('/hours-descriptions') {
         my $self = shift;
         my $c    = shift;
 
         my @descs;
-        for my $d ( 0..6 )
-        {
+        for my $d ( 0 .. 6 ) {
             my $is_closed = $c->request()->param("is-closed-$d");
             my $hours0    = $c->request()->param("hours-$d-0");
 
-            if ($is_closed)
-            {
+            if ($is_closed) {
                 $descs[$d]{s0} = 'closed';
                 next;
             }
 
             next if string_is_empty($hours0);
 
-            if ( $hours0 =~ /^\s* s/xism )
-            {
-                if ($d)
-                {
+            if ( $hours0 =~ /^\s* s/xism ) {
+                if ($d) {
                     $descs[$d] = $descs[ $d - 1 ];
                 }
-                else
-                {
+                else {
                     $descs[$d]{s0} = 'same as what?';
                 }
                 next;
             }
 
-            if ( $hours0 eq 'closed' )
-            {
+            if ( $hours0 eq 'closed' ) {
                 $descs[$d]{s0} = '';
                 next;
             }
 
-            $descs[$d]{s0} = eval { VegGuide::Vendor->CanonicalHoursRangeDescription($hours0) };
+            $descs[$d]{s0} = eval {
+                VegGuide::Vendor->CanonicalHoursRangeDescription($hours0);
+            };
 
-            if ( my $e = Exception::Class->caught('VegGuide::Exception::DataValidation') )
-            {
+            if (
+                my $e = Exception::Class->caught(
+                    'VegGuide::Exception::DataValidation')
+                ) {
                 $descs[$d]{error} = $e->error();
             }
 
             my $hours1 = $c->request()->param("hours-$d-1");
 
-            if ( ! string_is_empty($hours1) )
-            {
-                $descs[$d]{s1} =
-                    eval { VegGuide::Vendor->CanonicalHoursRangeDescription( $hours1, 'assume pm' ) };
+            if ( !string_is_empty($hours1) ) {
+                $descs[$d]{s1} = eval {
+                    VegGuide::Vendor->CanonicalHoursRangeDescription( $hours1,
+                        'assume pm' );
+                };
 
-                if ( my $e = Exception::Class->caught('VegGuide::Exception::DataValidation') )
-                {
+                if (
+                    my $e = Exception::Class->caught(
+                        'VegGuide::Exception::DataValidation')
+                    ) {
                     $descs[$d]{error} = $e->error();
                 }
             }
         }
 
-        $self->status_ok( $c,
-                          entity => \@descs,
-                        );
+        $self->status_ok(
+            $c,
+            entity => \@descs,
+        );
     }
 }
 
-sub test500 : Local
-{
+sub test500 : Local {
     die "Test 500";
 }
-
 
 1;
 

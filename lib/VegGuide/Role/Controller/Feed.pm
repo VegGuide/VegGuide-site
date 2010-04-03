@@ -8,13 +8,12 @@ use Class::Trait 'base';
 use File::Basename qw( basename );
 use URI::FromHash qw( uri );
 
+my %XMLFeedType = (
+    rss  => 'RSS',
+    atom => 'Atom',
+);
 
-my %XMLFeedType = ( rss  => 'RSS',
-                    atom => 'Atom',
-                  );
-
-sub _serve_feed
-{
+sub _serve_feed {
     my $self = shift;
     my $c    = shift;
     my $feed = shift;
@@ -27,27 +26,25 @@ sub _serve_feed
     $c->response()->body( $feed->convert( $XMLFeedType{$type} )->as_xml() );
 }
 
-sub _serve_rss_data_file
-{
+sub _serve_rss_data_file {
     my $self = shift;
     my $c    = shift;
     my $file = shift;
 
-    unless ( -f $file )
-    {
+    unless ( -f $file ) {
         $c->response()->status(404);
         $c->detach();
     }
 
-    if ( $c->engine()->isa('Catalyst::Engine::Apache') )
-    {
-        $c->redirect_and_detach( uri( path => '/static/rss/' . basename($file) ) );
+    if ( $c->engine()->isa('Catalyst::Engine::Apache') ) {
+        $c->redirect_and_detach(
+            uri( path => '/static/rss/' . basename($file) ) );
     }
 
     open my $fh, '<', $file
         or die "Cannot read $file: $!";
 
-    $c->response()->content_type( 'application/rss+xml' );
+    $c->response()->content_type('application/rss+xml');
     $c->response()->content_length( -s $file );
     $c->response()->body($fh);
 }

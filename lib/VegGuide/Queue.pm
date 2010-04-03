@@ -5,11 +5,10 @@ use warnings;
 
 use VegGuide::Validate qw( validate_pos CODEREF_TYPE );
 
-
 {
-    my $spec = ( CODEREF_TYPE );
-    sub AddToQueue
-    {
+    my $spec = (CODEREF_TYPE);
+
+    sub AddToQueue {
         my $class = shift;
         my ($action) = validate_pos( @_, $spec );
 
@@ -17,16 +16,13 @@ use VegGuide::Validate qw( validate_pos CODEREF_TYPE );
         my $r = Apache->request()
             if Apache->can('request');
 
-        if (0)
-        {
+        if (0) {
             $r->register_cleanup($action);
         }
-        else
-        {
+        else {
             $action->();
         }
     }
 }
-
 
 1;

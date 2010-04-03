@@ -5,6 +5,5 @@ use warnings;
 
 use base 'VegGuide::Controller::DirectToView';
 
-
 1;
 

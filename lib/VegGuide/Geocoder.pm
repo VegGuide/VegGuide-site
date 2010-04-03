@@ -8,56 +8,53 @@ use VegGuide::Config;
 use VegGuide::Util qw( string_is_empty );
 use VegGuide::Validate qw( validate SCALAR_TYPE );
 
-
-my %Geocoders =
-    ( map
-      { lc $_->[0] =>
-        { geocoder =>
-          Geo::Coder::Google->new
-              ( host   => $_->[1],
+my %Geocoders = (
+    map {
+        lc $_->[0] => {
+            geocoder => Geo::Coder::Google->new(
+                host   => $_->[1],
                 apikey => VegGuide::Config->GoogleAPIKey(),
-              ),
-          hostname => $_->[1],
-          country  => $_->[0],
-        }
-      }
-      [ 'Australia'      => 'maps.google.com.au' ],
-      [ 'Austria'        => 'maps.google.com' ],
-      [ 'Belgium'        => 'maps.google.com' ],
-      [ 'Brazil'         => 'maps.google.com' ],
-      [ 'Canada'         => 'maps.google.ca' ],
-      [ 'Czech Republic' => 'maps.google.com' ],
-      [ 'Denmark'        => 'maps.google.dk' ],
-      [ 'Finland'        => 'maps.google.fi' ],
-      [ 'France'         => 'maps.google.fr' ],
-      [ 'Germany'        => 'maps.google.de' ],
-      [ 'Hong Kong'      => 'maps.google.com' ],
-      [ 'Hungary'        => 'maps.google.com' ],
-      [ 'India'          => 'maps.google.com' ],
-      [ 'Ireland'        => 'maps.google.com' ],
-      [ 'Italy'          => 'maps.google.it' ],
-      [ 'Japan'          => 'maps.google.co.jp' ],
-      [ 'Luxembourg'     => 'maps.google.com' ],
-      [ 'Netherlands'    => 'maps.google.nl' ],
-      [ 'New Zealand'    => 'maps.google.com' ],
-      [ 'Poland'         => 'maps.google.com' ],
-      [ 'Portugal'       => 'maps.google.com' ],
-      [ 'Puerto Rico'    => 'maps.google.com' ],
-      [ 'Singapore'      => 'maps.google.com' ],
-      [ 'Spain'          => 'maps.google.es' ],
-      [ 'Sweden'         => 'maps.google.se' ],
-      [ 'Switzerland'    => 'maps.google.com' ],
-      [ 'Taiwan'         => 'maps.google.com.tw' ],
-      [ 'United Kingdom' => 'maps.google.com' ],
-      [ 'USA'            => 'maps.google.com' ],
-    );
+            ),
+            hostname => $_->[1],
+            country  => $_->[0],
+            }
+        }[ 'Australia' => 'maps.google.com.au' ],
+    [ 'Austria'        => 'maps.google.com' ],
+    [ 'Belgium'        => 'maps.google.com' ],
+    [ 'Brazil'         => 'maps.google.com' ],
+    [ 'Canada'         => 'maps.google.ca' ],
+    [ 'Czech Republic' => 'maps.google.com' ],
+    [ 'Denmark'        => 'maps.google.dk' ],
+    [ 'Finland'        => 'maps.google.fi' ],
+    [ 'France'         => 'maps.google.fr' ],
+    [ 'Germany'        => 'maps.google.de' ],
+    [ 'Hong Kong'      => 'maps.google.com' ],
+    [ 'Hungary'        => 'maps.google.com' ],
+    [ 'India'          => 'maps.google.com' ],
+    [ 'Ireland'        => 'maps.google.com' ],
+    [ 'Italy'          => 'maps.google.it' ],
+    [ 'Japan'          => 'maps.google.co.jp' ],
+    [ 'Luxembourg'     => 'maps.google.com' ],
+    [ 'Netherlands'    => 'maps.google.nl' ],
+    [ 'New Zealand'    => 'maps.google.com' ],
+    [ 'Poland'         => 'maps.google.com' ],
+    [ 'Portugal'       => 'maps.google.com' ],
+    [ 'Puerto Rico'    => 'maps.google.com' ],
+    [ 'Singapore'      => 'maps.google.com' ],
+    [ 'Spain'          => 'maps.google.es' ],
+    [ 'Sweden'         => 'maps.google.se' ],
+    [ 'Switzerland'    => 'maps.google.com' ],
+    [ 'Taiwan'         => 'maps.google.com.tw' ],
+    [ 'United Kingdom' => 'maps.google.com' ],
+    [ 'USA'            => 'maps.google.com' ],
+);
 
 {
     my $spec = { country => SCALAR_TYPE };
-    sub new
-    {
+
+    sub new {
         my $class = shift;
-        my %p     = validate( @_, $spec );
+        my %p = validate( @_, $spec );
 
         my $country = lc $p{country};
 
@@ -71,34 +68,35 @@ my %Geocoders =
 
         $meth = $class->can($meth) || '_standard_geocode_address';
 
-        return bless { geocoder => $Geocoders{$country}{geocoder},
-                       hostname => $Geocoders{$country}{hostname},
-                       country  => $Geocoders{$country}{country},
-                       method   => $meth,
-                     };
+        return bless {
+            geocoder => $Geocoders{$country}{geocoder},
+            hostname => $Geocoders{$country}{hostname},
+            country  => $Geocoders{$country}{country},
+            method   => $meth,
+        };
     }
 }
 
-sub Countries
-{
+sub Countries {
     return map { $_->{country} } values %Geocoders;
 }
 
 {
-    my $spec = { address1           => SCALAR_TYPE( optional => 1 ),
-                 localized_address1 => SCALAR_TYPE( optional => 1 ),
-                 city               => SCALAR_TYPE( optional => 1 ),
-                 localized_city     => SCALAR_TYPE( optional => 1 ),
-                 region             => SCALAR_TYPE( optional => 1 ),
-                 localized_region   => SCALAR_TYPE( optional => 1 ),
-                 postal_code        => SCALAR_TYPE( optional => 1 ),
-               };
-    sub geocode
-    {
-        my $self = shift;
-        my %p    = validate( @_, $spec );
+    my $spec = {
+        address1           => SCALAR_TYPE( optional => 1 ),
+        localized_address1 => SCALAR_TYPE( optional => 1 ),
+        city               => SCALAR_TYPE( optional => 1 ),
+        localized_city     => SCALAR_TYPE( optional => 1 ),
+        region             => SCALAR_TYPE( optional => 1 ),
+        localized_region   => SCALAR_TYPE( optional => 1 ),
+        postal_code        => SCALAR_TYPE( optional => 1 ),
+    };
 
-        my $meth = $self->{method};
+    sub geocode {
+        my $self = shift;
+        my %p = validate( @_, $spec );
+
+        my $meth    = $self->{method};
         my $address = $self->$meth(%p)
             or return;
 
@@ -106,65 +104,57 @@ sub Countries
     }
 }
 
-sub geocode_full_address
-{
-    my $self = shift;
+sub geocode_full_address {
+    my $self    = shift;
     my $address = shift;
 
-    return VegGuide::Geocoder::Result->new( $self->{geocoder}->geocode($address) );
+    return VegGuide::Geocoder::Result->new(
+        $self->{geocoder}->geocode($address) );
 }
 
-sub hostname
-{
+sub hostname {
     my $self = shift;
 
     return $self->{hostname};
 }
 
-sub country
-{
+sub country {
     my $self = shift;
 
     return $self->{country};
 }
 
-sub _united_states_geocode_address
-{
+sub _united_states_geocode_address {
     my $self = shift;
     my %p    = @_;
 
-    if ( defined $p{postal_code} && length $p{postal_code} )
-    {
-        $p{postal_code} =~ s/^(\d{5}).+/$1/
+    if ( defined $p{postal_code} && length $p{postal_code} ) {
+        $p{postal_code} =~ s/^(\d{5}).+/$1/;
     }
 
     return $self->_standard_geocode_address(%p);
 }
 
-sub _standard_geocode_address
-{
+sub _standard_geocode_address {
     my $self = shift;
     my %p    = @_;
 
     my @pieces;
-    if ( string_is_empty( $p{postal_code} ) )
-    {
+    if ( string_is_empty( $p{postal_code} ) ) {
         @pieces = qw( address1 city region );
     }
-    else
-    {
+    else {
         @pieces = qw( address1 postal_code );
     }
 
-    my $address = join ', ', grep { ! string_is_empty($_) } @p{@pieces};
+    my $address = join ', ', grep { !string_is_empty($_) } @p{@pieces};
 
     $address .= ', ' . $self->country();
 
     return $address;
 }
 
-sub _japan_geocode_address
-{
+sub _japan_geocode_address {
     my $self = shift;
     my %p    = @_;
 
@@ -178,15 +168,14 @@ sub _japan_geocode_address
 
     $address =~ s/^[^,]+,\s*//;
 
-    return
-        ( join ', ',
-          grep { defined }
-          $p{localized_region}, $address
-        );
+    return (
+        join ', ',
+        grep {defined}
+            $p{localized_region}, $address
+    );
 }
 
-sub _taiwan_geocode_address
-{
+sub _taiwan_geocode_address {
     my $self = shift;
     my %p    = @_;
 
@@ -196,35 +185,32 @@ sub _taiwan_geocode_address
 
     $address =~ s/^[^,]+,\s*//;
 
-    return
-        ( join ', ',
-          grep { defined }
-          $p{localized_city}, $address
-        );
+    return (
+        join ', ',
+        grep {defined}
+            $p{localized_city}, $address
+    );
 }
-
 
 package VegGuide::Geocoder::Result;
 
-
-for my $meth ( qw( latitude longitude canonical_address ) )
-{
+for my $meth (qw( latitude longitude canonical_address )) {
     my $sub = sub { return $_[0]->{$meth} };
     no strict 'refs';
     *{$meth} = $sub;
 }
 
-sub new
-{
+sub new {
     my $class        = shift;
     my $geocode_info = shift;
 
     return unless $geocode_info;
 
-    return bless { latitude          => $geocode_info->{Point}{coordinates}[1],
-                   longitude         => $geocode_info->{Point}{coordinates}[0],
-                   canonical_address => $geocode_info->{address},
-                 };
+    return bless {
+        latitude          => $geocode_info->{Point}{coordinates}[1],
+        longitude         => $geocode_info->{Point}{coordinates}[0],
+        canonical_address => $geocode_info->{address},
+    };
 }
 
 1;

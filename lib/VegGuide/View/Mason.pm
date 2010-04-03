@@ -6,6 +6,7 @@ use warnings;
 use base 'Catalyst::View::Mason';
 
 {
+
     package VegGuide::Mason;
 
     use Image::Size qw( html_imgsize );
@@ -16,8 +17,8 @@ use base 'Catalyst::View::Mason';
     use VegGuide::Geocoder;
     use VegGuide::JSON;
     use VegGuide::SiteURI qw( entry_uri entry_image_uri entry_review_uri
-                              news_item_uri region_uri user_uri site_uri
-                              static_uri );
+        news_item_uri region_uri user_uri site_uri
+        static_uri );
     use VegGuide::Util qw( list_to_english string_is_empty );
 }
 
@@ -30,30 +31,26 @@ use VegGuide::Config;
 
 __PACKAGE__->config( VegGuide::Config->MasonConfig() );
 
-
-sub new
-{
+sub new {
     my $class = shift;
 
     my $self = $class->SUPER::new(@_);
 
-    VegGuide::Util::chown_files_for_server( $self->template()->files_written() );
+    VegGuide::Util::chown_files_for_server(
+        $self->template()->files_written() );
 
     return $self;
 }
 
-sub has_template_for_path
-{
+sub has_template_for_path {
     my $self = shift;
     my $path = shift;
 
-    return -f
-        File::Spec->catfile
-            ( $self->config()->{comp_root},
-              ( grep { defined && length } split /\//, $path ),
-            );
+    return -f File::Spec->catfile(
+        $self->config()->{comp_root},
+        ( grep { defined && length } split /\//, $path ),
+    );
 }
-
 
 1;
 

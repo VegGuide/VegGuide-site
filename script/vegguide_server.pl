@@ -5,7 +5,7 @@ BEGIN {
 }
 
 use Catalyst::ScriptRunner;
-Catalyst::ScriptRunner->run('VegGuide', 'Server');
+Catalyst::ScriptRunner->run( 'VegGuide', 'Server' );
 
 1;
 

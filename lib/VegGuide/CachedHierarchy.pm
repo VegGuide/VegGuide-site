@@ -5,8 +5,8 @@ use warnings;
 
 use File::Spec;
 
-use VegGuide::Validate qw( validate validate_with SCALAR_TYPE ARRAYREF_TYPE OBJECT ARRAYREF );
-
+use VegGuide::Validate
+    qw( validate validate_with SCALAR_TYPE ARRAYREF_TYPE OBJECT ARRAYREF );
 
 # needs to be a global so we can use local()
 use vars qw( $Checked );
@@ -16,18 +16,21 @@ my %Cache;
 my %Times;
 
 {
-    my $spec = { parent   => SCALAR_TYPE,
-                 roots    => SCALAR_TYPE,
-                 id       => SCALAR_TYPE,
-                 order_by => { type => OBJECT | ARRAYREF,
-                               optional => 1 },
-                 flags    => ARRAYREF_TYPE( default => [] ),
-                 first    => SCALAR_TYPE( default => 0 ),
-               };
-    sub _build_cache
-    {
+    my $spec = {
+        parent   => SCALAR_TYPE,
+        roots    => SCALAR_TYPE,
+        id       => SCALAR_TYPE,
+        order_by => {
+            type     => OBJECT | ARRAYREF,
+            optional => 1
+        },
+        flags => ARRAYREF_TYPE( default => [] ),
+        first => SCALAR_TYPE( default   => 0 ),
+    };
+
+    sub _build_cache {
         my $class = shift;
-        my %p     = validate( @_, $spec );
+        my %p = validate( @_, $spec );
 
         my $first = delete $p{first};
 
@@ -41,30 +44,29 @@ my %Times;
         my $clean = $class;
         $clean =~ s/::/-/g;
 
-        my $f = $Meta{$class}{file} =
-            File::Spec->catfile( File::Spec->tmpdir, $clean );
+        my $f = $Meta{$class}{file}
+            = File::Spec->catfile( File::Spec->tmpdir, $clean );
 
         $class->_add_nodes($roots);
 
         _touch_file($f) if $first && $ENV{MOD_PERL};
 
-        $Meta{$class}{last_build} = (stat $f)[9];
+        $Meta{$class}{last_build} = ( stat $f )[9];
 
         #    $class->_dump( '_cached_roots', 0 );
     }
 }
 
-sub _touch_file
-{
+sub _touch_file {
     my $file = shift;
 
     open my $fh, ">$file" or die "Cannot write to $file";
+
     # The contents don't matter, only the last mod time.
     print $fh "1\n";
     close $fh;
 
-    unless ( $> || $< )
-    {
+    unless ( $> || $< ) {
         my ( $uid, $gid ) = _get_uid_gid();
 
         chown $uid, $gid, $file
@@ -73,33 +75,31 @@ sub _touch_file
 }
 
 # Copied from Mason's ApacheHandler
-sub _get_uid_gid
-{
+sub _get_uid_gid {
+
     # Apache2 lacks $s->uid.
     # Workaround by searching the config tree.
     require Apache2::Directive;
 
     my $conftree = Apache2::Directive::conftree();
-    my $user = $conftree->lookup('User');
-    my $group = $conftree->lookup('Group');
+    my $user     = $conftree->lookup('User');
+    my $group    = $conftree->lookup('Group');
 
-    $user =~ s/^["'](.*)["']$/$1/;
+    $user  =~ s/^["'](.*)["']$/$1/;
     $group =~ s/^["'](.*)["']$/$1/;
 
-    my $uid = $user ? getpwnam($user) : $>;
+    my $uid = $user  ? getpwnam($user)  : $>;
     my $gid = $group ? getgrnam($group) : $);
 
     return ( $uid, $gid );
 }
 
-sub _dump
-{
+sub _dump {
     my $thing = shift;
-    my $meth = shift;
-    my $i = shift;
+    my $meth  = shift;
+    my $i     = shift;
 
-    foreach my $n ( $thing->$meth() )
-    {
+    foreach my $n ( $thing->$meth() ) {
         print ' ' x $i;
         print '- ';
         print $n->name;
@@ -109,28 +109,24 @@ sub _dump
     }
 }
 
-sub _add_nodes
-{
-    my $class = shift;
-    my $cursor = shift;
-    my $parent = shift;
+sub _add_nodes {
+    my $class    = shift;
+    my $cursor   = shift;
+    my $parent   = shift;
     my $children = shift;
 
-    my $table = $class->table;
+    my $table      = $class->table;
     my $parent_col = $table->column( $Meta{$class}{params}{parent} );
 
     my $id = $Meta{$class}{params}{id};
 
-    while ( my $node = $cursor->next )
-    {
+    while ( my $node = $cursor->next ) {
         delete $node->{__hierarchy_cache__};
 
-        if ($children)
-        {
+        if ($children) {
             push @$children, $node;
         }
-        else
-        {
+        else {
             push @{ $Cache{$class}{roots} }, $node;
         }
 
@@ -138,25 +134,22 @@ sub _add_nodes
 
         $Cache{$class}{by_id}{$id_val} = $node;
 
-        foreach my $flag ( @{ $Meta{$class}{params}{flags} } )
-        {
+        foreach my $flag ( @{ $Meta{$class}{params}{flags} } ) {
             $Cache{$class}{nodes}{$id_val}{flags}{$flag} = $node->$flag();
         }
 
         $Cache{$class}{nodes}{$id_val}{parent} = $parent;
 
-        my $cursor =
-            $table->rows_where
-                ( where =>
-                  [ $parent_col, '=', $id_val ],
-                  ( $Meta{$class}{params}{order_by} ?
-                    ( order_by => $Meta{$class}{params}{order_by} ) :
-                    ()
-                  )
-                );
+        my $cursor = $table->rows_where(
+            where => [ $parent_col, '=', $id_val ],
+            (
+                $Meta{$class}{params}{order_by}
+                ? ( order_by => $Meta{$class}{params}{order_by} )
+                : ()
+            )
+        );
 
-        my $children =
-            Class::AlzaboWrapper::Cursor->new( cursor => $cursor );
+        my $children = Class::AlzaboWrapper::Cursor->new( cursor => $cursor );
 
         my @children;
         $Cache{$class}{nodes}{$id_val}{children} = \@children;
@@ -165,8 +158,7 @@ sub _add_nodes
     }
 }
 
-sub _cached_roots
-{
+sub _cached_roots {
     my $class = shift;
 
     $class->_check_cache_time;
@@ -176,8 +168,7 @@ sub _cached_roots
     return @{ $Cache{$class}{roots} };
 }
 
-sub all
-{
+sub all {
     my $class = shift;
 
     $class->_check_cache_time;
@@ -188,11 +179,10 @@ sub all
 }
 *All = \&all;
 
-sub all_with_flag
-{
+sub all_with_flag {
     my $class = shift;
-    my $flag = shift;
-    my $val = shift;
+    my $flag  = shift;
+    my $val   = shift;
 
     $class->_check_cache_time;
 
@@ -200,24 +190,22 @@ sub all_with_flag
 
     my $id = $Meta{$class}{params}{id};
 
-    return
-        ( grep { $Cache{$class}{nodes}{ $_->$id() }{flags}{$flag} == $val }
-          map { $_, $_->descendants }
-          grep { $Cache{$class}{nodes}{ $_->$id() }{flags}{$flag} == $val }
-          @{ $Cache{$class}{roots} }
-        );
+    return (
+        grep { $Cache{$class}{nodes}{ $_->$id() }{flags}{$flag} == $val }
+            map { $_, $_->descendants }
+            grep { $Cache{$class}{nodes}{ $_->$id() }{flags}{$flag} == $val }
+            @{ $Cache{$class}{roots} }
+    );
 }
 
-sub ByID
-{
+sub ByID {
     my $class = shift;
-    my $id = shift;
+    my $id    = shift;
 
     return $Cache{$class}{by_id}{$id};
 }
 
-sub parent
-{
+sub parent {
     my $self = shift;
 
     $self->_check_cache_time;
@@ -230,9 +218,8 @@ sub parent
     return $self->{__hierarchy_cache__}{parent} = $self->_parent();
 }
 
-sub _parent
-{
-    my $self = shift;
+sub _parent {
+    my $self  = shift;
     my $class = ref $self;
 
     my $id_name = $Meta{$class}{params}{id};
@@ -243,9 +230,8 @@ sub _parent
     return $Cache{$class}{nodes}{$id}{parent};
 }
 
-sub children
-{
-    my $self = shift;
+sub children {
+    my $self  = shift;
     my $class = ref $self;
 
     $self->_check_cache_time;
@@ -257,14 +243,14 @@ sub children
 
     my $id = $Meta{$class}{params}{id};
 
-    $self->{__hierarchy_cache__}{children} = $class->children_of( $self->$id() );
+    $self->{__hierarchy_cache__}{children}
+        = $class->children_of( $self->$id() );
 
     return @{ $self->{__hierarchy_cache__}{children} };
 }
 
-sub children_of
-{
-    my $class = shift;
+sub children_of {
+    my $class  = shift;
     my $id_val = shift;
 
     return unless defined $id_val;
@@ -274,9 +260,8 @@ sub children_of
     return $Cache{$class}{nodes}{$id_val}{children} || [];
 }
 
-sub child_count
-{
-    my $self = shift;
+sub child_count {
+    my $self  = shift;
     my $class = ref $self;
 
     $class->_check_cache_time;
@@ -293,9 +278,8 @@ sub child_count
     return scalar @{ $Cache{$class}{nodes}{ $self->$id() }{children} };
 }
 
-sub ancestors
-{
-    my $self = shift;
+sub ancestors {
+    my $self  = shift;
     my $class = ref $self;
 
     my @a;
@@ -305,17 +289,15 @@ sub ancestors
     local $Checked = 1;
 
     my $node = $self;
-    while ( $node = $node->parent )
-    {
+    while ( $node = $node->parent ) {
         unshift @a, $node;
     }
 
     return @a;
 }
 
-sub descendants
-{
-    my $self = shift;
+sub descendants {
+    my $self  = shift;
     my $class = ref $self;
 
     $class->_check_cache_time;
@@ -329,8 +311,7 @@ sub descendants
 
     my @c = @d;
 
-    while ( my $node = shift @c )
-    {
+    while ( my $node = shift @c ) {
         my @c1 = $node->children;
 
         push @d, @c1;
@@ -343,9 +324,8 @@ sub descendants
     return @d;
 }
 
-sub descendant_ids
-{
-    my $self = shift;
+sub descendant_ids {
+    my $self  = shift;
     my $class = ref $self;
 
     return @{ $self->{__hierarchy_cache__}{descendant_ids} }
@@ -353,14 +333,14 @@ sub descendant_ids
 
     my $id = $Meta{$class}{params}{id};
 
-    $self->{__hierarchy_cache__}{descendant_ids} = [ map { $_->$id() } $self->descendants ];
+    $self->{__hierarchy_cache__}{descendant_ids}
+        = [ map { $_->$id() } $self->descendants ];
 
     return @{ $self->{__hierarchy_cache__}{descendant_ids} };
 }
 
-sub ancestor_ids
-{
-    my $self = shift;
+sub ancestor_ids {
+    my $self  = shift;
     my $class = ref $self;
 
     my $id = $Meta{$class}{params}{id};
@@ -369,24 +349,22 @@ sub ancestor_ids
 }
 
 my $dumped;
-sub _check_cache_time
-{
+
+sub _check_cache_time {
     my $class = ref $_[0] || $_[0];
 
     return if $Checked;
 
     return unless $ENV{MOD_PERL};
 
-    my $last_mod = (stat $Meta{$class}{file})[9];
+    my $last_mod = ( stat $Meta{$class}{file} )[9];
 
-    if ( $last_mod > $Meta{$class}{last_build} )
-    {
+    if ( $last_mod > $Meta{$class}{last_build} ) {
         $class->_rebuild_cache;
     }
 }
 
-sub _rebuild_cache
-{
+sub _rebuild_cache {
     my $class = ref $_[0] || $_[0];
 
     my %p = %{ $Meta{$class}{params} };
@@ -394,8 +372,7 @@ sub _rebuild_cache
     $class->_build_cache(%p);
 }
 
-sub _cached_data_has_changed
-{
+sub _cached_data_has_changed {
     my $class = ref $_[0] || $_[0];
 
     $class->_rebuild_cache;

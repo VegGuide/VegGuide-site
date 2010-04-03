@@ -9,9 +9,7 @@ use VegGuide::Locale;
 use VegGuide::Vendor;
 use VegGuide::VendorSource;
 
-
-sub auto : Private
-{
+sub auto : Private {
     my $self = shift;
     my $c    = shift;
 
@@ -21,22 +19,22 @@ sub auto : Private
     return 1;
 }
 
-sub locale_list : Local
-{
+sub locale_list : Local {
     my $self = shift;
     my $c    = shift;
 
     $c->stash()->{locales} = VegGuide::Locale->All();
 }
 
-sub locale : Regex('^locale/(\d+)') : ActionClass('+VegGuide::Action::REST') { }
+sub locale : Regex('^locale/(\d+)') : ActionClass('+VegGuide::Action::REST') {
+}
 
-sub locale_PUT
-{
+sub locale_PUT {
     my $self = shift;
     my $c    = shift;
 
-    my $locale = VegGuide::Locale->new( locale_id => $c->request()->captures()->[0] );
+    my $locale = VegGuide::Locale->new(
+        locale_id => $c->request()->captures()->[0] );
 
     my %data = $c->request()->locale_data();
 
@@ -46,13 +44,13 @@ sub locale_PUT
 
     $c->add_message( $locale->name() . ' has been updated.' );
 
-    $c->redirect_and_detach( '/site/admin/locale_list' );
+    $c->redirect_and_detach('/site/admin/locale_list');
 }
 
-sub locales : Global : ActionClass('+VegGuide::Action::REST') { }
+sub locales : Global : ActionClass('+VegGuide::Action::REST') {
+}
 
-sub locales_POST
-{
+sub locales_POST {
     my $self = shift;
     my $c    = shift;
 
@@ -64,27 +62,25 @@ sub locales_POST
 
     $c->add_message( $locale->name() . ' has been created.' );
 
-    $c->redirect_and_detach( '/site/admin/locale_list' );
+    $c->redirect_and_detach('/site/admin/locale_list');
 }
 
-sub source_list : Local
-{
+sub source_list : Local {
     my $self = shift;
     my $c    = shift;
 
     $c->stash()->{sources} = VegGuide::VendorSource->All();
 }
 
-sub source : Regex('^source/(\d+)') : ActionClass('+VegGuide::Action::REST') { }
+sub source : Regex('^source/(\d+)') : ActionClass('+VegGuide::Action::REST') {
+}
 
-sub source_PUT
-{
+sub source_PUT {
     my $self = shift;
     my $c    = shift;
 
-    my $source =
-        VegGuide::VendorSource->new
-            ( vendor_source_id => $c->request()->captures()->[0] );
+    my $source = VegGuide::VendorSource->new(
+        vendor_source_id => $c->request()->captures()->[0] );
 
     my %data = $c->request()->vendor_source_data();
 
@@ -92,13 +88,13 @@ sub source_PUT
 
     $c->add_message( $source->name() . ' has been updated.' );
 
-    $c->redirect_and_detach( '/site/admin/source_list' );
+    $c->redirect_and_detach('/site/admin/source_list');
 }
 
-sub sources : Global : ActionClass('+VegGuide::Action::REST') { }
+sub sources : Global : ActionClass('+VegGuide::Action::REST') {
+}
 
-sub sources_POST
-{
+sub sources_POST {
     my $self = shift;
     my $c    = shift;
 
@@ -108,11 +104,10 @@ sub sources_POST
 
     $c->add_message( $source->name() . ' has been created.' );
 
-    $c->redirect_and_detach( '/site/admin/source_list' );
+    $c->redirect_and_detach('/site/admin/source_list');
 }
 
-sub duplicates : Local
-{
+sub duplicates : Local {
     my $self = shift;
     my $c    = shift;
 
@@ -121,8 +116,7 @@ sub duplicates : Local
     $c->stash()->{template} = '/site/admin/duplicates';
 }
 
-sub users_with_profiles : Local
-{
+sub users_with_profiles : Local {
     my $self = shift;
     my $c    = shift;
 

@@ -10,41 +10,38 @@ use VegGuide::AlzaboWrapper ( table => VegGuide::Schema->Schema->Cuisine_t );
 
 use VegGuide::Validate qw( validate validate_with SCALAR );
 
-my %CacheParams = ( parent => 'parent_cuisine_id',
-                    roots  => '_real_root_cuisines',
-                    id     => 'cuisine_id',
-                    order_by => VegGuide::Schema->Schema->Cuisine_t->name_c,
-                  );
+my %CacheParams = (
+    parent   => 'parent_cuisine_id',
+    roots    => '_real_root_cuisines',
+    id       => 'cuisine_id',
+    order_by => VegGuide::Schema->Schema->Cuisine_t->name_c,
+);
 
 __PACKAGE__->_build_cache( %CacheParams, first => 1 );
 
-sub _real_root_cuisines
-{
+sub _real_root_cuisines {
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        __PACKAGE__->NewCursor
-            ( $schema->Cuisine_t->rows_where
-                  ( where =>
-                    [ $schema->Cuisine_t->parent_cuisine_id_c, '=', undef ],
-                    order_by =>
-                    [ $schema->Cuisine_t->name_c, 'ASC' ],
-                  )
-            );
+    return __PACKAGE__->NewCursor(
+        $schema->Cuisine_t->rows_where(
+            where => [ $schema->Cuisine_t->parent_cuisine_id_c, '=', undef ],
+            order_by =>
+                [ $schema->Cuisine_t->name_c, 'ASC' ],
+        )
+    );
 }
 
-sub new
-{
+sub new {
     my $class = shift;
-    my %p = validate_with( params => \@_,
-                           spec =>
-                           { cuisine_id => { type => SCALAR, optional => 1 },
-                           },
-                           allow_extra => 1,
-                         );
+    my %p     = validate_with(
+        params => \@_,
+        spec   => {
+            cuisine_id => { type => SCALAR, optional => 1 },
+        },
+        allow_extra => 1,
+    );
 
-    if ( $p{cuisine_id} )
-    {
+    if ( $p{cuisine_id} ) {
         my $cuisine = $class->ByID( $p{cuisine_id} );
         return $cuisine if $cuisine;
     }
@@ -52,33 +49,30 @@ sub new
     return $class->SUPER::new(@_);
 }
 
-sub _new_row
-{
+sub _new_row {
     my $class = shift;
-    my %p = validate_with( params => \@_,
-                           spec =>
-                           { name => { type => SCALAR, optional => 1 },
-                           },
-                           allow_extra => 1,
-                         );
+    my %p     = validate_with(
+        params => \@_,
+        spec   => {
+            name => { type => SCALAR, optional => 1 },
+        },
+        allow_extra => 1,
+    );
 
     my $schema = VegGuide::Schema->Connect();
 
     my $user;
-    if ( $p{name} )
-    {
-	my @where;
-	push @where,
-	    [ $schema->Cuisine_t->name_c, '=', $p{name} ];
+    if ( $p{name} ) {
+        my @where;
+        push @where, [ $schema->Cuisine_t->name_c, '=', $p{name} ];
 
-	return $schema->Cuisine_t->one_row( where => \@where );
+        return $schema->Cuisine_t->one_row( where => \@where );
     }
 
     return;
 }
 
-sub create
-{
+sub create {
     my $self = shift;
 
     $self->SUPER::create(@_);
@@ -86,8 +80,7 @@ sub create
     $self->_cached_data_has_changed;
 }
 
-sub update
-{
+sub update {
     my $self = shift;
 
     $self->SUPER::update(@_);
@@ -95,8 +88,7 @@ sub update
     $self->_cached_data_has_changed;
 }
 
-sub delete
-{
+sub delete {
     my $self = shift;
 
     $self->SUPER::delete(@_);
@@ -105,6 +97,5 @@ sub delete
 }
 
 sub root_cuisines { $_[0]->_cached_roots }
-
 
 1;

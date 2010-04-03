@@ -10,12 +10,10 @@ use lib "$FindBin::Bin/../lib";
 use VegGuide::Config;
 use VegGuide::Schema;
 
-
 sync_backend();
 insert_defaults() if grep { $_ eq '--data' } @ARGV;
 
-sub sync_backend
-{
+sub sync_backend {
     my %c = VegGuide::Config->DBConnectParams();
     delete $c{dsn};
 
@@ -23,8 +21,7 @@ sub sync_backend
 
     $schema->drop(%c) if grep { $_ eq '--drop' } @ARGV;
 
-    for my $sql ( $schema->sync_backend_sql(%c) )
-    {
+    for my $sql ( $schema->sync_backend_sql(%c) ) {
         $sql =~ s/^/  /gm;
 
         print $sql, "\n";
@@ -32,7 +29,10 @@ sub sync_backend
 
     $schema->sync_backend(%c);
 
-    eval { $schema->driver()->do( sql => 'DROP FUNCTION IF EXISTS WEIGHTED_RATING' ) };
+    eval {
+        $schema->driver()
+            ->do( sql => 'DROP FUNCTION IF EXISTS WEIGHTED_RATING' );
+    };
 
     $schema->driver()->do( sql => <<'EOF' );
 CREATE FUNCTION
@@ -57,7 +57,10 @@ BEGIN
 END;
 EOF
 
-    eval { $schema->driver()->do( sql => 'DROP FUNCTION IF EXISTS GREAT_CIRCLE_DISTANCE' ) };
+    eval {
+        $schema->driver()
+            ->do( sql => 'DROP FUNCTION IF EXISTS GREAT_CIRCLE_DISTANCE' );
+    };
 
     $schema->driver()->do( sql => <<'EOF' );
 CREATE FUNCTION
@@ -83,71 +86,78 @@ END;
 EOF
 }
 
-sub insert_defaults
-{
-    my %Defaults =
-        ( UserActivityLogType =>
-          { column => 'type',
-            values =>
-            [ 'add vendor',
-              'update vendor',
-              'suggest a change',
-              'suggestion accepted',
-              'suggestion rejected',
-              'add review',
-              'update review',
-              'delete review',
-              'add image',
-              'add region',
+sub insert_defaults {
+    my %Defaults = (
+        UserActivityLogType => {
+            column => 'type',
+            values => [
+                'add vendor',
+                'update vendor',
+                'suggest a change',
+                'suggestion accepted',
+                'suggestion rejected',
+                'add review',
+                'update review',
+                'delete review',
+                'add image',
+                'add region',
             ],
-          },
-          AddressFormat =>
-          { column => 'format',
-            values =>
-            [ 'standard',
-              'Hungarian',
+        },
+        AddressFormat => {
+            column => 'format',
+            values => [
+                'standard',
+                'Hungarian',
             ],
-          },
-          Category =>
-          { column => 'name',
-            values =>
-            [ { name => 'Restaurant', display_order => 1 },
-              { name => 'Coffee/Tea/Juice', display_order => 2 },
-              { name => 'Bar', display_order => 3 },
-              { name => 'Food Court or Street Vendor', display_order => 4 },
-              { name => 'Grocery/Bakery/Deli', display_order => 5 },
-              { name => 'Caterer', display_order => 6 },
-              { name => 'General Store', display_order => 7 },
-              { name => 'Organization', display_order => 8 },
-              { name => 'Hotel/B&B', display_order => 10 },
-              { name => 'Other', display_order => 10 },
+        },
+        Category => {
+            column => 'name',
+            values => [
+                { name => 'Restaurant',                  display_order => 1 },
+                { name => 'Coffee/Tea/Juice',            display_order => 2 },
+                { name => 'Bar',                         display_order => 3 },
+                { name => 'Food Court or Street Vendor', display_order => 4 },
+                { name => 'Grocery/Bakery/Deli',         display_order => 5 },
+                { name => 'Caterer',                     display_order => 6 },
+                { name => 'General Store',               display_order => 7 },
+                { name => 'Organization',                display_order => 8 },
+                { name => 'Hotel/B&B', display_order => 10 },
+                { name => 'Other',     display_order => 10 },
             ],
-          },
-          PriceRange =>
-          { column => 'price_range_id',
-            values =>
-            [ { price_range_id => 1, description => '$ - inexpensive', display_order => 1 },
-              { price_range_id => 2, description => '$$ - average', display_order => 2 },
-              { price_range_id => 3, description => '$$$ - expensive', display_order => 3 },
+        },
+        PriceRange => {
+            column => 'price_range_id',
+            values => [
+                {
+                    price_range_id => 1, description => '$ - inexpensive',
+                    display_order  => 1
+                }, {
+                    price_range_id => 2, description => '$$ - average',
+                    display_order  => 2
+                }, {
+                    price_range_id => 3, description => '$$$ - expensive',
+                    display_order  => 3
+                },
             ],
-          },
-        );
+        },
+    );
 
     my $schema = VegGuide::Schema->Connect();
 
-    foreach my $t ( keys %Defaults )
-    {
+    foreach my $t ( keys %Defaults ) {
         my $table  = $schema->table($t);
         my $column = $table->column( $Defaults{$t}{column} );
 
         my $x = 1;
-        foreach my $val ( @{ $Defaults{$t}{values} } )
-        {
+        foreach my $val ( @{ $Defaults{$t}{values} } ) {
             my $where_val = ref $val ? $val->{ $column->name } : $val;
 
-            unless ( $table->function( select => 1,
-                                       where  => [ $column, '=', $where_val ] ) )
-            {
+            unless (
+                $table->function(
+                    select => 1,
+                    where  => [ $column, '=', $where_val ]
+                )
+                ) {
                 my %insert = ref $val ? %$val : ( $column->name => $val );
 
                 $table->insert( values => \%insert );
@@ -158,8 +168,9 @@ sub insert_defaults
     require VegGuide::Locale;
     my $standard = VegGuide::AddressFormat->Standard();
 
-    $schema->driver->do
-        ( sql  => 'UPDATE Locale SET address_format_id = ? WHERE address_format_id IN (NULL, 0)',
-          bind => $standard->address_format_id,
-        );
+    $schema->driver->do(
+        sql =>
+            'UPDATE Locale SET address_format_id = ? WHERE address_format_id IN (NULL, 0)',
+        bind => $standard->address_format_id,
+    );
 }

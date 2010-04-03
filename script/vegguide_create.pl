@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Catalyst::ScriptRunner;
-Catalyst::ScriptRunner->run('VegGuide', 'Create');
+Catalyst::ScriptRunner->run( 'VegGuide', 'Create' );
 
 1;
 

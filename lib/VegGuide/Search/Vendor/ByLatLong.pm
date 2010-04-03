@@ -14,9 +14,7 @@ use VegGuide::GreatCircle qw( lat_long_min_max );
 use VegGuide::Location;
 use VegGuide::Schema;
 
-
-sub SearchParams
-{
+sub SearchParams {
     my $class = shift;
 
     my %p = $class->SUPER::SearchParams();
@@ -26,34 +24,35 @@ sub SearchParams
     return %p;
 }
 
-sub SearchKeys
-{
+sub SearchKeys {
     my $class = shift;
 
     return grep { $_ ne 'open_for' } $class->SUPER::SearchKeys();
 }
 
 {
-    my $spec = { address   => SCALAR_TYPE,
-                 distance  => POS_INTEGER_TYPE( default => 5 ),
-                 unit      => SCALAR_TYPE( regex => qr/^(?:mile|km)$/, default => 'mile' ),
-                 latitude  => SCALAR_TYPE,
-                 longitude => SCALAR_TYPE,
-               };
-    sub new
-    {
-        my $class = shift;
-        my %p = validate_with( params => \@_,
-                               spec   => $spec,
-                               allow_extra => 1,
-                             );
+    my $spec = {
+        address  => SCALAR_TYPE,
+        distance => POS_INTEGER_TYPE( default => 5 ),
+        unit => SCALAR_TYPE( regex => qr/^(?:mile|km)$/, default => 'mile' ),
+        latitude  => SCALAR_TYPE,
+        longitude => SCALAR_TYPE,
+    };
 
-        my @keys = keys %{ $spec };
-        my @vals = delete @p{ @keys };
+    sub new {
+        my $class = shift;
+        my %p     = validate_with(
+            params      => \@_,
+            spec        => $spec,
+            allow_extra => 1,
+        );
+
+        my @keys = keys %{$spec};
+        my @vals = delete @p{@keys};
 
         my $self = $class->SUPER::new(%p);
 
-        @{ $self }{@keys} = @vals;
+        @{$self}{@keys} = @vals;
 
         $self->_process_sql_query();
 
@@ -67,8 +66,7 @@ sub unit      { $_[0]->{unit} }
 sub latitude  { $_[0]->{latitude} }
 sub longitude { $_[0]->{longitude} }
 
-sub set_distance
-{
+sub set_distance {
     my $self = shift;
 
     $self->{distance} = shift;
@@ -76,8 +74,7 @@ sub set_distance
     $self->_process_sql_query();
 }
 
-sub set_unit
-{
+sub set_unit {
     my $self = shift;
 
     $self->{unit} = shift;
@@ -85,10 +82,9 @@ sub set_unit
     $self->_process_sql_query();
 }
 
-sub _default_order_by { 'distance' }
+sub _default_order_by {'distance'}
 
-sub _process_sql_query
-{
+sub _process_sql_query {
     my $self = shift;
 
     $self->SUPER::_process_sql_query();
@@ -96,110 +92,95 @@ sub _process_sql_query
     my $schema = VegGuide::Schema->Schema();
 
     push @{ $self->{where} },
-        VegGuide::Vendor->LatitudeLongitudeMinMaxWhere( $self->_lat_long_min_max() );
+        VegGuide::Vendor->LatitudeLongitudeMinMaxWhere(
+        $self->_lat_long_min_max() );
 }
 
-sub _lat_long_min_max
-{
+sub _lat_long_min_max {
     my $self = shift;
 
-    return
-        lat_long_min_max( latitude  => $self->latitude(),
-                          longitude => $self->longitude(),
-                          distance  => $self->distance(),
-                          unit      => $self->unit(),
-                        );
+    return lat_long_min_max(
+        latitude  => $self->latitude(),
+        longitude => $self->longitude(),
+        distance  => $self->distance(),
+        unit      => $self->unit(),
+    );
 }
 
-sub _vendor_ids_for_rating
-{
+sub _vendor_ids_for_rating {
     my $self = shift;
 
-    return
-        VegGuide::Vendor->VendorIdsWithMinimumRating
-            ( rating                     => $self->{rating},
-              latitude_longitude_min_max => $self->_lat_long_min_max(),
-            );
+    return VegGuide::Vendor->VendorIdsWithMinimumRating(
+        rating                     => $self->{rating},
+        latitude_longitude_min_max => $self->_lat_long_min_max(),
+    );
 }
 
-sub count
-{
-    return
-        VegGuide::Vendor->VendorCount
-            ( where => $_[0]->{where},
-              join  => $_[0]->{join},
-            );
+sub count {
+    return VegGuide::Vendor->VendorCount(
+        where => $_[0]->{where},
+        join  => $_[0]->{join},
+    );
 }
 
-sub _cursor
-{
+sub _cursor {
     my $self = shift;
 
-    return
-        VegGuide::Vendor->VendorsWhere
-            ( join  => $self->{join},
-              where => $self->{where},
-              lat_long => [ $self->latitude(), $self->longitude() ],
-              unit     => $self->unit(),
-              @_,
-            );
+    return VegGuide::Vendor->VendorsWhere(
+        join     => $self->{join},
+        where    => $self->{where},
+        lat_long => [ $self->latitude(), $self->longitude() ],
+        unit     => $self->unit(),
+        @_,
+    );
 }
 
-sub title
-{
+sub title {
     my $self = shift;
 
-    return
-        ( 'Entries within '
-          . $self->distance() . q{ }
-          . PL( $self->unit(), $self->distance() )
-          . ' of ' . $self->address()
-        );
+    return (  'Entries within '
+            . $self->distance() . q{ }
+            . PL( $self->unit(), $self->distance() ) . ' of '
+            . $self->address() );
 }
 
-sub map_uri
-{
+sub map_uri {
     my $self = shift;
 
-    return
-        URI::FromHash::uri( $self->_uri_base_params('map') );
+    return URI::FromHash::uri( $self->_uri_base_params('map') );
 }
 
-sub printable_uri
-{
+sub printable_uri {
     my $self = shift;
 
-    return
-        URI::FromHash::uri( $self->_uri_base_params('printable') );
+    return URI::FromHash::uri( $self->_uri_base_params('printable') );
 }
 
-sub uri
-{
+sub uri {
     my $self = shift;
     my $page = shift || $self->page();
 
     my %params = $self->_uri_base_params();
 
-    $params{query} = { page       => $page,
-                       limit      => $self->limit(),
-                       order_by   => $self->order_by(),
-                       sort_order => $self->sort_order(),
-                       %{ $params{query} },
-                     };
+    $params{query} = {
+        page       => $page,
+        limit      => $self->limit(),
+        order_by   => $self->order_by(),
+        sort_order => $self->sort_order(),
+        %{ $params{query} },
+    };
 
     return URI::FromHash::uri(%params);
 }
 
-sub base_uri
-{
+sub base_uri {
     my $self = shift;
 
     return URI::FromHash::uri( $self->_uri_base_params(@_) );
 }
 
-sub _uri_base_params
-{
-    my $self   = shift;
+sub _uri_base_params {
+    my $self = shift;
     my $suffix = shift || 'filter';
 
     my @path = '';
@@ -207,33 +188,32 @@ sub _uri_base_params
     push @path, uri_escape( join ',', $self->latitude(), $self->longitude() );
     push @path, $suffix;
 
-    if ( my $pq = $self->_path_query() )
-    {
+    if ( my $pq = $self->_path_query() ) {
         push @path, $pq;
     }
 
     my %params;
     $params{path} = join '/', @path;
 
-    $params{query} = { address  => $self->address(),
-                       distance => $self->distance(),
-                       unit     => $self->unit(),
-                     };
+    $params{query} = {
+        address  => $self->address(),
+        distance => $self->distance(),
+        unit     => $self->unit(),
+    };
 
     return %params;
 }
 
-sub locations
-{
+sub locations {
     my $self = shift;
 
-    VegGuide::Location->NearLatLong
-        ( where    => $self->{where},
-          join     => $self->{join},
-          lat_long => [ $self->latitude(), $self->longitude() ],
-          unit     => $self->unit(),
-          limit    => 4,
-        );
+    VegGuide::Location->NearLatLong(
+        where    => $self->{where},
+        join     => $self->{join},
+        lat_long => [ $self->latitude(), $self->longitude() ],
+        unit     => $self->unit(),
+        limit    => 4,
+    );
 }
 
 1;

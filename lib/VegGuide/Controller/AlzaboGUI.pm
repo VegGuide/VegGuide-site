@@ -13,37 +13,32 @@ use VegGuide::View::AlzaboGUI;
 
 my $ShareDir = '/usr/local/share/alzabo/schema';
 
-
-sub schema : Regex('^schema(/[^/]+)?')
-{
+sub schema : Regex('^schema(/[^/]+)?') {
     my $self = shift;
     my $c    = shift;
     my $path = $c->request()->captures()->[0] || '/index.mhtml';
 
     unless ( -d $ShareDir
-             && ! VegGuide::Config->IsProduction() )
-    {
+        && !VegGuide::Config->IsProduction() ) {
         $c->response()->status(404);
         return;
     }
 
     require Alzabo::Create::Schema;
 
-    if ( $path =~ /\.jpg$/ )
-    {
+    if ( $path =~ /\.jpg$/ ) {
         my $file = File::Spec->catfile( $ShareDir, basename($path) );
         my $fh = IO::File->new( $file, 'r' )
             or die "Cannot read $file: $!";
 
-        $c->response()->content_type( 'image/jpeg' );
+        $c->response()->content_type('image/jpeg');
         $c->response()->body($fh);
 
         return;
     }
 
     my $p = $c->request()->parameters();
-    while ( my ($k, $v) = each %{$p} )
-    {
+    while ( my ( $k, $v ) = each %{$p} ) {
         $c->stash()->{$k} = $v;
     }
 
@@ -51,23 +46,19 @@ sub schema : Regex('^schema(/[^/]+)?')
 }
 
 # Not sure why this is necessary
-sub process {}
+sub process { }
 
-sub end : Private
-{
+sub end : Private {
     my $self = shift;
     my $c    = shift;
 
-    if ( ( ! $c->response()->status()
-           || $c->response()->status() == 200 )
-         && ! $c->response()->body()
-         && ! @{ $c->error() || [] } )
-    {
+    if (   ( !$c->response()->status() || $c->response()->status() == 200 )
+        && !$c->response()->body()
+        && !@{ $c->error() || [] } ) {
         $c->forward( $c->view('AlzaboGUI') );
     }
 
     return;
 }
-
 
 1;

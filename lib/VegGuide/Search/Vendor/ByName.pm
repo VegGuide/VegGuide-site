@@ -12,9 +12,7 @@ use URI::FromHash ();
 use VegGuide::Location;
 use VegGuide::Schema;
 
-
-sub SearchParams
-{
+sub SearchParams {
     my $class = shift;
 
     my %p = $class->SUPER::SearchParams();
@@ -24,8 +22,7 @@ sub SearchParams
     return %p;
 }
 
-sub SearchKeys
-{
+sub SearchKeys {
     my $class = shift;
 
     return grep { $_ ne 'open_for' } $class->SUPER::SearchKeys();
@@ -33,13 +30,14 @@ sub SearchKeys
 
 {
     my $spec = { name => SCALAR_TYPE };
-    sub new
-    {
+
+    sub new {
         my $class = shift;
-        my %p = validate_with( params => \@_,
-                               spec   => $spec,
-                               allow_extra => 1,
-                             );
+        my %p     = validate_with(
+            params      => \@_,
+            spec        => $spec,
+            allow_extra => 1,
+        );
 
         my $name = delete $p{name};
 
@@ -55,8 +53,7 @@ sub SearchKeys
 
 sub name { $_[0]->{name} }
 
-sub _process_sql_query
-{
+sub _process_sql_query {
     my $self = shift;
 
     $self->SUPER::_process_sql_query();
@@ -65,93 +62,78 @@ sub _process_sql_query
 
     my $name = $self->name();
 
-    push @{ $self->{where} },
-        VegGuide::Vendor->NameWhere( $self->name() );
+    push @{ $self->{where} }, VegGuide::Vendor->NameWhere( $self->name() );
 }
 
-sub _exclude_long_closed_vendors { 0 }
+sub _exclude_long_closed_vendors {0}
 
-sub _vendor_ids_for_rating
-{
+sub _vendor_ids_for_rating {
     my $self = shift;
 
-    return
-        VegGuide::Vendor->VendorIdsWithMinimumRating
-            ( rating => $self->{rating},
-              name   => $self->name(),
-            );
+    return VegGuide::Vendor->VendorIdsWithMinimumRating(
+        rating => $self->{rating},
+        name   => $self->name(),
+    );
 }
 
-sub count
-{
-    return
-        VegGuide::Vendor->VendorCount
-            ( where => $_[0]->{where},
-              join  => $_[0]->{join},
-            );
+sub count {
+    return VegGuide::Vendor->VendorCount(
+        where => $_[0]->{where},
+        join  => $_[0]->{join},
+    );
 }
 
-sub _cursor
-{
+sub _cursor {
     my $self = shift;
 
-    return
-        VegGuide::Vendor->VendorsWhere
-            ( join  => $self->{join},
-              where => $self->{where},
-              @_,
-            );
+    return VegGuide::Vendor->VendorsWhere(
+        join  => $self->{join},
+        where => $self->{where},
+        @_,
+    );
 }
 
-sub title
-{
+sub title {
     my $self = shift;
 
     return 'Entries matching "' . $self->name() . q{"};
 }
 
-sub map_uri
-{
+sub map_uri {
     my $self = shift;
 
-    return
-        URI::FromHash::uri( $self->_uri_base_params('map') );
+    return URI::FromHash::uri( $self->_uri_base_params('map') );
 }
 
-sub printable_uri
-{
+sub printable_uri {
     my $self = shift;
 
-    return
-        URI::FromHash::uri( $self->_uri_base_params('printable') );
+    return URI::FromHash::uri( $self->_uri_base_params('printable') );
 }
 
-sub uri
-{
+sub uri {
     my $self = shift;
     my $page = shift || $self->page();
 
-    return
-        URI::FromHash::uri
-            ( $self->_uri_base_params(),
-              query    => { page       => $page,
-                            limit      => $self->limit(),
-                            order_by   => $self->order_by(),
-                            sort_order => $self->sort_order(),
-                          },
-            );
+    return URI::FromHash::uri(
+        $self->_uri_base_params(),
+        query => {
+            page       => $page,
+            limit      => $self->limit(),
+            order_by   => $self->order_by(),
+            sort_order => $self->sort_order(),
+        },
+    );
 }
 
-sub base_uri
-{
+sub base_uri {
     my $self = shift;
 
     return URI::FromHash::uri( $self->_uri_base_params(@_) );
 }
 
-sub _uri_base_params
-{
-    my $self   = shift;
+sub _uri_base_params {
+    my $self = shift;
     my $suffix = shift || 'filter';
 
     my @path = '';
@@ -159,13 +141,11 @@ sub _uri_base_params
     push @path, uri_escape_utf8( $self->name() );
     push @path, $suffix;
 
-    if ( my $pq = $self->_path_query() )
-    {
+    if ( my $pq = $self->_path_query() ) {
         push @path, $pq;
     }
 
     return ( path => join '/', @path );
 }
-
 
 1;

@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
 use Catalyst::ScriptRunner;
-Catalyst::ScriptRunner->run('VegGuide', 'FastCGI');
+Catalyst::ScriptRunner->run( 'VegGuide', 'FastCGI' );
 
 1;
 

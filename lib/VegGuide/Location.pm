@@ -6,10 +6,10 @@ use warnings;
 use base 'VegGuide::CachedHierarchy';
 
 use VegGuide::Schema;
-use VegGuide::AlzaboWrapper
-    ( table => VegGuide::Schema->Schema->Location_t,
-      skip  => [ 'can_have_vendors' ]
-    );
+use VegGuide::AlzaboWrapper (
+    table => VegGuide::Schema->Schema->Location_t,
+    skip  => ['can_have_vendors']
+);
 
 use DateTime;
 use DateTime::Format::MySQL;
@@ -36,14 +36,15 @@ use VegGuide::SiteURI qw( entry_uri region_uri );
 use VegGuide::Util qw( string_is_empty );
 use VegGuide::Vendor;
 
-use VegGuide::Validate qw( validate validate_with UNDEF SCALAR ARRAYREF BOOLEAN SCALAR_TYPE );
+use VegGuide::Validate
+    qw( validate validate_with UNDEF SCALAR ARRAYREF BOOLEAN SCALAR_TYPE );
 
-
-my %CacheParams = ( parent => 'parent_location_id',
-                    roots  => '_RealRootLocations',
-                    id     => 'location_id',
-                    order_by => VegGuide::Schema->Schema->Location_t->name_c,
-                  );
+my %CacheParams = (
+    parent   => 'parent_location_id',
+    roots    => '_RealRootLocations',
+    id       => 'location_id',
+    order_by => VegGuide::Schema->Schema->Location_t->name_c,
+);
 
 __PACKAGE__->_build_cache( %CacheParams, first => 1 );
 __PACKAGE__->_PreloadTimeZones;
@@ -52,57 +53,49 @@ __PACKAGE__->_PreloadTimeZones;
 # change once first loaded.  These objects are singletons, so loading
 # them in the parent process can be a big win by keeping them all in
 # shared memory.
-sub _PreloadTimeZones
-{
+sub _PreloadTimeZones {
     my $class = shift;
 
     my $schema = VegGuide::Schema->Connect();
 
-    my $zones =
-        $schema->Location_t->select
-            ( select =>
-              $schema->sqlmaker->DISTINCT
-                  ( $schema->Location_t->time_zone_name_c ),
-              where =>
-              [ $schema->Location_t->time_zone_name_c, '!=', '' ],
-            );
+    my $zones = $schema->Location_t->select(
+        select => $schema->sqlmaker->DISTINCT(
+            $schema->Location_t->time_zone_name_c
+        ),
+        where => [ $schema->Location_t->time_zone_name_c, '!=', '' ],
+    );
 
-    while ( my $name = $zones->next )
-    {
+    while ( my $name = $zones->next ) {
         next unless DateTime::TimeZone->is_valid_name($name);
 
         DateTime::TimeZone->new( name => $name );
     }
 }
 
-sub _RealRootLocations
-{
+sub _RealRootLocations {
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        $_[0]->cursor
-            ( $schema->Location_t->rows_where
-                  ( where =>
-                    [ [ $schema->Location_t->parent_location_id_c, '=', undef ],
-                    ],
-                    order_by =>
-                    [ $schema->Location_t->name_c, 'ASC' ],
-                  )
-            );
+    return $_[0]->cursor(
+        $schema->Location_t->rows_where(
+            where => [
+                [ $schema->Location_t->parent_location_id_c, '=', undef ],
+            ],
+            order_by => [ $schema->Location_t->name_c, 'ASC' ],
+        )
+    );
 }
 
-sub new
-{
+sub new {
     my $class = shift;
-    my %p = validate_with( params => \@_,
-                           spec =>
-                           { location_id => { type => SCALAR, optional => 1 },
-                           },
-                           allow_extra => 1,
-                         );
+    my %p     = validate_with(
+        params => \@_,
+        spec   => {
+            location_id => { type => SCALAR, optional => 1 },
+        },
+        allow_extra => 1,
+    );
 
-    if ( $p{location_id} )
-    {
+    if ( $p{location_id} ) {
         my $location = $class->ByID( $p{location_id} );
         return $location if $location;
     }
@@ -114,48 +107,49 @@ sub new
     return $self;
 }
 
-sub _new_row
-{
+sub _new_row {
     my $class = shift;
-    my %p = validate_with( params => \@_,
-                           spec =>
-                           { name => { type => SCALAR, optional => 1 },
-                           },
-                           allow_extra => 1,
-                         );
+    my %p     = validate_with(
+        params => \@_,
+        spec   => {
+            name => { type => SCALAR, optional => 1 },
+        },
+        allow_extra => 1,
+    );
 
     my $schema = VegGuide::Schema->Connect();
 
-    if ( $p{name} )
-    {
-	my @where;
-	push @where,
-	    [ $schema->sqlmaker->LCASE( $schema->Location_t->name_c ),
-              '=', lc $p{name} ];
+    if ( $p{name} ) {
+        my @where;
+        push @where,
+            [
+            $schema->sqlmaker->LCASE( $schema->Location_t->name_c ),
+            '=', lc $p{name}
+            ];
 
-        if ( $p{parent_location_id} )
-        {
+        if ( $p{parent_location_id} ) {
             push @where,
-                [ $schema->Location_t()->parent_location_id_c(), '=',
-                  $p{parent_location_id} ];
+                [
+                $schema->Location_t()->parent_location_id_c(), '=',
+                $p{parent_location_id}
+                ];
         }
 
-	return $schema->Location_t->one_row( where => \@where );
+        return $schema->Location_t->one_row( where => \@where );
     }
 
     return;
 }
 
-sub create
-{
+sub create {
     my $class = shift;
     my %p     = @_;
 
-    if ( $p{parent_location_id} )
-    {
-        my $parent = VegGuide::Location->new( location_id => $p{parent_location_id} );
+    if ( $p{parent_location_id} ) {
+        my $parent = VegGuide::Location->new(
+            location_id => $p{parent_location_id} );
 
-        $p{has_hours} = $parent->has_hours();
+        $p{has_hours}     = $parent->has_hours();
         $p{has_addresses} = $parent->has_addresses();
     }
 
@@ -165,25 +159,24 @@ sub create
 
     $schema->begin_work;
 
-    eval
-    {
-        $location =
-            $class->SUPER::create( %p,
-                                   creation_datetime => $schema->sqlmaker->NOW(),
-                                 );
+    eval {
+        $location = $class->SUPER::create(
+            %p,
+            creation_datetime => $schema->sqlmaker->NOW(),
+        );
 
         my $user = VegGuide::User->new( user_id => $p{user_id} );
-        $user->insert_activity_log( type        => 'add region',
-                                    location_id => $location->location_id(),
-                                  );
+        $user->insert_activity_log(
+            type        => 'add region',
+            location_id => $location->location_id(),
+        );
 
         $class->_cached_data_has_changed;
 
         $schema->commit;
     };
 
-    if ( my $e = $@ )
-    {
+    if ( my $e = $@ ) {
         eval { $schema->rollback };
 
         die $e;
@@ -192,8 +185,7 @@ sub create
     return $location;
 }
 
-sub update
-{
+sub update {
     my $self = shift;
 
     $self->SUPER::update(@_);
@@ -201,10 +193,9 @@ sub update
     $self->_cached_data_has_changed;
 }
 
-sub _validate_data
-{
-    my $self = shift;
-    my $data = shift;
+sub _validate_data {
+    my $self      = shift;
+    my $data      = shift;
     my $is_update = ref $self ? 1 : 0;
 
     my @errors;
@@ -213,45 +204,49 @@ sub _validate_data
         if string_is_empty( $data->{name} );
 
     my $parent;
-    unless ($is_update)
-    {
-        $parent = VegGuide::Location->new( location_id => $data->{parent_location_id} );
+    unless ($is_update) {
+        $parent = VegGuide::Location->new(
+            location_id => $data->{parent_location_id} );
 
         push @errors, 'Invalid parent region.'
-            if $data->{parent_location_id} && ! $parent;
+            if $data->{parent_location_id} && !$parent;
     }
 
     push @errors, 'Invalid time zone name'
         if $data->{time_zone_name}
-           && ! eval { DateTime::TimeZone->new( name => $data->{time_zone_name} ) };
+            && !eval {
+                DateTime::TimeZone->new( name => $data->{time_zone_name} );
+            };
 
     push @errors, 'Invalid locale id'
         if $data->{locale_id}
-           && ! VegGuide::Locale->new( locale_id => $data->{locale_id} );
+            && !VegGuide::Locale->new( locale_id => $data->{locale_id} );
 
-    data_validation_error error => "One or more data validation errors", errors => \@errors
+    data_validation_error error => "One or more data validation errors",
+        errors                  => \@errors
         if @errors;
 
     delete $data->{localized_name}
         if string_is_empty( $data->{localized_name} );
 
     delete $data->{time_zone_name}
-        if $data->{time_zone_name} && $parent
-           && $data->{time_zone_name} eq ( $parent->time_zone_name() || '' );
+        if $data->{time_zone_name}
+            && $parent
+            && $data->{time_zone_name} eq ( $parent->time_zone_name() || '' );
 
     delete $data->{time_zone_name}
         if string_is_empty( $data->{time_zone_name} );
 
     delete $data->{locale_id}
-        if $data->{locale_id} && $parent
-           && $data->{locale_id} == ( $parent->locale_id() || 0 );
+        if $data->{locale_id}
+            && $parent
+            && $data->{locale_id} == ( $parent->locale_id() || 0 );
 
     delete $data->{locale_id}
         unless $data->{locale_id};
 }
 
-sub delete
-{
+sub delete {
     my $self = shift;
 
     $self->SUPER::delete(@_);
@@ -259,15 +254,13 @@ sub delete
     $self->_cached_data_has_changed();
 }
 
-sub _per_request_cache_key
-{
+sub _per_request_cache_key {
     my $self = shift;
 
-    return join q{/}, (ref $self), $self->location_id(), (caller(1))[3];
+    return join q{/}, ( ref $self ), $self->location_id(), ( caller(1) )[3];
 }
 
-sub descendants_vendor_count
-{
+sub descendants_vendor_count {
     my $self = shift;
 
     my $cache = VegGuide::PerRequestCache->Cache();
@@ -279,72 +272,74 @@ sub descendants_vendor_count
 
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        $cache->{$key} =
-            $schema->Vendor_t->row_count
-                ( where =>
-                  [ [ $schema->Vendor_t->location_id_c,
-                      'IN', $self->location_id, $self->descendant_ids ],
-                    [ $schema->Vendor_t->close_date_c,
-                      '=', undef ],
-                  ],
-                );
+    return $cache->{$key} = $schema->Vendor_t->row_count(
+        where => [
+            [
+                $schema->Vendor_t->location_id_c,
+                'IN', $self->location_id, $self->descendant_ids
+            ],
+            [
+                $schema->Vendor_t->close_date_c,
+                '=', undef
+            ],
+        ],
+    );
 }
 
-sub comment_count
-{
+sub comment_count {
     my $self = shift;
 
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        $schema->LocationComment_t->row_count
-            ( where =>
-              [ $schema->LocationComment_t->location_id_c,
-                '=', $self->location_id ],
-            );
+    return $schema->LocationComment_t->row_count(
+        where => [
+            $schema->LocationComment_t->location_id_c,
+            '=', $self->location_id
+        ],
+    );
 }
 
-sub comments
-{
+sub comments {
     my $self = shift;
-    my %p = validate( @_,
-                      { order_by   => { type => SCALAR, default => 'last_modified_datetime' },
-                        sort_order => { type => SCALAR, default => 'DESC' },
-                      },
-                    );
+    my %p    = validate(
+        @_, {
+            order_by =>
+                { type => SCALAR, default => 'last_modified_datetime' },
+            sort_order => { type => SCALAR, default => 'DESC' },
+        },
+    );
 
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        $self->cursor
-            ( $schema->join
-                  ( join  => [ $schema->tables( 'LocationComment', 'User' ) ],
-                    where =>
-                    [ $schema->LocationComment_t->location_id_c,
-                      '=', $self->location_id ],
-                    order_by =>
-                    [ $schema->LocationComment_t->column( $p{order_by} ),
-                      $p{sort_order} ],
-                  )
-            );
+    return $self->cursor(
+        $schema->join(
+            join  => [ $schema->tables( 'LocationComment', 'User' ) ],
+            where => [
+                $schema->LocationComment_t->location_id_c,
+                '=', $self->location_id
+            ],
+            order_by => [
+                $schema->LocationComment_t->column( $p{order_by} ),
+                $p{sort_order}
+            ],
+        )
+    );
 }
 
-sub add_or_update_comment
-{
+sub add_or_update_comment {
     my $self = shift;
-    my %p = validate( @_,
-                      { user => { isa => 'VegGuide::User' },
-                        comment => { type => UNDEF | SCALAR },
-                        calling_user => { isa => 'VegGuide::User' },
-                      },
-                    );
+    my %p    = validate(
+        @_, {
+            user         => { isa  => 'VegGuide::User' },
+            comment      => { type => UNDEF | SCALAR },
+            calling_user => { isa  => 'VegGuide::User' },
+        },
+    );
 
     data_validation_error "Comments must have content."
         unless defined $p{comment} && length $p{comment};
 
-    if ( $p{user}->user_id != $p{calling_user}->user_id )
-    {
+    if ( $p{user}->user_id != $p{calling_user}->user_id ) {
         auth_error "Cannot edit other user's comments"
             unless $p{calling_user}->is_location_owner($self);
     }
@@ -352,73 +347,68 @@ sub add_or_update_comment
     my $schema = VegGuide::Schema->Connect();
 
     my $comment;
-    if ( $comment = $self->comment_by_user( $p{user} ) )
-    {
-        $comment->update( comment => $p{comment},
-                          last_modified_datetime =>
-                          $schema->sqlmaker->NOW(),
-                        );
+    if ( $comment = $self->comment_by_user( $p{user} ) ) {
+        $comment->update(
+            comment => $p{comment},
+            last_modified_datetime =>
+                $schema->sqlmaker->NOW(),
+        );
     }
-    else
-    {
-        $comment =
-            VegGuide::LocationComment->create
-                ( user_id => $p{user}->user_id,
-                  location_id => $self->location_id,
-                  comment => $p{comment},
-                  last_modified_datetime =>
-                  $schema->sqlmaker->NOW(),
-                );
+    else {
+        $comment = VegGuide::LocationComment->create(
+            user_id     => $p{user}->user_id,
+            location_id => $self->location_id,
+            comment     => $p{comment},
+            last_modified_datetime =>
+                $schema->sqlmaker->NOW(),
+        );
     }
 
     return $comment;
 }
 
-sub comment_by_user
-{
+sub comment_by_user {
     my $self = shift;
     my $user = shift;
 
-    VegGuide::LocationComment->new( user_id => $user->user_id,
-                                    location_id => $self->location_id );
+    VegGuide::LocationComment->new(
+        user_id     => $user->user_id,
+        location_id => $self->location_id
+    );
 }
 
-sub active_vendor_count
-{
+sub active_vendor_count {
     my $self = shift;
-    my %p = validate_with( params => \@_,
-                           spec =>
-                           { where => { type => ARRAYREF, optional => 1 },
-                           },
-                           allow_extra => 1,
-                         );
+    my %p    = validate_with(
+        params => \@_,
+        spec   => {
+            where => { type => ARRAYREF, optional => 1 },
+        },
+        allow_extra => 1,
+    );
 
     my $schema = VegGuide::Schema->Connect();
 
     my @where;
-    if ( $p{where} )
-    {
-        @where =
-            ( @{ $p{where} },
-              [ $schema->Vendor_t->location_id_c, '=', $self->location_id ]
-            );
+    if ( $p{where} ) {
+        @where = (
+            @{ $p{where} },
+            [ $schema->Vendor_t->location_id_c, '=', $self->location_id ]
+        );
     }
-    else
-    {
-        @where =
-            [ $schema->Vendor_t->location_id_c, '=', $self->location_id ];
+    else {
+        @where
+            = [ $schema->Vendor_t->location_id_c, '=', $self->location_id ];
     }
 
-    push @where,
-        VegGuide::Vendor->CloseCutoffWhereClause();
+    push @where, VegGuide::Vendor->CloseCutoffWhereClause();
 
     $p{where} = \@where;
 
     return VegGuide::Vendor->VendorCount(%p);
 }
 
-sub open_vendor_count
-{
+sub open_vendor_count {
     my $self = shift;
 
     my $cache = VegGuide::PerRequestCache->Cache();
@@ -430,62 +420,54 @@ sub open_vendor_count
 
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        $cache->{$key} =
-            VegGuide::Vendor->VendorCount
-                ( where =>
-                  [ [ $schema->Vendor_t->location_id_c, '=', $self->location_id ],
-                    [ $schema->Vendor_t->close_date_c, '=', undef ],
-                  ],
-                );
+    return $cache->{$key} = VegGuide::Vendor->VendorCount(
+        where => [
+            [ $schema->Vendor_t->location_id_c, '=', $self->location_id ],
+            [ $schema->Vendor_t->close_date_c,  '=', undef ],
+        ],
+    );
 }
 
-sub vendor_count
-{
+sub vendor_count {
     my $self = shift;
 
     my $cache = VegGuide::PerRequestCache->Cache();
 
     my $key;
-    if ($cache)
-    {
+    if ($cache) {
         $key = $self->_per_request_cache_key();
     }
 
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        $cache->{$key} =
-            VegGuide::Vendor->VendorCount
-                ( where =>
-                  [ $schema->Vendor_t->location_id_c, '=', $self->location_id ],
-                );
+    return $cache->{$key} = VegGuide::Vendor->VendorCount(
+        where =>
+            [ $schema->Vendor_t->location_id_c, '=', $self->location_id ],
+    );
 }
 
-sub vendors
-{
+sub vendors {
     my $self = shift;
-    my %p = validate_with( params => \@_,
-                           spec =>
-                           { where => { type => ARRAYREF, optional => 1 },
-                           },
-                           allow_extra => 1,
-                         );
+    my %p    = validate_with(
+        params => \@_,
+        spec   => {
+            where => { type => ARRAYREF, optional => 1 },
+        },
+        allow_extra => 1,
+    );
 
     my $schema = VegGuide::Schema->Connect();
 
     my @where;
-    if ( $p{where} )
-    {
-        @where =
-            ( @{ $p{where} },
-              [ $schema->Vendor_t->location_id_c, '=', $self->location_id ]
-            );
+    if ( $p{where} ) {
+        @where = (
+            @{ $p{where} },
+            [ $schema->Vendor_t->location_id_c, '=', $self->location_id ]
+        );
     }
-    else
-    {
-        @where =
-            [ $schema->Vendor_t->location_id_c, '=', $self->location_id ];
+    else {
+        @where
+            = [ $schema->Vendor_t->location_id_c, '=', $self->location_id ];
     }
 
     $p{where} = \@where;
@@ -493,8 +475,7 @@ sub vendors
     return VegGuide::Vendor->VendorsWhere(%p);
 }
 
-sub review_count
-{
+sub review_count {
     my $self = shift;
 
     my $cache = VegGuide::PerRequestCache->Cache();
@@ -506,307 +487,299 @@ sub review_count
 
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        $cache->{$key} =
-            $schema->row_count
-                ( join =>
-                  [ $schema->tables( 'Vendor', 'VendorComment' ) ],
-                  where =>
-                  [ [ $schema->Vendor_t->location_id_c,
-                      '=', $self->location_id ],
-                    [ $schema->Vendor_t->close_date_c,
-                      '=', undef ],
-                  ],
-                );
+    return $cache->{$key} = $schema->row_count(
+        join  => [ $schema->tables( 'Vendor', 'VendorComment' ) ],
+        where => [
+            [
+                $schema->Vendor_t->location_id_c,
+                '=', $self->location_id
+            ],
+            [
+                $schema->Vendor_t->close_date_c,
+                '=', undef
+            ],
+        ],
+    );
 }
 
-sub vendors_by_review_count
-{
+sub vendors_by_review_count {
     my $self = shift;
-    my %p = validate( @_,
-                      { limit => { type => SCALAR, default => 5 },
-                      },
-                    );
+    my %p    = validate(
+        @_, {
+            limit => { type => SCALAR, default => 5 },
+        },
+    );
 
     my $schema = VegGuide::Schema->Connect();
 
-    my $count = $schema->sqlmaker->COUNT( $schema->VendorComment_t->user_id_c );
+    my $count
+        = $schema->sqlmaker->COUNT( $schema->VendorComment_t->user_id_c );
 
-    return
-        VegGuide::Cursor::VendorWithAggregate->new
-            ( cursor =>
-              $schema->select
-                  ( select =>
-                    [ $count,
-                      $schema->VendorComment_t->vendor_id_c
-                    ],
-                    join =>
-                    [ $schema->tables( 'Vendor', 'VendorComment' ) ],
-                    where =>
-                    [ [ $schema->Vendor_t->location_id_c,
-                        '=', $self->location_id ],
-                      [ $schema->Vendor_t->close_date_c,
-                        '=', undef ],
-                    ],
-                    group_by =>
-                    $schema->VendorComment_t->vendor_id_c,
-                    order_by =>
-                    [ $count,
-                      'DESC',
-                    ],
-                    limit => $p{limit},
-                  )
-            );
+    return VegGuide::Cursor::VendorWithAggregate->new(
+        cursor => $schema->select(
+            select => [
+                $count,
+                $schema->VendorComment_t->vendor_id_c
+            ],
+            join  => [ $schema->tables( 'Vendor', 'VendorComment' ) ],
+            where => [
+                [
+                    $schema->Vendor_t->location_id_c,
+                    '=', $self->location_id
+                ],
+                [
+                    $schema->Vendor_t->close_date_c,
+                    '=', undef
+                ],
+            ],
+            group_by => $schema->VendorComment_t->vendor_id_c,
+            order_by => [
+                $count,
+                'DESC',
+            ],
+            limit => $p{limit},
+        )
+    );
 }
 
-sub vendors_by_rating_count
-{
+sub vendors_by_rating_count {
     my $self = shift;
-    my %p = validate( @_,
-                      { limit => { type => SCALAR, default => 5 },
-                      },
-                    );
+    my %p    = validate(
+        @_, {
+            limit => { type => SCALAR, default => 5 },
+        },
+    );
 
     my $schema = VegGuide::Schema->Connect();
 
-    my $count = $schema->sqlmaker->COUNT( $schema->VendorRating_t->user_id_c );
+    my $count
+        = $schema->sqlmaker->COUNT( $schema->VendorRating_t->user_id_c );
 
-    return
-        VegGuide::Cursor::VendorWithAggregate->new
-            ( cursor =>
-              $schema->select
-                  ( select =>
-                    [ $count,
-                      $schema->VendorRating_t->vendor_id_c
-                    ],
-                    join =>
-                    [ $schema->tables( 'Vendor', 'VendorRating' ) ],
-                    where =>
-                    [ [ $schema->Vendor_t->location_id_c,
-                        '=', $self->location_id, ],
-                      [ $schema->Vendor_t->close_date_c,
-                        '=', undef ],
-                    ],
-                    group_by =>
-                    $schema->VendorRating_t->vendor_id_c,
-                    order_by =>
-                    [ $count,
-                      'DESC',
-                    ],
-                    limit => $p{limit},
-                  )
-            );
+    return VegGuide::Cursor::VendorWithAggregate->new(
+        cursor => $schema->select(
+            select => [
+                $count,
+                $schema->VendorRating_t->vendor_id_c
+            ],
+            join  => [ $schema->tables( 'Vendor', 'VendorRating' ) ],
+            where => [
+                [
+                    $schema->Vendor_t->location_id_c,
+                    '=', $self->location_id,
+                ],
+                [
+                    $schema->Vendor_t->close_date_c,
+                    '=', undef
+                ],
+            ],
+            group_by => $schema->VendorRating_t->vendor_id_c,
+            order_by => [
+                $count,
+                'DESC',
+            ],
+            limit => $p{limit},
+        )
+    );
 }
 
-sub descendant_vendors
-{
+sub descendant_vendors {
     my $self = shift;
 
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        VegGuide::Vendor->VendorsWhere
-            ( where =>
-              [ [ $schema->Vendor_t->location_id_c,
-                  'IN', $self->location_id, $self->descendant_ids ],
-                [ $schema->Vendor_t->close_date_c,
-                  '=', undef ],
-              ],
-            );
+    return VegGuide::Vendor->VendorsWhere(
+        where => [
+            [
+                $schema->Vendor_t->location_id_c,
+                'IN', $self->location_id, $self->descendant_ids
+            ],
+            [
+                $schema->Vendor_t->close_date_c,
+                '=', undef
+            ],
+        ],
+    );
 }
 
-sub most_recent_vendors
-{
+sub most_recent_vendors {
     my $self = shift;
-    my %p = validate( @_,
-                      { limit => { type => SCALAR, default => 5 },
-                      },
-                    );
-
+    my %p    = validate(
+        @_, {
+            limit => { type => SCALAR, default => 5 },
+        },
+    );
 
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        VegGuide::Vendor->VendorsWhere
-            ( where    =>
-              [ $schema->Vendor_t->location_id_c,
-                '=', $self->location_id ],
-              order_by   => 'created',
-              sort_order => 'DESC',
-              limit      => $p{limit},
-            );
+    return VegGuide::Vendor->VendorsWhere(
+        where => [
+            $schema->Vendor_t->location_id_c,
+            '=', $self->location_id
+        ],
+        order_by   => 'created',
+        sort_order => 'DESC',
+        limit      => $p{limit},
+    );
 }
 
-sub most_recent_reviews
-{
+sub most_recent_reviews {
     my $self = shift;
-    my %p = validate( @_,
-                      { limit => { type => SCALAR, default => 5 },
-                      },
-                    );
+    my %p    = validate(
+        @_, {
+            limit => { type => SCALAR, default => 5 },
+        },
+    );
 
-    return
-        VegGuide::Vendor->RecentlyReviewed
-            ( location_ids => [ $self->location_id ],
-              days         => undef, # most recent no matter how old
-              limit        => $p{limit},
-            );
+    return VegGuide::Vendor->RecentlyReviewed(
+        location_ids => [ $self->location_id ],
+        days         => undef,                 # most recent no matter how old
+        limit        => $p{limit},
+    );
 }
 
-sub top_vendors
-{
+sub top_vendors {
     my $self = shift;
 
     return VegGuide::Vendor->TopRated( location => $self, @_ );
 }
 
-sub top_restaurants
-{
+sub top_restaurants {
     my $self = shift;
 
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        VegGuide::Vendor->TopRated
-            ( location => $self,
-              where    => [ [ $schema->VendorCategory_t->category_id_c,
-                              '=', VegGuide::Category->Restaurant->category_id ] ],
-              tables   => [ $schema->VendorCategory_t ],
-              @_,
-            );
+    return VegGuide::Vendor->TopRated(
+        location => $self,
+        where    => [
+            [
+                $schema->VendorCategory_t->category_id_c,
+                '=', VegGuide::Category->Restaurant->category_id
+            ]
+        ],
+        tables => [ $schema->VendorCategory_t ],
+        @_,
+    );
 }
 
-sub users_by_entry_count
-{
+sub users_by_entry_count {
     my $self = shift;
-    my %p = validate( @_,
-                      { limit => { type => SCALAR, default => 5 },
-                      },
-                    );
+    my %p    = validate(
+        @_, {
+            limit => { type => SCALAR, default => 5 },
+        },
+    );
 
     my $schema = VegGuide::Schema->Connect();
 
     my $count = $schema->sqlmaker->COUNT( $schema->Vendor_t->vendor_id_c );
 
-    return
-        VegGuide::Cursor::UserWithAggregate->new
-            ( cursor =>
-              $schema->Vendor_t->select
-                  ( select =>
-                    [ $count,
-                      $schema->Vendor_t->user_id_c
-                    ],
-                    where =>
-                    [ $schema->Vendor_t->location_id_c,
-                      '=', $self->location_id ],
-                    group_by =>
-                    $schema->Vendor_t->user_id_c,
-                    order_by =>
-                    [ $count,
-                      'DESC',
-                    ],
-                    limit => $p{limit},
-                  )
-            );
+    return VegGuide::Cursor::UserWithAggregate->new(
+        cursor => $schema->Vendor_t->select(
+            select => [
+                $count,
+                $schema->Vendor_t->user_id_c
+            ],
+            where => [
+                $schema->Vendor_t->location_id_c,
+                '=', $self->location_id
+            ],
+            group_by => $schema->Vendor_t->user_id_c,
+            order_by => [
+                $count,
+                'DESC',
+            ],
+            limit => $p{limit},
+        )
+    );
 }
 
-sub users_by_review_count
-{
+sub users_by_review_count {
     my $self = shift;
-    my %p = validate( @_,
-                      { limit => { type => SCALAR, default => 5 },
-                      },
-                    );
+    my %p    = validate(
+        @_, {
+            limit => { type => SCALAR, default => 5 },
+        },
+    );
 
     my $schema = VegGuide::Schema->Connect();
 
-    my $count = $schema->sqlmaker->COUNT( $schema->VendorComment_t->vendor_id_c );
+    my $count
+        = $schema->sqlmaker->COUNT( $schema->VendorComment_t->vendor_id_c );
 
-    return
-        VegGuide::Cursor::UserWithAggregate->new
-            ( cursor =>
-              $schema->select
-                  ( select =>
-                    [ $count,
-                      $schema->VendorComment_t->user_id_c
-                    ],
-                    join =>
-                    [ $schema->tables( 'Vendor', 'VendorComment' ) ],
-                    where =>
-                    [ $schema->Vendor_t->location_id_c,
-                      '=', $self->location_id ],
-                    group_by =>
-                    $schema->VendorComment_t->user_id_c,
-                    order_by =>
-                    [ $count,
-                      'DESC',
-                    ],
-                    limit => $p{limit},
-                  )
-            );
+    return VegGuide::Cursor::UserWithAggregate->new(
+        cursor => $schema->select(
+            select => [
+                $count,
+                $schema->VendorComment_t->user_id_c
+            ],
+            join  => [ $schema->tables( 'Vendor', 'VendorComment' ) ],
+            where => [
+                $schema->Vendor_t->location_id_c,
+                '=', $self->location_id
+            ],
+            group_by => $schema->VendorComment_t->user_id_c,
+            order_by => [
+                $count,
+                'DESC',
+            ],
+            limit => $p{limit},
+        )
+    );
 }
 
-sub can_have_vendors
-{
+sub can_have_vendors {
     my $self = shift;
 
-    return $self->select('can_have_vendors') || ! $self->child_count;
+    return $self->select('can_have_vendors') || !$self->child_count;
 }
 
-sub can_have_child_regions
-{
+sub can_have_child_regions {
     my $self = shift;
 
-    return 1 if $self->child_count() || ! $self->vendor_count();
+    return 1 if $self->child_count() || !$self->vendor_count();
     return 0;
 }
 
-sub average_rating
-{
+sub average_rating {
     my $self = shift;
 
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        $schema->function
-            ( select => AVG( $schema->VendorRating_t()->rating_c() ),
-              join   => [ $schema->tables( 'Vendor', 'VendorRating' ) ],
-              where  => [ $schema->Vendor_t()->location_id(),
-                          '=', $self->location_id() ],
-            );
+    return $schema->function(
+        select => AVG( $schema->VendorRating_t()->rating_c() ),
+        join   => [ $schema->tables( 'Vendor', 'VendorRating' ) ],
+        where  => [
+            $schema->Vendor_t()->location_id(),
+            '=', $self->location_id()
+        ],
+    );
 }
 
-sub name_with_parent
-{
+sub name_with_parent {
     my $self = shift;
 
     my $name = $self->name();
 
-    if ( $self->parent() )
-    {
+    if ( $self->parent() ) {
         $name .= q{, } . $self->parent()->name();
     }
 
     return $name;
 }
 
-sub time_zone
-{
+sub time_zone {
     my $self = shift;
 
-    foreach my $l ( $self, $self->ancestors )
-    {
+    foreach my $l ( $self, $self->ancestors ) {
         my $tz = $l->time_zone_name;
         return $tz if $tz;
     }
 }
 
-sub locale
-{
+sub locale {
     my $self = shift;
 
-    foreach my $l ( $self, $self->ancestors )
-    {
+    foreach my $l ( $self, $self->ancestors ) {
         my $id = $l->locale_id;
 
         return VegGuide::Locale->new( locale_id => $id )
@@ -814,20 +787,19 @@ sub locale
     }
 }
 
-sub address_format { $_[0]->locale ? $_[0]->locale->address_format : 'standard' }
+sub address_format {
+    $_[0]->locale ? $_[0]->locale->address_format : 'standard';
+}
 
-sub country
-{
+sub country {
     my $self = shift;
 
-    foreach my $l ( $self, $self->ancestors )
-    {
+    foreach my $l ( $self, $self->ancestors ) {
         return $l->name if $l->is_country;
     }
 }
 
-sub creator
-{
+sub creator {
     my $self = shift;
 
     $self->{creator} ||= VegGuide::User->new( user_id => $self->user_id() );
@@ -835,80 +807,73 @@ sub creator
     return $self->{creator};
 }
 
-sub current_cities
-{
+sub current_cities {
     my $self = shift;
 
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        map { Encode::decode( 'utf8', $_ ) }
-        $schema->Vendor_t->function
-            ( select =>
-              $schema->sqlmaker->DISTINCT
-                  ( $schema->Vendor_t->city_c ),
-              where  =>
-              [ [ $schema->Vendor_t->location_id_c,
-                  '=', $self->location_id ],
-                [ $schema->Vendor_t->city_c, '!=', undef ],
-              ],
-              order_by => $schema->Vendor_t->city_c,
-            );
+    return map { Encode::decode( 'utf8', $_ ) } $schema->Vendor_t->function(
+        select => $schema->sqlmaker->DISTINCT( $schema->Vendor_t->city_c ),
+        where  => [
+            [
+                $schema->Vendor_t->location_id_c,
+                '=', $self->location_id
+            ],
+            [ $schema->Vendor_t->city_c, '!=', undef ],
+        ],
+        order_by => $schema->Vendor_t->city_c,
+    );
 }
 
-sub current_neighborhoods
-{
+sub current_neighborhoods {
     my $self = shift;
 
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        map { Encode::decode( 'utf8', $_ ) }
-        $schema->Vendor_t->function
-            ( select =>
-              $schema->sqlmaker->DISTINCT
-                  ( $schema->Vendor_t->neighborhood_c ),
-              where  =>
-              [ [ $schema->Vendor_t->location_id_c,
-                  '=', $self->location_id ],
-                [ $schema->Vendor_t->neighborhood_c, '!=', undef ],
-              ],
-              order_by => $schema->Vendor_t->neighborhood_c,
-            );
+    return map { Encode::decode( 'utf8', $_ ) } $schema->Vendor_t->function(
+        select =>
+            $schema->sqlmaker->DISTINCT( $schema->Vendor_t->neighborhood_c ),
+        where => [
+            [
+                $schema->Vendor_t->location_id_c,
+                '=', $self->location_id
+            ],
+            [ $schema->Vendor_t->neighborhood_c, '!=', undef ],
+        ],
+        order_by => $schema->Vendor_t->neighborhood_c,
+    );
 }
 
-sub current_localized_neighborhoods
-{
+sub current_localized_neighborhoods {
     my $self = shift;
 
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        map { Encode::decode( 'utf8', $_ ) }
-        $schema->Vendor_t->function
-            ( select =>
-              $schema->sqlmaker->DISTINCT
-                  ( $schema->Vendor_t->localized_neighborhood_c ),
-              where  =>
-              [ [ $schema->Vendor_t->location_id_c,
-                  '=', $self->location_id ],
-                [ $schema->Vendor_t->localized_neighborhood_c, '!=', undef ],
-              ],
-              order_by => $schema->Vendor_t->localized_neighborhood_c,
-            );
+    return map { Encode::decode( 'utf8', $_ ) } $schema->Vendor_t->function(
+        select => $schema->sqlmaker->DISTINCT(
+            $schema->Vendor_t->localized_neighborhood_c
+        ),
+        where => [
+            [
+                $schema->Vendor_t->location_id_c,
+                '=', $self->location_id
+            ],
+            [ $schema->Vendor_t->localized_neighborhood_c, '!=', undef ],
+        ],
+        order_by => $schema->Vendor_t->localized_neighborhood_c,
+    );
 }
 
 {
-    my %StatesForCountry =
-        ( USA       => Geography::States->new('USA'),
-          Canada    => Geography::States->new('Canada'),
-          Australia => Geography::States->new('Australia'),
-          Brazil    => Geography::States->new('Brazil'),
-          'The Netherlands' => Geography::States->new('The Netherlands'),
-        );
+    my %StatesForCountry = (
+        USA               => Geography::States->new('USA'),
+        Canada            => Geography::States->new('Canada'),
+        Australia         => Geography::States->new('Australia'),
+        Brazil            => Geography::States->new('Brazil'),
+        'The Netherlands' => Geography::States->new('The Netherlands'),
+    );
 
-    sub normalize_region
-    {
+    sub normalize_region {
         my $self   = shift;
         my $region = shift;
 
@@ -916,8 +881,7 @@ sub current_localized_neighborhoods
 
         my $country = $self->country;
 
-        if ( $country && $StatesForCountry{$country} )
-        {
+        if ( $country && $StatesForCountry{$country} ) {
             my $long = $StatesForCountry{$country}->state($region);
 
             $region = $long if defined $long;
@@ -926,9 +890,8 @@ sub current_localized_neighborhoods
         return $region;
     }
 
-    sub region_abbreviation
-    {
-        my $self = shift;
+    sub region_abbreviation {
+        my $self   = shift;
         my $region = shift;
 
         return $region if defined $region && length $region <= 3;
@@ -939,91 +902,83 @@ sub current_localized_neighborhoods
 
         my $country = $self->country;
 
-        if ( $country && $StatesForCountry{$country} )
-        {
+        if ( $country && $StatesForCountry{$country} ) {
             my $short = $StatesForCountry{$country}->state($region);
 
             $region = $short if defined $short;
         }
 
-	# bug in Geography::States
-	$region = 'QC' if defined $region && $region eq 'PQ';
+        # bug in Geography::States
+        $region = 'QC' if defined $region && $region eq 'PQ';
 
         return $region;
     }
 
-    sub GeoStatesObjects
-    {
-        return @StatesForCountry{ qw( USA Canada Australia Brazil ), 'The Netherlands' };
+    sub GeoStatesObjects {
+        return @StatesForCountry{ qw( USA Canada Australia Brazil ),
+            'The Netherlands' };
     }
 }
 
-sub owner_count
-{
+sub owner_count {
     my $self = shift;
 
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        $schema->row_count
-            ( join   => [ $schema->tables( 'LocationOwner', 'User' ) ],
-              where  =>
-              [ $schema->LocationOwner_t->location_id_c,
-                '=', $self->location_id ],
-            )
+    return $schema->row_count(
+        join  => [ $schema->tables( 'LocationOwner', 'User' ) ],
+        where => [
+            $schema->LocationOwner_t->location_id_c,
+            '=', $self->location_id
+        ],
+    );
 }
 
-sub owners
-{
+sub owners {
     my $self = shift;
 
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        $self->cursor
-            ( $schema->join
-                  ( select => $schema->User_t,
-                    join   => [ $schema->tables( 'LocationOwner', 'User' ) ],
-                    where  =>
-                    [ $schema->LocationOwner_t->location_id_c,
-                      '=', $self->location_id ],
-                    order_by => [ $schema->User_t->real_name_c, 'ASC' ],
-                  )
-            );
+    return $self->cursor(
+        $schema->join(
+            select => $schema->User_t,
+            join   => [ $schema->tables( 'LocationOwner', 'User' ) ],
+            where  => [
+                $schema->LocationOwner_t->location_id_c,
+                '=', $self->location_id
+            ],
+            order_by => [ $schema->User_t->real_name_c, 'ASC' ],
+        )
+    );
 }
 
-sub add_owner
-{
+sub add_owner {
     my $self = shift;
     my $user = shift;
 
-    eval
-    {
-        VegGuide::Schema->Connect->LocationOwner_t->insert
-            ( values =>
-              { location_id => $self->location_id,
+    eval {
+        VegGuide::Schema->Connect->LocationOwner_t->insert(
+            values => {
+                location_id => $self->location_id,
                 user_id     => $user->user_id,
-              }
-            );
+            }
+        );
     };
 
     warn $@ if $@;
 }
 
-sub remove_owner
-{
+sub remove_owner {
     my $self = shift;
     my $user = shift;
 
-    eval
-    {
-        my $row =
-            VegGuide::Schema->Connect->LocationOwner_t->row_by_pk
-                ( pk =>
-                  { location_id => $self->location_id,
-                    user_id     => $user->user_id,
-                  }
-                );
+    eval {
+        my $row = VegGuide::Schema->Connect->LocationOwner_t->row_by_pk(
+            pk => {
+                location_id => $self->location_id,
+                user_id     => $user->user_id,
+            }
+        );
 
         $row->delete;
     };
@@ -1031,12 +986,12 @@ sub remove_owner
     warn $@ if $@;
 }
 
-sub new_vendors_and_reviews_feed
-{
+sub new_vendors_and_reviews_feed {
     my $self = shift;
-    my %p = validate( @_,
-                      { limit => { type => SCALAR, default => 10 } }
-                    );
+    my %p    = validate(
+        @_,
+        { limit => { type => SCALAR, default => 10 } }
+    );
 
     my $schema = VegGuide::Schema->Connect();
 
@@ -1052,12 +1007,16 @@ sub new_vendors_and_reviews_feed
     $count += $self->_add_vendors_to_feed( $feed, $p{limit} );
     $count += $self->_add_reviews_to_feed( $feed, $p{limit} );
 
-    unless ($count)
-    {
+    unless ($count) {
         my $entry = XML::Feed::Entry->new();
-        $entry->title( 'No entries or reviews for this region.' );
-        $entry->link( uri( scheme => 'http', host => VegGuide::Config->CanonicalWebHostname() ) );
-        $entry->summary( 'This region appears to be empty.' );
+        $entry->title('No entries or reviews for this region.');
+        $entry->link(
+            uri(
+                scheme => 'http',
+                host   => VegGuide::Config->CanonicalWebHostname()
+            )
+        );
+        $entry->summary('This region appears to be empty.');
 
         $feed->add_entry($entry);
     }
@@ -1065,12 +1024,12 @@ sub new_vendors_and_reviews_feed
     return $feed;
 }
 
-sub new_vendors_feed
-{
+sub new_vendors_feed {
     my $self = shift;
-    my %p = validate( @_,
-                      { limit => { type => SCALAR, default => 10 } }
-                    );
+    my %p    = validate(
+        @_,
+        { limit => { type => SCALAR, default => 10 } }
+    );
 
     my $schema = VegGuide::Schema->Connect();
 
@@ -1087,12 +1046,16 @@ sub new_vendors_feed
     my $count = 0;
     $count += $self->_add_vendors_to_feed( $feed, $p{limit} );
 
-    unless ($count)
-    {
+    unless ($count) {
         my $entry = XML::Feed::Entry->new();
-        $entry->title( 'No entries for this region.' );
-        $entry->link( uri( scheme => 'http', host => VegGuide::Config->CanonicalWebHostname() ) );
-        $entry->summary( 'This region has no entries.' );
+        $entry->title('No entries for this region.');
+        $entry->link(
+            uri(
+                scheme => 'http',
+                host   => VegGuide::Config->CanonicalWebHostname()
+            )
+        );
+        $entry->summary('This region has no entries.');
 
         $feed->add_entry($entry);
     }
@@ -1100,12 +1063,12 @@ sub new_vendors_feed
     return $feed;
 }
 
-sub new_reviews_feed
-{
+sub new_reviews_feed {
     my $self = shift;
-    my %p = validate( @_,
-                      { limit => { type => SCALAR, default => 10 } }
-                    );
+    my %p    = validate(
+        @_,
+        { limit => { type => SCALAR, default => 10 } }
+    );
 
     my $feed = $self->_as_xml_feed();
 
@@ -1120,12 +1083,16 @@ sub new_reviews_feed
     my $count = 0;
     $count += $self->_add_reviews_to_feed( $feed, $p{limit} );
 
-    unless ($count)
-    {
+    unless ($count) {
         my $entry = XML::Feed::Entry->new();
-        $entry->title( 'No reviews for this region.' );
-        $entry->link( uri( scheme => 'http', host => VegGuide::Config->CanonicalWebHostname() ) );
-        $entry->summary( 'This region has no reviews.' );
+        $entry->title('No reviews for this region.');
+        $entry->link(
+            uri(
+                scheme => 'http',
+                host   => VegGuide::Config->CanonicalWebHostname()
+            )
+        );
+        $entry->summary('This region has no reviews.');
 
         $feed->add_entry($entry);
     }
@@ -1133,27 +1100,25 @@ sub new_reviews_feed
     return $feed;
 }
 
-sub _add_vendors_to_feed
-{
+sub _add_vendors_to_feed {
     my $self  = shift;
     my $feed  = shift;
     my $limit = shift;
 
     my $schema = VegGuide::Schema->Connect();
 
-    my $vendors =
-        VegGuide::Vendor->VendorsWhere
-            ( where    =>
-              [ $schema->Vendor_t->location_id_c, 'IN',
-                $self->location_id, $self->descendant_ids ],
-              order_by   => 'created',
-              sort_order => 'DESC',
-              limit      => $limit,
-            );
+    my $vendors = VegGuide::Vendor->VendorsWhere(
+        where => [
+            $schema->Vendor_t->location_id_c, 'IN',
+            $self->location_id,               $self->descendant_ids
+        ],
+        order_by   => 'created',
+        sort_order => 'DESC',
+        limit      => $limit,
+    );
 
     my $count = 0;
-    while ( my $vendor = $vendors->next )
-    {
+    while ( my $vendor = $vendors->next ) {
         $feed->add_entry( $vendor->as_xml_feed_entry() );
         $count++;
     }
@@ -1161,23 +1126,21 @@ sub _add_vendors_to_feed
     return $count;
 }
 
-sub _add_reviews_to_feed
-{
+sub _add_reviews_to_feed {
     my $self  = shift;
     my $feed  = shift;
     my $limit = shift;
 
     my $schema = VegGuide::Schema->Connect();
 
-    my $reviews =
-        VegGuide::Vendor->RecentlyReviewed
-            ( location_ids => [ $self->location_id, $self->descendant_ids ],
-              days         => undef, # most recent no matter how old
-              limit        => $limit );
+    my $reviews = VegGuide::Vendor->RecentlyReviewed(
+        location_ids => [ $self->location_id, $self->descendant_ids ],
+        days         => undef,                # most recent no matter how old
+        limit        => $limit
+    );
 
     my $count = 0;
-    while ( my ( $vendor, $comment, $user ) = $reviews->next )
-    {
+    while ( my ( $vendor, $comment, $user ) = $reviews->next ) {
         $feed->add_entry( $comment->as_xml_feed_entry() );
         $count++;
     }
@@ -1185,8 +1148,7 @@ sub _add_reviews_to_feed
     return $count;
 }
 
-sub _as_xml_feed
-{
+sub _as_xml_feed {
     my $self = shift;
 
     my $feed = VegGuide::Feed->new();
@@ -1194,32 +1156,32 @@ sub _as_xml_feed
     $feed->title( 'VegGuide.Org: ' . $self->name() );
     $feed->link( region_uri( location => $self, with_host => 1 ) );
 
-    $feed->author( 'Compassionate Action for Animals' );
-    $feed->copyright( 'Copyright 2002 - ' . DateTime->now()->year()
-                      . q{ } . $feed->author() );
+    $feed->author('Compassionate Action for Animals');
+    $feed->copyright( 'Copyright 2002 - '
+            . DateTime->now()->year() . q{ }
+            . $feed->author() );
 
     return $feed;
 }
 
-sub data_feed_rss_file
-{
+sub data_feed_rss_file {
     my $self = shift;
-    my %p    = validate( @_, { cache_only => { type => BOOLEAN, default => 0 } } );
+    my %p
+        = validate( @_, { cache_only => { type => BOOLEAN, default => 0 } } );
 
-    my $cache_file =
-        File::Spec->catfile
-                ( VegGuide::Config->CacheDir(), 'rss',
-                  'location-' . $self->location_id() . '.rss',
-                );
+    my $cache_file = File::Spec->catfile(
+        VegGuide::Config->CacheDir(), 'rss',
+        'location-' . $self->location_id() . '.rss',
+    );
 
-    $self->_regen_cached_file( $cache_file, sub { $self->_data_feed_handle() } )
+    $self->_regen_cached_file( $cache_file,
+        sub { $self->_data_feed_handle() } )
         unless $p{cache_only};
 
     return $cache_file;
 }
 
-sub _data_feed_handle
-{
+sub _data_feed_handle {
     my $self = shift;
 
     my $w = VegGuide::RSSWriter->new();
@@ -1231,25 +1193,25 @@ sub _data_feed_handle
 
 {
     my $MaxCacheAge = 5 * 60;
-    my $Locker = LockFile::Simple->make( -autoclean => 1, -delay => 1, -max => 15 );
+    my $Locker
+        = LockFile::Simple->make( -autoclean => 1, -delay => 1, -max => 15 );
 
-    sub _regen_cached_file
-    {
+    sub _regen_cached_file {
         shift;
         my $cache_file = shift;
         my $data_sub   = shift;
 
         return $cache_file
-            if -f $cache_file && ( stat $cache_file )[9] >= time - $MaxCacheAge;
+            if -f $cache_file
+                && ( stat $cache_file )[9] >= time - $MaxCacheAge;
 
         return $cache_file unless $Locker->lock($cache_file);
 
-        eval
-        {
+        eval {
             my $fh = $data_sub->();
             $fh->close;
 
-            mkpath( dirname( $cache_file ), 0, 0755 );
+            mkpath( dirname($cache_file), 0, 0755 );
 
             my $temp_file = $fh->filename();
             move( $temp_file, $cache_file )
@@ -1264,47 +1226,52 @@ sub _data_feed_handle
     }
 }
 
-sub rest_data
-{
+sub rest_data {
     my $self = shift;
 
-    my %rest = ( name        => $self->name(),
-                 uri         => region_uri( location => $self ),
-                 location_id => $self->location_id(),
-               );
+    my %rest = (
+        name        => $self->name(),
+        uri         => region_uri( location => $self ),
+        location_id => $self->location_id(),
+    );
 
-    if ( my $parent = $self->parent() )
-    {
-        $rest{parent} = { name => $parent->name(),
-                          uri  => region_uri( location => $parent ),
-                        };
+    if ( my $parent = $self->parent() ) {
+        $rest{parent} = {
+            name => $parent->name(),
+            uri  => region_uri( location => $parent ),
+        };
     }
 
     return \%rest;
 }
 
-sub NewVendorsAndReviewsFeed
-{
+sub NewVendorsAndReviewsFeed {
     my $class = shift;
-    my %p = validate( @_,
-                      { limit => { type => SCALAR, default => 10 } }
-                    );
+    my %p     = validate(
+        @_,
+        { limit => { type => SCALAR, default => 10 } }
+    );
 
     my $schema = VegGuide::Schema->Connect();
 
     my $feed = $class->_AsXMLFeed();
-    $feed->description( "The $p{limit} most recent entries and reviews on VegGuide.org." );
+    $feed->description(
+        "The $p{limit} most recent entries and reviews on VegGuide.org.");
 
     my $count = 0;
     $count += $class->_AddVendorsToFeed( $feed, $p{limit} );
     $count += $class->_AddReviewsToFeed( $feed, $p{limit} );
 
-    unless ($count)
-    {
+    unless ($count) {
         my $entry = XML::Feed::Entry->new();
-        $entry->title( 'No entries or reviews in the system.' );
-        $entry->link( uri( scheme => 'http', host => VegGuide::Config->CanonicalWebHostname() ) );
-        $entry->summary( 'The whole database is empty?!' );
+        $entry->title('No entries or reviews in the system.');
+        $entry->link(
+            uri(
+                scheme => 'http',
+                host   => VegGuide::Config->CanonicalWebHostname()
+            )
+        );
+        $entry->summary('The whole database is empty?!');
 
         $feed->add_entry($entry);
     }
@@ -1312,28 +1279,32 @@ sub NewVendorsAndReviewsFeed
     return $feed;
 }
 
-sub NewVendorsFeed
-{
+sub NewVendorsFeed {
     my $class = shift;
-    my %p = validate( @_,
-                      { limit => { type => SCALAR, default => 10 } }
-                    );
+    my %p     = validate(
+        @_,
+        { limit => { type => SCALAR, default => 10 } }
+    );
 
     my $schema = VegGuide::Schema->Connect();
 
     my $feed = $class->_AsXMLFeed();
     $feed->is_entries_only(1);
-    $feed->description( "The $p{limit} most recent entries on VegGuide.org." );
+    $feed->description("The $p{limit} most recent entries on VegGuide.org.");
 
     my $count = 0;
     $count += $class->_AddVendorsToFeed( $feed, $p{limit} );
 
-    unless ($count)
-    {
+    unless ($count) {
         my $entry = XML::Feed::Entry->new();
-        $entry->title( 'No entries in the system.' );
-        $entry->link( uri( scheme => 'http', host => VegGuide::Config->CanonicalWebHostname() ) );
-        $entry->summary( 'The whole database is empty?!' );
+        $entry->title('No entries in the system.');
+        $entry->link(
+            uri(
+                scheme => 'http',
+                host   => VegGuide::Config->CanonicalWebHostname()
+            )
+        );
+        $entry->summary('The whole database is empty?!');
 
         $feed->add_entry($entry);
     }
@@ -1341,29 +1312,32 @@ sub NewVendorsFeed
     return $feed;
 }
 
-
-sub NewReviewsFeed
-{
+sub NewReviewsFeed {
     my $class = shift;
-    my %p = validate( @_,
-                      { limit => { type => SCALAR, default => 10 } }
-                    );
+    my %p     = validate(
+        @_,
+        { limit => { type => SCALAR, default => 10 } }
+    );
 
     my $schema = VegGuide::Schema->Connect();
 
     my $feed = $class->_AsXMLFeed();
     $feed->is_reviews_only(1);
-    $feed->description( "The $p{limit} most recent reviews on VegGuide.org." );
+    $feed->description("The $p{limit} most recent reviews on VegGuide.org.");
 
     my $count = 0;
     $count += $class->_AddReviewsToFeed( $feed, $p{limit} );
 
-    unless ($count)
-    {
+    unless ($count) {
         my $entry = XML::Feed::Entry->new();
-        $entry->title( 'No reviews in the system.' );
-        $entry->link( uri( scheme => 'http', host => VegGuide::Config->CanonicalWebHostname() ) );
-        $entry->summary( 'The whole database is empty?!' );
+        $entry->title('No reviews in the system.');
+        $entry->link(
+            uri(
+                scheme => 'http',
+                host   => VegGuide::Config->CanonicalWebHostname()
+            )
+        );
+        $entry->summary('The whole database is empty?!');
 
         $feed->add_entry($entry);
     }
@@ -1371,23 +1345,26 @@ sub NewReviewsFeed
     return $feed;
 }
 
-sub _AsXMLFeed
-{
+sub _AsXMLFeed {
     my $class = shift;
 
     my $feed = VegGuide::Feed->new();
 
-    $feed->title( q{VegGuide.Org: What's New} );
-    $feed->link( uri( scheme => 'http', host => VegGuide::Config->CanonicalWebHostname() ) );
-    $feed->author( 'Compassionate Action for Animals' );
-    $feed->copyright( 'Copyright 2002 - ' . DateTime->now()->year()
-                      . q{ } . $feed->author() );
+    $feed->title(q{VegGuide.Org: What's New});
+    $feed->link(
+        uri(
+            scheme => 'http', host => VegGuide::Config->CanonicalWebHostname()
+        )
+    );
+    $feed->author('Compassionate Action for Animals');
+    $feed->copyright( 'Copyright 2002 - '
+            . DateTime->now()->year() . q{ }
+            . $feed->author() );
 
     return $feed;
 }
 
-sub _AddVendorsToFeed
-{
+sub _AddVendorsToFeed {
     my $class = shift;
     my $feed  = shift;
     my $limit = shift;
@@ -1395,8 +1372,7 @@ sub _AddVendorsToFeed
     my $count = 0;
 
     my $vendors = VegGuide::Vendor->RecentlyAdded( limit => $limit );
-    while ( my $vendor = $vendors->next )
-    {
+    while ( my $vendor = $vendors->next ) {
         $feed->add_entry( $vendor->as_xml_feed_entry() );
         $count++;
     }
@@ -1404,21 +1380,18 @@ sub _AddVendorsToFeed
     return $count;
 }
 
-sub _AddReviewsToFeed
-{
+sub _AddReviewsToFeed {
     my $class = shift;
     my $feed  = shift;
     my $limit = shift;
 
     my $count = 0;
 
-    my $reviews =
-        VegGuide::Vendor->RecentlyReviewed
-            ( days  => undef, # most recent no matter how old
-              limit => $limit,
-            );
-    while ( my ( $vendor, $comment, $user ) = $reviews->next )
-    {
+    my $reviews = VegGuide::Vendor->RecentlyReviewed(
+        days  => undef,    # most recent no matter how old
+        limit => $limit,
+    );
+    while ( my ( $vendor, $comment, $user ) = $reviews->next ) {
         $feed->add_entry( $comment->as_xml_feed_entry() );
         $count++;
     }
@@ -1426,218 +1399,225 @@ sub _AddReviewsToFeed
     return $count;
 }
 
-sub DataFeedRSSFile
-{
+sub DataFeedRSSFile {
     my $class = shift;
 
-    my $cache_file =
-        File::Spec->catfile
-                ( VegGuide::Config->CacheDir(), 'rss',
-                  'site.rss',
-                );
+    my $cache_file = File::Spec->catfile(
+        VegGuide::Config->CacheDir(), 'rss',
+        'site.rss',
+    );
 
-    $class->_regen_cached_file( $cache_file, sub { return $class->_DataFeedHandle() } );
+    $class->_regen_cached_file( $cache_file,
+        sub { return $class->_DataFeedHandle() } );
 
     return $cache_file;
 }
 
-sub _DataFeedHandle
-{
+sub _DataFeedHandle {
     my $w = VegGuide::RSSWriter->new();
 
     my $vendors = VegGuide::Vendor->AllOpen();
 
-    while ( my $v = $vendors->next() )
-    {
+    while ( my $v = $vendors->next() ) {
         $w->add_vendor_for_data_feed( vendor => $v );
     }
 
-    $w->site_channel( 'VegGuide.Org Data Feed',
-                      'Data feed of all entries (still in business) in the VegGuide.Org system.',
-                    );
+    $w->site_channel(
+        'VegGuide.Org Data Feed',
+        'Data feed of all entries (still in business) in the VegGuide.Org system.',
+    );
 
     return $w->fh();
 }
 
-sub DataFeedDynamicLimit { 500 }
+sub DataFeedDynamicLimit {500}
 
 sub RootLocations { $_[0]->_cached_roots }
 
-sub All
-{
+sub All {
     my $class = shift;
-    my %p = validate( @_,
-		      { order_by => { type => SCALAR, default => 'parent' },
-		      }
-		    );
+    my %p     = validate(
+        @_, {
+            order_by => { type => SCALAR, default => 'parent' },
+        }
+    );
 
-    if ( $p{order_by} eq 'parent' )
-    {
+    if ( $p{order_by} eq 'parent' ) {
         return sort _sort_by_parent $class->all;
     }
-    else
-    {
+    else {
         return $class->all;
     }
 }
 
-sub LocationsForVendors
-{
+sub LocationsForVendors {
     my $class = shift;
-    my %p = validate( @_,
-		      { order_by => { type => SCALAR, default => 'parent' },
-		      }
-		    );
+    my %p     = validate(
+        @_, {
+            order_by => { type => SCALAR, default => 'parent' },
+        }
+    );
 
     my @l;
 
-    foreach my $l ( $class->all )
-    {
+    foreach my $l ( $class->all ) {
         next unless $l->can_have_vendors;
 
-        my $root = ($l->ancestors)[0];
+        my $root = ( $l->ancestors )[0];
 
         next unless $l->name eq 'Internet' || $root;
 
         push @l, $l;
     }
 
-    if ( $p{order_by} eq 'parent' )
-    {
+    if ( $p{order_by} eq 'parent' ) {
         return sort _sort_by_parent @l;
     }
-    else
-    {
-        return @l
+    else {
+        return @l;
     }
 }
 
-sub _sort_by_parent
-{
+sub _sort_by_parent {
     my $ap = $a->parent;
     my $bp = $b->parent;
 
-    if ( $ap && $bp )
-    {
+    if ( $ap && $bp ) {
         my $cmp = lc $ap->name cmp lc $bp->name;
 
         return $cmp if $cmp;
 
         return lc $a->name cmp lc $b->name;
     }
-    elsif ( $bp && ! $ap )
-    {
+    elsif ( $bp && !$ap ) {
         return lc $a->name cmp lc $bp->name;
     }
-    elsif ( $ap && ! $bp )
-    {
+    elsif ( $ap && !$bp ) {
         return lc $ap->name cmp lc $b->name;
     }
-    else
-    {
+    else {
         return lc $a->name cmp lc $b->name;
     }
 }
 
-sub ByVendorCount
-{
+sub ByVendorCount {
     my $class = shift;
-    my %p = validate( @_,
-                      { limit => { type => SCALAR, default => 5 },
-                      },
-                    );
+    my %p     = validate(
+        @_, {
+            limit => { type => SCALAR, default => 5 },
+        },
+    );
 
     my $schema = VegGuide::Schema->Connect();
 
     my $Vendor_t = $schema->Vendor_t;
 
-    return
-        VegGuide::Cursor::LocationAndCount->new
-            ( cursor =>
-              $Vendor_t->select
-                  ( select =>
-                    [ $schema->sqlmaker->COUNT( $Vendor_t->vendor_id_c ),
-                      $Vendor_t->location_id_c,
-                    ],
-                    where => [ $Vendor_t->close_date_c, '=', undef ],
-                    group_by =>
-                    $Vendor_t->location_id_c,
-                    order_by =>
-                    [ $schema->sqlmaker->COUNT( $Vendor_t->vendor_id_c ),
-                      'DESC',
-                    ],
-                    limit => $p{limit}
-                  )
-            );
+    return VegGuide::Cursor::LocationAndCount->new(
+        cursor => $Vendor_t->select(
+            select => [
+                $schema->sqlmaker->COUNT( $Vendor_t->vendor_id_c ),
+                $Vendor_t->location_id_c,
+            ],
+            where    => [ $Vendor_t->close_date_c, '=', undef ],
+            group_by => $Vendor_t->location_id_c,
+            order_by => [
+                $schema->sqlmaker->COUNT( $Vendor_t->vendor_id_c ),
+                'DESC',
+            ],
+            limit => $p{limit}
+        )
+    );
 }
 
 {
-    my $spec = { name   => SCALAR_TYPE,
-                 parent => SCALAR_TYPE( optional => 1 ),
-               };
+    my $spec = {
+        name   => SCALAR_TYPE,
+        parent => SCALAR_TYPE( optional => 1 ),
+    };
 
-    sub ByNameOrCityName
-    {
+    sub ByNameOrCityName {
         my $class = shift;
-        my %p     = validate( @_, $spec );
+        my %p = validate( @_, $spec );
 
         my $regex = $class->_NameToRegex( $p{name} );
 
         my $schema = VegGuide::Schema->Connect();
 
-        my ( $lp_join, $lp_order_by, $parent_table ) = $class->LocationAndParentClauses();
+        my ( $lp_join, $lp_order_by, $parent_table )
+            = $class->LocationAndParentClauses();
 
-        my @where =
-            ( '(',
-              [ $schema->sqlmaker()->LOWER( $schema->Vendor_t()->city_c() ), 'REGEXP', $regex ],
-              'or',
-              [ $schema->sqlmaker()->LOWER( $schema->Vendor_t()->localized_city_c() ), 'REGEXP', $regex ],
-              'or',
-              [ $schema->sqlmaker()->LOWER( $class->table()->name_c() ), 'REGEXP', $regex ],
-              'or',
-              [ $schema->sqlmaker()->LOWER( $class->table()->localized_name_c() ), 'REGEXP', $regex ],
-              ')',
-            );
+        my @where = (
+            '(',
+            [
+                $schema->sqlmaker()->LOWER( $schema->Vendor_t()->city_c() ),
+                'REGEXP', $regex
+            ],
+            'or',
+            [
+                $schema->sqlmaker()
+                    ->LOWER( $schema->Vendor_t()->localized_city_c() ),
+                'REGEXP', $regex
+            ],
+            'or',
+            [
+                $schema->sqlmaker()->LOWER( $class->table()->name_c() ),
+                'REGEXP', $regex
+            ],
+            'or',
+            [
+                $schema->sqlmaker()
+                    ->LOWER( $class->table()->localized_name_c() ), 'REGEXP',
+                $regex
+            ],
+            ')',
+        );
 
-        if ( $p{parent} )
-        {
+        if ( $p{parent} ) {
             my $parent = $p{parent};
 
-            if ( length $parent < 3 )
-            {
-                my $long = first { defined } map { scalar $_->state($parent) } $class->GeoStatesObjects();
+            if ( length $parent < 3 ) {
+                my $long = first {defined}
+                map { scalar $_->state($parent) } $class->GeoStatesObjects();
                 $parent = $long if defined $long;
             }
 
             my $parent_regex = $class->_NameToRegex($parent);
 
             push @where,
-                ( 'and',
-                  '(',
-                  [ $schema->sqlmaker()->LOWER( $parent_table->name_c() ), 'REGEXP', $parent_regex ],
-                  'or',
-                  [ $schema->sqlmaker()->LOWER( $parent_table->localized_name_c() ), 'REGEXP', $parent_regex ],
-                  ')',
+                (
+                'and', '(',
+                [
+                    $schema->sqlmaker()->LOWER( $parent_table->name_c() ),
+                    'REGEXP', $parent_regex
+                ],
+                'or',
+                [
+                    $schema->sqlmaker()
+                        ->LOWER( $parent_table->localized_name_c() ),
+                    'REGEXP', $parent_regex
+                ],
+                ')',
                 );
         }
 
-        return
-            $class->cursor
-                ( $schema->join
-                      ( distinct => $class->table(),
-                        join =>
-                        [ [ left_outer_join => $schema->tables( 'Location', 'Vendor' ) ],
-                          $lp_join,
-                        ],
-                        where => \@where,
-                        order_by => $lp_order_by,
-                      )
-                );
+        return $class->cursor(
+            $schema->join(
+                distinct => $class->table(),
+                join     => [
+                    [
+                        left_outer_join =>
+                            $schema->tables( 'Location', 'Vendor' )
+                    ],
+                    $lp_join,
+                ],
+                where    => \@where,
+                order_by => $lp_order_by,
+            )
+        );
     }
 }
 
-sub name_matches_text
-{
+sub name_matches_text {
     my $self = shift;
     my $text = shift;
 
@@ -1646,8 +1626,7 @@ sub name_matches_text
     return 1 if $self->name() =~ /$regex/i;
 }
 
-sub cities_matching_text
-{
+sub cities_matching_text {
     my $self = shift;
     my $text = shift;
 
@@ -1655,46 +1634,58 @@ sub cities_matching_text
 
     my $schema = VegGuide::Schema->Connect();
 
-    my @cities =
-        map { Encode::decode( 'utf8', $_ ) }
-        $schema->Vendor_t()->function
-            ( select => $schema->sqlmaker()->DISTINCT( $schema->Vendor_t->city_c() ),
-              where  =>
-              [ [ $schema->sqlmaker()->LOWER( $schema->Vendor_t()->city_c() ), 'REGEXP', $regex ],
-                [ $schema->Vendor_t()->location_id_c(), '=', $self->location_id() ],
-              ]
-            );
+    my @cities
+        = map { Encode::decode( 'utf8', $_ ) } $schema->Vendor_t()->function(
+        select =>
+            $schema->sqlmaker()->DISTINCT( $schema->Vendor_t->city_c() ),
+        where => [
+            [
+                $schema->sqlmaker()->LOWER( $schema->Vendor_t()->city_c() ),
+                'REGEXP', $regex
+            ],
+            [
+                $schema->Vendor_t()->location_id_c(), '=',
+                $self->location_id()
+            ],
+        ]
+        );
 
     push @cities,
-        map { Encode::decode( 'utf8', $_ ) }
-        $schema->Vendor_t()->function
-            ( select => $schema->sqlmaker()->DISTINCT( $schema->Vendor_t->localized_city_c() ),
-              where  =>
-              [ [ $schema->sqlmaker()->LOWER( $schema->Vendor_t()->localized_city_c() ), 'REGEXP', $regex ],
-                [ $schema->Vendor_t()->location_id_c(), '=', $self->location_id() ],
-              ]
-            );
+        map { Encode::decode( 'utf8', $_ ) } $schema->Vendor_t()->function(
+        select => $schema->sqlmaker()
+            ->DISTINCT( $schema->Vendor_t->localized_city_c() ),
+        where => [
+            [
+                $schema->sqlmaker()
+                    ->LOWER( $schema->Vendor_t()->localized_city_c() ),
+                'REGEXP', $regex
+            ],
+            [
+                $schema->Vendor_t()->location_id_c(), '=',
+                $self->location_id()
+            ],
+        ]
+        );
 
     return uniq @cities;
 }
 
 {
-    my %Cardinal = ( n => 'n|no|north', e => 'e|east', s => 's|so|south', w => 'w|west' );
-    my $CardinalRE = eval 'qr/(' . ( join '|', map { "(?:$_)" } values %Cardinal ) . ')/i';
+    my %Cardinal = ( n => 'n|no|north', e => 'e|east', s => 's|so|south',
+        w => 'w|west' );
+    my $CardinalRE
+        = eval 'qr/(' . ( join '|', map {"(?:$_)"} values %Cardinal ) . ')/i';
 
-    sub _NameToRegex
-    {
+    sub _NameToRegex {
         shift;
         my $name = shift;
 
         my $regex = '';
-        if ( $name =~ s/^$CardinalRE\s+// )
-        {
+        if ( $name =~ s/^$CardinalRE\s+// ) {
             $regex = '^(' . $Cardinal{ lc substr( $1, 0, 1 ) } . ') ';
         }
 
-        if ( $name =~ s/^(st\.?|saint)\s+// )
-        {
+        if ( $name =~ s/^(st\.?|saint)\s+// ) {
             $regex = '^(st.?|saint) ';
         }
 
@@ -1705,29 +1696,28 @@ sub cities_matching_text
 
 }
 
-sub LocationAndParentClauses
-{
+sub LocationAndParentClauses {
     shift;
 
     my $schema = VegGuide::Schema->Connect();
 
     my $location_alias = $schema->Location_t()->alias();
 
-    my $fk =
-        first { ( $_->columns_from() )[0]->name() eq 'parent_location_id' }
-        $schema->Location_t()->foreign_keys_by_table( $schema->Location_t() );
+    my $fk
+        = first { ( $_->columns_from() )[0]->name() eq 'parent_location_id' }
+    $schema->Location_t()->foreign_keys_by_table( $schema->Location_t() );
 
-    return
-        ( [ left_outer_join => $schema->Location_t(), $location_alias, $fk ],
-          [ $location_alias->name_c(),
+    return (
+        [ left_outer_join => $schema->Location_t(), $location_alias, $fk ],
+        [
+            $location_alias->name_c(),
             $schema->Location_t()->name_c(),
-          ],
-          $location_alias
-        );
+        ],
+        $location_alias
+    );
 }
 
-sub AverageVendorCount
-{
+sub AverageVendorCount {
     my $schema = VegGuide::Schema->Connect();
 
     my $sql = <<'EOF';
@@ -1743,8 +1733,7 @@ EOF
     return $dbh->selectrow_arrayref($sql)->[0];
 }
 
-sub MedianVendorCount
-{
+sub MedianVendorCount {
     my $class = shift;
 
     my $schema = VegGuide::Schema->Connect();
@@ -1770,163 +1759,140 @@ EOF
     return ( sum @{$vals} ) / ( scalar @{$vals} );
 }
 
-sub BranchLocationCount
-{
+sub BranchLocationCount {
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        $schema->Location_t()->function
-            ( select =>
-              $schema->sqlmaker->COUNT
-                  ( $schema->sqlmaker->DISTINCT
-                        ( $schema->Location_t()->parent_location_id_c() ) )
-            );
+    return $schema->Location_t()->function(
+        select => $schema->sqlmaker->COUNT(
+            $schema->sqlmaker->DISTINCT(
+                $schema->Location_t()->parent_location_id_c()
+            )
+        )
+    );
 }
 
-sub LeafLocationCount
-{
+sub LeafLocationCount {
     my $class = shift;
 
     return $class->Count() - $class->BranchLocationCount();
 }
 
-sub LocationsWithVendorsCount
-{
+sub LocationsWithVendorsCount {
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        $schema->Vendor_t->function
-            ( select =>
-              $schema->sqlmaker->COUNT
-                  ( $schema->sqlmaker->DISTINCT
-                        ( $schema->Vendor_t->location_id_c ) ),
-            );
+    return $schema->Vendor_t->function(
+        select => $schema->sqlmaker->COUNT(
+            $schema->sqlmaker->DISTINCT( $schema->Vendor_t->location_id_c )
+        ),
+    );
 }
 
-sub LocationsWithVendors
-{
+sub LocationsWithVendors {
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        $schema->Vendor_t->function
-            ( select =>
-              $schema->sqlmaker->DISTINCT
-                  ( $schema->Vendor_t->location_id_c ),
-            );
+    return $schema->Vendor_t->function(
+        select =>
+            $schema->sqlmaker->DISTINCT( $schema->Vendor_t->location_id_c ),
+    );
 }
 
-sub CountryCount
-{
+sub CountryCount {
     my $class = shift;
 
-    return
-        $class->table()->row_count
-            ( where => [ $class->table()->is_country_c(), '=', 1 ] );
+    return $class->table()
+        ->row_count( where => [ $class->table()->is_country_c(), '=', 1 ] );
 }
 
-sub RecentlyAdded
-{
+sub RecentlyAdded {
     my $class = shift;
-    my %p     = validate( @_,
-                          { days  => { type => SCALAR, optional => 1 },
-                            limit => { type => SCALAR, optional => 1 },
-                          },
-                        );
+    my %p     = validate(
+        @_, {
+            days  => { type => SCALAR, optional => 1 },
+            limit => { type => SCALAR, optional => 1 },
+        },
+    );
 
     my %where;
-    if ( $p{days} )
-    {
+    if ( $p{days} ) {
         my $since = DateTime->today()->subtract( days => $p{days} );
 
-        $where{where} =
-            [ $class->table()->creation_datetime_c(),
-              '>=', DateTime::Format::MySQL->format_datetime($since) ];
+        $where{where} = [
+            $class->table()->creation_datetime_c(),
+            '>=', DateTime::Format::MySQL->format_datetime($since)
+        ];
     }
 
     my %limit;
     $limit{limit} = $p{limit} if $p{limit};
 
-    return
-        $class->cursor
-            ( $class->table()->rows_where
-                  ( %where,
-                    order_by =>
-                    [ $class->table()->creation_datetime_c, 'DESC' ],
-                    %limit
-                  ),
-            );
+    return $class->cursor(
+        $class->table()->rows_where(
+            %where,
+            order_by =>
+                [ $class->table()->creation_datetime_c, 'DESC' ],
+            %limit
+        ),
+    );
 }
 
-sub AllComments
-{
+sub AllComments {
     my $schema = VegGuide::Schema->Connect();
 
-    return
-        $_[0]->cursor
-            ( $schema->join
-                  ( select =>
-                    [ $schema->tables( 'LocationComment', 'User' ) ],
-                    join =>
-                    [ $schema->tables( 'Location', 'LocationComment', 'User' ) ],
-                    order_by =>
-                    [ $schema->LocationComment_t->last_modified_datetime_c, 'DESC',
-                    ],
-                  )
-            );
+    return $_[0]->cursor(
+        $schema->join(
+            select => [ $schema->tables( 'LocationComment', 'User' ) ],
+            join =>
+                [ $schema->tables( 'Location', 'LocationComment', 'User' ) ],
+            order_by => [
+                $schema->LocationComment_t->last_modified_datetime_c, 'DESC',
+            ],
+        )
+    );
 }
 
-sub USA
-{
+sub USA {
     my $class = shift;
 
     return $class->new( name => 'USA' );
 }
 
-
 package VegGuide::Cursor::LocationAndCount;
 
 use base qw(Class::AlzaboWrapper::Cursor);
 
-sub next
-{
+sub next {
     my $self = shift;
 
-    my ($count, $location_id) = $self->{cursor}->next
+    my ( $count, $location_id ) = $self->{cursor}->next
         or return;
 
-    return
-        ( $count,
-          VegGuide::Location->new
-              ( location_id => $location_id )
-        );
+    return (
+        $count,
+        VegGuide::Location->new( location_id => $location_id )
+    );
 }
 
 package VegGuide::Cursor::LocationById;
 
 use base qw(Class::AlzaboWrapper::Cursor);
 
-sub next
-{
+sub next {
     my $self = shift;
 
     my ($location_id) = $self->{cursor}->next
         or return;
 
-    return
-        VegGuide::Location->new
-            ( location_id => $location_id );
+    return VegGuide::Location->new( location_id => $location_id );
 }
-
 
 package VegGuide::LocationComment;
 
 use VegGuide::Schema;
-use VegGuide::AlzaboWrapper
-    ( table => VegGuide::Schema->Schema->LocationComment_t );
+use VegGuide::AlzaboWrapper (
+    table => VegGuide::Schema->Schema->LocationComment_t );
 
 use base 'VegGuide::Comment';
 
 sub location { VegGuide::Location->new( location_id => $_[0]->location_id ) }
-
 
 1;

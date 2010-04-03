@@ -8,19 +8,16 @@ use base 'VegGuide::Controller::Base';
 use Scalar::Util qw( looks_like_number );
 use VegGuide::Search::Review;
 
-
-sub list : Path('')
-{
+sub list : Path('') {
     my $self = shift;
     my $c    = shift;
 
     my $search = VegGuide::Search::Review->new();
 
     my $params = $c->request()->parameters();
-    my %p =
-      map { $_ => $params->{$_} }
-      grep { defined $params->{$_} }
-      qw( order_by sort_order page limit );
+    my %p
+        = map { $_ => $params->{$_} }
+        grep { defined $params->{$_} } qw( order_by sort_order page limit );
 
     my $limit = $params->{limit} || $c->vg_user()->entries_per_page();
 
@@ -32,7 +29,7 @@ sub list : Path('')
     $search->set_cursor_params(%p);
 
     $c->stash()->{search} = $search;
-    $c->stash()->{pager } = $search->pager();
+    $c->stash()->{pager}  = $search->pager();
 
     $c->stash()->{template} = '/site/review-list';
 }

@@ -7,24 +7,20 @@ use base 'Catalyst::View::Mason';
 
 use VegGuide::Config;
 
-
-__PACKAGE__->config
-    ( comp_root     => '/usr/local/share/alzabo/schema',
-      data_dir      =>
-      File::Spec->catdir( VegGuide::Config->CacheDir(), 'alzabo-gui' ),
-      in_package    => 'VegGuide::Mason::AlzaboGUI',
-      request_class => 'HTML::Mason::Request::Catalyst',
-      use_match     => 0,
-    );
-
+__PACKAGE__->config(
+    comp_root => '/usr/local/share/alzabo/schema',
+    data_dir =>
+        File::Spec->catdir( VegGuide::Config->CacheDir(), 'alzabo-gui' ),
+    in_package    => 'VegGuide::Mason::AlzaboGUI',
+    request_class => 'HTML::Mason::Request::Catalyst',
+    use_match     => 0,
+);
 
 package HTML::Mason::Request::Catalyst;
 
 use base 'HTML::Mason::Request';
 
-
-sub redirect
-{
+sub redirect {
     my $self = shift;
     my $uri  = shift;
 
@@ -35,7 +31,6 @@ sub redirect
 
     $self->abort();
 }
-
 
 1;
 
