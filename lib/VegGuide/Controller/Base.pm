@@ -107,7 +107,7 @@ sub _require_auth {
 
     return if $c->vg_user()->is_logged_in();
 
-    $c->_redirect_with_error(
+    $c->redirect_with_error(
         error  => $msg,
         uri    => '/user/login_form',
         params => { return_to => $c->request()->uri() },

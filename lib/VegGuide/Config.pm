@@ -9,6 +9,7 @@ use File::Basename qw( dirname );
 use File::Slurp qw( read_file );
 use File::Spec;
 use Sys::Hostname qw( hostname );
+use VegGuide::Web::Session;
 
 {
     my $Hostname = hostname();
@@ -29,12 +30,10 @@ use Sys::Hostname qw( hostname );
         +VegGuide::Plugin::FixupURI
         +VegGuide::Plugin::InOutEncoding
         +VegGuide::Plugin::ResponseAttributes
-        DR::Session
+        Session::AsObject
         Session::State::URI
         +VegGuide::Plugin::Session::Store::VegGuide
         +VegGuide::Plugin::User
-        Cache
-        Cache::Store::FastMmap
         Log::Dispatch
         RedirectAndDetach
         SubRequest
@@ -73,7 +72,9 @@ use Sys::Hostname qw( hostname );
 }
 
 {
-    my @Roles = qw( VegGuide::Role::Tabs
+    my @Roles = qw(
+        VegGuide::Role::RedirectWithError
+        VegGuide::Role::Tabs
     );
 
     sub CatalystRoles {
@@ -143,17 +144,9 @@ sub AlzaboRootDir {
             expires          => ( 60 * 5 ),
             dbi_table        => 'Session',
             dbi_dbh          => 'VegGuide::Plugin::Session::Store::VegGuide',
+            object_class     => 'VegGuide::Web::Session',
             rewrite_body     => 0,
             rewrite_redirect => 1,
-        },
-
-        cache => {
-            backend => {
-                share_file => File::Spec->catfile(
-                    __PACKAGE__->CacheDir(), 'cache.mmap'
-                ),
-                cache_size => '1m',
-            },
         },
 
         authen_cookie => {

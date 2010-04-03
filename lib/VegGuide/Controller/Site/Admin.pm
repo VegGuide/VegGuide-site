@@ -42,7 +42,7 @@ sub locale_PUT {
 
     $locale->replace_encodings( $c->request()->param('encodings') );
 
-    $c->add_message( $locale->name() . ' has been updated.' );
+    $c->session_object()->add_message( $locale->name() . ' has been updated.' );
 
     $c->redirect_and_detach('/site/admin/locale_list');
 }
@@ -60,7 +60,7 @@ sub locales_POST {
 
     $locale->replace_encodings( $c->request()->param('encodings') );
 
-    $c->add_message( $locale->name() . ' has been created.' );
+    $c->session_object()->add_message( $locale->name() . ' has been created.' );
 
     $c->redirect_and_detach('/site/admin/locale_list');
 }
@@ -86,7 +86,7 @@ sub source_PUT {
 
     $source->update(%data);
 
-    $c->add_message( $source->name() . ' has been updated.' );
+    $c->session_object()->add_message( $source->name() . ' has been updated.' );
 
     $c->redirect_and_detach('/site/admin/source_list');
 }
@@ -102,7 +102,7 @@ sub sources_POST {
 
     my $source = VegGuide::VendorSource->create(%data);
 
-    $c->add_message( $source->name() . ' has been created.' );
+    $c->session_object()->add_message( $source->name() . ' has been created.' );
 
     $c->redirect_and_detach('/site/admin/source_list');
 }

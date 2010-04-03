@@ -293,7 +293,7 @@ sub region_PUT : Private {
         }
     }
 
-    $c->add_message( $location->name() . ' has been updated.' );
+    $c->session_object()->add_message( $location->name() . ' has been updated.' );
 
     $c->redirect_and_detach( region_uri( location => $location ) );
 }
@@ -340,7 +340,7 @@ sub region_DELETE : Private {
 
     $location->delete();
 
-    $c->add_message("$name has been deleted.");
+    $c->session_object()->add_message("$name has been deleted.");
 
     my $redirect = $parent ? region_uri( location => $parent ) : '/';
     $c->redirect_and_detach($redirect);
@@ -358,7 +358,7 @@ sub _new_entry_submit {
     my $location = $c->stash()->{location};
 
     unless ( $c->vg_user()->is_admin() || $location->can_have_vendors() ) {
-        $c->add_message('This region cannot have entries.');
+        $c->session_object()->add_message('This region cannot have entries.');
         $c->redirect_and_detach( region_uri( location => $location ) );
     }
 
@@ -374,14 +374,14 @@ sub _new_entry_submit {
     };
 
     if ( my $e = $@ ) {
-        $c->_redirect_with_error(
+        $c->redirect_with_error(
             error => $e,
             uri => region_uri( location => $location, path => 'entry_form' ),
             params => \%data,
         );
     }
 
-    $c->add_message( $vendor->name() . ' has been added.' );
+    $c->session_object()->add_message( $vendor->name() . ' has been added.' );
 
     if ( $location->has_hours() ) {
         $c->redirect_and_detach(
@@ -404,7 +404,7 @@ sub entry_form : Chained('_set_location') : PathPart('entry_form') : Args(0) {
     my $location = $c->stash()->{location};
 
     unless ( $c->vg_user()->is_admin() || $location->can_have_vendors() ) {
-        $c->add_message('This region cannot have entries.');
+        $c->session_object()->add_message('This region cannot have entries.');
         $c->redirect_and_detach( region_uri( location => $location ) );
     }
 
@@ -426,7 +426,7 @@ sub entry_form_no_region : LocalRegex('^entry_form$') {
     my $location = VegGuide::Location->new( location_id => $location_id );
 
     unless ($location) {
-        $c->_redirect_with_error(
+        $c->redirect_with_error(
             error => 'You must pick a region for this new entry.',
             uri   => uri(
                 path => '/site/clone_entry_form',
@@ -463,7 +463,7 @@ sub comment_form : Chained('_set_location') : PathPart('comment_form') :
     $c->redirect_and_detach('/')
         unless $user && $comment;
 
-    $c->_redirect_with_error(
+    $c->redirect_with_error(
         error => 'You do not have permission to edit this comment.',
         uri   => '/',
     ) unless $c->vg_user()->can_edit_comment($comment);
@@ -508,11 +508,11 @@ sub new_region_comment_POST : Private {
     );
 
     if ( $c->vg_user()->user_id() == $comment->user_id() ) {
-        $c->add_message(
+        $c->session_object()->add_message(
             'Thanks for your comment on ' . $location->name() . '.' );
     }
     else {
-        $c->add_message('The comment has been updated.');
+        $c->session_object()->add_message('The comment has been updated.');
     }
 
     $c->redirect_and_detach( region_uri( location => $location ) );
@@ -581,7 +581,7 @@ sub region_comment_DELETE : Private {
     $c->redirect_and_detach('/')
         unless $comment;
 
-    $c->_redirect_with_error(
+    $c->redirect_with_error(
         error => 'You do not have permission to delete this comment.',
         uri   => '/',
     ) unless $c->vg_user()->can_delete_comment($comment);
@@ -595,7 +595,7 @@ sub region_comment_DELETE : Private {
 
     $comment->delete();
 
-    $c->add_message("$subject has been deleted.");
+    $c->session_object()->add_message("$subject has been deleted.");
 
     $c->redirect_and_detach( region_uri( location => $location ) );
 }
@@ -783,7 +783,7 @@ sub regions_POST {
             ? region_uri( location => $parent, path => 'new_region_form' )
             : '/region/new_region_form';
 
-        $c->_redirect_with_error(
+        $c->redirect_with_error(
             error  => \@errors,
             uri    => $uri,
             params => $c->request()->params(),
@@ -795,7 +795,7 @@ sub regions_POST {
         if $location->parent();
     $msg .= q{.};
 
-    $c->add_message($msg);
+    $c->session_object()->add_message($msg);
 
     $c->redirect_and_detach( region_uri( location => $location ) );
 }

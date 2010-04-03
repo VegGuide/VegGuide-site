@@ -294,7 +294,7 @@ sub news_POST : Private {
         body  => $params->{body},
     );
 
-    $c->add_message('News item added.');
+    $c->session_object()->add_message('News item added.');
 
     $c->redirect_and_detach('/site/news');
 }
@@ -323,7 +323,7 @@ sub news_item_PUT : Private {
         body  => $params->{body},
     );
 
-    $c->add_message('News item updated.');
+    $c->session_object()->add_message('News item updated.');
 
     $c->redirect_and_detach('/site/news');
 }
@@ -343,7 +343,7 @@ sub news_item_DELETE : Private {
 
     $item->delete();
 
-    $c->add_message('News item deleted.');
+    $c->session_object()->add_message('News item deleted.');
 
     $c->redirect_and_detach('/site/news');
 }
@@ -404,7 +404,7 @@ sub skins_POST : Private {
     $skin->save_image( $file->fh() )
         if $file && $file->fh();
 
-    $c->add_message( 'The ' . $skin->hostname() . ' skin has been created.' );
+    $c->session_object()->add_message( 'The ' . $skin->hostname() . ' skin has been created.' );
 
     $c->redirect_and_detach( '/skin/' . $skin->skin_id() . '/edit_form' );
 }

@@ -53,7 +53,7 @@ sub skin_PUT {
     $skin->save_image( $file->fh() )
         if $file && $file->fh();
 
-    $c->add_message( 'The ' . $skin->hostname() . ' skin has been updated.' );
+    $c->session_object()->add_message( 'The ' . $skin->hostname() . ' skin has been updated.' );
 
     $c->redirect_and_detach( '/skin/' . $skin->skin_id() . '/edit_form' );
 }

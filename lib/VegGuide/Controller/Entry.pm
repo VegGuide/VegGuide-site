@@ -167,14 +167,14 @@ sub entry_PUT : Private {
     };
 
     if ( my $e = $@ ) {
-        $c->_redirect_with_error(
+        $c->redirect_with_error(
             error  => $e,
             uri    => entry_uri( vendor => $vendor, path => 'edit_form' ),
             params => \%data,
         );
     }
 
-    $c->add_message($_) for @msg;
+    $c->session_object()->add_message($_) for @msg;
 
     $c->redirect_and_detach( entry_uri( vendor => $vendor ) );
 }
@@ -225,7 +225,7 @@ sub entry_DELETE : Private {
 
     $vendor->delete( calling_user => $c->vg_user() );
 
-    $c->add_message("$name was deleted.");
+    $c->session_object()->add_message("$name was deleted.");
 
     $c->redirect_and_detach( region_uri( location => $location ) );
 }
@@ -260,7 +260,7 @@ sub rating_POST : Private {
     );
 
     if ( $c->request()->looks_like_browser() ) {
-        $c->add_message(
+        $c->session_object()->add_message(
             'Your rating for ' . $vendor->name() . ' has been recorded.' );
         $c->redirect_and_detach( entry_uri( vendor => $vendor ) );
     }
@@ -321,7 +321,7 @@ sub review_form : Chained('_set_vendor') : PathPart('review_form') : Args(1) {
     $c->redirect_and_detach('/')
         unless $user && $comment;
 
-    $c->_redirect_with_error(
+    $c->redirect_with_error(
         error => 'You do not have permission to edit this review.',
         uri   => '/',
     ) unless $c->vg_user()->can_edit_review($comment);
@@ -398,11 +398,11 @@ sub reviews_POST : Private {
     );
 
     if ( $c->vg_user()->user_id() == $comment->user_id() ) {
-        $c->add_message(
+        $c->session_object()->add_message(
             'Thanks for your review of ' . $vendor->name() . '.' );
     }
     else {
-        $c->add_message('The review has been updated.');
+        $c->session_object()->add_message('The review has been updated.');
     }
 
     $c->redirect_and_detach( entry_uri( vendor => $vendor ) );
@@ -437,7 +437,7 @@ sub review_confirm_deletion : Chained('_set_review') :
 
     my $comment = $c->stash()->{comment};
 
-    $c->_redirect_with_error(
+    $c->redirect_with_error(
         error => 'You do not have permission to delete this review.',
         uri   => '/',
     ) unless $c->vg_user()->can_delete_comment($comment);
@@ -473,7 +473,7 @@ sub review_DELETE : Private {
 
     my $comment = $c->stash()->{comment};
 
-    $c->_redirect_with_error(
+    $c->redirect_with_error(
         error => 'You do not have permission to delete this review.',
         uri   => '/',
     ) unless $c->vg_user()->can_delete_comment($comment);
@@ -485,7 +485,7 @@ sub review_DELETE : Private {
 
     $comment->delete( calling_user => $c->vg_user() );
 
-    $c->add_message("$subject has been deleted.");
+    $c->session_object()->add_message("$subject has been deleted.");
 
     $c->redirect_and_detach( entry_uri( vendor => $c->stash()->{vendor} ) );
 }
@@ -521,7 +521,7 @@ sub hours_POST : Private {
     my ( $hours, $errors ) = $self->_parse_submitted_hours($c);
 
     if ( @{$errors} ) {
-        $c->_redirect_with_error(
+        $c->redirect_with_error(
             error => $errors,
             uri => entry_uri( vendor => $vendor, path => 'edit_hours_form' ),
             params => $c->request()->params(),
@@ -551,14 +551,14 @@ sub hours_POST : Private {
     };
 
     if ( my $e = $@ ) {
-        $c->_redirect_with_error(
+        $c->redirect_with_error(
             error => $e,
             uri => entry_uri( vendor => $vendor, path => 'edit_hours_form' ),
             params => $c->request()->params(),
         );
     }
 
-    $c->add_message($msg);
+    $c->session_object()->add_message($msg);
 
     $c->redirect_and_detach( entry_uri( vendor => $vendor ) );
 }
@@ -703,7 +703,7 @@ sub image_DELETE {
 
     $image->delete();
 
-    $c->add_message('The image has been deleted.');
+    $c->session_object()->add_message('The image has been deleted.');
 
     $c->redirect_and_detach(
         entry_uri( vendor => $vendor, path => 'images_form' ) );
@@ -769,7 +769,7 @@ sub images_POST {
     if ( my $e = $@ ) {
         my $params = $c->request()->parameters();
 
-        $c->_redirect_with_error(
+        $c->redirect_with_error(
             error  => $e,
             uri    => entry_uri( vendor => $vendor, path => 'images_form' ),
             params => $params,

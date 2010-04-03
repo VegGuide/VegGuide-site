@@ -140,7 +140,7 @@ sub authentication_POST {
     }
 
     if (@errors) {
-        $c->_redirect_with_error(
+        $c->redirect_with_error(
             error  => \@errors,
             uri    => '/user/login_form',
             params => {
@@ -179,7 +179,7 @@ sub authentication_POST {
         unless ($identity) {
             my $error = sprintf( $OpenIDErrors{ $csr->errcode() }, $uri );
 
-            $c->_redirect_with_error(
+            $c->redirect_with_error(
                 error  => $error,
                 uri    => '/user/login_form',
                 params => { openid_uri => $uri },
@@ -212,7 +212,7 @@ sub authentication_DELETE {
 
     $c->unset_authen_cookie();
 
-    $c->add_message('You have been logged out.');
+    $c->session_object()->add_message('You have been logged out.');
 
     $c->redirect_and_detach( $c->request()->parameters()->{return_to}
             || site_uri( path => '/', with_host => 1 ) );
@@ -232,7 +232,7 @@ sub openid_authentication : Local {
         $c->redirect_and_detach($setup_url);
     }
     elsif ( $csr->user_cancel() ) {
-        $c->_redirect_with_error(
+        $c->redirect_with_error(
             error =>
                 'You can still login without OpenID, or make a new account',
             uri => '/user/login_form',
@@ -241,7 +241,7 @@ sub openid_authentication : Local {
 
     my $identity = $csr->verified_identity();
     unless ($identity) {
-        $c->_redirect_with_error(
+        $c->redirect_with_error(
             error =>
                 'Something went mysteriously wrong trying to authenticate you with OpenID',
             uri => '/user/login_form',
@@ -251,7 +251,7 @@ sub openid_authentication : Local {
     my $user = VegGuide::User->new( openid_uri => $identity->url() );
 
     unless ($user) {
-        $c->_redirect_with_error(
+        $c->redirect_with_error(
             error =>
                 'Now you need to create a VegGuide.Org account for your OpenID URL',
             uri    => '/user/new_user_form',
@@ -274,7 +274,7 @@ sub _login_user {
         %expires,
     );
 
-    $c->add_message( 'Welcome to the site, ' . $user->real_name() );
+    $c->session_object()->add_message( 'Welcome to the site, ' . $user->real_name() );
 
     $c->redirect_and_detach( $c->request()->parameters()->{return_to}
             || site_uri( path => '/', with_host => 1 ) );
@@ -309,7 +309,7 @@ sub password_reminder_POST {
     }
 
     if (@errors) {
-        $c->_redirect_with_error(
+        $c->redirect_with_error(
             error  => \@errors,
             uri    => '/user/forgot_password_form',
             params => {
@@ -321,7 +321,7 @@ sub password_reminder_POST {
 
     $user->forgot_password();
 
-    $c->add_message(
+    $c->session_object()->add_message(
         "A message telling you how to change your password has been sent to $email."
     );
 
@@ -440,14 +440,14 @@ sub user_image_POST {
     if ( my $e = $@ ) {
         my $params = $c->request()->parameters();
 
-        $c->_redirect_with_error(
+        $c->redirect_with_error(
             error  => $e,
             uri    => user_uri( user => $user, path => 'image_form' ),
             params => $params,
         );
     }
 
-    $c->add_message('The image has been uploaded');
+    $c->session_object()->add_message('The image has been uploaded');
 
     $c->redirect_and_detach( user_uri( user => $user ) );
 }
@@ -465,14 +465,14 @@ sub _change_password {
     };
 
     if ( my $e = $@ ) {
-        $c->_redirect_with_error(
+        $c->redirect_with_error(
             error => $e,
             uri   => '/user/change_password_form/'
                 . $user->forgot_password_digest(),
         );
     }
 
-    $c->add_message('Your password has been updated');
+    $c->session_object()->add_message('Your password has been updated');
     $c->save_param( email_address => $user->email_address() );
 
     $c->redirect_and_detach('/user/login_form');
@@ -491,7 +491,7 @@ sub _update_user {
     eval { $user->update(%user_data); };
 
     if ( my $e = $@ ) {
-        $c->_redirect_with_error(
+        $c->redirect_with_error(
             error  => $e,
             uri    => user_uri( user => $user, path => 'edit_form' ),
             params => \%user_data,
@@ -507,7 +507,7 @@ sub _update_user {
         || user_uri( user => $user );
 
     unless ( keys %user_data == 1 && $user_data{entries_per_page} ) {
-        $c->add_message( $subject . ' account has been updated' );
+        $c->session_object()->add_message( $subject . ' account has been updated' );
     }
 
     $c->redirect_and_detach($redirect);
@@ -543,7 +543,7 @@ sub user_DELETE {
     my $name = $user->real_name();
     $user->delete( calling_user => $c->vg_user() );
 
-    $c->add_message("The user $name has been deleted.");
+    $c->session_object()->add_message("The user $name has been deleted.");
 
     $c->redirect_and_detach('/user');
 }
@@ -653,7 +653,7 @@ sub users_POST {
             $error = $CaptchaError{generic};
         }
 
-        $c->_redirect_with_error(
+        $c->redirect_with_error(
             error  => $error,
             uri    => '/user/new_user_form',
             params => \%user_data,
@@ -664,7 +664,7 @@ sub users_POST {
     eval { $user = VegGuide::User->create(%user_data); };
 
     if ( my $e = $@ ) {
-        $c->_redirect_with_error(
+        $c->redirect_with_error(
             error  => $e,
             uri    => '/user/new_user_form',
             params => \%user_data,
@@ -673,7 +673,7 @@ sub users_POST {
 
     $c->set_authen_cookie( value => { user_id => $user->user_id() } );
 
-    $c->add_message('Your account has been created.');
+    $c->session_object()->add_message('Your account has been created.');
 
     $c->redirect_and_detach( $c->request()->parameters()->{return_to}
             || site_uri( path => '/', with_host => 1 ) );

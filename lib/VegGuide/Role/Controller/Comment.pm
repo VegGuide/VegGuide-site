@@ -40,7 +40,7 @@ sub _comment_post {
     };
 
     if ( my $e = $@ ) {
-        $c->_redirect_with_error(
+        $c->redirect_with_error(
             error  => $e,
             uri    => $error_uri,
             params => $c->request()->parameters(),

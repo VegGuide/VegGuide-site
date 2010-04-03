@@ -15,14 +15,12 @@ sub _session_dbic_connect {
 
 sub store_session_data {
     my $self = shift;
-    my $key  = shift;
-    my $data = shift;
 
-    return if $key =~ /^expires:/;
+    return unless $self->has_session_object();
 
-    return unless defined $data && grep { !/^__/ } keys %{$data};
+    return if $_[0] =~ /^expires/;
 
-    $self->SUPER::store_session_data( $key, $data );
+    $self->SUPER::store_session_data(@_);
 }
 
 1;
