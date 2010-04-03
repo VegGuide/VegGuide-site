@@ -12,10 +12,6 @@
 
 <![endif]-->
 
-<div>
-  <& /lib/messages.mas &>
-</div>
-
 <div class="yui-g">
   <div class="yui-u first column">
     <& '/lib/front-page/' . $columns[0] . '.mas', %ARGS &>
