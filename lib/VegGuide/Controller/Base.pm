@@ -47,6 +47,9 @@ sub begin : Private {
     VegGuide::AlzaboWrapper->ClearCache();
     VegGuide::PerRequestCache->ClearCache();
 
+    # XXX - this is a hack to avoid checking in every call to ->ByID
+    VegGuide::Location->_check_cache_time();
+
     return unless $c->request()->looks_like_browser();
 
     unless ( VegGuide::Config->IsProduction()

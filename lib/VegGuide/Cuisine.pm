@@ -12,24 +12,11 @@ use VegGuide::Validate qw( validate validate_with SCALAR );
 
 my %CacheParams = (
     parent   => 'parent_cuisine_id',
-    roots    => '_real_root_cuisines',
     id       => 'cuisine_id',
-    order_by => VegGuide::Schema->Schema->Cuisine_t->name_c,
+    order_by => 'name',
 );
 
 __PACKAGE__->_build_cache( %CacheParams, first => 1 );
-
-sub _real_root_cuisines {
-    my $schema = VegGuide::Schema->Connect();
-
-    return __PACKAGE__->NewCursor(
-        $schema->Cuisine_t->rows_where(
-            where => [ $schema->Cuisine_t->parent_cuisine_id_c, '=', undef ],
-            order_by =>
-                [ $schema->Cuisine_t->name_c, 'ASC' ],
-        )
-    );
-}
 
 sub new {
     my $class = shift;

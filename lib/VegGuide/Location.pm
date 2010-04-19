@@ -41,9 +41,8 @@ use VegGuide::Validate
 
 my %CacheParams = (
     parent   => 'parent_location_id',
-    roots    => '_RealRootLocations',
     id       => 'location_id',
-    order_by => VegGuide::Schema->Schema->Location_t->name_c,
+    order_by => 'name',
 );
 
 __PACKAGE__->_build_cache( %CacheParams, first => 1 );
@@ -70,19 +69,6 @@ sub _PreloadTimeZones {
 
         DateTime::TimeZone->new( name => $name );
     }
-}
-
-sub _RealRootLocations {
-    my $schema = VegGuide::Schema->Connect();
-
-    return $_[0]->cursor(
-        $schema->Location_t->rows_where(
-            where => [
-                [ $schema->Location_t->parent_location_id_c, '=', undef ],
-            ],
-            order_by => [ $schema->Location_t->name_c, 'ASC' ],
-        )
-    );
 }
 
 sub new {
