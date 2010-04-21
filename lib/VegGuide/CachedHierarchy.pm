@@ -141,6 +141,12 @@ sub _fixup_cache {
 
     my $order_by = $Meta{$class}{params}{order_by};
 
+    $Cache{$class}{roots} = [
+        map  { $_->[0] }
+        sort { $a->[1] cmp $b->[1] }
+        map  { [ $_, $_->$order_by() ] } @{ $Cache{$class}{roots} }
+    ];
+
     for my $id ( keys %{ $Cache{$class}{nodes} } ) {
         $Cache{$class}{nodes}{$id}{parent}
             = $Cache{$class}{by_id}{ $Cache{$class}{nodes}{$id}{parent} }
