@@ -41,6 +41,7 @@
       2003-<% DateTime->now()->year() %>
       <a href="http://www.exploreveg.org/" title="Compassionate Action for
          Animals">Compassionate Action for Animals</a>.  All rights reserved.
+       <a href="/site/about#copyright">Copyright and licensing details</a>.
     </p>
 
     <div id="logos">
