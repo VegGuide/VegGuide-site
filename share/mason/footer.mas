@@ -49,7 +49,9 @@
       <a href="http://www.facebook.com/VegGuide"
          ><img src="/images/facebook-badge.gif"
                alt="Find us on Facebook"
-               height="44" width="144" /></a>
+               height="44" width="144"
+               style="margin-bottom: 8px"
+               /></a>
     </div>
 
   </div>
