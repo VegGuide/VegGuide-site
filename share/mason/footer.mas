@@ -35,11 +35,6 @@
   <div id="footer-copyright">
     <&| /lib/link/license.mas &><img id="cc-logo" src="http://i.creativecommons.org/l/by-nc-sa/3.0/us/88x31.png" alt="Creative Commons License" /></&>
 
-    <div id="organization-logos">
-      <a href="http://www.exploreveg.org/"><img src="/images/caa-logo.png" alt="CAA Logo" height="60" width="98" /></a>
-      <a href="http://www.mercyforanimals.org/"><img src="/images/mfa-logo.gif" alt="MFA Logo" height="60" width="117" /></a>
-    </div>
-
     <p>
       <a href="http://www.vegguide.org/" title="Home">VegGuide.Org</a>
       and its contents are Copyright &copy;
@@ -47,5 +42,15 @@
       <a href="http://www.exploreveg.org/" title="Compassionate Action for
          Animals">Compassionate Action for Animals</a>.  All rights reserved.
     </p>
+
+    <div id="logos">
+      <a href="http://www.exploreveg.org/"><img src="/images/caa-logo.png" alt="CAA Logo" height="60" width="98" /></a>
+      <a href="http://www.mercyforanimals.org/"><img src="/images/mfa-logo.gif" alt="MFA Logo" height="60" width="117" /></a>
+      <a href="http://www.facebook.com/VegGuide"
+         ><img src="/images/facebook-badge.gif"
+               alt="Find us on Facebook"
+               height="44" width="144" /></a>
+    </div>
+
   </div>
 </div>

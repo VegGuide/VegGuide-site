@@ -403,16 +403,17 @@ a.action-button-medium:visited, a.action-button-small:visited {
 #ft #cc-logo {
     border: none;
     float: left;
-    margin-top: 0.5em;
 }
 
-#ft #organization-logos {
-    float: right;
+#ft #logos {
+    clear: both;
+    margin-top: 2em;
+    text-align: center;
 }
 
-#ft #organization-logos img {
+#ft #logos img {
     border: none;
-    margin-left: 1em;
+    margin: 0 0.5em;
 }
 
 form {
