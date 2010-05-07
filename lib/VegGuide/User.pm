@@ -1182,6 +1182,19 @@ sub base_filename {
     return $self->user_id();
 }
 
+sub external_uri {
+    my $self = shift;
+
+    return unless $self->home_page();
+
+    if ( $self->home_page() =~ m{^https?://} ) {
+        return $self->home_page();
+    }
+    else {
+        return 'http://' . $self->home_page();
+    }
+}
+
 sub is_guest     {0}
 sub is_logged_in {1}
 

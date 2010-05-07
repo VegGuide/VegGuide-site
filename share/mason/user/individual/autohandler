@@ -7,7 +7,7 @@
 % }
 
 % if ( $user->home_page() ) {
-<a rel="nofollow" href="http://<% $user->home_page() %>">My website</a>
+<a rel="nofollow" href="<% $user->external_uri %>">My website</a>
 % }
 
 % if ( $user->how_veg() ) {

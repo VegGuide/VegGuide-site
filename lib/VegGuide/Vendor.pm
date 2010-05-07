@@ -886,7 +886,12 @@ sub external_uri {
 
     return unless $self->home_page();
 
-    return 'http://' . $self->home_page();
+    if ( $self->home_page() =~ m{^https?://} ) {
+        return $self->home_page();
+    }
+    else {
+        return 'http://' . $self->home_page();
+    }
 }
 
 sub review_count {
