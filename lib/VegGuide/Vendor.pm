@@ -2558,7 +2558,7 @@ sub VendorsWhere {
 
         return VegGuide::Cursor::VendorByAggregate->new(
             cursor => $schema->select(
-                select => [ $schema->Vendor_t()->vendor_id_c(), $distance ],
+                select => [ $schema->sqlmaker->DISTINCT( $schema->Vendor_t()->vendor_id_c() ), $distance ],
                 join   => \@join,
                 %where,
                 order_by => [
