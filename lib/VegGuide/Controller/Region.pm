@@ -823,6 +823,18 @@ sub comment : Local {
     $c->stash()->{template} = '/site/comment-list';
 }
 
+sub maintainers : Local {
+    my $self = shift;
+    my $c    = shift;
+
+    $c->redirect_and_detach('/')
+        unless $c->vg_user()->is_admin();
+
+    $c->stash()->{users} = VegGuide::User->RegionMaintainers();
+
+    $c->stash()->{template} = '/site/admin/region-maintainer-list';
+}
+
 1;
 
 __END__

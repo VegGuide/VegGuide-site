@@ -1,0 +1,21 @@
+<ul>
+% while ( my $user = $users->next() ) {
+  <li><& /lib/link/user.mas, user => $user &>
+      maintains
+    <ul style="margin-top: 0">
+%   my $locations = $user->owned_locations();
+%   while ( my $location = $locations->next() ) {
+      <li style="list-style-type: circle"><& /lib/link/location-and-parent.mas, location => $location &></li>
+%   }
+    </ul>
+  </li>
+% }
+</ul>
+
+<%args>
+$users
+</%args>
+
+<%method page_title>
+Region Maintainers
+</%method>

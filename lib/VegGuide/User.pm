@@ -292,6 +292,23 @@ sub is_location_owner {
     );
 }
 
+sub owned_locations {
+    my $self = shift;
+
+    my $schema = VegGuide::Schema->Connect();
+
+    return $self->cursor(
+        $schema->join(
+            select => $schema->Location_t,
+            join   => [ $schema->tables( 'Location', 'LocationOwner' ) ],
+            where  => [
+                [ $schema->LocationOwner_t->user_id_c, '=', $self->user_id ],
+            ],
+            order_by => $schema->Location_t->name_c,
+        )
+    );
+}
+
 sub can_delete_location {
     my $self = shift;
     my ($location) = validate_pos(
@@ -1554,6 +1571,21 @@ sub WithSubscriptions {
             distinct => $schema->User_t,
             join =>
                 [ $schema->tables( 'User', 'UserLocationSubscription' ) ],
+        )
+    );
+}
+
+sub RegionMaintainers {
+    my $class = shift;
+
+    my $schema = VegGuide::Schema->Connect();
+
+    return $class->cursor(
+        $schema->join(
+            distinct => $schema->User_t,
+            join =>
+                [ $schema->tables( 'User', 'LocationOwner' ) ],
+            order_by => [ $schema->User_t->real_name_c ],
         )
     );
 }
