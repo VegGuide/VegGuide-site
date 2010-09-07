@@ -660,7 +660,7 @@ The definitions are as follows ...
 <a name="vegan"></a>
 <h3>Vegan</h3>
 <p>
-For the purposes of VegGuide.Org, a restaurant is considered vegan if
+For the purposes of VegGuide.org, a restaurant is considered vegan if
 it is possible to randomly order anything on the menu and still have
 it be vegan.  For example, if everything on the menu is vegan but the
 restaurant offers cheese for pasta dishes on request, then it should
@@ -684,7 +684,7 @@ restaurants.
 <a name="vegetarian"></a>
 <h3>Vegetarian</h3>
 <p>
-For the purposes of this web guide, a restaurant is considered vegetarian if
+For the purposes of this VegGuide.org, a restaurant is considered vegetarian if
 it does not serve animal flesh in any form. Please note that sea creatures and
 chicken are animals, so seafood and chicken meat are not vegetarian.
 </p>
@@ -826,11 +826,11 @@ re-distributable</&>.
 
 <p>
 For an even longer explanation, you can read about
-the <a href="/site/philosophy">philosophy of VegGuide.Org</a>.
+the <a href="/site/philosophy">philosophy of VegGuide.org</a>.
 </p>
 
 </%def>
 
 <%method page_title>
-VegGuide.Org Help
+VegGuide.org Help
 </%method>
