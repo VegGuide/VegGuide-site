@@ -71,7 +71,7 @@ suggest changes to existing entries.
 
 <p>
 Adding an entry is done via the <strong>Add entry</strong> button,
-which is visible as you browse regions.  This link is only offered for
+which is visible as you browse regions. This link is only offered for
 regions which don't contain other regions, so you won't be able to add
 a new entry to Europe, instead you'll have to find the specific city.
 </p>
@@ -83,7 +83,7 @@ at a list of entries that is a result of searching by address or name.
 
 <p>
 To edit an existing entry, simply go to that entry's page, and use the
-appropriate "Edit" button.  The editing links are located near the
+appropriate "Edit" button. The editing links are located near the
 thing you're editing, so the <strong>"Edit"</strong> link right under
 the hours listing lets you edit the hours.
 </p>
@@ -95,7 +95,7 @@ To add a review, simply click on the
 
 <p>
 You can also add comments to a region, via the <strong>Add
-comment</strong> button.  If you have something useful to say about a
+comment</strong> button. If you have something useful to say about a
 region as a whole, as opposed to a specific entry, that's the place to
 do it.
 </p>
@@ -111,8 +111,8 @@ individually.</strong>
 
 <p>
 If you don't do this, we can't record phone numbers, hours, and so on
-for each entry.  Additionally, the map links will not work unless each
-entry has one address.  This is really important, because it helps
+for each entry. Additionally, the map links will not work unless each
+entry has one address. This is really important, because it helps
 people actually find places nearby.
 </p>
 
@@ -121,8 +121,8 @@ people actually find places nearby.
 
 <p>
 In order to make handling of vendors with multiple locations easier,
-we have a "clone" feature.  Cloning an entry lets you easily copy data
-from an existing entry into a new entry.  The cloned entry starts off
+we have a "clone" feature. Cloning an entry lets you easily copy data
+from an existing entry into a new entry. The cloned entry starts off
 identical to the original, except that you must enter new address and
 phone information and hours.
 </p>
@@ -132,7 +132,7 @@ phone information and hours.
 
 <p>
 Please use <strong>correct capitalization, grammar, and punctuation</strong>
-when entering names, addresses, and descriptions, etc.  Please <strong>do
+when entering names, addresses, and descriptions, etc. Please <strong>do
 not type in ALL CAPS</strong>!  TEXT THAT IS ALL CAPITALIZED IS REALLY HARD
 TO READ ;)
 </p>
@@ -159,11 +159,11 @@ anything like that.
 
 <p>
 For all other data fields, you can simply accept the defaults.
-However, there are good reasons to fill in more data.  Since the guide
+However, there are good reasons to fill in more data. Since the guide
 can filter listings based on things like non-smoking, wheelchair
 accessibility, and so on, adding more info increases the quality of
-search results.  Similarly, the guide can search for entries that are
-currently open, but only if you enter the hours for an entry.  Adding
+search results. Similarly, the guide can search for entries that are
+currently open, but only if you enter the hours for an entry. Adding
 address info for entries allows us to generate map links.
 </p>
 
@@ -176,10 +176,10 @@ Description" field, it is okay to just leave it blank.
 <h3>Is a given entry appropriate?</h3>
 
 <p>
-We're pretty flexible.  If an entry is likely to be of interest to
-other vegetarians or vegans, you should add it.  The one thing we do
+We're pretty flexible. If an entry is likely to be of interest to
+other vegetarians or vegans, you should add it. The one thing we do
 not want to see is entries added for the sole purpose of saying
-they're not veg-friendly.  If everyone did that, the system would
+they're not veg-friendly. If everyone did that, the system would
 consist almost entirely of entries telling you not to go somewhere,
 which wouldn't be very useful to anyone.
 </p>
@@ -190,18 +190,18 @@ which wouldn't be very useful to anyone.
 <h2>What are the guidelines for reviews?</h2>
 
 <p>
-There are only a few things that are unacceptable in reviews.  First
-of all, don't insult other reviewers.  It's fine to reference another
+There are only a few things that are unacceptable in reviews. First
+of all, don't insult other reviewers. It's fine to reference another
 review in your own, and to specifically disagree with it, but don't
-get personal.  Similarly, no personal attacks against anyone at the
-place you are reviewing.  It's okay to say a server was rude or weird,
+get personal. Similarly, no personal attacks against anyone at the
+place you are reviewing. It's okay to say a server was rude or weird,
 but keep it above the belt.
 </p>
 
 <p>
 Second, even if you are not 100% vegetarian, you're still very welcome
 to write a review, but please only talk about the vegetarian items you
-had.  If you really liked some non-vegetarian food you had, don't
+had. If you really liked some non-vegetarian food you had, don't
 mention it here.
 </p>
 
@@ -227,9 +227,9 @@ Reviews that don't follow these guidelines may be edited or deleted.
 <h2>What do the categories for entries mean?</h2>
 
 <p>
-The categories which can be assigned are detailed below.  Remember, an
+The categories which can be assigned are detailed below. Remember, an
 entry can have more than one category, so please choose all the ones
-that are appropriate.  The categories are primarily distinguished by
+that are appropriate. The categories are primarily distinguished by
 what things the vendor sells.
 </p>
 
@@ -244,17 +244,17 @@ what things the vendor sells.
  <li><strong>Bar</strong> - a vendor that focuses on serving alcoholic drinks.</li>
 
  <li><strong>Food Court or Street Vendor</strong> - a vendor at a food court or
- on a street.  The difference between this and a restaurant is that a
+ on a street. The difference between this and a restaurant is that a
  food court vendor probably doesn't have their own tables or any sort
- of table service.  Obviously, there's some overlap between this and a
- restaurant.  Use your best judgement.</li>
+ of table service. Obviously, there's some overlap between this and a
+ restaurant. Use your best judgement.</li>
 
  <li><strong>Grocery/Bakery/Deli</strong> - a vendor that focuses on selling food
  <strong>ingredients</strong> for people to prepare themselves, or
  bakery/deli goods.</li>
 
  <li><strong>Caterer</strong> - a vendor that provides complete meals for people
- or groups of people.  Note that a "personal chef" service would be
+ or groups of people. Note that a "personal chef" service would be
  considered a caterer as well.</li>
 
  <li><strong>General Store</strong> - use this category for vendors that sell
@@ -265,7 +265,7 @@ what things the vendor sells.
  groups.</li>
 
  <li><strong>Other</strong> - use this category for vendors that don't fit
- elsewhere.  In particular, this is intended for services like salons,
+ elsewhere. In particular, this is intended for services like salons,
  cleaning services, nutritionists, etc.</li>
 
 </ul>
@@ -380,9 +380,9 @@ average is relatively minimal.
 
 <p>
 When adding or editing an entry in some locations, the guide also
-allows you to enter information in other writing systems.  This is
+allows you to enter information in other writing systems. This is
 used for things like Chinese, where we want to have both a Romanized
-name (like "Hao Fan") and a name in Chinese characters.  Similarly,
+name (like "Hao Fan") and a name in Chinese characters. Similarly,
 having the address in both forms is quite useful.
 </p>
 
@@ -398,7 +398,7 @@ but this is a far more complex problem to solve.
 
 <p>
 An entry's long description, as well as user reviews and location
-comments, are all formatted with standard Wiki formatting.  Please
+comments, are all formatted with standard Wiki formatting. Please
 use this sparingly, as too much formatting looks ridiculous.
 </p>
 
@@ -425,7 +425,7 @@ A regular plain old paragraph.
 </p>
 
 <p>
-[http://www.vegguide.org/|VegGuide] - a link with a title.  The link and
+[http://www.vegguide.org/|VegGuide] - a link with a title. The link and
 title are separated by a vertical bar (|).
 </p>
 
@@ -481,13 +481,13 @@ Four or more hyphens make a line
 
 <p>
 When a user makes a suggestion for an entry, that suggestion is saved
-in the system.  It is reviewed by the system admins and/or the region
-maintainer(s).  They can approve or reject the suggestion.
+in the system. It is reviewed by the system admins and/or the region
+maintainer(s). They can approve or reject the suggestion.
 </p>
 
 <p>
 When you make a suggestion, you have the option to ask for an email
-notifying you when the selection has been accepted or rejected.  By
+notifying you when the selection has been accepted or rejected. By
 default, no email is sent.
 </p>
 </%def>
@@ -496,16 +496,16 @@ default, no email is sent.
 <h2>Your entries for [region X] stinks, what are you going to do about it?</h2>
 
 <p>
-Nothing.  But you should feel free to add new entries and suggest
-changes to existing ones.  Also, if you're really motivated, you can
+Nothing. But you should feel free to add new entries and suggest
+changes to existing ones. Also, if you're really motivated, you can
 become a powerful and awe-inspiring <a href="#access">region
-maintainer</a>.  If that interests you, <a href="/site/about">let
+maintainer</a>. If that interests you, <a href="/site/about">let
 us know</a>.
 </p>
 </%def>
 
 <%def .love_hate>
-<h2>I love/hate the guide.  Where can I discuss that with other users?</h2>
+<h2>I love/hate the guide. Where can I discuss that with other users?</h2>
 
 <p>
 The place for this is the <a
@@ -518,14 +518,14 @@ href="/mailman/listinfo/community">VegGuide community email list</a>.
 
 <p>
 Yes, that's why we offer a <a href="/site/rest_api/">REST API</a> for
-our database.  Please respect <&| /lib/link/license.mas &>our
+our database. Please respect <&| /lib/link/license.mas &>our
 license</&>, and note that the license <strong>does not allow
 commercial use</strong> of this data.
 </p>
 
 <p>
 We're very interested in finding partners who want to use our data in
-interesting ways.  If you have a cool idea, but need some help from
+interesting ways. If you have a cool idea, but need some help from
 us, <a href="/site/about">please contact us</a>.
 </p>
 
@@ -538,7 +538,7 @@ us, <a href="/site/about">please contact us</a>.
 
 <p>
 Tell all your friends and family about it, and encourage them to add
-reviews and entries.  If you can, order some of our <a
+reviews and entries. If you can, order some of our <a
 href="/site/promo_cards">promo cards</a> and distribute them in your
 area.
 </p>
@@ -576,8 +576,8 @@ Not right now, we need to make some from the current logo.
 <h2>Will you add [some restaurant, store, whatever]?</h2>
 
 <p>
-No.  We're very, very lazy, and creating the site itself has
-completely exhausted us.  That's why we've made it possible for anyone
+No. We're very, very lazy, and creating the site itself has
+completely exhausted us. That's why we've made it possible for anyone
 to <a href="/user/new_user_form">sign up</a> and start <a
 href="#add_or_edit">adding new entries</a> immediately.
 </p>
@@ -587,7 +587,7 @@ href="#add_or_edit">adding new entries</a> immediately.
 <h2>Will you add feature X?</h2>
 
 <p>
-Probably.  Please see our <a href="/site/todo">todo list</a> first.
+Probably. Please see our <a href="/site/todo">todo list</a> first.
 If you want to discuss potential features with other users please join
 the <a href="/mailman/listinfo/community">VegGuide community email
 list</a>.
@@ -608,16 +608,16 @@ There are three levels of access to the Guide:
 </ul>
 
 <p>
-System admins can edit or delete anything on the system.  Regular
+System admins can edit or delete anything on the system. Regular
 users are able to add new entries, edit entries which they submitted
 originally, and edit or delete their own comments and reviews.
 </p>
 
 <p>
-Finally, region maintainers are given extra privileges to administer
-certain regions in the guide.  For those regions, they are able to
-edit any entry, comment or review.  They can also approve or reject
-changes suggested by regular users.
+Finally, region maintainers are given extra privileges to administer certain
+regions in the guide. For those regions, they are able to edit any entry or
+region comment, but not reviews. They can also approve or reject changes
+suggested by regular users.
 </p>
 
 <p>
@@ -631,7 +631,7 @@ If you are interested in being a region maintainer for an area, please
 
 <p>
 You can add regions to your personal watch list by clicking on the
-"watch list" icon (an eye) when you are looking at a region.  Once a
+"watch list" icon (an eye) when you are looking at a region. Once a
 week, you'll receive an email telling you what new entries have been
 created for all the regions on your watch list.
 </p>
@@ -662,9 +662,9 @@ The definitions are as follows ...
 <p>
 For the purposes of VegGuide.org, a restaurant is considered vegan if
 it is possible to randomly order anything on the menu and still have
-it be vegan.  For example, if everything on the menu is vegan but the
+it be vegan. For example, if everything on the menu is vegan but the
 restaurant offers cheese for pasta dishes on request, then it should
-still be considered a vegan restaurant.  Honey is <strong>not</strong>
+still be considered a vegan restaurant. Honey is <strong>not</strong>
 considered vegan.
 </p>
 
@@ -675,7 +675,7 @@ questions about the ingredients.
 </p>
 
 <p>
-If you're not sure, use your best judgement.  Remember, the purpose of
+If you're not sure, use your best judgement. Remember, the purpose of
 this guide is to make the lives of vegetarians and vegans easier and
 more pleasant, not to enforce strict standards of vegan purity on
 restaurants.
@@ -693,10 +693,10 @@ chicken are animals, so seafood and chicken meat are not vegetarian.
 <h3>Vegan-friendly</h3>
 <p>
 This categorization is far more flexible than the others, and should
-be influenced by the restaurants's locale.  For example, in places
+be influenced by the restaurants's locale. For example, in places
 like New York City or San Francisco, which have many vegan and
 vegetarian restaurants, a restaurant offering a single vegan entree
-would not be considered vegan-friendly.  On the other hand, in a small
+would not be considered vegan-friendly. On the other hand, in a small
 town vegan-friendly may mean a restaurant that is willing to make
 pasta with marinara sauce.
 </p>
@@ -709,7 +709,7 @@ minimal vegan-friendliness is worth noting.
 <a name="vegetarian-friendly"></a>
 <h3>Vegetarian-friendly</h3>
 <p>
-Like vegan-friendly, the definition of this term varies by locale.  A
+Like vegan-friendly, the definition of this term varies by locale. A
 restaurant need not be vegetarian-friendly to be added to the guide,
 though there should be some other compelling reason for adding it if
 it isn't vegetarian-friendly. For example, if a restaurant has a few
@@ -722,8 +722,8 @@ feel free to add it.
 <h2>Who pays for this site?</h2>
 
 <p>
-This site has pretty low expenses at the moment.  XMission provides
-our Internet connectivity, and Eric Waters provided our server.  If
+This site has pretty low expenses at the moment. XMission provides
+our Internet connectivity, and Eric Waters provided our server. If
 you want to help out, feel free
 to <a href="http://www.exploreveg.org/donate">make a donation</a> to
 Compassionate Action for Animals.
@@ -743,7 +743,7 @@ be usable in text-only browsers.
 
 <p>
 If you are using an older version of Internet Explorer or Mozilla, the
-site layout may look pretty strange.  We recommend upgrading to the
+site layout may look pretty strange. We recommend upgrading to the
 latest version of <a href="http://www.getfirefox.com/">Firefox</a>
 available, or at least to IE7 if you cannot use Firefox.
 </p>
@@ -754,7 +754,7 @@ available, or at least to IE7 if you cannot use Firefox.
 
 <p>
 You have to have your browser set to accept the language for the
-localized content.  For example, if you look at the Singapore entries,
+localized content. For example, if you look at the Singapore entries,
 you'll need to have your browser set to accept Chinese to see the
 localized data.
 </p>
@@ -767,7 +767,7 @@ Languages</code> and click on <code>"Choose"</code>.
 <p>
 If you're stuck using that horrid thing Microsoft pretends is a web
 browser, then we suggest upgrading to <a
-href="http://www.getfirefox.com/">Firefox</a>.  If you don't want to
+href="http://www.getfirefox.com/">Firefox</a>. If you don't want to
 upgrade, then Windows users of Internet Explorer should go to <code>Tools
 or View or Extras -> Internet Options -> (General) Languages</code>, and Mac
 users should go to <code>Edit -> Preferences -> Web Browser ->
@@ -796,7 +796,7 @@ everywhere.
 <h2>Why are you competing with [site X]?</h2>
 
 <p>
-There's a number of answers to this question.  Some of our reasons for
+There's a number of answers to this question. Some of our reasons for
 starting this site include:
 </p>
 
