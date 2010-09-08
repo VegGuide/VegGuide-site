@@ -758,7 +758,10 @@ sub delete {
     my $vendors = $self->vendors;
 
     while ( my $vendor = $vendors->next ) {
-        $vendor->update( user_id => $p{calling_user}->user_id );
+        $vendor->update(
+            user_id => $p{calling_user}->user_id,
+            user    => $p{calling_user},
+        );
     }
 
     $self->SUPER::delete;
