@@ -3,7 +3,7 @@
       <h2>Nearby</h2>
     </div>
 
-    <div class="column-content">
+    <div id="nearby" class="column-content">
 % if ($city) {
 %   if ( my $count = $search->count() ) {
       <ul>
@@ -16,7 +16,7 @@
 %     }
       </ul>
 
-      <p>
+      <p id="nearby-browse-all">
         Browse all entries in <& /lib/link/location-and-parent.mas, location
         => $location &>, including grocers, organizations, etc.
       </p>

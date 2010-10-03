@@ -821,6 +821,60 @@ sub images_POST {
         $c->stash()->{template} = '/site/entry-search-results';
     }
 
+    sub near_filter_GET {
+        my $self = shift;
+        my $c    = shift;
+
+        $self->_set_search_in_stash( $c, %SearchConfig );
+
+        my $search = $c->stash()->{search};
+
+        my $count = $search->count();
+
+        unless ($count) {
+            $self->status_ok(
+                $c,
+                entity => {},
+            );
+
+            return;
+        }
+
+        my @vendors = $search->vendors()->all();
+
+        my @entries = map {
+            {
+                uri      => entry_uri( vendor => $_ ),
+                name     => $_->name(),
+            }
+        } @vendors;
+
+        my $loc      = $vendors[0]->location();
+        my %location = (
+            name   => $loc->name(),
+            parent => (
+                  $loc->parent()
+                ? $loc->parent()->name()
+                : q{}
+            ),
+            uri => region_uri( location => $loc ),
+        );
+
+        if ($count > 10 ) {
+            $search->set_cursor_params( page => 1, limit => $c->vg_user()->entries_per_page() );
+            $location{search_uri} = $search->uri();
+        }
+
+        $self->status_ok(
+            $c,
+            entity => {
+                count    => $count,
+                entries  => \@entries,
+                location => \%location,
+            },
+        );
+    }
+
     sub near_filter_POST : Private {
         my $self = shift;
         my $c    = shift;
@@ -828,34 +882,18 @@ sub images_POST {
         return $self->_search_post( $c, 0, %SearchConfig );
     }
 
-    sub near_map :
+    sub near :
         LocalRegex('^near/(-?[\d\.]+)(?:%2C|,)(-?[\d\.]+)/map(?:/(.*))?$') :
         ActionClass('+VegGuide::Action::REST') {
     }
 
-    sub near_map_GET_html {
+    sub near_html {
         my $self = shift;
         my $c    = shift;
 
-        $self->_set_map_search_in_stash( $c, %SearchConfig );
-
-        my $search = $c->stash()->{search};
-
-        return unless $search;
-
-        $self->_add_search_tabs( $c, $search );
-
-        $c->tab_by_id('map')->set_is_selected(1);
-
-        $c->response()->breadcrumbs()->add(
-            uri   => $search->uri(),
-            label => $search->title(),
-        );
-
-        $c->stash()->{template} = '/site/entry-search-results-map';
     }
 
-    sub near_map_POST : Private {
+    sub near_POST : Private {
         my $self = shift;
         my $c    = shift;
 
