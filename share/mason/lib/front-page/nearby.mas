@@ -16,7 +16,7 @@
 %     }
       </ul>
 
-      <p id="nearby-browse-all">
+      <p>
         Browse all entries in <& /lib/link/location-and-parent.mas, location
         => $location &>, including grocers, organizations, etc.
       </p>
