@@ -34,7 +34,7 @@ VegGuide.FrontPageGeolocation._getNearbyList = function (location) {
 
     var uri = "/entry/near/"
               + location.coords.latitude + "%2C" + location.coords.longitude
-              + "/filter/category_id=1;veg_level=2";
+              + "/filter/category_id=1;veg_level=2;allow_closed=0";
 
     var req = new HTTP.Request( {
         parameters: "limit=10;order_by=rand;address=Your+location",
