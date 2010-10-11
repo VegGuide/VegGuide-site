@@ -882,18 +882,34 @@ sub images_POST {
         return $self->_search_post( $c, 0, %SearchConfig );
     }
 
-    sub near :
+    sub near_map :
         LocalRegex('^near/(-?[\d\.]+)(?:%2C|,)(-?[\d\.]+)/map(?:/(.*))?$') :
         ActionClass('+VegGuide::Action::REST') {
     }
 
-    sub near_html {
+    sub near_map_GET_html {
         my $self = shift;
         my $c    = shift;
 
+        $self->_set_map_search_in_stash( $c, %SearchConfig );
+
+        my $search = $c->stash()->{search};
+
+        return unless $search;
+
+        $self->_add_search_tabs( $c, $search );
+
+        $c->tab_by_id('map')->set_is_selected(1);
+
+        $c->response()->breadcrumbs()->add(
+            uri   => $search->uri(),
+            label => $search->title(),
+        );
+
+        $c->stash()->{template} = '/site/entry-search-results-map';
     }
 
-    sub near_POST : Private {
+    sub near_map_POST : Private {
         my $self = shift;
         my $c    = shift;
 
