@@ -3,7 +3,7 @@
 
 % if ( $c->vg_user()->skin_count() || $c->vg_user()->viewable_suggestion_count() || $c->vg_user()->is_admin() ) {
     <ul>
-%   if ( $c->vg_user()->skin_count() ) {
+%   if ( $c->vg_user()->skin_count() || $c->vg_user()->is_admin() ) {
       <li class="first">
         <a href="<% user_uri( user => $c->vg_user(), path => 'skins' ) | h %>" title="Skins"
            >Skins</a>
