@@ -37,7 +37,7 @@ VegGuide.FrontPageGeolocation._getNearbyList = function (location) {
               + "/filter/category_id=1;veg_level=2;allow_closed=0";
 
     var req = new HTTP.Request( {
-        parameters: "limit=10;order_by=rand;address=Your+location",
+        parameters: "limit=10;order_by=distance;address=Your+location",
         method:     "get",
         onSuccess:  VegGuide.FrontPageGeolocation._updateNearbyList
         }
@@ -53,7 +53,7 @@ VegGuide.FrontPageGeolocation._updateNearbyList = function (res) {
         var list = "<ul>";
 
         for ( var i = 0; i < response.entries.length; i++ ) {
-            list = list + '<li><a href="' + response.entries[i].uri + '">' + response.entries[i].name + "</a></li>";
+            list = list + '<li><a href="' + response.entries[i].uri + '">' + response.entries[i].name + " - " + response.entries[i].distance + "</a></li>";
         }
 
         var loc_name = response.location.name;

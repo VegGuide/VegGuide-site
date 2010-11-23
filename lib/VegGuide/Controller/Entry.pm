@@ -840,16 +840,30 @@ sub images_POST {
             return;
         }
 
-        my @vendors = $search->vendors()->all();
+        my $vendors = $search->vendors();
 
-        my @entries = map {
-            {
-                uri      => entry_uri( vendor => $_ ),
-                name     => $_->name(),
-            }
-        } @vendors;
+        my @entries;
 
-        my $loc      = $vendors[0]->location();
+        my $loc;
+        while ( my $vendor = $vendors->next() ) {
+            $loc ||= $vendor->location();
+
+            my $distance = $vendor->distance_from(
+                latitude  => $search->latitude(),
+                longitude => $search->longitude(),
+                unit      => $search->unit(),
+            );
+
+            my $with_units = $distance . ' ' . $search->unit();
+            $with_units .= 's' unless $distance == 1;
+
+            push @entries, {
+                uri      => entry_uri( vendor => $vendor ),
+                name     => $vendor->name(),
+                distance => $with_units,
+                };
+        }
+
         my %location = (
             name   => $loc->name(),
             parent => (
