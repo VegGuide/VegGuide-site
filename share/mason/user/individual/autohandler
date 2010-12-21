@@ -43,7 +43,3 @@ $user
 <%method page_title>
 <% $m->caller_args(-1)->{user}->real_name() | h %>
 </%method>
-
-<%method title>
-VegGuide.Org | <% $m->caller_args(-1)->{user}->real_name() | h %>
-</%method>

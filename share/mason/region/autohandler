@@ -5,7 +5,7 @@ $location
 </%args>
 
 <%method title>
-VegGuide.Org | <& /lib/l10n/location-name.mas, location => $m->caller_args(1)->{location} &>
+<% $m->caller_args(1)->{location}->name_with_parent() %> | VegGuide.Org
 </%method>
 
 <%method page_title>
