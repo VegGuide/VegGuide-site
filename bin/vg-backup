@@ -3,28 +3,40 @@
 use strict;
 use warnings;
 
+use Getopt::Long;
 use VegGuide::Config;
 
 exit 0
     unless VegGuide::Config->IsProduction()
-           && ! VegGuide::Config->IsTest();
+        && !VegGuide::Config->IsTest();
+
+my $verbose;
+GetOptions( 'verbose' => \$verbose );
 
 # Should be run as me (autarch) on the vegguide.org box. No need to
 # run as root.
 
-system( qw( mysqldump -u root RegVeg --ignore-table RegVeg.Session -r /home/autarch/RegVeg.sql ) )
-    and die 'Cannot execute mysqldump';
+system(
+    qw( mysqldump -u root RegVeg --ignore-table RegVeg.Session -r /home/autarch/RegVeg.sql )
+) and die 'Cannot execute mysqldump';
 
-for my $host ( qw( urth.org li205-70.members.linode.com ) ) {
-    for my $source ( qw( /var/lib/vegguide/entry-images
-                         /var/lib/vegguide/user-images
-                         /var/lib/vegguide/skin-images
-                         /home/autarch/RegVeg.sql
-                         /var/lib/mailman/archives
-                         /var/lib/mailman/lists ) )
-    {
-        system( 'rsync', '-e', 'ssh -i /home/autarch/.ssh/id_rsa.backups', '-r',
-                $source, $host . ':/home/autarch/backup/vegguide.org/' )
-            and die "Cannot rsync $source";
+for my $host (qw( urth.org li205-70.members.linode.com )) {
+    for my $source (
+        qw( /var/lib/vegguide/entry-images
+        /var/lib/vegguide/user-images
+        /var/lib/vegguide/skin-images
+        /home/autarch/RegVeg.sql
+        /var/lib/mailman/archives
+        /var/lib/mailman/lists )
+        ) {
+
+        my @v = $verbose ? '-v' : ();
+        system(
+            'rsync',
+            @v,
+            '-e', 'ssh -i /home/autarch/.ssh/id_rsa.backups',
+            '-r',
+            $source, $host . ':/home/autarch/backup/vegguide.org/'
+        ) and die "Cannot rsync $source";
     }
 }
