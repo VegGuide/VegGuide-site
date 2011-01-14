@@ -11,7 +11,15 @@ exit 0
         && !VegGuide::Config->IsTest();
 
 my $verbose;
-GetOptions( 'verbose' => \$verbose );
+my @hosts;
+
+GetOptions(
+    'verbose' => \$verbose,
+    'host=s@' => \@hosts,
+);
+
+@hosts = qw( urth.org li205-70.members.linode.com )
+    unless @hosts;
 
 # Should be run as me (autarch) on the vegguide.org box. No need to
 # run as root.
@@ -20,7 +28,7 @@ system(
     qw( mysqldump -u root RegVeg --ignore-table RegVeg.Session -r /home/autarch/RegVeg.sql )
 ) and die 'Cannot execute mysqldump';
 
-for my $host (qw( urth.org li205-70.members.linode.com )) {
+for my $host (@hosts) {
     for my $source (
         qw( /var/lib/vegguide/entry-images
         /var/lib/vegguide/user-images
