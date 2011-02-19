@@ -5,6 +5,7 @@ use warnings;
 
 use DateTime;
 use DateTime::Format::MySQL;
+use Encode::ZapCP1252;
 use LWP::Simple qw( get );
 use VegGuide::VendorSource::Filter;
 use VegGuide::User;
@@ -55,6 +56,7 @@ sub _get_feed {
         my $xml  = shift;
 
         my $items = eval { $Simple->XMLin($xml)->{item} };
+        warn $@ if $@;
 
         return unless $items;
 
