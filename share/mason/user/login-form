@@ -77,7 +77,7 @@
     </p>
 
     <p>
-      <a class="action-button" href="/user/new_user_form">Create an account</a>.
+      <a class="action-button" href="/user/new_user_form">Create an account</a>
     </p>
   </div>
 </div>
