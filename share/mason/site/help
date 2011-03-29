@@ -792,7 +792,7 @@ everywhere.
 </p>
 </%def>
 
-<%def .competition>
+<%def .contact>
 <h2>Why are you competing with [site X]?</h2>
 
 <p>
@@ -829,6 +829,12 @@ For an even longer explanation, you can read about
 the <a href="/site/philosophy">philosophy of VegGuide.org</a>.
 </p>
 
+</%def>
+
+<%def .competition>
+<h2>How Can I Contact Someone About This Site?</h2>
+
+<& /lib/contact-us.mas &>
 </%def>
 
 <%method page_title>

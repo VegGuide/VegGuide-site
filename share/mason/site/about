@@ -171,25 +171,7 @@ Donations go to Compassionate Action for Animals, a 501c3 nonprofit.
 
 <h2>Contact Us</h2>
 
-<p>
-If you want to ask for some sort of link exchange, please
-don't. Instead, just add your site to the
-<a href="<% region_uri( location => $internet ) | h %>">Internet "region"</a>
-listings.
-</p>
-
-<p>
-It is our editorial policy not to remove negative reviews submitted by
-our users unless we find them offensive or inappropriate. We reserve
-the right to publicly repost any threatening correspondence related to
-negative reviews, which will prove significantly worse for your
-reputation than the reviews in question.
-</p>
-
-<p>
-Email us
-at <a href="mailto:guide@vegguide.org">guide@vegguide.org</a>.
-</p>
+<& /lib/contact-us.mas &>
 
 <%init>
 my $internet = VegGuide::Location->new( name => 'Internet' );
