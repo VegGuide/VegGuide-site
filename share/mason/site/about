@@ -173,10 +173,6 @@ Donations go to Compassionate Action for Animals, a 501c3 nonprofit.
 
 <& /lib/contact-us.mas &>
 
-<%init>
-my $internet = VegGuide::Location->new( name => 'Internet' );
-</%init>
-
 <%method page_title>
 About VegGuide.Org
 </%method>
