@@ -832,7 +832,7 @@ the <a href="/site/philosophy">philosophy of VegGuide.org</a>.
 </%def>
 
 <%def .competition>
-<h2>How Can I Contact Someone About This Site?</h2>
+<h2>How can I contact someone about this site?</h2>
 
 <& /lib/contact-us.mas &>
 </%def>
