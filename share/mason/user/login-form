@@ -83,5 +83,8 @@
 </div>
 
 <%init>
-my $return_to = $c->request()->param('return_to') || $c->session()->{saved_params}{return_to} || '/';
+my $return_to 
+    = $c->request()->param('return_to')
+    || $c->session()->{saved_params}{return_to}
+    || site_uri( path => '/', with_host => 1 );
 </%init>
