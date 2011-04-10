@@ -27,12 +27,16 @@ GetOptions(
 # run as root.
 
 if ($dump) {
+    print "Dumping database\n\n" if $verbose;
+
     system(
         qw( mysqldump -u root RegVeg --ignore-table RegVeg.Session -r /home/autarch/RegVeg.sql )
     ) and die 'Cannot execute mysqldump';
 }
 
 for my $host (@hosts) {
+    print "Rsyncing to $host\n\n" if $verbose;
+
     for my $source (
         qw( /var/lib/vegguide/entry-images
         /var/lib/vegguide/user-images
