@@ -43,7 +43,7 @@ for my $host (@hosts) {
             'rsync',
             @v,
             '-e', 'ssh -i /home/autarch/.ssh/id_rsa.backups',
-            '-r',
+            '-r', '--links',
             $source, $host . ':/home/autarch/backup/vegguide.org/'
         ) and die "Cannot rsync $source to $host";
     }
