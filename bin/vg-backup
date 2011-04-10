@@ -35,7 +35,7 @@ if ($dump) {
 }
 
 for my $host (@hosts) {
-    print "Rsyncing to $host\n\n" if $verbose;
+    print "Rsyncing to $host\n\n";
 
     for my $source (
         qw( /var/lib/vegguide/entry-images
@@ -56,3 +56,5 @@ for my $host (@hosts) {
         ) and die "Cannot rsync $source to $host";
     }
 }
+
+print "vg-backup completed successfully\n\n";
