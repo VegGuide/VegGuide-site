@@ -81,7 +81,7 @@ sub resize {
     my $status = $img->write(
         filename => $path,
         quality  => $img->get('quality'),
-        type     => 'Palette',
+        type     => 'TrueColor',
     );
 
     die $status if $status;
