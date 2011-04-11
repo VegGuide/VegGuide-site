@@ -5,7 +5,6 @@ use warnings;
 
 use DateTime;
 use DateTime::Format::MySQL;
-use Encode::ZapCP1252;
 use LWP::Simple qw( get );
 use VegGuide::VendorSource::Filter;
 use VegGuide::User;
