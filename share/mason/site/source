@@ -1,6 +1,7 @@
 <p>
-The source for this site is in a Mercurial repository
-at <a href="http://hg.urth.org/hg/VegGuide">http://hg.urth.org/hg/VegGuide</a>.
+The source for this site is in a Git repository
+at <a href="http://git.urth.org/VegGuide.git">http://git.urth.org/VegGuide.git</a>. You
+can clone anonymously from <code>git://git.urth.org/VegGuide.git</code>.
 </p>
 
 <p>
