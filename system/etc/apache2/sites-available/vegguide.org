@@ -159,9 +159,9 @@
     </Location>
 
     <IfDefine !Testing>
-        AliasMatch   (/\d+)?/css/vegguide-combined.css       /var/lib/vegguide/css/vegguide-combined.css
-        AliasMatch   (/\d+)?/css(.+)       /usr/local/share/vegguide/css$2
-        AliasMatch   (/\d+)?/images(.+)    /usr/local/share/vegguide/images$2
+        AliasMatch   (/\w+)?/css/vegguide-combined.css       /var/lib/vegguide/css/vegguide-combined.css
+        AliasMatch   (/\w+)?/css(.+)       /usr/local/share/vegguide/css$2
+        AliasMatch   (/\w+)?/images(.+)    /usr/local/share/vegguide/images$2
         Alias        /static/rss           /var/cache/vegguide/rss
         Alias        /static               /usr/local/share/vegguide/static
         Alias        /w3c                  /usr/local/share/vegguide/w3c
@@ -175,9 +175,9 @@
     </IfDefine>
 
     <IfDefine Testing>
-        AliasMatch   (/\d+)?/css/vegguide-combined.css       /home/autarch/.vegguide/var/lib/css/vegguide-combined.css
-        AliasMatch   (/\d+)?/css(.+)       ${PWD}/share/css$2
-        AliasMatch   (/\d+)?/images(.+)    ${PWD}/share/images$2
+        AliasMatch   (/\w+)?/css/vegguide-combined.css       /home/autarch/.vegguide/var/lib/css/vegguide-combined.css
+        AliasMatch   (/\w+)?/css(.+)       ${PWD}/share/css$2
+        AliasMatch   (/\w+)?/images(.+)    ${PWD}/share/images$2
         Alias        /static/rss           /var/cache/vegguide/rss
         Alias        /static               ${PWD}/share/static
         Alias        /w3c                  ${PWD}/share/w3c
