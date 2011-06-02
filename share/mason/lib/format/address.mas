@@ -1,0 +1,63 @@
+<&| /lib/filter/remove-last-br.mas &>
+
+% if ( $city_first ) {
+    <& .city_and_region, address => \%address &>
+% }
+
+% for my $line ( grep { ! string_is_empty($_) } @address{ 'street1', 'street2' } ) {
+    <span itemprop="streetAddress">
+      <% $line | h %>
+    </span>
+    <br />
+% }
+
+% if ( ! $city_first ) {
+    <& .city_and_region, address => \%address &>
+    <& .postal_code, address => \%address &>
+% } else {
+    <& .postal_code, address => \%address &>
+% }
+
+</&>
+
+<%args>
+$vendor
+%address
+$localized => 0
+</%args>
+
+<%init>
+my $city_first = $localized && $vendor->location()->address_format() eq 'Hungarian';
+</%init>
+
+<%def .city_and_region>
+% if ( ! string_is_empty( $address{city} ) ) {
+    <span itemprop="addressLocality"><% $address{city} | h %></span>\
+% }
+% if ( all { ! string_is_empty($_) } @address{ 'city', 'region' } ) {
+,
+% }
+% if ( ! string_is_empty( $address{region} ) ) {
+    <span itemprop="addressRegion"><% $address{region} | h %></span>
+% }
+
+<%args>
+%address
+</%args>
+
+<%init>
+return if all { string_is_empty($_) } @address{ 'city', 'region' };
+</%init>
+</%def>
+
+<%def .postal_code>
+<span itemprop="postalCode"><% $address{postal_code} | h %></span>
+
+<%args>
+%address
+</%args>
+
+<%init>
+return if string_is_empty( $address{postal_code} );
+</%init>
+</%def>

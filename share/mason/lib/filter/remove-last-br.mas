@@ -1,0 +1,7 @@
+<%init>
+my $content = $m->content();
+
+$content =~ s{<br(?:\s*/)>\s*$}{};
+
+$m->print($content);
+</%init>
