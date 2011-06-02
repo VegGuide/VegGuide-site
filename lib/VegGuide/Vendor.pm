@@ -1766,6 +1766,34 @@ sub _validate_hour_sets {
     }
 }
 
+sub has_address {
+    my $self = shift;
+
+    return grep { ! string_is_empty($_) } $self->address_pieces();
+}
+
+sub address_pieces {
+    my $self = shift;
+
+    my $meth = '_address_pieces_' . $self->location->address_format;
+
+    $self->$meth();
+}
+
+sub _address_pieces_standard {
+    return ( grep {defined} $_[0]->address1, $_[0]->address2,
+        $_[0]->city_region_postal_code );
+}
+
+sub _address_pieces_Hungarian {
+    return (
+        join ', ',
+        grep {defined}
+            $_[0]->postal_code, $_[0]->city, $_[0]->region, $_[0]->address1,
+        $_[0]->address2
+    );
+}
+
 sub address_hash {
     my $self = shift;
 
