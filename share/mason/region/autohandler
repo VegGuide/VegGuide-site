@@ -9,14 +9,14 @@ $location
 </%method>
 
 <%method page_title>
-<h1 id="page-title"><& /lib/l10n/location-name.mas, location => $location &>
+<div id="page-title">
+  <h1><& /lib/l10n/location-name.mas, location => $location &></h1>
 % if ( my $parent = $location->parent() ) {
-<br />
-<span id="link-to-parent"><& /lib/link/location.mas,
-                             location => $parent
-                           &></span>
+  <& /lib/link/location.mas,
+     location => $parent
+    &>
 % }
-</h1>
+</div>
 <%args>
 $location
 </%args>

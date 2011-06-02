@@ -22,9 +22,10 @@
 
     <ul id="ratings-list" class="no-top-margin">
 %   while ( my ( $rating, $user ) = $ratings->next() ) {
-      <li><a name="user-id-<% $user->user_id() %>"></a>
-          <& /lib/link/user.mas, user => $user &>:
+      <li itemscope itemtype="http://schema.org/Review"><a name="user-id-<% $user->user_id() %>"></a>
+          <& /lib/link/user.mas, user => $user, itemprop => 'author' &>:
           <& /lib/stars-for-rating.mas, rating => $rating->rating(), color => 'green' &>
+          <meta itemprop="reviewRating" content="<% $rating->rating() %>" />
       </li>
 %   }
     </ul>

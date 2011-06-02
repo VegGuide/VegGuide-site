@@ -19,6 +19,7 @@
 
 % if ( defined $reservations ) {
 <h3><% $reservations ? 'Accepts Reservations' : 'No Reservations' %></h3>
+<meta itemprop="acceptsReservations" content="<% $reservations ? 'Yes' : 'No' %>" />
 % }
 
 % if ( defined $wheelchair ) {
@@ -28,7 +29,7 @@
 % if ( $vendor->is_restaurant() ) {
 <h3>Prices</h3>
 
-<p><% $vendor->price_range()->description() | h %></p>
+<p itemprop="priceRange"><% $vendor->price_range()->description() | h %></p>
 % }
 
 % if ($payment) {
@@ -58,7 +59,7 @@
 
 <ul class="no-top-margin">
 %   for my $cuisine (@cuisines) {
-  <li><% $cuisine->name() | h %></li>
+  <li itemprop="servesCuisine"><% $cuisine->name() | h %></li>
 %   }
 </ul>
 % }

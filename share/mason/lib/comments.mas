@@ -1,4 +1,7 @@
 % while ( my ( $comment, $user, @extra ) = $comments->next() ) {
+%   if ($vendor) {
+  <div itemprop="reviews" itemscope itemtype="http://schema.org/Review">
+%   }
 %   $vendor = shift @extra if @extra;
      <a name="user-id-<% $user->user_id() %>"></a>
 %   if ($show_location) {
@@ -17,19 +20,31 @@
        </&>
 %   }
        <span class="user-name">
-         <& /lib/link/user.mas, user => $user &>
+         <& /lib/link/user.mas, user => $user, itemprop => $vendor ? 'author' : q{} &>
        </span>
        <span class="comment-date">
          <br />
-         <& /lib/format/date.mas, date => $comment->last_modified_datetime() &>
+%   if ($vendor) {
+         <time itemprop="publishDate" datetime="<% $comment->last_modified_datetime_object()->iso8601() | h %>">
+%   }
+           <& /lib/format/date.mas, date => $comment->last_modified_datetime_object() &>
+%   if ($vendor) {
+         </time>
+%    }
        </span>
      </h3>
 
      <div class="comment-body">
+
 %   if ($vendor) {
 <& .rating, vendor => $vendor, user => $user &>
-%   }
+       <div itemprop="reviewBody">
+%    }
+
        <% VegGuide::Util::text_to_html( text => $comment->comment() ) %>
+%   if ($vendor) {
+       </div>
+%    }
 
 %   if ( $c->vg_user()->$edit_meth($comment) ) {
        <div>
@@ -48,7 +63,7 @@
        </div>
 %   }
      </div>
-
+  </div>
 % }
 
 <%args>
@@ -64,6 +79,7 @@ my $edit_meth = $vendor ? 'can_edit_review' : 'can_edit_comment';
 <%def .rating>
        <div class="rating">
         <& /lib/stars-for-rating.mas, rating => $rating, color => 'green' &>
+        <meta itemprop="reviewRating" content="<% $rating %>" />
        </div>
 
 <%args>

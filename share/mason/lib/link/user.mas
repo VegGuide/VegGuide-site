@@ -1,4 +1,8 @@
-<a href="<% user_uri( user => $user, @path, with_host => $with_host ) %>" class="user" title="<% $user->real_name() | h %>">\
+<a href="<% user_uri( user => $user, @path, with_host => $with_host ) %>" class="user" title="<% $user->real_name() | h %>"
+% if ($itemprop) {
+itemprop="<% $itemprop | h %>"
+% }
+>\
 % if ( $text ) {
 <% $text %>\
 % } else {
@@ -10,6 +14,7 @@ $user
 $path => undef
 $with_host => 0
 $text => $m->content()
+$itemprop => undef
 </%args>
 <%init>
 my @path = $path ? ( path => $path ) : ();

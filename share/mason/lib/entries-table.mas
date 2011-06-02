@@ -71,11 +71,9 @@ if ( $search->can('location') )
   <tr class="<% $count % 2 ? 'odd' : 'even' %>">
     <td class="name">
       <& /lib/link/vendor.mas, vendor => $vendor &>
-% if (@address) {
+% if ( keys %address ) {
       <address>
-%   for my $line (@address) {
-        <% $line | h %><% $line ne $address[-1] ? '<br/>' : '' %>
-%   }
+        <& /lib/format/address.mas, vendor => $vendor, address => $vendor->address_hash() &>
       </address>
 % }
 % if ( $vendor->is_closed ) {
@@ -139,8 +137,8 @@ else
     $rating_title = "no ratings";
 }
 
-my @address;
-@address = $vendor->address_pieces()
+my %address;
+%address = $vendor->address_hash()
     if $search->has_addresses();
 
 my $distance;

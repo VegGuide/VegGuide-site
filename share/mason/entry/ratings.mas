@@ -1,16 +1,17 @@
-<div id="rating-info">
+<div id="rating-info" itemscope itemtype="http://schema.org/AggregateRating">
   <div id="ratings-and-total">
     <div id="total-ratings">
       <h2 id="rating-numbers">
 % if ( $total_ratings ) {
-        <span id="weighted-average-<% $vendor->vendor_id() %>"><% $weighted_average %></span>
+        <span id="weighted-average-<% $vendor->vendor_id() %>" itemprop="ratingValue"><% $weighted_average %></span>
         <span id="average-and-count-separator">/</span>
-        <span id="vote-count-<% $vendor->vendor_id() %>"><% $total_ratings %>
+        <span id="vote-count-<% $vendor->vendor_id() %>" itemprop="ratingCount"><% $total_ratings %>
           vote<% $total_ratings != 1 ? 's' : '' %></span>
 % } else {
         <span id="weighted-average-<% $vendor->vendor_id() %>">no ratings yet</span>
         <span id="average-and-count-separator" style="display: none">/</span>
         <span id="vote-count-<% $vendor->vendor_id() %>"></span>
+        <meta itemprop="ratingCount" content="0" />
 % }
       </h2>
     </div>

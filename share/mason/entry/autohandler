@@ -11,14 +11,16 @@ $vendor
 </%method>
 
 <%method page_title>
-<h1 id="page-title"
-    class="<% $vendor->is_closed ? 'closed' : q{} %>"
-    ><& /lib/l10n/vendor-name.mas, vendor => $vendor &>
-    <br />
-    <span id="link-to-parent"><& /lib/link/location-and-parent.mas,
-                                 location => $location,
-                               &></span>
-</h1>
+<div id="page-title">
+  <h1 class="<% $vendor->is_closed ? 'closed' : q{} %>"
+      itemprop="name"><& /lib/l10n/vendor-name.mas, vendor => $vendor &>
+  </h1>
+
+  <& /lib/link/location-and-parent.mas,
+     location => $location,
+    &>
+</div>
+
 <%args>
 $vendor
 </%args>
@@ -26,5 +28,6 @@ $vendor
 <%init>
 my $location = $vendor->location();
 </%init>
-
 </%method>
+
+<%method page_schema><% $ARGS{vendor} ? $ARGS{vendor}->microdata_schema() : q{} %></%method>

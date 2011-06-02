@@ -172,12 +172,16 @@ a.action-button-medium:visited, a.action-button-small:visited {
 
 #page-title {
     color: #6aa41d;
-    font-size: 200%;
-    margin-bottom: 0.5em;
+    margin-bottom: 1em;
     margin-top: 0;
 }
 
-#page-title.closed {
+#page-title h1 {
+    font-size: 200%;
+    margin: 0;
+}
+
+#page-title h1.closed {
     color: #333;
 }
 
@@ -964,10 +968,6 @@ h2.comment-attribution, h3.comment-attribution {
     margin: 0;
     padding: 0.5em;
     overflow: auto;
-}
-
-#link-to-parent {
-    font-size: 50%;
 }
 
 #region-creation-info {
