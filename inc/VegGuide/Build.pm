@@ -376,7 +376,7 @@ sub ACTION_write_revision_file {
 
     require VegGuide::Config;
 
-    my ($revision) = `hg tip` =~ /changeset:\s+(\d+)/;
+    my ($revision) = `git log -n 1` =~ /commit\s+(......)/;
 
     return unless $revision;
 
