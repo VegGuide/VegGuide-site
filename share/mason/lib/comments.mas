@@ -11,7 +11,7 @@
 %   }
      <h3 class="comment-attribution">
 %   if ( $user->has_image() ) {
-       <&| /lib/link/user.mas, user => $user &>
+       <span class="author"><&| /lib/link/user.mas, user => $user &></a>
        <img class="user-image"
             src="<% $user->small_image_uri() %>"
             height="<% $user->small_image_height() %>"

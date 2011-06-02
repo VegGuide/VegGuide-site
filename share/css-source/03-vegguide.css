@@ -857,13 +857,10 @@ p.summary {
 }
 
 h2.comment-attribution, h3.comment-attribution {
-    border-top: 2px solid #8cc63f;
-    border-bottom: 2px solid #8cc63f;
     font-weight: normal;
     font-size: 100%;
     margin: 0;
     min-height: 40px;
-    padding: 0.5em 0 0.5em 0;
 }
 
 .comment-attribution .user-image {
@@ -872,6 +869,7 @@ h2.comment-attribution, h3.comment-attribution {
 }
 
 .comment-attribution .user-name {
+    font-size: 108%;
     font-weight: bold;
 }
 
