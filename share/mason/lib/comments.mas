@@ -63,7 +63,9 @@
        </div>
 %   }
      </div>
+%   if ($vendor) {
   </div>
+%   }
 % }
 
 <%args>
