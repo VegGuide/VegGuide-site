@@ -426,10 +426,12 @@ sub vendor_count {
 
     my $schema = VegGuide::Schema->Connect();
 
-    return $cache->{$key} = VegGuide::Vendor->VendorCount(
+    my $count = VegGuide::Vendor->VendorCount(
         where =>
             [ $schema->Vendor_t->location_id_c, '=', $self->location_id ],
     );
+
+    return $key ? $cache->{$key} = $count : $count;
 }
 
 sub vendors {
