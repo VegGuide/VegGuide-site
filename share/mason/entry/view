@@ -13,7 +13,7 @@
         <& .address, vendor => $vendor, address => $vendor->address_hash() &>
 % }
 
-% if ( $c->client()->show_localized_content() && $vendor->has_localized_address() ) {
+% if ( $c->client()->show_localized_content() ) {
         <& .address, vendor => $vendor, address => $vendor->localized_address_hash() &>
 % }
 
@@ -193,6 +193,11 @@ $vendor
 %address
 $localized => 0
 </%args>
+
+<%init>
+return unless keys %address;
+</%init>
+
 </%def>
 
 <%attr>
