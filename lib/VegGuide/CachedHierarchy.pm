@@ -343,7 +343,7 @@ sub _check_cache_time {
 
     my $last_mod = ( stat $Meta{$class}{file} )[9];
 
-    if ( $last_mod > $Meta{$class}{last_build} ) {
+    unless ( $last_mod && $last_mod <= $Meta{$class}{last_build} ) {
         $class->_rebuild_cache;
     }
 }
