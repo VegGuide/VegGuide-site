@@ -11,7 +11,7 @@
         sharedscripts
         postrotate
                 if [ -f /var/run/apache2-backend.pid ]; then
-                        /etc/init.d/apache2-backend reload > /dev/null
+                        /etc/init.d/apache2-backend restart > /dev/null
                 fi
         endscript
 }
