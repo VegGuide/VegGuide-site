@@ -37,7 +37,7 @@ sub new {
             $self->{show_localized_content} = 1;
         }
     }
-$self->{show_localized_content} = 1;
+
     $self->{encoding} ||= 'utf-8-strict';
     $self->{show_utf8} = $self->_client_accepts_utf8;
 
