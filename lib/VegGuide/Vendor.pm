@@ -1814,7 +1814,7 @@ sub localized_address_hash {
         street2     => $self->localized_address2(),
         city        => $self->localized_city(),
         region      => $self->localized_region(),
-        postal_code => $self->localized_postal_code(),
+        postal_code => $self->postal_code(),
     };
 }
 
