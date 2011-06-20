@@ -188,7 +188,8 @@ sub map : Chained('_set_vendor') : PathPart('map') : Args(0) {
         $c->redirect_and_detach( entry_uri( vendor => $vendor ) );
     }
 
-    $c->tab_by_id('map')->set_is_selected(1);
+    $c->tab_by_id('map')->set_is_selected(1)
+        if $c->tab_by_id('map');
 
     $c->stash()->{template} = '/entry/large-map';
 }
