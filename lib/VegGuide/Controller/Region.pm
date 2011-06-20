@@ -604,7 +604,8 @@ sub stats : Chained('_set_location') : PathPart('stats') : Args(0) {
     my $self = shift;
     my $c    = shift;
 
-    $c->tab_by_id('stats')->set_is_selected(1);
+    $c->tab_by_id('stats')->set_is_selected(1)
+        if $c->tab_by_id('stats');
 
     $c->stash()->{template} = '/region/stats';
 }
