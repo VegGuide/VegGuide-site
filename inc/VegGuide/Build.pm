@@ -285,7 +285,7 @@ sub _find_things {
     my $rule = File::Find::Rule->new();
 
     $rule = $rule->or(
-        $rule->new()->directory()->name('.hg')->prune()->discard(),
+        $rule->new()->directory()->name('.git')->prune()->discard(),
 
         $rule->new()->name('*~')->prune()->discard(),
 
