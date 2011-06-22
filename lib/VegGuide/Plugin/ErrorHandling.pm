@@ -68,6 +68,8 @@ sub _log_error {
     my $self  = shift;
     my $error = shift;
 
+    return if $error =~ /Software caused connection abort/;
+
     # XXX - change this later to log to the apache log?
     #    if ( $error =~ /unknown resource/ )
 
