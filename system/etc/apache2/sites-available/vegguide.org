@@ -142,6 +142,7 @@
     RewriteRule   favicon.(gif|ico)$                          /images/favicon.ico                     [R,L]
 
     RewriteRule   !^/404               - [C]
+    RewriteRule   !^/crossdomain\.xml  - [C]
     RewriteRule   !^(/\w+)?/css        - [C]
     RewriteRule   !^/entry-images      - [C]
     RewriteRule   !^/user-images       - [C]
