@@ -5,6 +5,8 @@
 #   mime ?
 #   perl
 
+ServerSignature Off
+
 <IfDefine !Testing>
     CustomLog /var/log/apache2-backend/access.log combined
 </IfDefine>
