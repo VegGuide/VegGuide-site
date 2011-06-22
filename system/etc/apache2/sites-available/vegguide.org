@@ -43,7 +43,7 @@
         CustomLog /home/autarch/.vegguide/var/log/apache2/access.log combined
     </IfDefine>
 
-    ServerSignature On
+    ServerSignature Off
 
     RewriteEngine On
 
