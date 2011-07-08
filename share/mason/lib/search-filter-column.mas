@@ -1,14 +1,5 @@
 <h2 class="no-top-margin">Filter listings by ...</h2>
 
-% if ( $search->has_filters() ) {
-%   my $clear = $search->clone();
-%   $clear->delete_all();
-<p>
-  <a class="action-button-small"
-     title="Remove all filters that are currently in place"
-     href="<% $clear->$search_uri_method() | h %>">Show everything</a>
-</p>
-% }
 % unless ( @{ $search->category_id() } ) {
 %   my $just_rest = $search->clone();
 %   $just_rest->add( category_id => VegGuide::Category->Restaurant()->category_id() );
@@ -24,6 +15,15 @@
   <a class="action-button-small"
      href="<% $vegan_friendly->$search_uri_method() | h %>"
      title="Show places which are at least vegan-friendly">Vegan-friendly</a>
+</p>
+% }
+% if ( $search->has_filters() ) {
+%   my $clear = $search->clone();
+%   $clear->delete_all();
+<p>
+  <a class="action-button-small"
+     title="Remove all filters that are currently in place"
+     href="<% $clear->$search_uri_method() | h %>">Show everything</a>
 </p>
 % }
 
