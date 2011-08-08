@@ -187,8 +187,10 @@ sub add_vendor_for_data_feed {
 
     $rv{'price-range-number'} = $p{vendor}->price_range->display_order;
 
-    $rv{'veg-level'}        = $p{vendor}->veg_description;
-    $rv{'veg-level-number'} = $p{vendor}->veg_level;
+    unless ( $p{vendor}->is_organization() ) {
+        $rv{'veg-level'}        = $p{vendor}->veg_description;
+        $rv{'veg-level-number'} = $p{vendor}->veg_level;
+    }
 
     foreach my $f (
         qw( allows_smoking accepts_reservations is_wheelchair_accessible )) {

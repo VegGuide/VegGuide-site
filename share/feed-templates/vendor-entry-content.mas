@@ -6,9 +6,11 @@
 </p>
 % }
 
+% unless ( $vendor->is_organization() ) {
 <p>
  <strong><% uc $vendor->veg_description() | h %></strong>
 </p>
+% }
 
 % if ( $vendor->address1() || $vendor->city_region_postal_code() ) {
 <address>
