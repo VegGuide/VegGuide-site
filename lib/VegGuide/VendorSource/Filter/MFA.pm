@@ -156,7 +156,8 @@ sub _merge_categories {
             (
                 map { lc $_ => 'Triangle Area' } qw( Raleigh Durham Cary ),
                 'Chapel Hill'
-            )
+            ),
+            'Mathews' => 'Matthews',
         },
 
         # IN
