@@ -125,7 +125,7 @@ sub _merge_categories {
     );
     my $states = Geography::States->new('USA');
 
-    my %RegionMap = (    # IL
+    my %RegionMap = (
         Illinois => {
             ( map { lc $_ => 'Champaign-Urbana' } qw( Champaign Urbana ) ),
             (
@@ -151,7 +151,6 @@ sub _merge_categories {
             'all nj - catering' => $NJ,
         },
 
-        # NC
         'North Carolina' => {
             (
                 map { lc $_ => 'Triangle Area' } qw( Raleigh Durham Cary ),
@@ -160,7 +159,6 @@ sub _merge_categories {
             'Mathews' => 'Matthews',
         },
 
-        # IN
         Indiana => { ( lc 'Mishawaka' => 'South Bend' ), },
     );
 
