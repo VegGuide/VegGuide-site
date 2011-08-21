@@ -250,7 +250,7 @@ sub CanonicalWebHostname {
 
     my $hostname = $class->Hostname();
     $hostname = 'www.vegguide.org' if $hostname eq 'vegguide.org';
-    $hostname .= ':3000'
+    $hostname .= ':' . $ENV{SERVER_PORT} || 3000
         unless $class->IsProduction();
 
     return $hostname;

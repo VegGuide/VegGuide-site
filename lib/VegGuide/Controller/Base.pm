@@ -37,6 +37,8 @@ sub begin : Private {
     my $self = shift;
     my $c    = shift;
 
+    $ENV{SERVER_PORT} = $c->engine()->env()->{SERVER_PORT};
+
     if ( $self->_is_bad_request($c) ) {
         $c->response()->body('');
         $c->response()->status(RC_FORBIDDEN);
