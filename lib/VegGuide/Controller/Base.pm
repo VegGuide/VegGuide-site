@@ -38,7 +38,7 @@ sub begin : Private {
     my $c    = shift;
 
     $ENV{SERVER_PORT} = $c->engine()->env()->{SERVER_PORT}
-        if $c->engine && $c->engine->can('env');
+        if $c->engine() && $c->engine->can('env') && $c->engine()->env();
 
     if ( $self->_is_bad_request($c) ) {
         $c->response()->body('');
