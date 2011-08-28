@@ -148,7 +148,7 @@ sub AlzaboRootDir {
             rewrite_redirect => 1,
         },
 
-        cache => {
+        'Plugin::Cache' => {
             backend => {
                 share_file => File::Spec->catfile(
                     __PACKAGE__->CacheDir(), 'cache.mmap'
