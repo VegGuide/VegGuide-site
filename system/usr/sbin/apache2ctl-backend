@@ -44,7 +44,7 @@ ARGV="$@"
 
 if [ `id -nu` != "root" ] && [ -d system/etc ] ; then
     RUN_DIR=~/run
-    ETC_DIR=system/etc
+    ETC_DIR=$PWD/system/etc
     DEFINE="-D Testing"
     PERL5LIB=$PWD/lib
 else
@@ -92,7 +92,9 @@ fi
 case $ARGV in
 start)
     mkdir -p $RUN_DIR/apache2-backend
-    install -d -o www-data /var/lock/apache2-backend
+    if [ `id -nu` = "root" ]; then
+        install -d -o www-data /var/lock/apache2-backend
+    fi
     # ssl_scache shouldn't be here if we're just starting up.
     # (this is bad if there are several apache2 instances running)
     rm -f $RUN_DIR/apache2-backend/*ssl_scache*
