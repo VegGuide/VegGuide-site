@@ -1162,9 +1162,10 @@ sub data_feed_rss_file {
         'location-' . $self->location_id() . '.rss',
     );
 
-    $self->_regen_cached_file( $cache_file,
-        sub { $self->_data_feed_handle() } )
-        unless $p{cache_only};
+    $self->_regen_cached_file(
+        $cache_file,
+        sub { $self->_data_feed_handle() }
+    ) unless $p{cache_only};
 
     return $cache_file;
 }
