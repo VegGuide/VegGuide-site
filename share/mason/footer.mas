@@ -33,7 +33,7 @@
   </div>
 
   <div id="footer-copyright">
-    <&| /lib/link/license.mas &><img id="cc-logo" src="http://i.creativecommons.org/l/by-nc-sa/3.0/us/88x31.png" alt="Creative Commons License" /></&>
+    <&| /lib/link/license.mas &><img id="cc-logo" src="http://i.creativecommons.org/l/by-sa/3.0/us/88x31.png" alt="Creative Commons License" /></&>
 
     <p>
       <a href="http://www.vegguide.org/" title="Home">VegGuide.Org</a>

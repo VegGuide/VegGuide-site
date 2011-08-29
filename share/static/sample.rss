@@ -6540,12 +6540,12 @@ The 2 and 3 subway lines let off half a block away, and the ABCD and 456 lines a
     <rdf:li rdf:resource='http://houseabsolute.urth.org:3000/entry/3974' />
    </rdf:Seq>
   </items>
-  <cc:license rdf:about='http://creativecommons.org/licenses/by-nc-sa/2.0/' />
+  <cc:license rdf:about='http://creativecommons.org/licenses/by-sa/3.0/us/' />
   <dc:date>2007-10-18T15:17:19Z</dc:date>
   <dc:publisher>Compassionate Action for Animals</dc:publisher>
   <dc:rights>Copyright 2002 - 2007  Compassionate Action for Animals</dc:rights>
-  <cc:License rdf:about='http://creativecommons.org/licenses/by-nc-sa/2.0/'>
-   <cc:prohibits rdf:resource='http://web.resource.org/cc/CommercialUse' />
+  <cc:License rdf:about='http://creativecommons.org/licenses/by-sa/3.0/us/'>
+   <cc:permits rdf:resource='http://web.resource.org/cc/CommercialUse' />
    <cc:permits rdf:resource='http://web.resource.org/cc/Reproduction' />
    <cc:permits rdf:resource='http://web.resource.org/cc/Distribution' />
    <cc:permits rdf:resource='http://web.resource.org/cc/DerivativeWorks' />

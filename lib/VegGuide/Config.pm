@@ -136,7 +136,7 @@ sub AlzaboRootDir {
 {
     my %BaseConfig = (
         is_production        => __PACKAGE__->IsProduction(),
-        using_frontend_proxy => __PACKAGE__->IsProduction(),
+        using_frontend_proxy => ( $ENV{MOD_PERL} ? 1 : 0 ),
 
         default_view => 'Mason',
 

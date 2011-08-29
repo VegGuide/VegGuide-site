@@ -108,7 +108,7 @@ sub location_channel {
             date => $self->{w3cdtf_now},
         },
         cc => {
-            license => 'http://creativecommons.org/licenses/by-nc-sa/2.0/'
+            license => 'http://creativecommons.org/licenses/by-sa/3.0/us/'
         },
     );
 }
@@ -131,7 +131,7 @@ sub site_channel {
             date => $self->{w3cdtf_now},
         },
         cc => {
-            license => 'http://creativecommons.org/licenses/by-nc-sa/2.0/'
+            license => 'http://creativecommons.org/licenses/by-sa/3.0/us/'
         },
     );
 }
