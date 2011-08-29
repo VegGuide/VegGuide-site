@@ -1194,13 +1194,19 @@ sub _data_feed_handle {
             if -f $cache_file
                 && ( stat $cache_file )[9] >= time - $MaxCacheAge;
 
-        return $cache_file unless $Locker->lock($cache_file);
+        my $locked;
+        if ( -f _ ) {
+            return $cache_file unless $Locker->lock($cache_file);
+            $locked = 1;
+        }
 
         eval {
             my $fh = $data_sub->();
             $fh->close;
 
             mkpath( dirname($cache_file), 0, 0755 );
+
+            $Locker->lock($cache_file) unless $locked;
 
             my $temp_file = $fh->filename();
             move( $temp_file, $cache_file )
