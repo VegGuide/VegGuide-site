@@ -22,8 +22,7 @@
 <p>
   The data feeds will let you pull the data for <% $thing %> and repurpose
   it. They are in a <a href="/site/data_feed">highly extended RSS 1.0
-  dialect</a>. You may prefer to use our <a href="/site/rest_api">REST API</a>
-  instead.
+  dialect</a>.
 </p>
 
 <p>    
