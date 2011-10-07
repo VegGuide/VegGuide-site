@@ -22,6 +22,11 @@
   <% $subject | h %> <% $has_verb %> added <% $vendor_count %> entr<% $vendor_count != 1 ? 'ies' : 'y' %>,
   written <% $review_count %> review<% $review_count != 1 ? 's' : '' %>
   and rated <% $rating_count %> entr<% $review_count != 1 ? 'ies' : 'y' %>.
+% if ($image_count) {
+<% $subject %> has uploaded <% $image_count %> image<% $image_count != 1 ? 's': '' %>.
+% } else {
+<% $subject %> has not uploaded any images.
+% }
 </p>
 
 % if ($rating_count) {
@@ -81,6 +86,7 @@ my ( $subject, $possessive, $has_verb, $doesnot_verb ) =
 my $vendor_count = $user->vendor_count();
 my $review_count = $user->review_count();
 my $rating_count = $user->rating_count();
+my $image_count  = $user->image_count();
 
 my @top_vendors = $user->top_vendors()->all();
 my @bottom_vendors = $user->bottom_vendors()->all();
