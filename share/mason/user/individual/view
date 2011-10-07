@@ -23,7 +23,7 @@
   written <% $review_count %> review<% $review_count != 1 ? 's' : '' %>
   and rated <% $rating_count %> entr<% $review_count != 1 ? 'ies' : 'y' %>.
 % if ($image_count) {
-<% $subject %> has uploaded <% $image_count %> image<% $image_count != 1 ? 's': '' %>.
+<% $subject %> <% $has_verb %> uploaded <% $image_count %> image<% $image_count != 1 ? 's': '' %>.
 % } else {
 <% $subject %> has not uploaded any images.
 % }
