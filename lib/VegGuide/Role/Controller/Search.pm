@@ -77,10 +77,11 @@ sub _set_printable_search_in_stash {
         if exists $config{captured_path_position};
 
     my $search = $self->_search_from_request(
-        $c,
-        $path,
-        $config{search_class},
-        { $self->_extra_search_params( $c, $config{extra_params} ) },
+        $c, $path,
+        $config{search_class}, {
+            $self->_extra_search_params( $c, $config{extra_params} ),
+            allow_closed => 0,
+        },
     );
 
     $search->set_cursor_params(

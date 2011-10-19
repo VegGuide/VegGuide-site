@@ -1,5 +1,5 @@
 body {
-    font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
+    font: 13px/1.231 Arial, sans-serif;
 }
 
 /* custom 600px wide grid for front page */
@@ -172,12 +172,16 @@ a.action-button-medium:visited, a.action-button-small:visited {
 
 #page-title {
     color: #6aa41d;
-    font-size: 200%;
-    margin-bottom: 0.5em;
+    margin-bottom: 1em;
     margin-top: 0;
 }
 
-#page-title.closed {
+#page-title h1 {
+    font-size: 200%;
+    margin: 0;
+}
+
+#page-title h1.closed {
     color: #333;
 }
 
@@ -403,16 +407,17 @@ a.action-button-medium:visited, a.action-button-small:visited {
 #ft #cc-logo {
     border: none;
     float: left;
-    margin-top: 0.5em;
 }
 
-#ft #organization-logos {
-    float: right;
+#ft #logos {
+    clear: both;
+    margin-top: 2em;
+    text-align: center;
 }
 
-#ft #organization-logos img {
+#ft #logos img {
     border: none;
-    margin-left: 1em;
+    margin: 0 1em 1em 1em;
 }
 
 form {
@@ -852,13 +857,10 @@ p.summary {
 }
 
 h2.comment-attribution, h3.comment-attribution {
-    border-top: 2px solid #8cc63f;
-    border-bottom: 2px solid #8cc63f;
     font-weight: normal;
     font-size: 100%;
     margin: 0;
     min-height: 40px;
-    padding: 0.5em 0 0.5em 0;
 }
 
 .comment-attribution .user-image {
@@ -867,6 +869,7 @@ h2.comment-attribution, h3.comment-attribution {
 }
 
 .comment-attribution .user-name {
+    font-size: 108%;
     font-weight: bold;
 }
 
@@ -963,10 +966,6 @@ h2.comment-attribution, h3.comment-attribution {
     margin: 0;
     padding: 0.5em;
     overflow: auto;
-}
-
-#link-to-parent {
-    font-size: 50%;
 }
 
 #region-creation-info {

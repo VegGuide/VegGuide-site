@@ -11,7 +11,7 @@ use base 'Catalyst::View::Mason';
 
     use Image::Size qw( html_imgsize );
     use Lingua::EN::Inflect qw( PL );
-    use List::Util qw( first );
+    use List::AllUtils qw( all any first );
     use Math::Round qw( nearest );
     use URI::FromHash qw( uri );
     use VegGuide::Geocoder;

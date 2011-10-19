@@ -4,6 +4,7 @@ JSAN.use("DOM.Ready");
 JSAN.use("VegGuide.EntryFilters");
 JSAN.use("VegGuide.EntryForm");
 JSAN.use("VegGuide.EntryImageSlideshow");
+JSAN.use("VegGuide.FrontPageGeolocation");
 JSAN.use("VegGuide.GoogleMap");
 JSAN.use("VegGuide.HoursForm");
 JSAN.use("VegGuide.IEPngFilter");
@@ -31,6 +32,7 @@ VegGuide.Enhancements.instrumentAll = function () {
     VegGuide.EntryForm.instrumentPage();
     VegGuide.EntryFilters.instrumentPage();
     VegGuide.EntryImageSlideshow.instrumentPage();
+    VegGuide.FrontPageGeolocation.instrumentPage();
     VegGuide.HoursForm.instrumentPage();
     VegGuide.LocaleList.instrumentPage();
     VegGuide.LocationSearch.instrumentPage();

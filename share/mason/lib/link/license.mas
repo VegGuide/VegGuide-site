@@ -1,4 +1,7 @@
-<a class="<% $class | h %>" rel="license" title="Creative Commons License" href="http://creativecommons.org/licenses/by-nc-sa/3.0/us/"><% $m->content() %></a>\
+<a class="<% $class | h %>"
+   rel="license"
+   title="Creative Commons License Attribution-ShareAlike 3.0 United States (CC BY-SA 3.0)"
+   href="http://creativecommons.org/licenses/by-sa/3.0/us/"><% $m->content() %></a>\
 <%args>
 $class => ''
 </%args>

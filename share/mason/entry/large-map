@@ -25,14 +25,7 @@ DOM.Ready.onDOMDone( function () {
 
     <div class="map-info" id="map-entry-info" style="display: none">
       <h2><% $vendor->name() | h %></h2>
-      <address>
-% for my $piece (@address_pieces) {
-        <% $piece | h %>
-%   if ( $piece ne $address_pieces[-1] ) {
-        <br />
-%   }
-% }
-      </address>
+      <& /lib/format/address.mas, vendor => $vendor, address => $vendor->address_hash &>
 
 <%doc>
 It seems that with a Google map, it's not possible to use modern event
@@ -72,10 +65,8 @@ my $marker = { latitude    => $vendor->latitude(),
                info_div    => 'map-entry-info',
              };
 
-my @address_pieces = $vendor->address_pieces();
-
 my $address_for_directions = $vendor->canonical_address();
-$address_for_directions ||= join ', ', @address_pieces;
+$address_for_directions ||= join ', ', grep { defined } $vendor->address1(), $vendor->city_region_postal_code();
 </%init>
 
 <%attr>

@@ -163,14 +163,7 @@ my ( $weighted_average, $total_ratings )
   <span class="category"><% join ', ', map { $_->name() } $vendor->categories() %></span>
 % }
 
-  <address>
-% for my $piece (@address_pieces) {
-    <% $piece | h %>
-%   if ( $piece ne $address_pieces[-1] ) {
-    <br />
-%   }
-% }
-  </address>
+  <& /lib/format/address.mas, vendor => $vendor, address => $vendor->address_hash() &>
 
   <p class="summary">
     <% $vendor->short_description() | h %>
@@ -186,7 +179,6 @@ $vendor
 </%args>
 
 <%init>
-my @address_pieces = $vendor->address_pieces();
 my @categories = $vendor->categories();
 </%init>
 

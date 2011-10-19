@@ -10,7 +10,11 @@
   <div id="bd">
     <div id="yui-main">
       <div class="yui-b">
-        <div id="content">
+        <div id="content"
+% if ($md_schema) {
+             itemscope itemtype="<% $md_schema | h %>"
+% }
+             >
 
           <& /lib/messages.mas &>
 
@@ -19,14 +23,13 @@
 %   if ( $title =~ /<h1/ ) {
 <% $title %>
 %   } else {
-          <h1 id="page-title">
-            <% $title %>
-          </h1>
+          <div id="page-title">
+            <h1><% $title %></h1>
+          </div>
 %   }
 % }
 
 % $m->call_next();
-
         </div>
       </div>
     </div>
@@ -63,6 +66,7 @@
 
 <%init>
 my $is_front_page = $m->request_comp()->attr('is_front_page');
+my $md_schema = $m->request_comp()->scall_method( 'page_schema', %ARGS );
 </%init>
 
 <%attr>
@@ -71,5 +75,7 @@ is_front_page => 0
 </%attr>
 
 <%method title>
-VegGuide.Org | Vegetarian and Vegan Restaurants, Grocers, and more
+Vegetarian and Vegan Restaurants, Grocers, Bakeries | VegGuide.Org
 </%method>
+
+<%method page_schema></%method>

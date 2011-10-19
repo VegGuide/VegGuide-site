@@ -1,4 +1,3 @@
-syntax: glob
 .\#*
 \#*\#
 *~
@@ -8,6 +7,8 @@ Build
 _build
 MANIFEST
 META.yml
+MYMETA.yml
+MYMETA.json
 README
 Debian_CPANTS.txt
 Makefile.PL

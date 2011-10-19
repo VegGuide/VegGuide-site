@@ -188,7 +188,8 @@ sub map : Chained('_set_vendor') : PathPart('map') : Args(0) {
         $c->redirect_and_detach( entry_uri( vendor => $vendor ) );
     }
 
-    $c->tab_by_id('map')->set_is_selected(1);
+    $c->tab_by_id('map')->set_is_selected(1)
+        if $c->tab_by_id('map');
 
     $c->stash()->{template} = '/entry/large-map';
 }
@@ -819,6 +820,74 @@ sub images_POST {
         );
 
         $c->stash()->{template} = '/site/entry-search-results';
+    }
+
+    sub near_filter_GET {
+        my $self = shift;
+        my $c    = shift;
+
+        $self->_set_search_in_stash( $c, %SearchConfig );
+
+        my $search = $c->stash()->{search};
+
+        my $count = $search->count();
+
+        unless ($count) {
+            $self->status_ok(
+                $c,
+                entity => {},
+            );
+
+            return;
+        }
+
+        my $vendors = $search->vendors();
+
+        my @entries;
+
+        my $loc;
+        while ( my $vendor = $vendors->next() ) {
+            $loc ||= $vendor->location();
+
+            my $distance = $vendor->distance_from(
+                latitude  => $search->latitude(),
+                longitude => $search->longitude(),
+                unit      => $search->unit(),
+            );
+
+            my $with_units = $distance . ' ' . $search->unit();
+            $with_units .= 's' unless $distance == 1;
+
+            push @entries, {
+                uri      => entry_uri( vendor => $vendor ),
+                name     => $vendor->name(),
+                distance => $with_units,
+                };
+        }
+
+        my %location = (
+            name   => $loc->name(),
+            parent => (
+                  $loc->parent()
+                ? $loc->parent()->name()
+                : q{}
+            ),
+            uri => region_uri( location => $loc ),
+        );
+
+        if ($count > 10 ) {
+            $search->set_cursor_params( page => 1, limit => $c->vg_user()->entries_per_page() );
+            $location{search_uri} = $search->uri();
+        }
+
+        $self->status_ok(
+            $c,
+            entity => {
+                count    => $count,
+                entries  => \@entries,
+                location => \%location,
+            },
+        );
     }
 
     sub near_filter_POST : Private {

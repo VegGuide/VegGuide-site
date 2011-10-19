@@ -43,7 +43,7 @@
         CustomLog /home/autarch/.vegguide/var/log/apache2/access.log combined
     </IfDefine>
 
-    ServerSignature On
+    ServerSignature Off
 
     RewriteEngine On
 
@@ -142,11 +142,12 @@
     RewriteRule   favicon.(gif|ico)$                          /images/favicon.ico                     [R,L]
 
     RewriteRule   !^/404               - [C]
-    RewriteRule   !^(/\d+)?/css        - [C]
+    RewriteRule   !^/crossdomain\.xml  - [C]
+    RewriteRule   !^(/\w+)?/css        - [C]
     RewriteRule   !^/entry-images      - [C]
     RewriteRule   !^/user-images       - [C]
-    RewriteRule   !^(/\d+)?/images     - [C]
-    RewriteRule   !^(/\d+)?/js         - [C]
+    RewriteRule   !^(/\w+)?/images     - [C]
+    RewriteRule   !^(/\w+)?/js         - [C]
     RewriteRule   !^/skin-images       - [C]
     RewriteRule   !^/static            - [C]
     RewriteRule   !^/w3c               - [C]
@@ -159,9 +160,9 @@
     </Location>
 
     <IfDefine !Testing>
-        AliasMatch   (/\d+)?/css/vegguide-combined.css       /var/lib/vegguide/css/vegguide-combined.css
-        AliasMatch   (/\d+)?/css(.+)       /usr/local/share/vegguide/css$2
-        AliasMatch   (/\d+)?/images(.+)    /usr/local/share/vegguide/images$2
+        AliasMatch   (/\w+)?/css/vegguide-combined.css       /var/lib/vegguide/css/vegguide-combined.css
+        AliasMatch   (/\w+)?/css(.+)       /usr/local/share/vegguide/css$2
+        AliasMatch   (/\w+)?/images(.+)    /usr/local/share/vegguide/images$2
         Alias        /static/rss           /var/cache/vegguide/rss
         Alias        /static               /usr/local/share/vegguide/static
         Alias        /w3c                  /usr/local/share/vegguide/w3c
@@ -175,9 +176,9 @@
     </IfDefine>
 
     <IfDefine Testing>
-        AliasMatch   (/\d+)?/css/vegguide-combined.css       /home/autarch/.vegguide/var/lib/css/vegguide-combined.css
-        AliasMatch   (/\d+)?/css(.+)       ${PWD}/share/css$2
-        AliasMatch   (/\d+)?/images(.+)    ${PWD}/share/images$2
+        AliasMatch   (/\w+)?/css/vegguide-combined.css       /home/autarch/.vegguide/var/lib/css/vegguide-combined.css
+        AliasMatch   (/\w+)?/css(.+)       ${PWD}/share/css$2
+        AliasMatch   (/\w+)?/images(.+)    ${PWD}/share/images$2
         Alias        /static/rss           /var/cache/vegguide/rss
         Alias        /static               ${PWD}/share/static
         Alias        /w3c                  ${PWD}/share/w3c

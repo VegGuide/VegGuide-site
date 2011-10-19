@@ -3,7 +3,7 @@
 
 % if ( $c->vg_user()->skin_count() || $c->vg_user()->viewable_suggestion_count() || $c->vg_user()->is_admin() ) {
     <ul>
-%   if ( $c->vg_user()->skin_count() ) {
+%   if ( $c->vg_user()->skin_count() || $c->vg_user()->is_admin() ) {
       <li class="first">
         <a href="<% user_uri( user => $c->vg_user(), path => 'skins' ) | h %>" title="Skins"
            >Skins</a>
@@ -33,12 +33,7 @@
   </div>
 
   <div id="footer-copyright">
-    <&| /lib/link/license.mas &><img id="cc-logo" src="http://i.creativecommons.org/l/by-nc-sa/3.0/us/88x31.png" alt="Creative Commons License" /></&>
-
-    <div id="organization-logos">
-      <a href="http://www.exploreveg.org/"><img src="/images/caa-logo.png" alt="CAA Logo" height="60" width="98" /></a>
-      <a href="http://www.mercyforanimals.org/"><img src="/images/mfa-logo.gif" alt="MFA Logo" height="60" width="117" /></a>
-    </div>
+    <&| /lib/link/license.mas &><img id="cc-logo" src="http://i.creativecommons.org/l/by-sa/3.0/us/88x31.png" alt="Creative Commons License" /></&>
 
     <p>
       <a href="http://www.vegguide.org/" title="Home">VegGuide.Org</a>
@@ -46,6 +41,20 @@
       2003-<% DateTime->now()->year() %>
       <a href="http://www.exploreveg.org/" title="Compassionate Action for
          Animals">Compassionate Action for Animals</a>.  All rights reserved.
+       <a href="/site/about#copyright">Copyright and licensing details</a>.
     </p>
+
+    <div id="logos">
+      <a href="http://www.exploreveg.org/"><img src="/images/caa-logo.png" alt="CAA Logo" height="60" width="98" /></a>
+      <a href="http://www.mercyforanimals.org/"><img src="/images/mfa-logo.gif" alt="MFA Logo" height="52" width="136" /></a>
+      <br />
+      <a href="http://www.facebook.com/VegGuide"
+         ><img src="/images/facebook-badge.gif"
+               alt="Find us on Facebook"
+               height="44" width="144"
+               style="margin-bottom: 8px"
+               /></a>
+    </div>
+
   </div>
 </div>

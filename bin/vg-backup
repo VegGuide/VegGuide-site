@@ -3,27 +3,58 @@
 use strict;
 use warnings;
 
+use Getopt::Long;
 use VegGuide::Config;
 
 exit 0
     unless VegGuide::Config->IsProduction()
-           && ! VegGuide::Config->IsTest();
+        && !VegGuide::Config->IsTest();
+
+my $verbose;
+my @hosts;
+my $dump = 1;
+
+GetOptions(
+    'verbose' => \$verbose,
+    'host=s@' => \@hosts,
+    'dump!'   => \$dump,
+);
+
+@hosts = qw( urth.org li205-70.members.linode.com )
+    unless @hosts;
 
 # Should be run as me (autarch) on the vegguide.org box. No need to
 # run as root.
 
+if ($dump) {
+    print "Dumping database\n\n" if $verbose;
 
-system( qw( mysqldump -u root RegVeg --ignore-table RegVeg.Session -r /home/autarch/RegVeg.sql ) )
-    and die 'Cannot execute mysqldump';
-
-for my $source ( qw( /var/lib/vegguide/entry-images
-                     /var/lib/vegguide/user-images
-                     /var/lib/vegguide/skin-images
-                     /home/autarch/RegVeg.sql
-                     /var/lib/mailman/archives
-                     /var/lib/mailman/lists ) )
-{
-    system( 'rsync', '-e', 'ssh -i /home/autarch/.ssh/id_rsa.backups', '-r',
-            $source, 'urth.org:/home/autarch/backup/vegguide.org/' )
-        and die "Cannot rsync $source";
+    system(
+        qw( mysqldump -u root RegVeg --ignore-table RegVeg.Session -r /home/autarch/RegVeg.sql )
+    ) and die 'Cannot execute mysqldump';
 }
+
+for my $host (@hosts) {
+    print "Rsyncing to $host\n\n";
+
+    for my $source (
+        qw( /var/lib/vegguide/entry-images
+        /var/lib/vegguide/user-images
+        /var/lib/vegguide/skin-images
+        /home/autarch/RegVeg.sql
+        /var/lib/mailman/archives
+        /var/lib/mailman/lists )
+        ) {
+
+        my @v = $verbose ? '-v' : ();
+        system(
+            'rsync',
+            @v,
+            '-e', 'ssh -i /home/autarch/.ssh/id_rsa.backups',
+            '-r', '--links',
+            $source, $host . ':/home/autarch/backup/vegguide.org/'
+        ) and die "Cannot rsync $source to $host";
+    }
+}
+
+print "vg-backup completed successfully\n\n";

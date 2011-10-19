@@ -37,6 +37,12 @@ sub begin : Private {
     my $self = shift;
     my $c    = shift;
 
+    $ENV{SERVER_PORT} = $c->engine()->env()->{SERVER_PORT}
+        if $c->engine()
+            && $c->engine->can('env')
+            && $c->engine()->env()
+            && $c->engine()->env()->{SERVER_PORT} != 80;
+
     if ( $self->_is_bad_request($c) ) {
         $c->response()->body('');
         $c->response()->status(RC_FORBIDDEN);
@@ -46,6 +52,9 @@ sub begin : Private {
     Alzabo::Runtime::UniqueRowCache->clear();
     VegGuide::AlzaboWrapper->ClearCache();
     VegGuide::PerRequestCache->ClearCache();
+
+    # XXX - this is a hack to avoid checking in every call to ->ByID
+    VegGuide::Location->_check_cache_time();
 
     return unless $c->request()->looks_like_browser();
 

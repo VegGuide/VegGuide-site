@@ -1,0 +1,20 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use DateTime;
+use Getopt::Long;
+use VegGuide::Schema;
+
+my %opts = ( days => 7 );
+GetOptions(
+    'days:i' => \$opts{days},
+);
+
+my $dbh = VegGuide::Schema->Connect()->driver()->handle();
+
+$dbh->do(
+    'DELETE FROM Session WHERE expires < ?', {},
+    DateTime->now( time_zone => 'UTC' )->subtract( days => $opts{days} )->epoch()
+);

@@ -1,7 +1,11 @@
 <div id="hours">
 %   foreach my $desc (@descriptions) {
   <div class="hours-set">
-    <label><% $desc->{days} | h %></label>
+    <label><% $desc->{days} | h %>
+%     if ( $desc->{hours}[1] ) { # IE hack to force days to line up with hours
+<br />&nbsp;
+%     }
+</label>
     <span class="hours-times">
       <% $desc->{hours}[0] | h %>\
 %     if ( $desc->{hours}[1] ) {

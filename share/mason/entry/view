@@ -10,15 +10,15 @@
 % }
 
 % if ( $vendor->location()->has_addresses() ) {
-        <& .address, vendor => $vendor, address => \@address &>
+        <& .address, vendor => $vendor, address => $vendor->address_hash() &>
 % }
 
-% if ( $c->client()->show_localized_content() && $vendor->has_localized_address() ) {
-        <& .address, vendor => $vendor, address => [ $vendor->localized_address_pieces() ] &>
+% if ( $c->client()->show_localized_content() ) {
+        <& .address, vendor => $vendor, address => $vendor->localized_address_hash() &>
 % }
 
 % if ( defined $vendor->phone() ) {
-        <div id="phone"><% $vendor->phone() %></div>
+        <div id="phone" itemprop="telephone"><% $vendor->phone() | h %></div>
 % }
 
 % if ( $vendor->home_page() ) {
@@ -26,6 +26,7 @@
           <a class="external" rel="nofollow"
              href="<% $vendor->external_uri() | h %>"
              title="<% $vendor->name() | h %> web site"
+             itemprop="url"
              ><% $vendor->external_uri() | h %></a>
         </div>
 % }
@@ -57,7 +58,7 @@
       </div>
     </div>
 
-<p class="summary">
+<p class="summary" itemprop="description">
   <% $vendor->short_description() | h %>
 % if ( $c->client()->show_localized_content() && defined $vendor->localized_short_description() ) {
   - <% $c->client()->encode( $vendor->localized_short_description() ) | h %>
@@ -159,11 +160,6 @@ $comments => undef
 </%args>
 
 <%init>
-my $c_r_pc = $vendor->city_region_postal_code();
-my $localized_c_r_pc = $vendor->localized_city_region_postal_code();
-
-my @address = $vendor->address_pieces();
-
 my $description =
       VegGuide::Util::text_to_html( text        => $vendor->long_description(),
                                     first_class => 'first',
@@ -181,24 +177,27 @@ if ( $c->client()->show_localized_content() )
 </%init>
 
 <%def .address>
-  <address class="entry-address">
+  <address class="entry-address" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
 % unless ( string_is_empty( $vendor->canonical_address() ) ) {
-    <a href="<% entry_uri( vendor => $vendor, path => 'map' ) %>" title="Google Map of this address">
+    <a href="<% entry_uri( vendor => $vendor, path => 'map' ) | h %>" title="Google Map of this address">
 % }
-% foreach my $line (@address) {
-    <% $line | h %>
-%   if ( $line ne $address[-1] ) {
-    <br />
-%   }
-% }
+
+<& /lib/format/address.mas, vendor => $vendor, address => \%address, localized => $localized &>
+
 % unless ( string_is_empty( $vendor->canonical_address() ) ) {
     </a>
 % }
   </address>
 <%args>
 $vendor
-@address
+%address
+$localized => 0
 </%args>
+
+<%init>
+return unless keys %address;
+</%init>
+
 </%def>
 
 <%attr>

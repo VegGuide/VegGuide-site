@@ -18,14 +18,9 @@ my %Times;
 {
     my $spec = {
         parent   => SCALAR_TYPE,
-        roots    => SCALAR_TYPE,
         id       => SCALAR_TYPE,
-        order_by => {
-            type     => OBJECT | ARRAYREF,
-            optional => 1
-        },
-        flags => ARRAYREF_TYPE( default => [] ),
-        first => SCALAR_TYPE( default   => 0 ),
+        order_by => SCALAR_TYPE,
+        first    => SCALAR_TYPE( default => 0 ),
     };
 
     sub _build_cache {
@@ -33,10 +28,6 @@ my %Times;
         my %p = validate( @_, $spec );
 
         my $first = delete $p{first};
-
-        my $r = $p{roots};
-
-        my $roots = $class->$r();
 
         $Cache{$class} = { roots => [] };
         $Meta{$class}{params} = \%p;
@@ -47,7 +38,7 @@ my %Times;
         my $f = $Meta{$class}{file}
             = File::Spec->catfile( File::Spec->tmpdir, $clean );
 
-        $class->_add_nodes($roots);
+        $class->_iterate_all_nodes();
 
         _touch_file($f) if $first && $ENV{MOD_PERL};
 
@@ -109,52 +100,64 @@ sub _dump {
     }
 }
 
-sub _add_nodes {
-    my $class    = shift;
-    my $cursor   = shift;
-    my $parent   = shift;
-    my $children = shift;
+sub _iterate_all_nodes {
+    my $class = shift;
 
-    my $table      = $class->table;
-    my $parent_col = $table->column( $Meta{$class}{params}{parent} );
+    my $all = $class->table()->all_rows();
 
-    my $id = $Meta{$class}{params}{id};
+    while ( my $row = $all->next() ) {
+        my $node = $class->new( object => $row );
+        $class->_add_node($node);
+    }
 
-    while ( my $node = $cursor->next ) {
-        delete $node->{__hierarchy_cache__};
+    $class->_fixup_cache();
+}
 
-        if ($children) {
-            push @$children, $node;
-        }
-        else {
-            push @{ $Cache{$class}{roots} }, $node;
-        }
+sub _add_node {
+    my $class = shift;
+    my $node  = shift;
 
-        my $id_val = $node->$id();
+    delete $node->{__hierarchy_cache__};
 
-        $Cache{$class}{by_id}{$id_val} = $node;
+    my $parent_col = $Meta{$class}{params}{parent};
+    my $id_col     = $Meta{$class}{params}{id};
 
-        foreach my $flag ( @{ $Meta{$class}{params}{flags} } ) {
-            $Cache{$class}{nodes}{$id_val}{flags}{$flag} = $node->$flag();
-        }
+    my $id_val = $node->$id_col();
 
+    $Cache{$class}{by_id}{$id_val} = $node;
+
+    if ( my $parent = $node->$parent_col() ) {
         $Cache{$class}{nodes}{$id_val}{parent} = $parent;
 
-        my $cursor = $table->rows_where(
-            where => [ $parent_col, '=', $id_val ],
-            (
-                $Meta{$class}{params}{order_by}
-                ? ( order_by => $Meta{$class}{params}{order_by} )
-                : ()
-            )
-        );
+        push @{ $Cache{$class}{nodes}{$parent}{children} }, $node;
+    }
+    else {
+        push @{ $Cache{$class}{roots} }, $node;
+    }
+}
 
-        my $children = Class::AlzaboWrapper::Cursor->new( cursor => $cursor );
+sub _fixup_cache {
+    my $class = shift;
 
-        my @children;
-        $Cache{$class}{nodes}{$id_val}{children} = \@children;
+    my $order_by = $Meta{$class}{params}{order_by};
 
-        $class->_add_nodes( $children, $node, \@children );
+    $Cache{$class}{roots} = [
+        map  { $_->[0] }
+        sort { $a->[1] cmp $b->[1] }
+        map  { [ $_, $_->$order_by() ] } @{ $Cache{$class}{roots} }
+    ];
+
+    for my $id ( keys %{ $Cache{$class}{nodes} } ) {
+        $Cache{$class}{nodes}{$id}{parent}
+            = $Cache{$class}{by_id}{ $Cache{$class}{nodes}{$id}{parent} }
+            if $Cache{$class}{nodes}{$id}{parent};
+
+        $Cache{$class}{nodes}{$id}{children} = [
+            map      { $_->[0] }
+                sort { $a->[1] cmp $b->[1] }
+                map  { [ $_, $_->$order_by() ] }
+                @{ $Cache{$class}{nodes}{$id}{children} }
+        ];
     }
 }
 
@@ -179,28 +182,11 @@ sub all {
 }
 *All = \&all;
 
-sub all_with_flag {
-    my $class = shift;
-    my $flag  = shift;
-    my $val   = shift;
-
-    $class->_check_cache_time;
-
-    local $Checked = 1;
-
-    my $id = $Meta{$class}{params}{id};
-
-    return (
-        grep { $Cache{$class}{nodes}{ $_->$id() }{flags}{$flag} == $val }
-            map { $_, $_->descendants }
-            grep { $Cache{$class}{nodes}{ $_->$id() }{flags}{$flag} == $val }
-            @{ $Cache{$class}{roots} }
-    );
-}
-
 sub ByID {
     my $class = shift;
     my $id    = shift;
+
+    $class->_check_cache_time();
 
     return $Cache{$class}{by_id}{$id};
 }
@@ -348,8 +334,6 @@ sub ancestor_ids {
     return map { $_->$id() } $self->ancestors;
 }
 
-my $dumped;
-
 sub _check_cache_time {
     my $class = ref $_[0] || $_[0];
 
@@ -359,7 +343,7 @@ sub _check_cache_time {
 
     my $last_mod = ( stat $Meta{$class}{file} )[9];
 
-    if ( $last_mod > $Meta{$class}{last_build} ) {
+    unless ( $last_mod && $last_mod <= $Meta{$class}{last_build} ) {
         $class->_rebuild_cache;
     }
 }

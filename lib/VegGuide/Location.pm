@@ -41,9 +41,8 @@ use VegGuide::Validate
 
 my %CacheParams = (
     parent   => 'parent_location_id',
-    roots    => '_RealRootLocations',
     id       => 'location_id',
-    order_by => VegGuide::Schema->Schema->Location_t->name_c,
+    order_by => 'name',
 );
 
 __PACKAGE__->_build_cache( %CacheParams, first => 1 );
@@ -70,19 +69,6 @@ sub _PreloadTimeZones {
 
         DateTime::TimeZone->new( name => $name );
     }
-}
-
-sub _RealRootLocations {
-    my $schema = VegGuide::Schema->Connect();
-
-    return $_[0]->cursor(
-        $schema->Location_t->rows_where(
-            where => [
-                [ $schema->Location_t->parent_location_id_c, '=', undef ],
-            ],
-            order_by => [ $schema->Location_t->name_c, 'ASC' ],
-        )
-    );
 }
 
 sub new {
@@ -440,10 +426,12 @@ sub vendor_count {
 
     my $schema = VegGuide::Schema->Connect();
 
-    return $cache->{$key} = VegGuide::Vendor->VendorCount(
+    my $count = VegGuide::Vendor->VendorCount(
         where =>
             [ $schema->Vendor_t->location_id_c, '=', $self->location_id ],
     );
+
+    return $key ? $cache->{$key} = $count : $count;
 }
 
 sub vendors {
@@ -1174,9 +1162,10 @@ sub data_feed_rss_file {
         'location-' . $self->location_id() . '.rss',
     );
 
-    $self->_regen_cached_file( $cache_file,
-        sub { $self->_data_feed_handle() } )
-        unless $p{cache_only};
+    $self->_regen_cached_file(
+        $cache_file,
+        sub { $self->_data_feed_handle() }
+    ) unless $p{cache_only};
 
     return $cache_file;
 }
@@ -1205,13 +1194,19 @@ sub _data_feed_handle {
             if -f $cache_file
                 && ( stat $cache_file )[9] >= time - $MaxCacheAge;
 
-        return $cache_file unless $Locker->lock($cache_file);
+        my $locked;
+        if ( -f _ ) {
+            return $cache_file unless $Locker->lock($cache_file);
+            $locked = 1;
+        }
 
         eval {
             my $fh = $data_sub->();
             $fh->close;
 
             mkpath( dirname($cache_file), 0, 0755 );
+
+            $Locker->lock($cache_file) unless $locked;
 
             my $temp_file = $fh->filename();
             move( $temp_file, $cache_file )

@@ -6,6 +6,7 @@ If you're not an admin we have a serious bug.
  <li><a href="/site/admin/news_form">Add a news item</a></li>
  <li><a href="/region/recent">Recent regions</a></li>
  <li><a href="/region/comment">All region comments</a></li>
+ <li><a href="/region/maintainers">All region maintainers</a></li>
  <li><a href="/site/admin/locale_list">Locales</a></li>
  <li><a href="/entry/ungeocoded">Entries that are not geocoded (but could be)</a></li>
  <li><a href="/site/admin/duplicates">Possible duplicate entries</a></li>

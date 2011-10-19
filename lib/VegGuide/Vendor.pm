@@ -886,7 +886,12 @@ sub external_uri {
 
     return unless $self->home_page();
 
-    return 'http://' . $self->home_page();
+    if ( $self->home_page() =~ m{^https?://} ) {
+        return $self->home_page();
+    }
+    else {
+        return 'http://' . $self->home_page();
+    }
 }
 
 sub review_count {
@@ -1761,6 +1766,12 @@ sub _validate_hour_sets {
     }
 }
 
+sub has_address {
+    my $self = shift;
+
+    return grep { ! string_is_empty($_) } $self->address_pieces();
+}
+
 sub address_pieces {
     my $self = shift;
 
@@ -1783,33 +1794,28 @@ sub _address_pieces_Hungarian {
     );
 }
 
-sub has_localized_address {
-    return 1
-        if grep { defined && length }
-            $_[0]->_localized_address_pieces_standard();
-}
-
-sub localized_address_pieces {
+sub address_hash {
     my $self = shift;
 
-    my $meth = '_localized_address_pieces_' . $self->location->address_format;
-
-    $self->$meth();
+    return {
+        street1     => $self->address1(),
+        street2     => $self->address2(),
+        city        => $self->city(),
+        region      => $self->region(),
+        postal_code => $self->postal_code(),
+    };
 }
 
-sub _localized_address_pieces_standard {
-    return ( grep {defined} $_[0]->localized_address1,
-        $_[0]->localized_address2, $_[0]->localized_city_region_postal_code );
-}
+sub localized_address_hash {
+    my $self = shift;
 
-sub _localized_address_pieces_Hungarian {
-    return (
-        join ', ',
-        grep {defined}
-            $_[0]->postal_code,  $_[0]->localized_city,
-        $_[0]->localized_region, $_[0]->localized_address1,
-        $_[0]->localized_address2
-    );
+    return {
+        street1     => $self->localized_address1(),
+        street2     => $self->localized_address2(),
+        city        => $self->localized_city(),
+        region      => $self->localized_region(),
+        postal_code => $self->postal_code(),
+    };
 }
 
 sub city_region_postal_code {
@@ -1817,24 +1823,6 @@ sub city_region_postal_code {
 
     my ( $city, $region, $postal_code )
         = ( $self->city, $self->region, $self->postal_code );
-
-    my $c_r_pc;
-    $c_r_pc = $city if defined $city;
-    $c_r_pc .= ', ' if defined $city && defined $region;
-    $c_r_pc .= $region if defined $region;
-    $c_r_pc .= "  $postal_code" if defined $postal_code;
-
-    return $c_r_pc;
-}
-
-sub localized_city_region_postal_code {
-    my $self = shift;
-
-    my ( $city, $region, $postal_code )
-        = ( $self->localized_city, $self->localized_region,
-        $self->postal_code );
-
-    return unless $city || $region;
 
     my $c_r_pc;
     $c_r_pc = $city if defined $city;
@@ -2078,14 +2066,6 @@ sub is_restaurant {
         grep { $_->category_id == $RestaurantCategoryID } $self->categories;
 }
 
-sub is_smoke_free {
-    my $self = shift;
-
-    my $smoking = $self->allows_smoking();
-
-    return 1 if defined $smoking && !$smoking;
-}
-
 my $BarCategoryID
     = VegGuide::Category->Bar ? VegGuide::Category->Bar->category_id : 0;
 my $CoffeeTeaJuiceCategoryID
@@ -2270,6 +2250,49 @@ sub vendor_source {
 
         return %data;
     }
+}
+
+sub microdata_schema {
+    my $self = shift;
+
+    $self->{microdata_schema} = $self->_build_microdata_schema()
+        unless exists $self->{microdata_schema};
+
+    return $self->{microdata_schema};
+}
+
+{
+    my $Restaurant = 'http://schema.org/Restaurant';
+    my $Coffee     = 'http://schema.org/CafeOrCoffeeShop';
+    my $Bar        = 'http://schema.org/BarOrPub';
+    my $Lodging    = 'http://schema.org/LodgingBusiness';
+    my $NGO        = 'http://schema.org/NGO';
+    my $GenericOrg = 'http://schema.org/Organization';
+
+    sub _build_microdata_schema {
+        my $self = shift;
+
+        my %cat = map { $_->name() => 1 } $self->categories();
+
+        return $Restaurant
+            if $cat{Restaurant}
+                || $cat{'Food Court or Street Vendor'};
+
+        return $Coffee  if $cat{'Coffee/Tea/Juice'};
+        return $Bar     if $cat{Bar};
+        return $Lodging if $cat{'Hotel/B&B'};
+        return $NGO     if $cat{Organization};
+
+        return $GenericOrg;
+    }
+}
+
+sub is_smoke_free {
+    my $self = shift;
+
+    my $smoking = $self->allows_smoking();
+
+    return 1 if defined $smoking && !$smoking;
 }
 
 sub rest_data {
@@ -2553,7 +2576,7 @@ sub VendorsWhere {
 
         return VegGuide::Cursor::VendorByAggregate->new(
             cursor => $schema->select(
-                select => [ $schema->Vendor_t()->vendor_id_c(), $distance ],
+                select => [ $schema->sqlmaker->DISTINCT( $schema->Vendor_t()->vendor_id_c() ), $distance ],
                 join   => \@join,
                 %where,
                 order_by => [

@@ -54,10 +54,6 @@ my $vendors = $search->vendors();
  </div>
 % }
 
-% if ( $c->client()->show_localized_content() && $vendor->has_localized_address() ) {
- <div class="address"><% join ', ', $vendor->localized_address_pieces() %></div>
-% }
-
  <div class="hours">
 % foreach my $desc (@hours) {
   <span class="day-name"><% $desc->{days} | h %>:</span> <span class="day-hours"><% $desc->{hours}[0] | h %>\

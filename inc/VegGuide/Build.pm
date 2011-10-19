@@ -290,7 +290,7 @@ sub _find_things {
     my $rule = File::Find::Rule->new();
 
     $rule = $rule->or(
-        $rule->new()->directory()->name('.hg')->prune()->discard(),
+        $rule->new()->directory()->name('.git')->prune()->discard(),
 
         $rule->new()->name('*~')->prune()->discard(),
 
@@ -381,7 +381,7 @@ sub ACTION_write_revision_file {
 
     require VegGuide::Config;
 
-    my ($revision) = `hg tip` =~ /changeset:\s+(\d+)/;
+    my ($revision) = `git log -n 1` =~ /commit\s+(......)/;
 
     return unless $revision;
 

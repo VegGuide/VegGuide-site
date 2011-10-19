@@ -55,6 +55,7 @@ sub _get_feed {
         my $xml  = shift;
 
         my $items = eval { $Simple->XMLin($xml)->{item} };
+        warn $@ if $@;
 
         return unless $items;
 

@@ -197,7 +197,8 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1) {
         return unless $c->stash()->{search};
 
         $c->tab_by_id('map')->set_is_selected(1)
-            if $c->request()->looks_like_browser()
+            if $c->tab_by_id('map')
+                && $c->request()->looks_like_browser()
                 && $c->request()->method() eq 'GET';
 
         $self->_set_uris_for_search($c);
@@ -220,7 +221,8 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1) {
         my $c    = shift;
 
         $c->tab_by_id('printable')->set_is_selected(1)
-            if $c->request()->looks_like_browser()
+            if $c->tab_by_id('printable')
+                && $c->request()->looks_like_browser()
                 && $c->request()->method() eq 'GET';
 
         $self->_set_uris_for_search($c);
@@ -240,7 +242,8 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1) {
         return unless $c->stash()->{search};
 
         $c->tab_by_id('printable')->set_is_selected(1)
-            if $c->request()->looks_like_browser()
+            if $c->tab_by_id('printable')
+                && $c->request()->looks_like_browser()
                 && $c->request()->method() eq 'GET';
 
         $self->_set_uris_for_search($c);
@@ -604,7 +607,8 @@ sub stats : Chained('_set_location') : PathPart('stats') : Args(0) {
     my $self = shift;
     my $c    = shift;
 
-    $c->tab_by_id('stats')->set_is_selected(1);
+    $c->tab_by_id('stats')->set_is_selected(1)
+        if $c->tab_by_id('stats');
 
     $c->stash()->{template} = '/region/stats';
 }
@@ -821,6 +825,18 @@ sub comment : Local {
     $c->stash()->{comments} = VegGuide::Location->AllComments();
 
     $c->stash()->{template} = '/site/comment-list';
+}
+
+sub maintainers : Local {
+    my $self = shift;
+    my $c    = shift;
+
+    $c->redirect_and_detach('/')
+        unless $c->vg_user()->is_admin();
+
+    $c->stash()->{users} = VegGuide::User->RegionMaintainers();
+
+    $c->stash()->{template} = '/site/admin/region-maintainer-list';
 }
 
 1;

@@ -7,7 +7,7 @@
 % }
 
 % if ( $user->home_page() ) {
-<a rel="nofollow" href="http://<% $user->home_page() %>">My website</a>
+<a rel="nofollow" href="<% $user->external_uri %>">My website</a>
 % }
 
 % if ( $user->how_veg() ) {
@@ -42,8 +42,4 @@ $user
 
 <%method page_title>
 <% $m->caller_args(-1)->{user}->real_name() | h %>
-</%method>
-
-<%method title>
-VegGuide.Org | <% $m->caller_args(-1)->{user}->real_name() | h %>
 </%method>
