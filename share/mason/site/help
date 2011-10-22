@@ -734,14 +734,13 @@ Compassionate Action for Animals.
 <h2>Why does this site look terrible in my browser?</h2>
 
 <p>
-This site was primarily designed to look good in Mozilla/Firefox and
-Internet Explorer 7.0+. It should also look okay in Safari, Konqueror,
-and Opera 7+. Because the site is standards-compliant, it should also
-be usable in text-only browsers.
+This site was primarily designed to look good in modern browsers: Firefox,
+Chrome, Safari, Opera, and Internet Explorer (version 7 or newer). Because the
+site is standards-compliant, it should also be usable in text-only browsers.
 </p>
 
 <p>
-If you are using an older version of Internet Explorer or Mozilla, the
+If you are using an older version of Internet Explorer or Firefox, the
 site layout may look pretty strange. We recommend upgrading to the
 latest version of <a href="http://www.getfirefox.com/">Firefox</a>
 available, or at least to IE7 if you cannot use Firefox.
