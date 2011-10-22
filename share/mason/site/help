@@ -517,9 +517,7 @@ href="/mailman/listinfo/community">VegGuide community email list</a>.
 <h2>Can I use your database content for my website/leaflet/etc.?</h2>
 
 <p>
-Yes, that's why we offer a <a href="/site/rest_api/">REST API</a> for
-our database. Please respect <&| /lib/link/license.mas &>our
-license</&>.
+Yes. Please respect <&| /lib/link/license.mas &>our license</&>.
 </p>
 
 <p>
