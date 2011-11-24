@@ -630,8 +630,7 @@ sub recent_rss : Chained('_set_location') : PathPart('recent.rss') : Args(0) {
     $self->_recent_feed( $c, 'rss' );
 }
 
-sub recent_atom : Chained('_set_location') : PathPart('recent.atom') : Args(0)
-{
+sub recent_atom : Chained('_set_location') : PathPart('recent.atom') : Args(0) {
     my $self = shift;
     my $c    = shift;
 
