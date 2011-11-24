@@ -58,6 +58,7 @@ sub process_line {
 
         my $text = $3;
         return if $text =~ /Software caused connection abort/;
+
         $text =~ s/\\n/\n/g;
         $text =~ s/\\\\/\\/g;
         $text =~ s/^\s+|\s+$//g;
