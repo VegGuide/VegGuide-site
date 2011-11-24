@@ -57,10 +57,12 @@ sub process_line {
         $message{level} = $2;
 
         my $text = $3;
+        return if $text =~ /Software caused connection abort/;
+        $text =~ s/\\n/\n/g;
+        $text =~ s/\\\\/\\/g;
+        $text =~ s/^\s+|\s+$//g;
 
-        if ( $text =~ /^{.+}$/ ) {
-            $text =~ s/(\\.)/eval qq{"$1"}/eg;
-
+        if ( $text =~ /^{.+}$/s ) {
             my $error = VegGuide::JSON->Decode($text);
 
             $text = 'URI: ' . $error->{uri};
@@ -131,5 +133,6 @@ sub _make_tail {
         name       => $file,
         resetafter => 3600 * 8,
         nowait     => 1,
+tail => 20,
     );
 }

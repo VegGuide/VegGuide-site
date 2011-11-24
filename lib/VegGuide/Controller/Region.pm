@@ -617,7 +617,8 @@ sub feeds : Chained('_set_location') : PathPart('feeds') : Args(0) {
     my $self = shift;
     my $c    = shift;
 
-    $c->tab_by_id('feeds')->set_is_selected(1);
+    $c->tab_by_id('feeds')->set_is_selected(1)
+        if $c->tab_by_id('feeds');
 
     $c->stash()->{template} = '/region/feeds';
 }
