@@ -248,7 +248,7 @@ sub _veg_level {
 
     return
         unless $self->{veg_level}
-            && $self->{veg_level} >= 1
+            && $self->{veg_level} >= 0
             && $self->{veg_level} <= 5;
 
     if ( $self->{veg_level} == 2 ) {
