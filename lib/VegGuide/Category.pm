@@ -28,10 +28,10 @@ sub new {
     my %p     = @_;
 
     if ( $p{name} ) {
-        return $CategoriesByName{ $p{name} };
+        return $CategoriesByName{ $p{name} } || ();
     }
 
-    return $Categories{ $p{category_id} };
+    return $Categories{ $p{category_id} } || ();
 }
 
 sub plural_name {

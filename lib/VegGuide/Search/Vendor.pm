@@ -119,6 +119,10 @@ sub _exclude_long_closed_vendors {1}
 sub _category_id {
     my $self = shift;
 
+    $self->{category_id}
+        = [ grep { VegGuide::Category->new( category_id => $_ ) }
+            @{ $self->{category_id} || [] } ];
+
     return unless @{ $self->{category_id} };
 
     push @{ $self->{join} },
@@ -130,10 +134,9 @@ sub _category_id {
         'IN', @{ $self->{category_id} }
         ];
 
-    my @names = (
-        map { lc VegGuide::Category->new( category_id => $_ )->plural_name() }
-            @{ $self->{category_id} }
-    );
+    my @names
+        = map { lc VegGuide::Category->new( category_id => $_ )->plural_name() }
+        @{ $self->{category_id} };
 
     if ( @names == 1 ) {
         $self->{descriptions}{category_id}{long} = "which are $names[0].";
