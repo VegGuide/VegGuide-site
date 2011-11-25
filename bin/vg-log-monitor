@@ -85,7 +85,7 @@ sub process_line {
         $message{text} = $text;
     }
 
-    next unless $message{text};
+    return unless $message{text};
 
     $message{text} =~ s/^\s*/    /gm;
 
