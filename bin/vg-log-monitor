@@ -30,12 +30,23 @@ my $local_tz = DateTime::TimeZone->new( name => 'local' );
 my $tail = _make_tail();
 
 while ( defined( my $line = $tail->read() ) ) {
+    if ( length $line ) {
+        local $@;
+        if ( eval { process_line($line) } ) {
+            next;
+        }
+        else {
+            warn $@ if $@;
+        }
+    }
+    else {
+        {
+            local $@;
+            eval { send_if_pending(); };
+            warn $@ if $@;
+        }
+    }
 
-    # Process all the messages that are pending if there's something
-    # in the logs.
-    next if process_line($line);
-
-    send_if_pending();
     sleep $sleep;
 }
 
@@ -59,8 +70,9 @@ sub process_line {
         my $text = $3;
         return if $text =~ /Software caused connection abort/;
 
-        $text =~ s/\\n/\n/g;
+        $text =~ s/(?<!\\)\\n/\n/g;
         $text =~ s/\\\\/\\/g;
+
         $text =~ s/^\s+|\s+$//g;
 
         if ( $text =~ /^{.+}$/s ) {
@@ -127,6 +139,8 @@ sub send_if_pending {
     $last_sent = $now;
 
     @messages = ();
+
+    return;
 }
 
 sub _make_tail {
