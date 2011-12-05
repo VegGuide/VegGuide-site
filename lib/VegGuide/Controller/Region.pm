@@ -174,7 +174,8 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1) {
         my $c    = shift;
 
         $c->tab_by_id('map')->set_is_selected(1)
-            if $c->request()->looks_like_browser()
+            if $c->tab_by_id('map')
+                && $c->request()->looks_like_browser()
                 && $c->request()->method() eq 'GET';
 
         $self->_set_uris_for_search($c);
