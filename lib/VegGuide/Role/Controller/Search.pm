@@ -142,6 +142,11 @@ sub _redirect_on_bad_request {
         $c->redirect_and_detach( q{/}, 301 );
     }
 
+    # More l33t hackers
+    if ( grep { /\.\./ } keys %p ) {
+        $c->redirect_and_detach( q{/}, 301 );
+    }
+
     my @bad_keys = qw( location_id new_query amp from );
 
     # Some bad redirects pointed bots to these URIs and now they keep
