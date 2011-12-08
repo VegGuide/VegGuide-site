@@ -25,7 +25,7 @@
        <span class="comment-date">
          <br />
 %   if ($vendor) {
-         <time itemprop="publishDate" datetime="<% $comment->last_modified_datetime_object()->iso8601() | h %>">
+         <time itemprop="datePublished" datetime="<% $comment->last_modified_datetime_object()->iso8601() | h %>">
 %   }
            <& /lib/format/date.mas, date => $comment->last_modified_datetime_object() &>
 %   if ($vendor) {
