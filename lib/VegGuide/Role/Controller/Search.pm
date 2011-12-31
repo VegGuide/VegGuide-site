@@ -144,7 +144,7 @@ sub _redirect_on_bad_request {
     }
 
     # More l33t hackers
-    if ( grep { /\.\./ || /_ult_sec/ } keys %p ) {
+    if ( grep { /\.\./ || /_ult/ } keys %p ) {
         $c->redirect_and_detach( q{/}, 301 );
     }
 
