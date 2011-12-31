@@ -178,6 +178,9 @@ sub _set_search_cursor_params {
     my $params = $c->request()->parameters();
 
     my $page = $params->{page} || 1;
+    if ( $page =~ /\D/ ) {
+        $c->redirect_and_detach( $search->uri(1) );
+    }
 
     my $limit = $params->{limit} || $c->vg_user()->entries_per_page();
 
