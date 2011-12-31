@@ -121,7 +121,7 @@ sub _search_from_request {
         %{ $extra || {} },
     );
 
-    $self->_redirect_on_bad_request( $c, %p );
+    $self->_redirect_on_bad_request( $c, $class, %p );
 
     delete $p{$_} for grep {/^possible/} keys %p;
     delete @p{qw( order_by sort_order page limit )};
@@ -131,9 +131,10 @@ sub _search_from_request {
 }
 
 sub _redirect_on_bad_request {
-    my $self = shift;
-    my $c    = shift;
-    my %p    = @_;
+    my $self  = shift;
+    my $c     = shift;
+    my $class = shift;
+    my %p     = @_;
 
     # Some l33t hacker bot keeps trying to stick links in these
     # parameters
@@ -144,6 +145,10 @@ sub _redirect_on_bad_request {
 
     # More l33t hackers
     if ( grep { /\.\./ } keys %p ) {
+        $c->redirect_and_detach( q{/}, 301 );
+    }
+
+    if ( $class =~ /ByLatLong/ && ! exists $p{address} ) {
         $c->redirect_and_detach( q{/}, 301 );
     }
 
