@@ -623,30 +623,6 @@ If you are interested in being a region maintainer for an area, please
 </p>
 </%def>
 
-<%def .watch_list>
-<h2>What is the "watch list" feature?</h2>
-
-<p>
-You can add regions to your personal watch list by clicking on the
-"watch list" icon (an eye) when you are looking at a region. Once a
-week, you'll receive an email telling you what new entries have been
-created for all the regions on your watch list.
-</p>
-
-<p>
-If you add a region that contains other regions to your list, for
-example Minnesota, then you will be notified of additions for
-<i>all</i> of the regions contained in Minnesota.
-</p>
-
-% if ( $c->vg_user()->is_logged_in() ) {
-<p>
-You can remove regions from your watch list on your <a
-href="<% user_uri( user => $c->vg_user(), path => 'watch_list' ) | h %>">watch list</a> page.
-</p>
-% }
-</%def>
-
 <%def .definitions>
 <h2>How are "vegan", "vegetarian", etc. defined on this site?</h2>
 
