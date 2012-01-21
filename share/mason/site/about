@@ -86,6 +86,11 @@ Perl, and is available from our <a href="/site/source" title="Source
 Code">source repository</a>.
 </p>
 
+<p>
+The site is written in <a href="http://www.perl.org">Perl</a> using
+the <a href="http://www.catalystframework.org/">Catalyst MVC framework</a>.
+</p>
+
 <h2>History</h2>
 
 <p>
