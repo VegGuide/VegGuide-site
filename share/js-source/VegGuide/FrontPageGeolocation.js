@@ -17,8 +17,6 @@ VegGuide.FrontPageGeolocation.instrumentPage = function () {
         return;
     }
 
-    VegGuide.FrontPageGeolocation.browse_all = $("nearby-browse-all");
-
     VegGuide.FrontPageGeolocation.nearby.innerHTML = "<p>Finding nearby restaurants ...</p>";
 
     navigator.geolocation.getCurrentPosition( VegGuide.FrontPageGeolocation._getNearbyList );
