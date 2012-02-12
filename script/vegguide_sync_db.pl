@@ -7,6 +7,8 @@ use FindBin;
 
 use lib "$FindBin::Bin/../lib";
 
+BEGIN { $VegGuide::Build::IsInstalling = 1 }
+
 use VegGuide::Config;
 use VegGuide::Schema;
 

@@ -9,7 +9,7 @@ use lib "$FindBin::Bin/../../../lib";
 use VegGuide::Schema;
 
 
-system( 'script/vegguide_sync_db.pl' )
+system( $^X, 'script/vegguide_sync_db.pl' )
     and die $!;
 
 my $dbh = VegGuide::Schema->Connect()->driver()->handle();

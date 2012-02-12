@@ -17,5 +17,5 @@ $dbh->do( 'UPDATE Vendor SET price_range_id = 3 WHERE price_range_id IN ( 4, 5 )
 
 $dbh->do( 'DELETE FROM PriceRange' );
 
-system( 'script/vegguide_sync_db.pl', '--data' )
+system( $^X, 'script/vegguide_sync_db.pl', '--data' )
     and die $!;

@@ -50,7 +50,7 @@ sub run_scripts {
     print "Running migrations for version $ver\n";
     for my $script ( sort grep { -f && -x } glob "$Dir/migrations/$ver/*" ) {
         print "  - ", basename($script), "\n";
-        system($script )
+        system( $^X, $script )
             and die "Cannot run $script: $!";
     }
 }
