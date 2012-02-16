@@ -44,46 +44,6 @@ __PACKAGE__->response_class('VegGuide::Response');
 
 __PACKAGE__->setup();
 
-{
-
-    # monkey patch to fix Catalyst::Runtime issue
-    use Moose::Util qw/find_meta/;
-
-    sub setup_engine {
-        my ( $class, $requested_engine ) = @_;
-
-        my $engine = $class->engine_class($requested_engine);
-
-        # Don't really setup_engine -- see _setup_psgi_app for explanation.
-        return if $class->loading_psgi_file;
-
-        Class::MOP::load_class($engine);
-
-        if ( $ENV{MOD_PERL} ) {
-            my $apache = $class->engine_loader->auto;
-
-            my $meta              = find_meta($class);
-            my $was_immutable     = $meta->is_immutable;
-            my %immutable_options = $meta->immutable_options;
-            $meta->make_mutable if $was_immutable;
-
-            $meta->add_method(
-                handler => sub {
-                    my $r        = shift;
-                    my $psgi_app = $class->_finalized_psgi_app;
-                    $apache->call_app( $r, $psgi_app );
-                }
-            );
-
-            $meta->make_immutable(%immutable_options) if $was_immutable;
-        }
-
-        $class->engine( $engine->new );
-
-        return;
-    }
-}
-
 sub skin {
     my $self = shift;
 
