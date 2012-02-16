@@ -1,0 +1,254 @@
+# Static files and backend proxy
+server {
+    error_log  /var/log/nginx/vegguide.org/error.log;
+    access_log /var/log/nginx/vegguide.org/access.log;
+
+    listen 80;
+    server_name www.vegguide.org vegguide.org;
+    
+    add_header P3P "policyref=\"http://www.vegguide.org/w3c/p3p.xml\", CP=\"ALL DSP COR CURa ADMa \DEVa TAIa PSAa PSDa OUR IND PHY ONL COM NAV DEM STA\"";
+
+    rewrite  ^(/mailman|/pipermail)(.*)  https://lists.vegguide.org$1$2  permanent;
+
+    #rewrite  !^/down.html$  /down.html  redirect;
+    rewrite   ^/down\.html  /  redirect;
+
+    set $var_dir   /var/lib/vegguide;
+    set $cache_dir /var/cache/vegguide;
+    set $share_dir /usr/local/share/vegguide;
+
+    error_page 503 $share_dir/static/503.html;
+
+    location ~ .*favicon\.(?:gif|ico)$ {
+        alias $share_dir/images/favicon.ico;
+    }
+
+    location ~ (?:/\w*)?/css/vegguide-combined\.css {
+        expires max;
+        alias $cache_dir/css/vegguide-combined.css;
+    }
+       
+    location ~ (?:/\w*)?/(css|images)(.+) {
+        expires max;
+        alias $share_dir/$1$2;
+    }
+
+    location ~ (?:/\w*)?/(js.+) {
+        expires max;
+        alias $var_dir/$1;
+    }
+
+    location ~ ^/static/rss {
+        alias $cache_dir/rss;
+    }
+
+    location ~ ^/(static|w3c) {
+        alias $share_dir/$1;
+    }
+
+    location ~ ^/robots\.txt {
+        alias $share_dir/static/robots.txt;
+    }
+
+    location ~ ^/(entry-images|user-images|skin-images) {
+        alias $var_dir/$1;
+    }
+    
+    location ~ ^/plain.* {
+        return 410;
+    }
+    
+    location ~ ^/(?:events?|location|logged-in||news|noauth|vendor)/.*\.html {
+        return 410;
+    }
+
+    location ~ ^/(?:source|privacy|about|contact|info_key|contest|todo).html {
+        return 410;
+    }
+
+    location ~ ^/(?:search|printable|location_suggestion|promo_cards|vegsiteinabox).html {
+        return 410;
+    }
+
+    location ~ ^/by_(?:name|geocode|zipcode).html {
+        return 410;
+    }
+
+    location ~ ^/submit.* {
+        return 410;
+    }
+
+    # Random requests for stuff that we don't have - some are hack attempts
+    location ~ ^/maps/c/ui/HovercardLauncher/dommanifest\.js$ {
+        return 404;
+    }
+
+    location ~ ^/\.api/main\.js  {
+        return 404;
+    }
+
+    location ~ ^/ge/v/1/4/loader\.js {
+        return 404;
+    }
+
+    location ~ ^/__utm\.gif {
+        return 404;
+    }
+
+    location ~ ^\/apple-touch-icon(?:-precomposed)?\.png {
+        return 404;
+    }
+
+    location ~ ^\/labels\.rdf {
+        return 404;
+    }
+
+    location ~ ^\/sugest\.css {
+        return 404;
+    }
+
+    # This stuff seems to be hack attempts
+    location ~ ^/https://www\.paypal\.com/cgi-bin/webscr {
+        return 403;
+    }
+
+    location ~ \.(?:asp|cfn|php|dll)$ {
+        return 403;
+    }
+
+    location ~ (?:ikonboard\.cgi|YaBB\.pl)$ {
+        return 403;
+    }
+
+    location ~ ^\/add\.php3$ {
+        return 403;
+    }
+
+    location ~ ^\/uds.* {
+        return 403;
+    }
+
+    location ~ ^\/img.* {
+        return 403;
+    }
+
+    location ~ ^\/\.\.\. {
+        return 403;
+    }
+
+    # This dates back to much older versions of the site, when most pages
+    # had a .mhtml extension.
+    rewrite  (.*/)?([^/]+)\.mhtml$  $1$2.html permanent;
+
+    # Some brain-damaged crawler was requesting URIs like this
+    rewrite  ^.+\.rss%3[Ff]  /  permanent;
+
+    location ~ ^/location {
+        if ( $args_location_id ~ (\d+) ) {
+            set $region_id $1;
+            rewrite  ^/location/view\.html         /region/$region_id             permanent;
+            rewrite  ^/location/data\.rss          /region/$region_id.rss         permanent;
+            rewrite  ^/location/most_recent\.rss   /region/$region_id/recent.rss  permanent;
+            rewrite  ^/location/most_recent_vendors\.rss   /region/$region_id/recent.rss?entries_only=1  permanent;
+            rewrite  ^/location/most_recent_reviews\.rss   /region/$region_id/recent.rss?reviews_only=1  permanent;
+        }
+        rewrite  ^  /  break;
+    }
+
+    location ~ ^/vendor {
+        if ( $args_vendor_id ~ (\d+) ) {
+            set $vendor_id $1;
+            rewrite  ^/vendor/view\.html     /entry/$vendor_id          permanent;
+            rewrite  ^/vendor/reviews\.html  /entry/$vendor_id/reviews  permanent;
+        }
+        rewrite  ^  /  break;
+    }
+
+    location ~ ^/user {
+        if ( $args_user_id ~ (\d+) ) {
+            set $user_id $1;
+            rewrite  ^/user/view\.html  /user/$user_id  permanent;
+        }
+        rewrite  ^  /  break;
+    }
+
+    rewrite  ^/index\.html             /                permanent;
+    rewrite  ^/faq\.html               /site/help       permanent;
+    rewrite  ^/rss/data_feed.html      /site/data_feed  permanent;
+    rewrite  ^/rss                     /site/feeds      permanent;
+    rewrite  ^/news                    /site/news       permanent;
+    rewrite  ^/rss/static/all\w+\.rss  /site.rss        permanent;
+    rewrite  ^/noauth                  /                redirect;
+
+    location ~ ^/submit/search {
+        rewrite  ^/submit/search  /site/search?search_text=$args_search  permanent;
+    }
+
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_connect_timeout 90;
+    proxy_send_timeout    90;
+    proxy_read_timeout    90;
+    proxy_buffers         32 4k;
+
+    location / {
+        proxy_pass http:://localhost:8088;
+    }
+}
+
+server {
+    listen 80;
+    server_name *.vegguide.org;
+
+    rewrite  ^  http://www.vegguide.org$request_uri? permanent;
+}
+
+server {
+    listen 443;
+    server_name lists.vegguide.org;
+
+    ssl on;
+    ssl_certificate     /etc/ssl/certs/www.vegguide.org.crt;
+    ssl_certificate_key /etc/ssl/private/www.vegguide.org.key;
+
+    root /usr/lib;
+
+    location = / {
+        rewrite ^ /mailman/listinfo permanent;
+    }
+ 
+    location / {
+        rewrite ^ /mailman$uri?$args;
+    }
+ 
+    location = /mailman/ {
+        rewrite ^ /mailman/listinfo permanent;
+    }
+    
+    location /mailman/ {
+        include proxy_params;
+        proxy_pass http://127.0.0.1:7777/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+ 
+    location /cgi-bin {
+        rewrite ^/cgi-bin(.*)$ $1 permanent;
+    }
+ 
+    location /images/mailman {
+        alias /var/lib/mailman/icons;
+    }
+ 
+    location /pipermail {
+        alias /var/lib/mailman/archives/public;
+        autoindex on;
+    }
+}    
+
+server {
+    listen 80;
+
+    rewrite  ^  http://www.vegguide.org$request_uri?  permanent;
+}

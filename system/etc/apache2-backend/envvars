@@ -1,3 +1,0 @@
-export APACHE_RUN_USER=www-data
-export APACHE_RUN_GROUP=www-data
-export APACHE_PID_FILE=/var/run/apache2-backend.pid
