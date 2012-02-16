@@ -25,7 +25,6 @@ use Sys::Hostname qw( hostname );
 {
     my @StandardImports = qw( AuthenCookie
         +VegGuide::Plugin::ErrorHandling
-        +VegGuide::Plugin::FixupHost
         +VegGuide::Plugin::FixupURI
         +VegGuide::Plugin::InOutEncoding
         +VegGuide::Plugin::ResponseAttributes
