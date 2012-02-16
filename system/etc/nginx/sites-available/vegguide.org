@@ -8,10 +8,15 @@ server {
     
     add_header P3P "policyref=\"http://www.vegguide.org/w3c/p3p.xml\", CP=\"ALL DSP COR CURa ADMa \DEVa TAIa PSAa PSDa OUR IND PHY ONL COM NAV DEM STA\"";
 
-    rewrite  ^(/mailman|/pipermail)(.*)  https://lists.vegguide.org$1$2  permanent;
+    location ~ ^(/mailman|/pipermail)(.*) {
+        set $path $1$2;
+        rewrite  ^  https://lists.vegguide.org$path  permanent;
+    }
 
     #rewrite  !^/down.html$  /down.html  redirect;
-    rewrite   ^/down\.html  /  redirect;
+    location = /down.html {
+        rewrite  ^  /;
+    }
 
     set $var_dir   /var/lib/vegguide;
     set $cache_dir /var/cache/vegguide;
@@ -19,42 +24,46 @@ server {
 
     error_page 503 $share_dir/static/503.html;
 
-    location ~ .*favicon\.(?:gif|ico)$ {
-        alias $share_dir/images/favicon.ico;
+    location ~ .*favicon\.gif$ {
+        rewrite  ^  /favicon.ico;
+    }
+
+    location = /favicon.ico {
+        root $share_dir/images;
     }
 
     location ~ (?:/\w*)?/css/vegguide-combined\.css {
         expires max;
-        alias $cache_dir/css/vegguide-combined.css;
+        root $cache_dir/css;
     }
        
-    location ~ (?:/\w*)?/(css|images)(.+) {
+    location ~ (?:/\w*)?/(css|images) {
         expires max;
-        alias $share_dir/$1$2;
+        root $share_dir/$1;
     }
 
-    location ~ (?:/\w*)?/(js.+) {
+    location ~ (?:/\w*)?/js {
         expires max;
-        alias $var_dir/$1;
+        root $var_dir/js;
     }
 
-    location ~ ^/static/rss {
-        alias $cache_dir/rss;
+    location ^~ /static/rss {
+        root $cache_dir/rss;
     }
 
     location ~ ^/(static|w3c) {
-        alias $share_dir/$1;
+        root $share_dir/$1;
     }
 
-    location ~ ^/robots\.txt {
-        alias $share_dir/static/robots.txt;
+    location ^~ /robots.txt {
+        root $share_dir/static;
     }
 
     location ~ ^/(entry-images|user-images|skin-images) {
-        alias $var_dir/$1;
+        root $var_dir/$1;
     }
     
-    location ~ ^/plain.* {
+    location ^~ /plain {
         return 410;
     }
     
@@ -74,7 +83,7 @@ server {
         return 410;
     }
 
-    location ~ ^/submit.* {
+    location ^~ /submit {
         return 410;
     }
 
@@ -83,15 +92,15 @@ server {
         return 404;
     }
 
-    location ~ ^/\.api/main\.js  {
+    location ^~ /.api/main.js  {
         return 404;
     }
 
-    location ~ ^/ge/v/1/4/loader\.js {
+    location ^~ /ge/v/1/4/loader.js {
         return 404;
     }
 
-    location ~ ^/__utm\.gif {
+    location ^~ /__utm.gif {
         return 404;
     }
 
@@ -99,16 +108,16 @@ server {
         return 404;
     }
 
-    location ~ ^\/labels\.rdf {
+    location ^~ \/labels.rdf {
         return 404;
     }
 
-    location ~ ^\/sugest\.css {
+    location ^~ \/sugest.css {
         return 404;
     }
 
     # This stuff seems to be hack attempts
-    location ~ ^/https://www\.paypal\.com/cgi-bin/webscr {
+    location ^~ /https://www.paypal.com/cgi-bin/webscr {
         return 403;
     }
 
@@ -138,12 +147,17 @@ server {
 
     # This dates back to much older versions of the site, when most pages
     # had a .mhtml extension.
-    rewrite  (.*/)?([^/]+)\.mhtml$  $1$2.html permanent;
+    location ~ (.*/)?([^/]+)\.mhtml$ {
+        set $path $1$2;
+        rewrite  ^  $path.html permanent;
+    }
 
     # Some brain-damaged crawler was requesting URIs like this
-    rewrite  ^.+\.rss%3[Ff]  /  permanent;
+    location ~ ^.+\.rss%3[Ff] {
+        rewrite  ^  /  permanent;
+    }
 
-    location ~ ^/location {
+    location ^~ /location {
         if ( $args_location_id ~ (\d+) ) {
             set $region_id $1;
             rewrite  ^/location/view\.html         /region/$region_id             permanent;
@@ -155,7 +169,7 @@ server {
         rewrite  ^  /  break;
     }
 
-    location ~ ^/vendor {
+    location ^~ /vendor {
         if ( $args_vendor_id ~ (\d+) ) {
             set $vendor_id $1;
             rewrite  ^/vendor/view\.html     /entry/$vendor_id          permanent;
@@ -164,7 +178,7 @@ server {
         rewrite  ^  /  break;
     }
 
-    location ~ ^/user {
+    location ^~ /user {
         if ( $args_user_id ~ (\d+) ) {
             set $user_id $1;
             rewrite  ^/user/view\.html  /user/$user_id  permanent;
@@ -172,28 +186,52 @@ server {
         rewrite  ^  /  break;
     }
 
-    rewrite  ^/index\.html             /                permanent;
-    rewrite  ^/faq\.html               /site/help       permanent;
-    rewrite  ^/rss/data_feed.html      /site/data_feed  permanent;
-    rewrite  ^/rss                     /site/feeds      permanent;
-    rewrite  ^/news                    /site/news       permanent;
-    rewrite  ^/rss/static/all\w+\.rss  /site.rss        permanent;
-    rewrite  ^/noauth                  /                redirect;
+    location = /index.html {
+        rewrite  ^  / permanent;
+    }
+
+    location = /faq.html {
+        rewrite  ^  /site/hrlp permanent;
+    }
+
+    location = /rss/data_feed.html {
+        rewrite  ^  /site/data_feed  permanent;
+    }
+
+    location ^~ /rss {
+        rewrite  ^  /site/feeds  permanent;
+    }
+
+    location ^~ /news {
+        rewrite  ^  /site/news  permanent;
+    }
+        
+    location ~ /rss/static/all\w+\.rss {
+        rewrite  ^  /site.rss permanent;
+    }
+
+    location ^~ /noauth {
+        rewrite  ^  /  redirect;
+    }
 
     location ~ ^/submit/search {
         rewrite  ^/submit/search  /site/search?search_text=$args_search  permanent;
     }
 
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_connect_timeout 90;
-    proxy_send_timeout    90;
-    proxy_read_timeout    90;
-    proxy_buffers         32 4k;
-
     location / {
-        proxy_pass http:://localhost:8088;
+        try_files $uri @backend;
+    }
+    
+    location @backend {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_connect_timeout 90;
+        proxy_send_timeout    90;
+        proxy_read_timeout    90;
+        proxy_buffers         32 4k;
+
+        proxy_pass http://localhost:8088;
     }
 }
 
@@ -201,7 +239,7 @@ server {
     listen 80;
     server_name *.vegguide.org;
 
-    rewrite  ^  http://www.vegguide.org$request_uri? permanent;
+    rewrite  ^  http://www.vegguide.org$request_uri?  permanent;
 }
 
 server {
@@ -215,26 +253,31 @@ server {
     root /usr/lib;
 
     location = / {
-        rewrite ^ /mailman/listinfo permanent;
+        rewrite  ^  /mailman/listinfo  permanent;
     }
  
     location / {
-        rewrite ^ /mailman$uri?$args;
+        rewrite  ^  /mailman$uri?$args;
     }
  
     location = /mailman/ {
-        rewrite ^ /mailman/listinfo permanent;
+        rewrite  ^  /mailman/listinfo  permanent;
     }
     
     location /mailman/ {
-        include proxy_params;
-        proxy_pass http://127.0.0.1:7777/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_connect_timeout 90;
+        proxy_send_timeout    90;
+        proxy_read_timeout    90;
+        proxy_buffers         32 4k;
+
+        proxy_pass http://127.0.0.1:7777/;
     }
  
     location /cgi-bin {
-        rewrite ^/cgi-bin(.*)$ $1 permanent;
+        rewrite  ^/cgi-bin(.*)$  $1  permanent;
     }
  
     location /images/mailman {

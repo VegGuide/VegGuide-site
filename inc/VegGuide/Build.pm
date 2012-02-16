@@ -247,27 +247,8 @@ sub ACTION_copy_system_files {
         }
     }
 
-    for my $file (
-        File::Find::Rule->new()->file()->in('/etc/apache2/mods-available') ) {
-        my $to = File::Spec->catfile(
-            '/etc/apache2-backend/mods-available',
-            basename($file)
-        );
-
-        if ($FAKE) {
-            $self->log_info("Copying $file -> $to\n");
-            next;
-        }
-
-        $self->copy_if_modified(
-            from    => $file,
-            to      => $to,
-            flatten => 1,
-        );
-    }
-
-    my $dir = '/var/log/apache2-backend';
-    mkpath( $dir, 0, 0750 )
+    my $dir = '/var/log/nginx/vegguide.org';
+    mkpath( $dir, 0, 0755 )
         unless -d $dir;
     chmod 0750, $dir
         or die "Cannot chmod 0640 $dir: $!";
@@ -486,7 +467,7 @@ sub ACTION_sync_db {
 
     return if $FAKE;
 
-    $self->do_system( './script/vegguide_sync_db.pl', '--data' );
+    $self->do_system( $^X, './script/vegguide_sync_db.pl', '--data' );
 }
 
 sub ACTION_generate_secrets {
@@ -537,7 +518,7 @@ sub ACTION_run_migrations {
     mkpath( '/etc/vegguide', 1, 0755 )
         unless $FAKE;
 
-    $self->do_system(qw( script/vegguide_run_migrations.pl ));
+    $self->do_system( $^X, qw( script/vegguide_run_migrations.pl ) );
 }
 
 sub ACTION_manual_reminder {
