@@ -250,8 +250,8 @@ sub ACTION_copy_system_files {
     my $dir = '/var/log/nginx/vegguide.org';
     mkpath( $dir, 0, 0755 )
         unless -d $dir;
-    chmod 0750, $dir
-        or die "Cannot chmod 0640 $dir: $!";
+    chmod 0755, $dir
+        or die "Cannot chmod 0755 $dir: $!";
 
     my $adm_gid = getgrnam('adm');
     chown 0, $adm_gid, $dir
