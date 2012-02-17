@@ -36,7 +36,8 @@
 
 <VirtualHost _default_>
     <IfDefine !Testing>
-        CustomLog /var/log/apache2/access.log combined
+        LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\" \"%{host}i\"" with_host
+        CustomLog /var/log/apache2/access.log with_host
     </IfDefine>
 
     <IfDefine Testing>
