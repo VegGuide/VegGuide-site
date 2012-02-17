@@ -9,6 +9,9 @@ limit as 524288000 524288000
 pre-start script
     mkdir -p /var/run/vegguide
     chown www-data:www-data /var/run/vegguide
+
+    mkdir -p /var/log/vegguide
+    chown www-data:www-data /var/log/vegguide
 end script
 
-/opt/perl5.14.2-no-threads/bin/starman --listen 127.0.0.1:8088 --workers 12 --preload-app VegGuide --user www-data --group www-data
+/opt/perl5.14.2-no-threads/bin/starman --listen 127.0.0.1:8088 --workers 12 --preload-app --user www-data --group www-data /opt/perl5.14.2-no-threads/bin/vegguide.psgi 2> /var/log/vegguide/error.log
