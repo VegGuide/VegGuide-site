@@ -1,10 +1,10 @@
 # Static files and backend proxy
 server {
+    listen 80;
+    server_name vegguide.tela.com www.vegguide.org vegguide.org;
+
     error_log  /var/log/nginx/vegguide.org/error.log;
     access_log /var/log/nginx/vegguide.org/access.log;
-
-    listen 80;
-    server_name www.vegguide.org vegguide.org;
     
     add_header P3P "policyref=\"http://www.vegguide.org/w3c/p3p.xml\", CP=\"ALL DSP COR CURa ADMa \DEVa TAIa PSAa PSDa OUR IND PHY ONL COM NAV DEM STA\"";
 
@@ -32,37 +32,123 @@ server {
         root $share_dir/images;
     }
 
-    location ~ (?:/\w*)?/css/vegguide-combined\.css {
+    location ~ ^/\w+/(css/vegguide-combined\.css) {
         expires max;
-        root $cache_dir/css;
-    }
-       
-    location ~ (?:/\w*)?/(css|images) {
-        expires max;
-        root $share_dir/$1;
+        alias $var_dir/$1;
     }
 
-    location ~ (?:/\w*)?/js {
+    location ~ ^(?:/\w+)?/(css|images)(.+) {
         expires max;
-        root $var_dir/js;
+        alias $share_dir/$1$2;
+    }
+
+    location ~ ^(?:/\w+)?/(js/.+) {
+        expires max;
+        alias $var_dir/$1;
     }
 
     location ^~ /static/rss {
+        alias $cache_dir/rss;
+    }
+
+    location = /site.rss {
         root $cache_dir/rss;
     }
 
-    location ~ ^/(static|w3c) {
-        root $share_dir/$1;
+    location ^~ /static {
+        alias $share_dir/static;
     }
 
-    location ^~ /robots.txt {
+    location ^~ /w3c {
+        alias $share_dir/w3c;
+    }
+
+    location = /robots.txt {
         root $share_dir/static;
     }
 
-    location ~ ^/(entry-images|user-images|skin-images) {
-        root $var_dir/$1;
+    location ^~ /entry-images {
+        root $var_dir;
     }
-    
+
+    location ^~ /user-images {
+        root $var_dir;
+    }
+
+    # This dates back to much older versions of the site, when most pages
+    # had a .mhtml extension.
+    location ~ (.*/)?([^/]+)\.mhtml$ {
+        set $path $1$2;
+        rewrite  ^  $path.html permanent;
+    }
+
+    # Some brain-damaged crawler was requesting URIs like this
+    location ~ ^.+\.rss%3[Ff] {
+        rewrite  ^  /  permanent;
+    }
+
+    location ^~ /location {
+        if ( $arg_location_id ~ (\d+) ) {
+            set $region_id $1;
+            rewrite  ^/location/view\.html         /region/$region_id?             permanent;
+            rewrite  ^/location/data\.rss          /region/$region_id.rss?         permanent;
+            rewrite  ^/location/most_recent\.rss   /region/$region_id/recent.rss?  permanent;
+            rewrite  ^/location/most_recent_vendors\.rss   /region/$region_id/recent.rss?entries_only=1  permanent;
+            rewrite  ^/location/most_recent_reviews\.rss   /region/$region_id/recent.rss?reviews_only=1  permanent;
+        }
+        rewrite  ^  /  break;
+    }
+
+    location ^~ /vendor {
+        if ( $arg_vendor_id ~ (\d+) ) {
+            set $vendor_id $1;
+            rewrite  ^/vendor/view\.html     /entry/$vendor_id?          permanent;
+            rewrite  ^/vendor/reviews\.html  /entry/$vendor_id/reviews?  permanent;
+        }
+        rewrite  ^  /  break;
+    }
+
+    location ^~ /user {
+        if ( $arg_user_id ~ (\d+) ) {
+            set $user_id $1;
+            rewrite  ^/user/view\.html  /user/$user_id?  permanent;
+        }
+        try_files $uri @backend;
+    }
+
+    location = /index.html {
+        rewrite  ^  / permanent;
+    }
+
+    location = /faq.html {
+        rewrite  ^  /site/help permanent;
+    }
+
+    location = /rss/data_feed.html {
+        rewrite  ^  /site/data_feed  permanent;
+    }
+
+    location ^~ /rss {
+        rewrite  ^  /site/feeds  permanent;
+    }
+
+    location ^~ /news {
+        rewrite  ^  /site/news  permanent;
+    }
+        
+    location ~ ^/rss/static/all\w+\.rss {
+        rewrite  ^  /site.rss permanent;
+    }
+
+    location ^~ /noauth {
+        rewrite  ^  /  redirect;
+    }
+
+    location ^~ /submit/search {
+        rewrite  ^  /site/search?search_text=$arg_search  permanent;
+    }
+
+    # More old URIs I don't want to bother supporting
     location ^~ /plain {
         return 410;
     }
@@ -88,7 +174,7 @@ server {
     }
 
     # Random requests for stuff that we don't have - some are hack attempts
-    location ~ ^/maps/c/ui/HovercardLauncher/dommanifest\.js$ {
+    location ^~ /maps/c/ui/HovercardLauncher/dommanifest.js {
         return 404;
     }
 
@@ -118,104 +204,31 @@ server {
 
     # This stuff seems to be hack attempts
     location ^~ /https://www.paypal.com/cgi-bin/webscr {
-        return 403;
+        return 404;
     }
 
     location ~ \.(?:asp|cfn|php|dll)$ {
-        return 403;
+        return 404;
     }
 
     location ~ (?:ikonboard\.cgi|YaBB\.pl)$ {
-        return 403;
+        return 404;
     }
 
-    location ~ ^\/add\.php3$ {
-        return 403;
+    location ^~ /add.php3 {
+        return 404;
     }
 
-    location ~ ^\/uds.* {
-        return 403;
+    location ^~ /uds {
+        return 404;
     }
 
-    location ~ ^\/img.* {
-        return 403;
+    location ^~ /img {
+        return 404;
     }
 
-    location ~ ^\/\.\.\. {
-        return 403;
-    }
-
-    # This dates back to much older versions of the site, when most pages
-    # had a .mhtml extension.
-    location ~ (.*/)?([^/]+)\.mhtml$ {
-        set $path $1$2;
-        rewrite  ^  $path.html permanent;
-    }
-
-    # Some brain-damaged crawler was requesting URIs like this
-    location ~ ^.+\.rss%3[Ff] {
-        rewrite  ^  /  permanent;
-    }
-
-    location ^~ /location {
-        if ( $args_location_id ~ (\d+) ) {
-            set $region_id $1;
-            rewrite  ^/location/view\.html         /region/$region_id             permanent;
-            rewrite  ^/location/data\.rss          /region/$region_id.rss         permanent;
-            rewrite  ^/location/most_recent\.rss   /region/$region_id/recent.rss  permanent;
-            rewrite  ^/location/most_recent_vendors\.rss   /region/$region_id/recent.rss?entries_only=1  permanent;
-            rewrite  ^/location/most_recent_reviews\.rss   /region/$region_id/recent.rss?reviews_only=1  permanent;
-        }
-        rewrite  ^  /  break;
-    }
-
-    location ^~ /vendor {
-        if ( $args_vendor_id ~ (\d+) ) {
-            set $vendor_id $1;
-            rewrite  ^/vendor/view\.html     /entry/$vendor_id          permanent;
-            rewrite  ^/vendor/reviews\.html  /entry/$vendor_id/reviews  permanent;
-        }
-        rewrite  ^  /  break;
-    }
-
-    location ^~ /user {
-        if ( $args_user_id ~ (\d+) ) {
-            set $user_id $1;
-            rewrite  ^/user/view\.html  /user/$user_id  permanent;
-        }
-        rewrite  ^  /  break;
-    }
-
-    location = /index.html {
-        rewrite  ^  / permanent;
-    }
-
-    location = /faq.html {
-        rewrite  ^  /site/hrlp permanent;
-    }
-
-    location = /rss/data_feed.html {
-        rewrite  ^  /site/data_feed  permanent;
-    }
-
-    location ^~ /rss {
-        rewrite  ^  /site/feeds  permanent;
-    }
-
-    location ^~ /news {
-        rewrite  ^  /site/news  permanent;
-    }
-        
-    location ~ /rss/static/all\w+\.rss {
-        rewrite  ^  /site.rss permanent;
-    }
-
-    location ^~ /noauth {
-        rewrite  ^  /  redirect;
-    }
-
-    location ~ ^/submit/search {
-        rewrite  ^/submit/search  /site/search?search_text=$args_search  permanent;
+    location ^~ /... {
+        return 404;
     }
 
     location / {
@@ -235,16 +248,23 @@ server {
     }
 }
 
+# For the old skin feature
 server {
     listen 80;
-    server_name *.vegguide.org;
+    server_name uchicago.vegguide.org athens.vegguide.org;
 
-    rewrite  ^  http://www.vegguide.org$request_uri?  permanent;
+    error_log  /var/log/nginx/error.log;
+    access_log /var/log/nginx/access.log;
+
+    rewrite  ^  http://www.vegguide.org$request_uri  permanent;
 }
 
 server {
     listen 443;
     server_name lists.vegguide.org;
+
+    error_log  /var/log/nginx/error.log;
+    access_log /var/log/nginx/access.log;
 
     ssl on;
     ssl_certificate     /etc/ssl/certs/www.vegguide.org.crt;
@@ -289,9 +309,3 @@ server {
         autoindex on;
     }
 }    
-
-server {
-    listen 80;
-
-    rewrite  ^  http://www.vegguide.org$request_uri?  permanent;
-}
