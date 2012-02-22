@@ -496,8 +496,8 @@ sub ACTION_generate_secrets {
 
         close $fh;
 
-        chmod 0640, $f
-            or die "Cannot chmod 0640 $f: $!";
+        chmod 0644, $f
+            or die "Cannot chmod 0644 $f: $!";
     }
 }
 
