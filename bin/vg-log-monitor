@@ -14,10 +14,15 @@ use File::Tail;
 use VegGuide::Config;
 use VegGuide::JSON;
 
-my $file = '/var/log/apache2-backend/error.log';
+use Getopt::Long;
+
+my $debug;
+GetOptions( 'debug' => \$debug );
+
+my $file = '/var/log/vegguide/error.log';
 
 my $interval = 5 * 60;
-my $sleep    = 60;
+my $sleep    = ($debug ? 1 : 60);
 
 my $hostname  = VegGuide::Config->Hostname();
 my $from      = 'log-monitor@' . $hostname;
@@ -29,79 +34,54 @@ my $local_tz = DateTime::TimeZone->new( name => 'local' );
 
 my $tail = _make_tail();
 
+my $record = q{};
 while ( defined( my $line = $tail->read() ) ) {
     if ( length $line ) {
-        local $@;
-        if ( eval { process_line($line) } ) {
-            next;
-        }
-        else {
+        $record .= $line;
+        if ( $line =~ /^}/ ) {
+            warn $record if $debug;
+            eval { process_record($record) };
             warn $@ if $@;
+            $record = q{};
         }
     }
-    else {
-        {
-            local $@;
-            eval { send_if_pending(); };
-            warn $@ if $@;
-        }
+
+    {
+        local $@;
+        eval { send_if_pending(); };
+        warn $@ if $@;
     }
 
     sleep $sleep;
 }
 
-sub process_line {
-    my $line = shift;
+sub process_record {
+    my $record = shift;
 
-    return if $line eq '';
+    my $error = VegGuide::JSON->Decode($record);
 
-    my %message;
-
-    if ( $line =~ /^([^[].*)/ ) {
-        $message{date}  = DateTime->now( time_zone => $local_tz );
-        $message{level} = 'warning';
-        $message{text}  = $1;
-    }
-    elsif ( $line =~ /^\[([^]]+)\] \[(error|warning)] vegguide: (.+)$/ ) {
-        $message{date}
-            = DateTime::Format::HTTP->parse_datetime( $1, $local_tz );
-        $message{level} = $2;
-
-        my $text = $3;
-        return if $text =~ /Software caused connection abort/;
-
-        $text =~ s/(?<!\\)\\n/\n/g;
-        $text =~ s/\\\\/\\/g;
-
-        $text =~ s/^\s+|\s+$//g;
-
-        if ( $text =~ /^{.+}$/s ) {
-            my $error = VegGuide::JSON->Decode($text);
-
-            $text = 'URI: ' . $error->{uri};
-            if ( $error->{user} ) {
-                $text .= "\n";
-                $text .= 'User: ' . $error->{user};
-            }
-
-            if ( $error->{referer} ) {
-                $text .= "\n";
-                $text .= "Referer: $error->{referer}";
-            }
-
-            $text .= "\n";
-            $text .= $error->{error};
-
-        }
-
-        $message{text} = $text;
+    my $text = 'URI: ' . $error->{uri};
+    if ( $error->{user} ) {
+        $text .= "\n";
+        $text .= 'User: ' . $error->{user};
     }
 
-    return unless $message{text};
+    if ( $error->{referer} ) {
+        $text .= "\n";
+        $text .= "Referer: $error->{referer}";
+    }
 
-    $message{text} =~ s/^\s*/    /gm;
+    $text .= "\n";
+    $text .= $error->{error};
 
-    push @messages, \%message;
+    $text =~ s/^\s*/    /gm;
+
+    my $dt = DateTime->from_epoch(
+        epoch     => $error->{epoch},
+        time_zone => 'America/Denver',
+    );
+
+    push @messages, { date => $dt, text => $text };
 
     return 1;
 }
@@ -109,17 +89,22 @@ sub process_line {
 sub send_if_pending {
     return unless @messages;
 
+    warn 'We have ' . ( scalar @messages ) . " to send\n" if $debug;
+
     my $now = time;
 
-    return if $now - $last_sent < $interval;
+    my $elapsed = $now - $last_sent;
+
+    return if $elapsed < $interval;
+
+    warn "Sending messages - $elapsed seconds since last sent\n";
 
     my $body = '';
 
     for my $msg (@messages) {
         $body .= "\n\n" if $body;
 
-        $body .= $msg->{date}->strftime('%Y-%m-%d %H:%M:%S') . q{ - }
-            . $msg->{level};
+        $body .= $msg->{date}->strftime('%Y-%m-%d %H:%M:%S');
         $body .= "\n";
         $body .= $msg->{text};
     }
@@ -145,8 +130,9 @@ sub send_if_pending {
 
 sub _make_tail {
     return File::Tail->new(
-        name       => $file,
-        resetafter => 3600 * 8,
-        nowait     => 1,
+        name        => $file,
+        maxinterval => $sleep,
+        resetafter  => 3600 * 8,
+        nowait      => 1,
     );
 }

@@ -70,10 +70,12 @@ sub _log_error {
 
     return if $error =~ /Software caused connection abort/;
 
-    # XXX - change this later to log to the apache log?
     #    if ( $error =~ /unknown resource/ )
 
-    my %error = ( uri => $self->request()->uri() . '' );
+    my %error = (
+        uri   => $self->request()->uri() . '',
+        epoch => time(),
+    );
 
     if ( my $user = $self->vg_user() ) {
         $error{user} = $user->real_name();
