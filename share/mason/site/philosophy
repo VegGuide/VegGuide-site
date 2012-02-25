@@ -1,148 +1,123 @@
 <p>
 <em>
-This essay was first written for the Voices of CAA blog on September
-24, 2007. That blog was later destroyed in a fiery CMS upgrade.
+This essay was first written for the Voices of CAA blog on September 24,
+2007. That blog was later destroyed in a fiery CMS upgrade. Last revised on
+February 25, 2012.
 </em>
 </p>
 
 <p>
-The <a href="http://www.vegguide.org/">VegGuide.Org</a> site has been
-around for almost five years now. Sometimes people ask why we made it,
-since there were already two similar sites in existence at the
-time, <a href="http://www.happycow.net/">Happy Cow</a>
-and <a href="http://www.vegdining.com/">Veg Dining</a>. That's a good
+The <a href="http://www.vegguide.org/">VegGuide.Org</a> site has been around
+for almost five years now. Sometimes people ask why we made it, since there
+were already two similar sites in existence at the time. That's a good
 question, so here's the answer.
 </p>
 
 <p>
-The goal of the guide is provide a tool that helps makes it easier to
-live a more animal-friendly life. Specifically, we want to make it
-easier for people to find vegetarian and vegan food, products, etc. If
-it doesn't make it easier for people to be (more) veg, it probably
-isn't right for the guide.
+The goal of the guide is to provide a tool that helps makes it easier to live
+a more animal-friendly life. Specifically, we want to make it easier for
+people to find vegetarian and vegan food, products, etc. This guides our
+decisions about features, design, and everything else. If it doesn't make it
+easier for people to be (more) veg, it probably isn't right for the guide.
 </p>
 
 <p>
-The first requirement of a useful guide to veg-friendly places is that
-it needs to be big and up-to-date. There's no way that we could build a
-huge database single-handedly, much less keep it up to date. It can
-only be done with many people's help. If you've ever thought about
-how Wikipedia works, the guide is quite similar, and in many ways
-wikis provide a good model for what the guide should be.
+The first requirement of a useful guide to veg-friendly places is that it be
+big and up-to-date. There's no way that we could build a huge database
+single-handedly, much less keep it up to date. This can only be done through
+the efforts of a community. If you've ever thought about how Wikipedia works,
+the guide is quite similar, and in many ways wikis provide a good model for
+what the guide should be.
 </p>
 
 <p>
-If we want to build a huge database, adding information to the guide
-must be as easy as possible. When users browse the site, even if
-they're not logged-in, they see the links and buttons that let them
-add new entries and reviews. They're also encouraged to edit existing
-information in the same way.
+If we want to build a huge database, adding information to the guide must be
+as easy as possible. When users browse the site, even if they're not
+logged-in, they see the links and buttons that let them add new entries and
+reviews. They're also encouraged to edit existing information in the same way.
 </p>
 
 <p>
-We want to lower the barrier to entry <em>and</em> to make it obvious
-that stuff is added by users, not some magic site admin. <em>You</em>
-are building the site, all we made was a framework.
+We want to lower the barrier to entry <em>and</em> to make it obvious that
+stuff is added by users, not some magic site admin. <em>You</em> are building
+the site, all we made was a framework.
 </p>
 
 <p>
-Contrast this to most other sites, where it's not always clear how you
-can contribute, or even <em>if</em> you can contribute. Take a look at
-most of the VegCity sites,
-like <a href="http://www.vegdc.com/">VegDC</a> or
-<a href="http://www.vegportland.com/">VegPortland</a>. Any idea how to
-contribute a new restaurant? How about rating something or writing a
-review?
+Contrast this to many other sites, where it's not always clear how you can
+contribute, or even <em>if</em> you can contribute. Some sites allow you to
+submit data, but the submission process is filtered by a human, so there is no
+instant feedback.
 </p>
 
 <p>
-Other sites do better to varying degrees. Happy Cow does make it more
-obvious how you can write reviews and add entries. Our understanding is
-that the submission process is filtered by a human, so there is no
-instant feedback. We can't figure out how to add a new entry on Veg
-Dining at all.
+It's not enough to make adding things easy, you also need to provide instant
+feedback, and the guide tries its best here. If you let people do something
+and show them positive results ("hey, my new entry is right there!") they feel
+satisfied and encouraged to repeat that behavior ("why don't I add a few
+more?").
 </p>
 
 <p>
-It's not enough to make adding things easy, you also need to provide
-instant feedback, and the guide tries its best here. If you let people
-do something and show them positive results ("hey, my new entry is
-right there!") they feel satisfied and encouraged to repeat that
-behavior ("why don't I add a few more?").
+Since the guide is all about making it easier to be veg, we try to consider
+users' needs first. If it's useful to users, it's good. Otherwise it's not.
 </p>
 
 <p>
-Since the guide is all about making it easier to be veg, we try to
-consider users' needs first. If it's useful to users, it's
-good. Otherwise it's not.
+For example, the guidelines for what makes an acceptable entry are pretty
+loose. If a steak place is the most veg-friendly restaurant in a small town,
+we want it listed in the guide. We don't require a certain level of "purity"
+for new entries (all-veg, mostly veg, whatever). That simply reduces the
+amount of useful information we could provide for our users.
 </p>
 
 <p>
-For example, the guidelines for what makes an acceptable entry are
-pretty loose. If a steak place is the most veg-friendly restaurant in
-a small town, we want it listed in the guide. Happy Cow requires a
-certain level of "purity" for new entries (all-veg, mostly veg,
-whatever), which simply reduces the amount of useful information they
-have for their users.
+We also don't censor negative opinions (except for ad hominem attacks). Some
+sites do, in the interest of helping businesses. That's a nice thought, but if
+a place is really terrible, you want to be able to find out before you go
+there. Remember, the guide wants to make your life easier, which means helping
+you find good food and helping you avoid the bad stuff.
 </p>
 
 <p>
-Veg Dining says in their review form that they don't usually post
-negative reviews, instead they pass them on to the business so they
-can change constructively. That's a nice thought, but if a place is
-really terrible, you want to be able to find out before you go
-there. Remember, the guide wants to make your life easier, which means
-helping you find good food and helping you avoid the bad stuff.
+Serving users well also means avoiding conflicts of interest. We don't charge
+restaurants for listings. This would lead to us having <em>less</em>
+information in the system, and we want a huge database. We don't charge people
+for access to features, since this would definitely not make your life easier!
 </p>
 
 <p>
-Serving users well also means avoiding conflicts of interest. We don't
-charge restaurants for listings. This would lead to us
-having <em>less</em> information in the system, and we want a huge
-database. We don't charge people for access to features, since this
-would definitely not make your life easier!
+The guide has no ads, since these are just visual clutter and provide no
+end-user benefit. Nor does it use much real estate asking for donations (in
+fact, it's near invisible, look at the footer).
 </p>
 
 <p>
-The guide has no ads, since these are just visual clutter and provide
-no end-user benefit. Nor does it use much real estate asking for
-donations (in fact, it's near invisible, look
-at <a href="http://www.vegguide.org/">the footer</a>).
+Finally, there is another philosophical drive to the guide, which is to
+promote the free exchange of information. I use the word "free" here to refer
+to <strong>freedom</strong>, not price. The guide is a community resource, and
+as such we want to share ownership with all of our contributors.
 </p>
 
 <p>
-Finally, there is another philosophical drive to the guide, which is
-to promote the free exchange of information. I use the word "free"
-here to refer to <strong>freedom</strong>, not price. The guide is a
-community resource, and as such we want to share ownership with all of
-our contributors.
+When users submit entries or reviews to the guide, they grant us a license to
+use that content, but they don't give up their own rights. Other sites have
+much stricter terms, even up to demanding exclusive ownership of a submission.
 </p>
 
 <p>
-When users submit entries or reviews to the guide, they grant us a
-license to use that content, but they don't give up their own
-rights. Happy Cow has
-<a href="http://www.happycow.net/terms_of_use.html">
-terms that are much too strict</a>, demanding exclusive ownership on
-submission. Veg Dining doesn't seem to have any terms at all, which is
-better than bad terms, I guess, but this provides no protection for
-users.
+Even better, the guide's data is all freely available and reusable for any
+purpose. You don't need to ask permission, just abide by the simple
+<&| /lib/link/license.mas &>Creative Commons license</&>. How cool is that?
 </p>
 
 <p>
-Even better, the guide's data is all freely available and reusable for
-any non-commercial purpose. You don't need to ask permission, just
-abide by the simple <&| /lib/link/license.mas &>Creative Commons
-license</&>. How cool is that?
-</p>
-
-<p>
-So that was our very long-winded answer to why the guide exists. Of
-course, besides the philosophy, there's also the hubris. I was
-convinced when we started, and remained convinced, that we could make a
-better, more useful and fun site than what was out there. We hope some
-of you agree. If you don't, we're still working on making things better,
-so maybe you'll change your mind some time in the future.
+So that was our very long-winded answer to why the guide exists. Of course,
+besides the philosophy, there's also the hubris. I was convinced when we
+started, and remained convinced, that we could make a better, more useful and
+fun site than what was out there. We hope some of you agree. If you don't,
+we're still working on making things better, so maybe you'll change your mind
+some time in the future.
 </p>
 
 <%method page_title>
