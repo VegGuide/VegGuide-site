@@ -34,8 +34,8 @@
 % }
 
 <p>
-  VegGuide.Org is a community-maintained, world-wide guide to vegetarian and
-  vegan restaurants, grocers, and more.
+  VegGuide.org is a community-maintained, world-wide guide to vegetarian and
+  vegan restaurants and shopping.
 </p>
 
 % if ($news_item) {
