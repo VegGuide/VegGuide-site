@@ -47,7 +47,7 @@ server {
         alias $var_dir/$1;
     }
 
-    location ^~ /static/rss {
+    location ^~ /static/rss/ {
         alias $cache_dir/rss;
     }
 
