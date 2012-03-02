@@ -1,16 +1,19 @@
 # Static files and backend proxy
 server {
     listen 80;
-    server_name vegguide.tela.com www.vegguide.org vegguide.org;
+    server_name www.vegguide.org vegguide.org;
 
     error_log  /var/log/nginx/vegguide.org/error.log;
     access_log /var/log/nginx/vegguide.org/access.log;
     
     add_header P3P "policyref=\"http://www.vegguide.org/w3c/p3p.xml\", CP=\"ALL DSP COR CURa ADMa \DEVa TAIa PSAa PSDa OUR IND PHY ONL COM NAV DEM STA\"";
 
-    location ~ ^(/mailman|/pipermail)(.*) {
-        set $path $1$2;
-        rewrite  ^  https://lists.vegguide.org$path  permanent;
+    location ^~ /mailman {
+        rewrite  ^(.*)  https://lists.vegguide.org$1  permanent;
+    }
+
+    location ^~ /pipermail {
+        rewrite  ^(.*)  https://lists.vegguide.org$1  permanent;
     }
 
     #rewrite  !^/down.html$  /down.html  redirect;
@@ -25,7 +28,7 @@ server {
     error_page 503 $share_dir/static/503.html;
 
     location ~ .*favicon\.gif$ {
-        rewrite  ^  /favicon.ico;
+        rewrite  ^  /favicon.ico  permanent;
     }
 
     location = /favicon.ico {
