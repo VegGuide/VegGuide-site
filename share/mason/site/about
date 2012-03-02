@@ -141,11 +141,7 @@ the site. I hope that this UI is more usable and intuitive.
 <h2>Thanks</h2>
 
 <p>
-<a href="http://www.xmission.com/">XMission</a> provides co-location and bandwidth.
-</p>
-
-<p>
-Eric Waters provided our server.
+Our hosting and bandwidth are provided courtesy of <a href="http://tela.com">Tela</a>.
 </p>
 
 <p>
@@ -159,8 +155,13 @@ contributed the rating star icons.
 </p>
 
 <p>
-<a href="http://www.maxmind.com/">MaxMind</a> provided the Geolocation
+<a href="http://www.maxmind.com/">MaxMind</a> provides the Geolocation
 database we use to show you nearby restaurants on the home page.
+</p>
+
+<p>
+Thanks to <a href="http://www.xmission.com/">XMission</a> and Eric Waters, who
+provided our server and hosting for many years.
 </p>
 
 <h2>Support Us</h2>
