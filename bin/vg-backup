@@ -38,7 +38,9 @@ for my $host (@hosts) {
     print "Rsyncing to $host\n\n";
 
     for my $source (
-        qw( /var/lib/vegguide/entry-images
+        qw(
+        /etc
+        /var/lib/vegguide/entry-images
         /var/lib/vegguide/user-images
         /var/lib/vegguide/skin-images
         /home/autarch/RegVeg.sql
