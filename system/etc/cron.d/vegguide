@@ -1,5 +1,8 @@
 30 10 * * * www-data  /opt/perl5.14.2-no-threads/bin/perl /opt/perl5.14.2-no-threads/bin/vg-regen-data-feed-rss
 15 12 * * 7 www-data  /opt/perl5.14.2-no-threads/bin/perl /opt/perl5.14.2-no-threads/bin/vg-send-watch-list-emails
 37 3  * * * autarch   /opt/perl5.14.2-no-threads/bin/perl /opt/perl5.14.2-no-threads/bin/vg-backup
-17 6  * * * www-data  /opt/perl5.14.2-no-threads/bin/perl /opt/perl5.14.2-no-threads/bin/vg-update-from-external-sources
 2  15 * * * autarch   /opt/perl5.14.2-no-threads/bin/perl /opt/perl5.14.2-no-threads/bin/vg-delete-old-sessions
+
+# All of the VegXX sites are either down or no longer generating feeds
+#17 6  * * * www-data  /opt/perl5.14.2-no-threads/bin/perl /opt/perl5.14.2-no-threads/bin/vg-update-from-external-sources
+
