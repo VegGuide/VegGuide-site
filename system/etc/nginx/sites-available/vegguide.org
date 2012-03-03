@@ -197,6 +197,10 @@ server {
         return 404;
     }
 
+    location ^~ /crossdomain.xml {
+        return 404;
+    }
+
     location ^~ /sitemap.xml {
         return 404;
     }
