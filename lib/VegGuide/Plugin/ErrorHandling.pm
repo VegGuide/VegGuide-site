@@ -87,6 +87,8 @@ sub _log_error {
         $error{referer} = $ref;
     }
 
+    $error{user_agent} = $self->request()->user_agent();
+
     $error{error} = $error . '';
 
     $self->log()->error( VegGuide::JSON->Encode( \%error ) );
