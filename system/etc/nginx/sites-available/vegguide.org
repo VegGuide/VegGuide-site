@@ -193,15 +193,23 @@ server {
         return 404;
     }
 
-    location ~ ^\/apple-touch-icon(?:-precomposed)?\.png {
+    location ~ ^\/apple-touch-icon-\d+x\d+(?:-precomposed)?\.png {
         return 404;
     }
 
-    location ^~ \/labels.rdf {
+    location ^~ /sitemap.xml {
         return 404;
     }
 
-    location ^~ \/sugest.css {
+    location ^~ /signup {
+        return 404;
+    }
+
+    location ^~ /labels.rdf {
+        return 404;
+    }
+
+    location ^~ /sugest.css {
         return 404;
     }
 
