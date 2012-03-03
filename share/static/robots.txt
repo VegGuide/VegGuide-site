@@ -1,3 +1,7 @@
 User-agent: *
 Disallow: /user/login_form
 Crawl-Delay: 45
+
+# Seems to just make up random URIs that don't exist
+User-agent: NextGenSearchBot
+Disallow:/
