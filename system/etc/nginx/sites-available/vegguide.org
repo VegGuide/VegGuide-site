@@ -193,7 +193,7 @@ server {
         return 404;
     }
 
-    location ~ ^\/apple-touch-icon-\d+x\d+(?:-precomposed)?\.png {
+    location ~ ^\/apple-touch-icon(?:-\d+x\d+)(?:-precomposed)?\.png {
         return 404;
     }
 
