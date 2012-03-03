@@ -38,9 +38,8 @@ my %Requires = (
     'Chart::OFC'                               => '0.07',
     'Class::AlzaboWrapper'                     => '0.14',
     'Class::Trait'                             => '0.22',
-
-    # For SSL-enabled openid URIs
-    'Crypt::SSLeay'              => '0',
+    'Courriel'                                 => '0.28',
+    'Crypt::SSLeay'              => '0',       # For SSL-enabled openid URIs
     'CSS::Minifier'              => '0',
     'Data::Dump::Streamer'       => '0',
     'Data::Pageset'              => '0',
@@ -57,6 +56,7 @@ my %Requires = (
     'Email::Date'                => '1.101',
     'Email::MessageID'           => '1.35',
     'Email::Send'                => '2.185',
+    'Email::Sender'              => '0',
     'Email::MIME::CreateHTML'    => '0',
     'Email::Valid'               => '0',
     'Encode'                     => '2.23',
@@ -73,6 +73,7 @@ my %Requires = (
     'HTML::FillInForm'           => '1.07',
     'Image::Magick'              => '0',
     'Image::Size'                => '0',
+    'IO::Async'                  => '0.46',
     'JavaScript::Squish'         => '0',
     'JSAN::ServerSide'           => '0.04',
     'JSON::XS'                   => '0',

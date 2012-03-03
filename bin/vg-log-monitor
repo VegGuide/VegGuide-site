@@ -2,142 +2,211 @@
 
 use strict;
 use warnings;
+use autodie;
 
+use Courriel::Builder;
 use DateTime;
-use DateTime::Format::HTTP;
 use DateTime::TimeZone;
-use Email::MessageID;
-use Email::Send;
-use Email::Simple;
-use Email::Simple::Creator;
-use File::Tail;
+use Email::Sender::Simple qw( sendmail );
+use IO::Async::FileStream;
+use IO::Async::Loop;
+use Try::Tiny;
 use VegGuide::Config;
 use VegGuide::JSON;
 
 use Getopt::Long;
 
-my $debug;
-GetOptions( 'debug' => \$debug );
-
-my $file = '/var/log/vegguide/error.log';
-
-my $interval = 5 * 60;
-my $sleep    = ($debug ? 1 : 60);
-
-my $hostname  = VegGuide::Config->Hostname();
-my $from      = 'log-monitor@' . $hostname;
-my $sender    = Email::Send->new( { mailer => 'Sendmail' } );
-my $last_sent = 0;
-my @messages;
-
+my $file     = '/var/log/vegguide/error.log';
+my $hostname = VegGuide::Config->Hostname();
+my $from     = 'log-monitor@' . $hostname;
 my $local_tz = DateTime::TimeZone->new( name => 'local' );
 
-my $tail = _make_tail();
+sub main {
+    my $debug;
+    GetOptions( 'debug' => \$debug );
 
-my $record = q{};
-while ( defined( my $line = $tail->read() ) ) {
-    if ( length $line ) {
-        $record .= $line;
-        if ( $line =~ /^}/ ) {
-            warn $record if $debug;
-            eval { process_record($record) };
-            warn $@ if $@;
-            $record = q{};
-        }
-    }
+    my @messages;
 
-    {
-        local $@;
-        eval { send_if_pending(); };
-        warn $@ if $@;
-    }
+    open my $log_fh, '<', $file;
 
-    sleep $sleep;
+    my $on_read = _on_read_callback( \@messages, $debug );
+
+    my $tail = IO::Async::FileStream->new(
+        read_handle => $log_fh,
+        on_initial  => sub {
+            my $self = shift;
+            $self->seek_to_last("\n");
+        },
+        on_read => $on_read,
+    );
+
+    my $timer = IO::Async::Timer::Periodic->new(
+        interval => ( $debug ? 5 : 5 * 60 ),
+        on_tick => _on_tick_callback( \@messages, $debug ),
+    );
+
+    my $loop = IO::Async::Loop->new();
+
+    $loop->add($tail);
+
+    $timer->start();
+    $loop->add($timer);
+
+    $loop->loop_forever();
 }
 
-sub process_record {
+sub _on_read_callback {
+    my $messages = shift;
+    my $debug    = shift;
+
+    my $record    = q{};
+    my $in_record = 0;
+
+    return sub {
+        shift;
+        my $buffer = shift;
+
+        while ( ${$buffer} =~ s/^(.*)\n// ) {
+            my $line = $1;
+            warn "[$line]\n" if $debug;
+
+            next if _skip($line);
+
+            if ( $line =~ /^{/ ) {
+                $in_record = 1;
+                $record .= $line;
+            }
+            elsif ($in_record) {
+                $record .= $line;
+
+                if ( $line =~ /^}/ ) {
+                    my $message;
+                    try {
+                        push @{$messages}, _process_record($record);
+                    }
+                    catch {
+                        warn $_ if $debug;
+                    };
+
+                    $in_record = 0;
+                    $record = q{};
+                }
+            }
+            else {
+                push @{$messages}, { text => $line };
+            }
+        }
+    };
+}
+
+sub _skip {
+    my $line = shift;
+
+    return 1 unless $line =~ /\S/;
+    return 1 if $line =~ /\QSubroutine finalize_error redefined/;
+    return 1 if $line =~ /\QStarman::Server (type Net::Server::PreFork) starting/;
+    return 1 if $line =~ /\QUsing default listen value of/;
+    return 1 if $line =~ /\QBinding to TCP port/;
+    return 1 if $line =~ /\QSetting gid to/;
+    return 1 if $line =~ /\QSetting uid to/;
+    return 1 if $line =~ /\QServer closing!/;
+
+    return 0;
+}
+
+my %key_order = (
+    uri        => 1,
+    user       => 2,
+    referer    => 3,
+    user_agent => 4,
+);
+
+sub _process_record {
     my $record = shift;
 
-    my $error = VegGuide::JSON->Decode($record);
+    my $decoded = VegGuide::JSON->Decode($record);
 
-    my $text = 'URI: ' . $error->{uri};
-    if ( $error->{user} ) {
+    my $epoch         = delete $decoded->{epoch};
+    my $error_message = delete $decoded->{error};
+
+    my $text = q{};
+
+    for my $key (
+        sort {
+            ( $key_order{$a} // 5 ) <=> ( $key_order{$b} // 5 )
+                or $a cmp $b
+        } keys %{$decoded}
+        ) {
+
+        $text .= sprintf( '%-11s: %s', _titleize($key), $decoded->{$key} );
         $text .= "\n";
-        $text .= 'User: ' . $error->{user};
     }
 
-    if ( $error->{referer} ) {
-        $text .= "\n";
-        $text .= "Referer: $error->{referer}";
-    }
-
-    if ( $error->{user_agent} ) {
-        $text .= "\n";
-        $text .= "User-Agent: $error->{user_agent}";
-    }
-
-    $text .= "\n";
-    $text .= $error->{error};
+    $text .= $error_message;
 
     $text =~ s/^\s*/    /gm;
 
     my $dt = DateTime->from_epoch(
-        epoch     => $error->{epoch},
-        time_zone => 'America/Denver',
+        epoch     => $epoch,
+        time_zone => $local_tz,
     );
 
-    push @messages, { date => $dt, text => $text };
-
-    return 1;
+    return { date => $dt, text => $text };
 }
 
-sub send_if_pending {
-    return unless @messages;
+sub _titleize {
+    my $key = shift;
 
-    warn 'We have ' . ( scalar @messages ) . " to send\n" if $debug;
+    return 'URI' if $key eq 'uri';
+    return join '-', map { ucfirst } split /_/, $key;
+}
 
-    my $now = time;
+sub _on_tick_callback {
+    my $messages = shift;
+    my $debug    = shift;
 
-    my $elapsed = $now - $last_sent;
+    return sub {
+        warn 'We have ' . ( scalar @{$messages} ) . " message(s) to send\n" if $debug;
 
-    return if $elapsed < $interval;
+        return unless @{$messages};
 
-    warn "Sending messages - $elapsed seconds since last sent\n";
+        my $sep = "\n\n";
+        $sep .= '-' x 80;
+        $sep .= "\n\n";
 
-    my $body = '';
+        my $body = join $sep, map { _format_message($_) } @{$messages};
 
-    for my $msg (@messages) {
-        $body .= "\n\n" if $body;
+        my $email = build_email(
+            from($from),
+            to('autarch@urth.org'),
+            subject("VegGuide ($hostname) log errors"),
+            plain_body($body),
+        );
 
-        $body .= $msg->{date}->strftime('%Y-%m-%d %H:%M:%S');
-        $body .= "\n";
-        $body .= $msg->{text};
+        try {
+            sendmail($email);
+        }
+        catch {
+            warn $_ if $debug;
+        };
+
+        @{$messages} = ();
+    };
+}
+
+sub _format_message {
+    my $message = shift;
+
+    my $formatted = q{};
+
+    if ( $message->{date} ) {
+        $formatted .= $message->{date}->strftime('%Y-%m-%d %H:%M:%S');
+        $formatted .= "\n";
     }
 
-    my $email = Email::Simple->create(
-        header => [
-            From         => $from,
-            To           => 'autarch@urth.org',
-            Subject      => "VegGuide ($hostname) log errors",
-            'Message-ID' => Email::MessageID->new(),
-        ],
-        body => $body,
-    );
+    $formatted .= $message->{text};
 
-    $sender->send($email);
-
-    $last_sent = $now;
-
-    @messages = ();
-
-    return;
+    return $formatted;
 }
 
-sub _make_tail {
-    return File::Tail->new(
-        name        => $file,
-        maxinterval => $sleep,
-        resetafter  => 3600 * 8,
-        nowait      => 1,
-    );
-}
+main();
