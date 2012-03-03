@@ -29,6 +29,7 @@ use URI::Escape qw( uri_unescape );
 use URI::FromHash qw( uri );
 use VegGuide::AlzaboWrapper;
 use VegGuide::JSON;
+use VegGuide::SiteURI qw( site_uri );
 use VegGuide::Util qw( string_is_empty );
 use VegGuide::Web::CSS;
 use VegGuide::Web::Javascript;
@@ -44,9 +45,7 @@ sub begin : Private {
             && $c->engine()->env()->{SERVER_PORT} != 80;
 
     if ( $self->_is_bad_request($c) ) {
-        $c->response()->body('');
-        $c->response()->status(RC_FORBIDDEN);
-        return $c->detach('/end');
+        $c->redirect_and_detach( site_uri( path => '/', with_host => 1 ) );
     }
 
     Alzabo::Runtime::UniqueRowCache->clear();
@@ -103,8 +102,12 @@ sub _is_bad_request {
     my $self = shift;
     my $c    = shift;
 
-    return 1
-        if grep {/(?:DECLARE|SET) \@S/} keys %{ $c->request()->parameters() };
+    my $params = $c->request()->parameters();
+
+    return 1 if grep { /(?:DECLARE|SET) \@S/ } keys %{$params};
+    return 1 if exists $params->{iframe};
+    return 1 if exists $params->{pag};
+    return 1 if exists $params->{pa};
 
     return 0;
 }
