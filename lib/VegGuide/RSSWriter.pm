@@ -24,7 +24,7 @@ sub new {
     my $fh = File::Temp->new();
 
     # shuts up "wide character in print" warnings
-    binmode $fh, ':utf8';
+    binmode $fh, ':encoding(UTF-8)';
 
     my $w = XML::SAX::Writer->new( Output => $fh );
     my $g = XML::Generator::RSS10->new(
