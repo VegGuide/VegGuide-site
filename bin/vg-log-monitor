@@ -71,6 +71,11 @@ sub process_record {
         $text .= "Referer: $error->{referer}";
     }
 
+    if ( $error->{user_agent} ) {
+        $text .= "\n";
+        $text .= "User-Agent: $error->{user_agent}";
+    }
+
     $text .= "\n";
     $text .= $error->{error};
 
