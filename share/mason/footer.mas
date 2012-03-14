@@ -45,16 +45,18 @@
     </p>
 
     <div id="logos">
-      <a href="http://www.exploreveg.org/"><img src="/images/caa-logo.png" alt="Compassionate Action for Animals logo" title="Compassionate Action for Animals" height="60" width="98" /></a>
-      <a href="http://www.mercyforanimals.org/"><img src="/images/mfa-logo.png" alt="Mercy for Animals logo" title="Mercy for Animals" height="53" width="136" /></a>
-      <a href="http://www.veganoutreach.org/"><img src="/images/vo-logo.gif" alt="Vegan Outreach logo" title="Vegan Outreach" height="44" width="217" /></a>
-      <br />
       <a href="http://www.facebook.com/VegGuide"
          ><img src="/images/facebook-badge.gif"
                alt="Find us on Facebook"
                height="44" width="144"
                style="margin-bottom: 8px"
                /></a>
+      <br />
+      <a href="http://www.exploreveg.org/"><img src="/images/caa-logo.png" alt="Compassionate Action for Animals logo" title="Compassionate Action for Animals" height="60" width="98" /></a>
+      <a href="http://www.farmsanctuary.org/"><img src="/images/fs-logo.png" alt="Farm Sanctuary logo" title="Farm Sanctuary" height="53" width="249" /></a>
+      <br />
+      <a href="http://www.mercyforanimals.org/"><img src="/images/mfa-logo.png" alt="Mercy for Animals logo" title="Mercy for Animals" height="53" width="136" /></a>
+      <a href="http://www.veganoutreach.org/"><img src="/images/vo-logo.gif" alt="Vegan Outreach logo" title="Vegan Outreach" height="44" width="217" /></a>
     </div>
 
   </div>
