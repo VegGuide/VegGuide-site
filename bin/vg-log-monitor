@@ -72,9 +72,9 @@ sub _on_read_callback {
 
             next if _skip($line);
 
-            if ( $line =~ /^{/ ) {
+            if ( $line =~ /^\Q[error]\E\s+{/ ) {
                 $in_record = 1;
-                $record .= $line;
+                $record .= '{';
             }
             elsif ($in_record) {
                 $record .= $line;
