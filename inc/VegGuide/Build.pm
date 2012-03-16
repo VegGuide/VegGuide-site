@@ -42,6 +42,7 @@ my %Requires = (
     'Crypt::SSLeay'              => '0',       # For SSL-enabled openid URIs
     'CSS::Minifier'              => '0',
     'Data::Dump::Streamer'       => '0',
+    'Data::Dumper::Concise'      => '0',
     'Data::Pageset'              => '0',
     'DateTime'                   => '0',
     'DateTime::Format::HTTP'     => '0',
