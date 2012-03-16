@@ -123,4 +123,11 @@ sub users_with_profiles : Local {
     $c->stash()->{users} = VegGuide::User->All( with_profile => 1 );
 }
 
+sub debug : Local {
+    my $self = shift;
+    my $c    = shift;
+
+    $c->stash()->{template} = '/site/admin/debug';
+}
+
 1;

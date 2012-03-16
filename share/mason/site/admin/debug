@@ -1,0 +1,16 @@
+<h2>%ENV</h2>
+
+<pre>
+<% Data::Dumper::Concise::Dumper(\%ENV) %>
+
+</pre>
+
+<h2>$c->engine()->env()</h2>
+
+<pre>
+<% Data::Dumper::Concise::Dumper($c->engine()->env()) %>
+</pre>
+
+<%once>
+use Data::Dumper::Concise ();
+</%once>
