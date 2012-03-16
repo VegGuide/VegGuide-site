@@ -263,10 +263,10 @@ server {
     }
 }
 
-# For the old skin feature
+# For the old skin feature and a test hostname
 server {
     listen 80;
-    server_name uchicago.vegguide.org athens.vegguide.org;
+    server_name uchicago.vegguide.org athens.vegguide.org vegguide.tela.com;
 
     error_log  /var/log/nginx/error.log;
     access_log /var/log/nginx/access.log;
