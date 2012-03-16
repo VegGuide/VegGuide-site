@@ -1,0 +1,32 @@
+use strict;
+use warnings;
+
+use VegGuide::Schema;
+use VegGuide::Location;
+
+my $dbh = VegGuide::Schema->Schema()->driver()->handle();
+
+my $country_sql = 'SELECT location_id FROM Location WHERE is_country = 1';
+my $count_sql_base = q{SELECT COUNT(*) FROM Vendor WHERE creation_datetime >= '2011-01-01' AND creation_datetime < '2012-01-01' AND location_id IN };
+
+my %count;
+for my $location ( map { VegGuide::Location->new( location_id => $_ ) }
+    @{ $dbh->selectcol_arrayref($country_sql) } ) {
+
+    my @ids = map { $_->location_id() } $location->descendants();
+    next unless @ids;
+
+    my $count_sql = $count_sql_base;
+    $count_sql .= '(';
+    $count_sql .= join ', ', ('?') x @ids;
+    $count_sql .= ')';
+
+    my $count = $dbh->selectcol_arrayref( $count_sql, undef, @ids );
+
+    $count{ $location->name_with_parent() } = $count ? $count->[0] : 0;
+}
+
+for my $name ( sort { $count{$b} <=> $count{$a} } keys %count ) {
+    print "$name - $count{$name}\n";
+}
+
