@@ -46,7 +46,7 @@ use Sys::Hostname qw( hostname );
 
         @Imports = @StandardImports;
         push @Imports, 'Static::Simple'
-            unless $ENV{MOD_PERL} || __PACKAGE__->Profiling();
+            unless $ENV{PLACK_ENV} || __PACKAGE__->Profiling();
 
         push @Imports, 'StackTrace'
             unless __PACKAGE__->IsProduction() || __PACKAGE__->Profiling();
@@ -135,7 +135,7 @@ sub AlzaboRootDir {
 {
     my %BaseConfig = (
         is_production        => __PACKAGE__->IsProduction(),
-        using_frontend_proxy => ( $ENV{MOD_PERL} ? 1 : 0 ),
+        using_frontend_proxy => ( $ENV{PLACK_ENV} ? 1 : 0 ),
 
         default_view => 'Mason',
 
@@ -185,7 +185,7 @@ sub AlzaboRootDir {
         my $class = shift;
 
         my @loggers;
-        if ( $class->IsProduction() && $ENV{MOD_PERL} ) {
+        if ( $class->IsProduction() && $ENV{PLACK_ENV} ) {
             require Apache2::ServerUtil;
 
             push @loggers, {
@@ -410,7 +410,7 @@ sub reCAPTCHAPublicKey {
     }
 }
 
-if ( __PACKAGE__->IsProduction() && $ENV{MOD_PERL} ) {
+if ( __PACKAGE__->IsProduction() && $ENV{PLACK_ENV} ) {
     __PACKAGE__->$_() for qw( ForgotPWSecret MACSecret reCAPTCHAPrivateKey );
 }
 

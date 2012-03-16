@@ -6,7 +6,7 @@ use warnings;
 my %Cache;
 
 sub Cache {
-    return unless $ENV{MOD_PERL} || $ENV{CATALYST_ENGINE};
+    return unless $ENV{PLACK_ENV};
 
     return \%Cache;
 }

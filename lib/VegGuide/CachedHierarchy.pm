@@ -41,7 +41,7 @@ my %Times;
 
         $class->_iterate_all_nodes();
 
-        _touch_file($f) if $first && $ENV{MOD_PERL};
+        _touch_file($f) if $first && $ENV{PLACK_ENV};
 
         $Meta{$class}{last_build} = ( stat $f )[9];
 
@@ -339,7 +339,7 @@ sub _check_cache_time {
 
     return if $Checked;
 
-    return unless $ENV{MOD_PERL};
+    return unless $ENV{PLACK_ENV};
 
     my $last_mod = ( stat $Meta{$class}{file} )[9];
 
