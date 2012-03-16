@@ -34,7 +34,6 @@ use Sys::Hostname qw( hostname );
         +VegGuide::Plugin::User
         Cache
         Cache::Store::FastMmap
-        Log::Dispatch
         RedirectAndDetach
         SubRequest
     );
@@ -46,7 +45,7 @@ use Sys::Hostname qw( hostname );
 
         @Imports = @StandardImports;
         push @Imports, 'Static::Simple'
-            unless $ENV{PLACK_ENV} || __PACKAGE__->Profiling();
+            unless __PACKAGE__->IsProduction() || __PACKAGE__->Profiling();
 
         push @Imports, 'StackTrace'
             unless __PACKAGE__->IsProduction() || __PACKAGE__->Profiling();
@@ -164,8 +163,6 @@ sub AlzaboRootDir {
         },
 
         dbi => { user => 'root' },
-
-        __PACKAGE__->_LogConfig(),
     );
 
     $BaseConfig{root} = __PACKAGE__->ShareDir();
@@ -179,35 +176,6 @@ sub AlzaboRootDir {
             ],
             debug => 1,
         };
-    }
-
-    sub _LogConfig {
-        my $class = shift;
-
-        my @loggers;
-        if ( $class->IsProduction() && $ENV{PLACK_ENV} ) {
-            require Apache2::ServerUtil;
-
-            push @loggers, {
-                class     => 'ApacheLog',
-                name      => 'ApacheLog',
-                min_level => 'warning',
-                apache    => Apache2::ServerUtil->server(),
-                callbacks => sub {
-                    my %m = @_;
-                    return 'vegguide: ' . $m{message};
-                },
-            };
-        }
-        else {
-            push @loggers, {
-                class     => 'Screen',
-                name      => 'Screen',
-                min_level => 'debug',
-                };
-        }
-
-        return ( 'Log::Dispatch' => \@loggers );
     }
 
     sub CatalystConfig {
