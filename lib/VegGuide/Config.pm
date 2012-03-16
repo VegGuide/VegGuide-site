@@ -34,6 +34,7 @@ use Sys::Hostname qw( hostname );
         +VegGuide::Plugin::User
         Cache
         Cache::Store::FastMmap
+        Log::Dispatch
         RedirectAndDetach
         SubRequest
     );
@@ -163,6 +164,12 @@ sub AlzaboRootDir {
         },
 
         dbi => { user => 'root' },
+
+        'Log::Dispatch' => {
+            class     => 'Screen',
+            name      => 'Screen',
+            min_level => 'warn',
+        },
     );
 
     $BaseConfig{root} = __PACKAGE__->ShareDir();
