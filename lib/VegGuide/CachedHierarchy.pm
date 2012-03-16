@@ -2,6 +2,7 @@ package VegGuide::CachedHierarchy;
 
 use strict;
 use warnings;
+use autodie;
 
 use File::Spec;
 
@@ -51,7 +52,7 @@ my %Times;
 sub _touch_file {
     my $file = shift;
 
-    open my $fh, ">$file" or die "Cannot write to $file";
+    open my $fh, '>', $file;
 
     # The contents don't matter, only the last mod time.
     print $fh "1\n";
@@ -60,8 +61,7 @@ sub _touch_file {
     unless ( $> || $< ) {
         my ( $uid, $gid ) = _get_uid_gid();
 
-        chown $uid, $gid, $file
-            or die "Cannot chown $file to Apache server uid/gid: $!";
+        chown $uid, $gid, $file;
     }
 }
 
