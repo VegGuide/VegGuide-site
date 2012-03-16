@@ -191,11 +191,13 @@ sub _validate_data {
 
     my $parent;
     unless ($is_update) {
-        $parent = VegGuide::Location->new(
-            location_id => $data->{parent_location_id} );
+        if ( $data->{parent_location_id} ) {
+            $parent = VegGuide::Location->new(
+                location_id => $data->{parent_location_id} );
 
-        push @errors, 'Invalid parent region.'
-            if $data->{parent_location_id} && !$parent;
+            push @errors, 'Invalid parent region.'
+                unless $parent;
+        }
     }
 
     push @errors, 'Invalid time zone name'

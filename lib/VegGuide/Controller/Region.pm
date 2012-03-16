@@ -16,7 +16,7 @@ use VegGuide::Location;
 use VegGuide::Pageset;
 use VegGuide::RSSWriter;
 use VegGuide::Search::Vendor::ByLocation;
-use VegGuide::SiteURI qw( entry_uri region_uri );
+use VegGuide::SiteURI qw( entry_uri region_uri site_uri );
 use VegGuide::Util qw( string_is_empty );
 use VegGuide::Vendor;
 
@@ -766,11 +766,14 @@ sub regions_POST {
     push @errors, 'You must provide a parent region.'
         unless $data{parent_location_id} || $c->vg_user()->is_admin();
 
+    delete $data{parent_location_id} unless defined $data{parent_location_id};
+
     my $location;
     eval {
-        $location
-            = VegGuide::Location->create( %data,
-            user_id => $c->vg_user()->user_id() );
+        $location = VegGuide::Location->create(
+            %data,
+            user_id => $c->vg_user()->user_id()
+        );
     };
 
     if ( my $e = $@ ) {
