@@ -1,11 +1,15 @@
 # Static files and backend proxy
 server {
     listen 80;
-    server_name www.vegguide.org vegguide.org;
+    server_name www.vegguide.org;
 
     error_log  /var/log/nginx/vegguide.org/error.log;
     access_log /var/log/nginx/vegguide.org/access.log;
-    
+
+    if ( $host != "www.vegguide.org" ) {
+        rewrite  ^(.*)  http://www.vegguide.org$1  permanent;
+    }
+
     add_header P3P "policyref=\"http://www.vegguide.org/w3c/p3p.xml\", CP=\"ALL DSP COR CURa ADMa \DEVa TAIa PSAa PSDa OUR IND PHY ONL COM NAV DEM STA\"";
 
     location ^~ /mailman {
@@ -261,17 +265,6 @@ server {
 
         proxy_pass http://localhost:8088;
     }
-}
-
-# For the old skin feature and a test hostname
-server {
-    listen 80;
-    server_name uchicago.vegguide.org athens.vegguide.org vegguide.tela.com;
-
-    error_log  /var/log/nginx/error.log;
-    access_log /var/log/nginx/access.log;
-
-    rewrite  ^  http://www.vegguide.org$request_uri  permanent;
 }
 
 server {
