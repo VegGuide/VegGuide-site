@@ -65,19 +65,10 @@ sub _touch_file {
     }
 }
 
-# Copied from Mason's ApacheHandler
+# XXX - quick hack fix - should revisit at some point
 sub _get_uid_gid {
-
-    # Apache2 lacks $s->uid.
-    # Workaround by searching the config tree.
-    require Apache2::Directive;
-
-    my $conftree = Apache2::Directive::conftree();
-    my $user     = $conftree->lookup('User');
-    my $group    = $conftree->lookup('Group');
-
-    $user  =~ s/^["'](.*)["']$/$1/;
-    $group =~ s/^["'](.*)["']$/$1/;
+    my $user  = 'www-data';
+    my $group = 'www-data';
 
     my $uid = $user  ? getpwnam($user)  : $>;
     my $gid = $group ? getgrnam($group) : $);
