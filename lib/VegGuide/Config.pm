@@ -168,7 +168,7 @@ sub AlzaboRootDir {
         'Log::Dispatch' => {
             class     => 'Screen',
             name      => 'Screen',
-            min_level => 'warn',
+            min_level => ( __PACKAGE__->IsProduction() ? 'warn' : 'debug' ),
         },
     );
 
