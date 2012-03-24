@@ -5,8 +5,8 @@ can clone anonymously from <code>git://git.urth.org/VegGuide.git</code>.
 </p>
 
 <p>
-The VegGuide source code is distributed under the same terms as Perl
-itself. Please see the LICENSE file in repository for details.
+The VegGuide source code is distributed under the Artistic 2.0 License. Please
+see the LICENSE file in repository for details.
 </p>
 
 <%method page_title>
