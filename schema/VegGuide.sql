@@ -1,3 +1,47 @@
+SET CLIENT_MIN_MESSAGES = ERROR;
+
+CREATE DOMAIN email_address AS citext
+       CONSTRAINT valid_email_address CHECK ( VALUE ~ E'^.+@.+(?:\\..+)+' );
+
+CREATE DOMAIN uri AS TEXT
+       CONSTRAINT valid_uri CHECK ( VALUE ~ E'^https?://[\\w-_]+(\.[\\w-_]+)*\\.\\w{2,3}' );
+
+CREATE "User" (
+  user_id          BIGSERIAL         NOT NULL  PRIMARY KEY,
+  email_address    email_address     NOT NULL  UNIQUE,
+  password         VARCHAR(40)       NOT NULL,
+  display_name     VARCHAR(100)      NOT NULL  UNIQUE,
+  website          uri               NULL,
+  is_admin         BOOL              DEFAULT FALSE NOT NULL,
+  allows_email     BOOL              DEFAULT FALSE NOT NULL,
+  entries_per_page BIGINT            DEFAULT 20 NOT NULL,
+  bio              TEXT,
+  how_veg          SMALLINT          NOT NULL,
+  image_extension  VARCHAR(3)        NULL,
+  forgot_password_digest VARCHAR(40) NULL,
+  forgot_password_digest_datetime TIMESTAMP WITHOUT TIME ZONE NULL,
+  creation_datetime TIMESTAMP WITHOUT TIME ZONE  NOT NULL,
+  CONSTRAINT valid_display_name CHECK (display_name != '')
+);
+
+CREATE TABLE "Region" (
+  region_id BIGSERIAL NOT NULL,
+  name VARCHAR(200) DEFAULT '' NOT NULL,
+  localized_name VARCHAR(200) DEFAULT NULL,
+  time_zone_name VARCHAR(100) DEFAULT NULL,
+  can_have_vendors BOOL DEFAULT FALSE NOT NULL,
+  is_country BOOL DEFAULT FALSE NOT NULL,
+  parent_location_id INTEGER DEFAULT NULL,
+  locale_id BIGINT DEFAULT NULL,
+  creation_datetime timestamp DEFAULT '2007-01-01 00:00:00' NOT NULL,
+  user_id BIGINT DEFAULT 1 NOT NULL,
+  has_addresses BOOL DEFAULT TRUE NOT NULL,
+  has_hours BOOL DEFAULT TRUE NOT NULL,
+  PRIMARY KEY ("location_id")
+);
+
+
+
 CREATE TABLE "AddressFormat" (
   address_format_id SERIAL NOT NULL,
   format VARCHAR(100) DEFAULT '' NOT NULL,
