@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 12;
+use Test::More;
 
 use VegGuide::AlternateLinks;
 
@@ -34,7 +34,11 @@ is( $links[0]->mime_type(), 'text/foo', 'mime_type() for link object' );
 is( $links[0]->uri(),       '/a/uri',   'uri() for first link object' );
 is( $links[0]->title(),     'yadda',    'title() for first link object' );
 
-is( $links[1]->mime_type(), 'application/bar',
-    'mime_type() for link object' );
+is(
+    $links[1]->mime_type(), 'application/bar',
+    'mime_type() for link object'
+);
 is( $links[1]->uri(),   '/b/uri', 'uri() for second link object' );
 is( $links[1]->title(), 'foo',    'title() for second link object' );
+
+done_testing();
