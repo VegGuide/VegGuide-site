@@ -22,6 +22,8 @@ use VegGuide::Config;
 use VegGuide::Email;
 use VegGuide::Image;
 use VegGuide::Location;
+use VegGuide::UserActivityLog;
+use VegGuide::User::Guest;
 use VegGuide::Util qw( string_is_empty );
 
 sub _new_row {
@@ -1629,93 +1631,6 @@ sub CountForDateSpan {
             ],
         ],
     );
-}
-
-package VegGuide::Cursor::UserWithAggregate;
-
-use base qw(Class::AlzaboWrapper::Cursor);
-
-sub next {
-    my $self = shift;
-
-    my ( $agg, $user_id ) = $self->{cursor}->next
-        or return;
-
-    return (
-        $agg,
-        VegGuide::User->new( user_id => $user_id )
-    );
-}
-
-package VegGuide::User::Guest;
-
-use base 'VegGuide::User';
-
-{
-    my $guest_row = VegGuide::Schema->Schema()->User_t()->potential_row(
-        values => {
-            user_id          => 0,
-            email_address    => 'guest@vegguide.org',
-            real_name        => 'Guest',
-            entries_per_page => 20,
-        },
-    );
-
-    sub new {
-        my $class = shift;
-
-        return bless { row => $guest_row }, $class;
-    }
-}
-
-sub can_edit_location {0}
-
-sub is_location_owner {0}
-
-sub can_edit_comment {0}
-
-sub can_edit_vendor {0}
-
-sub can_edit_vendor_image {0}
-
-sub can_delete_vendor_image {0}
-
-sub can_edit_user {0}
-
-sub can_edit_skin {0}
-
-sub can_edit_team {0}
-
-sub is_guest     {1}
-sub is_logged_in {0}
-
-package VegGuide::UserActivityLog;
-
-use VegGuide::AlzaboWrapper (
-    table => VegGuide::Schema->Schema()->UserActivityLog_t() );
-
-sub datetime {
-    DateTime::Format::MySQL->parse_datetime( $_[0]->activity_datetime );
-}
-
-sub type {
-    $_[0]->row_object->type->select('type');
-}
-
-sub vendor {
-    my $self = shift;
-
-    return unless defined $self->vendor_id;
-
-    return VegGuide::Vendor->new( object => $self->row_object->vendor );
-}
-
-sub location {
-    my $self = shift;
-
-    return unless defined $self->location_id;
-
-    return VegGuide::Location->new( object => $self->row_object->location );
 }
 
 1;
