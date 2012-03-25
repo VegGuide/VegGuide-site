@@ -3,7 +3,7 @@ package VegGuide::Controller::Site;
 use strict;
 use warnings;
 
-use base 'VegGuide::Controller::DirectToView';
+use parent 'VegGuide::Controller::DirectToView';
 
 use Class::Trait 'VegGuide::Role::Controller::Feed';
 

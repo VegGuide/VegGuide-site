@@ -3,7 +3,7 @@ package VegGuide::Plugin::Session::Store::VegGuide;
 use strict;
 use warnings;
 
-use base 'Catalyst::Plugin::Session::Store::DBI';
+use parent 'Catalyst::Plugin::Session::Store::DBI';
 
 use VegGuide::Schema;
 

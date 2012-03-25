@@ -3,7 +3,7 @@ package VegGuide::Search::Vendor;
 use strict;
 use warnings;
 
-use base 'VegGuide::Search';
+use parent 'VegGuide::Search';
 
 use URI::FromHash qw( uri );
 use VegGuide::Validate

@@ -25,7 +25,7 @@ __PACKAGE__->_PreloadLocales;
     package DateTime::Locale::en_Ghana;
 
     # guessing Botswana has similar datetime formatting
-    use base 'DateTime::Locale::en_BW';
+    use parent 'DateTime::Locale::en_BW';
 
     DateTime::Locale->register(
         id           => 'en_Ghana',
@@ -42,7 +42,7 @@ __PACKAGE__->_PreloadLocales;
     package DateTime::Locale::en_Kenya;
 
     # guessing Botswana has similar datetime formatting
-    use base 'DateTime::Locale::en_BW';
+    use parent 'DateTime::Locale::en_BW';
 
     DateTime::Locale->register(
         id           => 'en_Kenya',

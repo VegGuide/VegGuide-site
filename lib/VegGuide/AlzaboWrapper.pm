@@ -3,7 +3,7 @@ package VegGuide::AlzaboWrapper;
 use strict;
 use warnings;
 
-use base 'Class::AlzaboWrapper';
+use parent 'Class::AlzaboWrapper';
 
 use Class::AlzaboWrapper 0.12;
 

@@ -3,7 +3,7 @@ package XML::Generator::RSS10::regveg;
 use strict;
 use warnings;
 
-use base 'XML::Generator::RSS10::Module';
+use parent 'XML::Generator::RSS10::Module';
 
 use HTML::Entities qw( encode_entities );
 use Params::Validate qw( validate SCALAR ARRAYREF );

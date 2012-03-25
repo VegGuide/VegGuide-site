@@ -3,7 +3,7 @@ package VegGuide::Controller::Stats;
 use strict;
 use warnings;
 
-use base 'VegGuide::Controller::DirectToView';
+use parent 'VegGuide::Controller::DirectToView';
 
 use VegGuide::Chart;
 

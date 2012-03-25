@@ -221,7 +221,7 @@ sub time_to_minutes
 
 package HTML::WikiConverter::VegGuide;
 
-use base 'HTML::WikiConverter';
+use parent 'HTML::WikiConverter';
 
 
 sub rules

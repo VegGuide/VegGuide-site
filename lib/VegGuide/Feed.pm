@@ -3,7 +3,7 @@ package VegGuide::Feed;
 use strict;
 use warnings;
 
-use base 'XML::Feed';
+use parent 'XML::Feed';
 use XML::Feed;
 use XML::Feed::Format::Atom;
 use XML::Feed::Format::RSS;

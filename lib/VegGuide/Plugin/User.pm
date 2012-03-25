@@ -3,7 +3,7 @@ package VegGuide::Plugin::User;
 use strict;
 use warnings;
 
-use base 'Class::Accessor::Fast';
+use parent 'Class::Accessor::Fast';
 
 __PACKAGE__->mk_accessors('_vg_user');
 

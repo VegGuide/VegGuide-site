@@ -3,7 +3,7 @@ package VegGuide::Controller::User;
 use strict;
 use warnings;
 
-use base 'VegGuide::Controller::Base';
+use parent 'VegGuide::Controller::Base';
 
 use Class::Trait 'VegGuide::Role::Controller::Search';
 

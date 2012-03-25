@@ -3,7 +3,7 @@ package VegGuide::View::AlzaboGUI;
 use strict;
 use warnings;
 
-use base 'Catalyst::View::Mason';
+use parent 'Catalyst::View::Mason';
 
 use VegGuide::Config;
 
@@ -18,7 +18,7 @@ __PACKAGE__->config(
 
 package HTML::Mason::Request::Catalyst;
 
-use base 'HTML::Mason::Request';
+use parent 'HTML::Mason::Request';
 
 sub redirect {
     my $self = shift;

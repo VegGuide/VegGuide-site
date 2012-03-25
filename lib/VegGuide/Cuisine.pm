@@ -3,7 +3,7 @@ package VegGuide::Cuisine;
 use strict;
 use warnings;
 
-use base 'VegGuide::CachedHierarchy';
+use parent 'VegGuide::CachedHierarchy';
 
 use VegGuide::Schema;
 use VegGuide::AlzaboWrapper ( table => VegGuide::Schema->Schema->Cuisine_t );

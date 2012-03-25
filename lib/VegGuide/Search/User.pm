@@ -3,7 +3,7 @@ package VegGuide::Search::User;
 use strict;
 use warnings;
 
-use base 'VegGuide::Search';
+use parent 'VegGuide::Search';
 
 use URI::FromHash ();
 use VegGuide::User;

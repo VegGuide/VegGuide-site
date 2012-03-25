@@ -3,7 +3,7 @@ package VegGuide::Controller::AlzaboGUI;
 use strict;
 use warnings;
 
-use base 'Catalyst::Controller';
+use parent 'Catalyst::Controller';
 
 use Alzabo::Config;
 use File::Basename qw( basename );

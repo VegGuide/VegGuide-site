@@ -3,7 +3,7 @@ package VegGuide::Controller::Base;
 use strict;
 use warnings;
 
-use base 'Catalyst::Controller';
+use parent 'Catalyst::Controller';
 use MRO::Compat;
 
 # Normally I'd inherit from this class, but that seems to magically

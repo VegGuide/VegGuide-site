@@ -3,7 +3,7 @@ package VegGuide::Request;
 use strict;
 use warnings;
 
-use base 'Catalyst::Request::REST::ForBrowsers';
+use parent 'Catalyst::Request::REST::ForBrowsers';
 
 use DateTime::Format::Natural;
 use HTTP::Headers::Util qw(split_header_words);

@@ -3,7 +3,7 @@ package VegGuide::Build;
 use strict;
 use warnings;
 
-use base 'Module::Build';
+use parent 'Module::Build';
 
 use File::Basename qw( basename dirname );
 use File::Find::Rule;

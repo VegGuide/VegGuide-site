@@ -3,7 +3,7 @@ package VegGuide::Location;
 use strict;
 use warnings;
 
-use base 'VegGuide::CachedHierarchy';
+use parent 'VegGuide::CachedHierarchy';
 
 use VegGuide::Schema;
 use VegGuide::AlzaboWrapper (

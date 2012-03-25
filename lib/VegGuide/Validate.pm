@@ -3,7 +3,7 @@ package VegGuide::Validate;
 use strict;
 use warnings;
 
-use base 'Exporter';
+use parent 'Exporter';
 
 use Params::Validate qw(:types);
 use Scalar::Util qw( blessed );

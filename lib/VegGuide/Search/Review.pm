@@ -3,7 +3,7 @@ package VegGuide::Search::Review;
 use strict;
 use warnings;
 
-use base 'VegGuide::Search';
+use parent 'VegGuide::Search';
 
 use VegGuide::SiteURI qw( site_uri );
 use VegGuide::VendorComment;

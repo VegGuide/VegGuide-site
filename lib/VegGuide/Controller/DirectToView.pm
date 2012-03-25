@@ -3,7 +3,7 @@ package VegGuide::Controller::DirectToView;
 use strict;
 use warnings;
 
-use base 'VegGuide::Controller::Base';
+use parent 'VegGuide::Controller::Base';
 
 sub auto : Private {
     my $self = shift;

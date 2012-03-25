@@ -3,7 +3,7 @@ package VegGuide::Controller::Root;
 use strict;
 use warnings;
 
-use base 'VegGuide::Controller::Base';
+use parent 'VegGuide::Controller::Base';
 
 use Geo::IP;
 use List::AllUtils qw( uniq );

@@ -3,7 +3,7 @@ package VegGuide::Action::REST;
 use strict;
 use warnings;
 
-use base 'Catalyst::Action::REST';
+use parent 'Catalyst::Action::REST';
 
 use MRO::Compat;
 

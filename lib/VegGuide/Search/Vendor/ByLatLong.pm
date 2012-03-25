@@ -3,7 +3,7 @@ package VegGuide::Search::Vendor::ByLatLong;
 use strict;
 use warnings;
 
-use base 'VegGuide::Search::Vendor';
+use parent 'VegGuide::Search::Vendor';
 
 use VegGuide::Validate qw( validate_with SCALAR_TYPE POS_INTEGER_TYPE );
 

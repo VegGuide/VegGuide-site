@@ -3,7 +3,7 @@ package VegGuide::Controller::Suggestion;
 use strict;
 use warnings;
 
-use base 'VegGuide::Controller::Base';
+use parent 'VegGuide::Controller::Base';
 
 use VegGuide::SiteURI qw( user_uri );
 use VegGuide::Vendor;

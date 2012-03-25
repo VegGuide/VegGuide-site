@@ -3,7 +3,7 @@ package VegGuide::Controller::Review;
 use strict;
 use warnings;
 
-use base 'VegGuide::Controller::Base';
+use parent 'VegGuide::Controller::Base';
 
 use Scalar::Util qw( looks_like_number );
 use VegGuide::Search::Review;

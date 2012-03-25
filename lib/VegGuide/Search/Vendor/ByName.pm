@@ -3,7 +3,7 @@ package VegGuide::Search::Vendor::ByName;
 use strict;
 use warnings;
 
-use base 'VegGuide::Search::Vendor';
+use parent 'VegGuide::Search::Vendor';
 
 use VegGuide::Validate qw( validate_with SCALAR_TYPE );
 

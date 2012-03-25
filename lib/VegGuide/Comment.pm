@@ -3,7 +3,7 @@ package VegGuide::Comment;
 use strict;
 use warnings;
 
-use base 'VegGuide::AlzaboWrapper';
+use parent 'VegGuide::AlzaboWrapper';
 
 use DateTime::Format::MySQL;
 use VegGuide::User;

@@ -7,7 +7,7 @@ use VegGuide::Schema;
 use VegGuide::AlzaboWrapper (
     table => VegGuide::Schema->Schema->VendorComment_t );
 
-use base 'VegGuide::Comment';
+use parent 'VegGuide::Comment';
 
 use Class::Trait qw( VegGuide::Role::FeedEntry );
 

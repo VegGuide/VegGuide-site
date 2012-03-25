@@ -3,7 +3,7 @@ package VegGuide::View::Mason;
 use strict;
 use warnings;
 
-use base 'Catalyst::View::Mason';
+use parent 'Catalyst::View::Mason';
 
 {
 

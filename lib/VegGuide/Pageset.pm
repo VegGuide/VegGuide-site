@@ -1,6 +1,6 @@
 package VegGuide::Pageset;
 
-use base 'Data::Pageset';
+use parent 'Data::Pageset';
 
 use Scalar::Util qw( weaken );
 
