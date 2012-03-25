@@ -26,10 +26,13 @@ use List::Util qw( first sum );
 use LockFile::Simple;
 use URI::FromHash qw( uri );
 use VegGuide::Config;
+use VegGuide::Cursor::LocationAndCount;
+use VegGuide::Cursor::LocationById;
 use VegGuide::Exceptions qw( auth_error data_validation_error );
 use VegGuide::Feed;
 use VegGuide::GreatCircle qw( earth_radius );
 use VegGuide::Locale;
+use VegGuide::LocationComment;
 use VegGuide::PerRequestCache;
 use VegGuide::RSSWriter;
 use VegGuide::SiteURI qw( entry_uri region_uri );
@@ -1852,44 +1855,5 @@ sub USA {
 
     return $class->new( name => 'USA' );
 }
-
-package VegGuide::Cursor::LocationAndCount;
-
-use base qw(Class::AlzaboWrapper::Cursor);
-
-sub next {
-    my $self = shift;
-
-    my ( $count, $location_id ) = $self->{cursor}->next
-        or return;
-
-    return (
-        $count,
-        VegGuide::Location->new( location_id => $location_id )
-    );
-}
-
-package VegGuide::Cursor::LocationById;
-
-use base qw(Class::AlzaboWrapper::Cursor);
-
-sub next {
-    my $self = shift;
-
-    my ($location_id) = $self->{cursor}->next
-        or return;
-
-    return VegGuide::Location->new( location_id => $location_id );
-}
-
-package VegGuide::LocationComment;
-
-use VegGuide::Schema;
-use VegGuide::AlzaboWrapper (
-    table => VegGuide::Schema->Schema->LocationComment_t );
-
-use base 'VegGuide::Comment';
-
-sub location { VegGuide::Location->new( location_id => $_[0]->location_id ) }
 
 1;
