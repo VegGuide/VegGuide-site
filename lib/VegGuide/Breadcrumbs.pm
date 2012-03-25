@@ -9,7 +9,7 @@ use VegGuide::UniqueArray;
 use VegGuide::Validate qw( validate_pos );
 
 {
-    my @spec = ( { can => 'uri_for' } );
+    my @spec = ( { can => 'request' } );
 
     sub new {
         my $class = shift;

@@ -5,6 +5,7 @@ use warnings;
 
 use Exporter qw( import );
 use URI::FromHash qw( uri );
+use VegGuide::Config;
 use VegGuide::Validate qw( validate VENDOR_TYPE LOCATION_TYPE USER_TYPE
     NEWS_ITEM_TYPE VENDOR_IMAGE_TYPE
     SCALAR_TYPE HASHREF_TYPE BOOLEAN_TYPE );

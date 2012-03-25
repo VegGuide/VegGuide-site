@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 12;
+use Test::More;
 
 use VegGuide::Breadcrumbs;
 
@@ -42,6 +42,8 @@ is( scalar @bc, 3, 'three breadcrumbs returned' );
 is( $bc[2]->uri(),   '/my/path', 'uri() for third breadcrumb object' );
 is( $bc[2]->label(), 'label',    'label() for third breadcrumb object' );
 
+done_testing();
+
 package FakeRequest;
 
 use URI;
@@ -52,5 +54,7 @@ sub new {
 
     return bless \$uri, $class;
 }
+
+sub request { return $_[0] }
 
 sub uri { URI->new( ${ $_[0] } ) }
