@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 11;
+use Test::More;
 
 use Sys::Hostname ();
 use VegGuide::Config;
@@ -18,9 +18,9 @@ my $is_prod
 
 {
     my %cat_config = VegGuide::Config->CatalystConfig();
-    ok( $cat_config{session},        'defines session config' );
-    ok( $cat_config{dbi},            'defines dbi config' );
-    ok( $cat_config{authentication}, 'defines authen config' );
+    ok( $cat_config{session},       'defines session config' );
+    ok( $cat_config{dbi},           'defines dbi config' );
+    ok( $cat_config{authen_cookie}, 'defines authen cookie config' );
 }
 
 {
@@ -45,3 +45,5 @@ my $is_prod
     ok( defined $mac_secret, 'mac secret is defined' );
     ok( length $mac_secret,  'mac secret is not an empty string' );
 }
+
+done_testing();
