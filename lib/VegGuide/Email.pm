@@ -9,7 +9,6 @@ use Email::Send;
 use Email::MIME::CreateHTML;
 use Encode qw( encode );
 use HTML::Mason::Interp;
-use VegGuide::Queue;
 use VegGuide::Util;
 
 use VegGuide::Validate qw( validate SCALAR_TYPE HASHREF_TYPE BOOLEAN_TYPE );
@@ -62,7 +61,7 @@ sub TestMode {
             text_body            => encode( 'utf8', $text_body ),
         );
 
-        VegGuide::Queue->AddToQueue( sub { _Send($email) } );
+        _Send($email);
     }
 }
 
