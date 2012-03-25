@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 4;
+use Test::More;
 
 use VegGuide::Keywords;
 
@@ -17,3 +17,5 @@ $kw->add('blue');
 @kw = $kw->all();
 is( scalar @kw, 2,      'two keywords returned' );
 is( $kw[1],     'blue', 'second keyword is blue' );
+
+done_testing();
