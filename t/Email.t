@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 14;
+use Test::More;
 
 use VegGuide::Email;
 
@@ -10,10 +10,11 @@ VegGuide::Email->TestMode();
 {
     Email::Send::Test->clear();
     VegGuide::Email->Send(
-        to      => 'to@example.com',
-        from    => 'from@example.com',
-        subject => 'Testing',
-        body    => 'Test',
+        to       => 'to@example.com',
+        from     => 'from@example.com',
+        subject  => 'Testing',
+        template => 'forgot-password',
+        params   => { uri => 'http://example.com' },
     );
 
     my @emails = Email::Send::Test->emails();
@@ -44,39 +45,12 @@ VegGuide::Email->TestMode();
         $email->header('X-Sender'), 'VegGuide::Email',
         'check X-Sender'
     );
-    is(
-        $email->content_type(), q|text/plain; charset="UTF-8"|,
+    like(
+        $email->content_type(), qr{multipart/alternative},
         'check Content-Type'
-    );
-    is(
-        $email->header('Content-Disposition'), 'inline',
-        'check Content-Disposition'
     );
     ok( $email->header('Message-ID'), 'header has Message-ID' );
     ok( $email->header('Date'),       'header has Date' );
-    is( $email->body(), 'Test', 'check body' );
 }
 
-{
-    Email::Send::Test->clear();
-
-    my $body = '12345679 ' x 20;
-    VegGuide::Email->Send(
-        to      => 'to@example.com',
-        from    => 'from@example.com',
-        subject => 'Testing',
-        body    => $body,
-    );
-
-    my @emails = Email::Send::Test->emails();
-    is( scalar @emails, 1, 'one email was sent' );
-
-    my $sent_body  = $emails[0]->body();
-    my $max_length = 0;
-    for my $line ( split /\n/, $sent_body ) {
-        $max_length = length $line
-            if length $line > $max_length;
-    }
-
-    ok( $max_length <= 72, 'no line in body is longer than 72 characters' );
-}
+done_testing();
