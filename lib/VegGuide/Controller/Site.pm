@@ -388,30 +388,6 @@ sub news_item_deletion_confirmation :
     $c->stash()->{template} = '/shared/deletion-confirmation-form';
 }
 
-sub skins : Local : ActionClass('+VegGuide::Action::REST') {
-}
-
-sub skins_POST : Private {
-    my $self = shift;
-    my $c    = shift;
-
-    $c->redirect_and_detach('/')
-        unless $c->vg_user()->is_admin();
-
-    my %data = $c->request()->skin_data();
-
-    my $skin = VegGuide::Skin->create(%data);
-
-    my $file = $c->request()->upload('image');
-
-    $skin->save_image( $file->fh() )
-        if $file && $file->fh();
-
-    $c->add_message( 'The ' . $skin->hostname() . ' skin has been created.' );
-
-    $c->redirect_and_detach( '/skin/' . $skin->skin_id() . '/edit_form' );
-}
-
 sub survey_2008_1_summary : Local {
     my $self = shift;
     my $c    = shift;

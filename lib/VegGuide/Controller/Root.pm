@@ -9,7 +9,7 @@ use List::AllUtils qw( uniq );
 use VegGuide::Category;
 use VegGuide::Config;
 use VegGuide::Search::Vendor::ByLatLong;
-use VegGuide::SiteURI qw( region_uri );
+use VegGuide::SiteURI qw( region_uri site_uri );
 use VegGuide::Util qw( string_is_empty );
 use VegGuide::Vendor;
 
@@ -122,11 +122,7 @@ sub home : Path('/home') {
     my $self = shift;
     my $c    = shift;
 
-    my $location = $c->skin()->home_location();
-
-    my $redirect = $location ? region_uri( location => $location ) : '/';
-
-    $c->redirect_and_detach($redirect);
+    $c->redirect_and_detach( site_uri( path => '/', with_host => 1 ) );
 }
 
 {

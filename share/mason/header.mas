@@ -7,9 +7,8 @@
  <& front-page-header.mas, %ARGS &>
 % } else {
   <div id="logo">
-   <a href="/" title="Home"><img class="png-filter" src="<% $c->skin()->image_uri() | h %>"
-                                 <% html_imgsize( $c->skin()->image_file() ) %>
-                                 alt="VegGuide.Org Logo" /></a>
+   <a href="/" title="Home"><img class="png-filter" src="/images/vegguide-logo.png"
+                                 width="300" height="50" alt="VegGuide.Org Logo" /></a>
   </div>
 
   <& sitewide-search.mas &>

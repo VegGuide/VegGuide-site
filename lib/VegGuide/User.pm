@@ -442,18 +442,6 @@ sub can_delete_user {
     return 1 if $self->is_admin;
 }
 
-sub can_edit_skin {
-    my $self = shift;
-    my ($skin) = validate_pos(
-        @_,
-        { isa => 'VegGuide::Skin' },
-    );
-
-    return 1 if $self->is_admin;
-
-    return $skin->owner_user_id == $self->user_id;
-}
-
 sub can_edit_team {
     my $self = shift;
     my ($team) = validate_pos(
@@ -464,32 +452,6 @@ sub can_edit_team {
     return 1 if $self->is_admin;
 
     return $team->owner_user_id == $self->user_id;
-}
-
-sub skin_count {
-    my $self = shift;
-
-    my $schema = VegGuide::Schema->Connect();
-
-    return $schema->Skin_t->row_count(
-        where => [ $schema->Skin_t->owner_user_id_c, '=', $self->user_id ],
-    );
-}
-
-sub skins {
-    my $self = shift;
-
-    return VegGuide::Skin->All
-        if $self->is_admin;
-
-    my $schema = VegGuide::Schema->Connect();
-
-    return $self->cursor(
-        $schema->Skin_t->rows_where(
-            where =>
-                [ $schema->Skin_t->owner_user_id_c, '=', $self->user_id ],
-        )
-    );
 }
 
 sub vendor_count {

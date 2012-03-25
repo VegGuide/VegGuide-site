@@ -810,21 +810,6 @@ sub suggestions : Chained('_set_user') : PathPart('suggestions') : Args(0) {
     $c->stash()->{template} = '/user/individual/suggestions';
 }
 
-sub skins : Chained('_set_user') : PathPart('skins') : Args(0) {
-    my $self = shift;
-    my $c    = shift;
-
-    my $user = $c->stash()->{user};
-
-    $c->redirect_and_detach( site_uri( path => '/', with_host => 1 ) )
-        unless $c->vg_user()->is_admin()
-            || $c->vg_user()->user_id() == $user->user_id();
-
-    $c->stash()->{skins} = $user->skins();
-
-    $c->stash()->{template} = '/user/individual/skins';
-}
-
 __PACKAGE__->meta()->make_immutable();
 
 1;

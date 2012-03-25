@@ -97,16 +97,6 @@ sub vendor_source_data {
     return $self->_params_for_classes( classes => 'VegGuide::VendorSource' );
 }
 
-sub skin_data {
-    my $self = shift;
-
-    my %data = $self->_params_for_classes( classes => 'VegGuide::Skin' );
-
-    $data{home_location_id} = $self->param('location_id');
-
-    return %data;
-}
-
 {
     my $spec = {
         classes    => SCALAR_OR_ARRAYREF_TYPE,

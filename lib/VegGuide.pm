@@ -18,7 +18,6 @@ use VegGuide::Attribute;
 use VegGuide::Comment;
 use VegGuide::Cuisine;
 use VegGuide::Location;
-use VegGuide::Skin;
 use VegGuide::User;
 use VegGuide::Vendor;
 use VegGuide::VendorSource;
@@ -43,21 +42,6 @@ __PACKAGE__->request_class('VegGuide::Request');
 __PACKAGE__->response_class('VegGuide::Response');
 
 __PACKAGE__->setup();
-
-sub skin {
-    my $self = shift;
-
-    return $self->{skin}
-        if $self->{skin};
-
-    if ( $self->request()->param('skin_id') ) {
-        return $self->{skin} = VegGuide::Skin->new(
-            skin_id => $self->request()->param('skin_id') );
-    }
-
-    return $self->{skin} = VegGuide::Skin->SkinForHostname(
-        ( $self->request()->uri()->host() || '' ) );
-}
 
 sub client {
     my $self = shift;
