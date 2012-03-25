@@ -2,11 +2,14 @@ package VegGuide::Controller::Review;
 
 use strict;
 use warnings;
-
-use parent 'VegGuide::Controller::Base';
+use namespace::autoclean;
 
 use Scalar::Util qw( looks_like_number );
 use VegGuide::Search::Review;
+
+use Moose;
+
+BEGIN { extends 'VegGuide::Controller::Base'; }
 
 sub list : Path('') {
     my $self = shift;
@@ -33,6 +36,8 @@ sub list : Path('') {
 
     $c->stash()->{template} = '/site/review-list';
 }
+
+__PACKAGE__->meta()->make_immutable();
 
 1;
 

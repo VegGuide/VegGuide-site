@@ -2,10 +2,7 @@ package VegGuide::Controller::User;
 
 use strict;
 use warnings;
-
-use parent 'VegGuide::Controller::Base';
-
-use Class::Trait 'VegGuide::Role::Controller::Search';
+use namespace::autoclean;
 
 use Captcha::reCAPTCHA;
 use LWPx::ParanoidAgent;
@@ -15,6 +12,12 @@ use VegGuide::Config;
 use VegGuide::Search::User;
 use VegGuide::SiteURI qw( region_uri site_uri user_uri );
 use VegGuide::Util qw( string_is_empty );
+
+use Moose;
+
+BEGIN { extends 'VegGuide::Controller::Base'; }
+
+with 'VegGuide::Role::Controller::Search';
 
 sub _set_user : Chained('/') : PathPart('user') : CaptureArgs(1) {
     my $self    = shift;
@@ -822,35 +825,6 @@ sub skins : Chained('_set_user') : PathPart('skins') : Args(0) {
     $c->stash()->{template} = '/user/individual/skins';
 }
 
+__PACKAGE__->meta()->make_immutable();
+
 1;
-
-__END__
-
-=head1 NAME
-
-VegGuide::Controller::User - Catalyst Controller
-
-=head1 SYNOPSIS
-
-See L<VegGuide>
-
-=head1 DESCRIPTION
-
-Catalyst Controller.
-
-=head1 METHODS
-
-=over 4
-
-=back
-
-=head1 AUTHOR
-
-Dave Rolsky,,,
-
-=head1 LICENSE
-
-This library is free software, you can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut

@@ -2,12 +2,17 @@ package VegGuide::Controller::Site::Admin;
 
 use strict;
 use warnings;
-
-use parent 'VegGuide::Controller::DirectToView';
+use namespace::autoclean;
 
 use VegGuide::Locale;
 use VegGuide::Vendor;
 use VegGuide::VendorSource;
+
+use Moose;
+
+BEGIN { extends 'VegGuide::Controller::DirectToView'; }
+
+with 'VegGuide::Role::Controller::Feed';
 
 sub auto : Private {
     my $self = shift;
@@ -129,5 +134,7 @@ sub debug : Local {
 
     $c->stash()->{template} = '/site/admin/debug';
 }
+
+__PACKAGE__->meta()->make_immutable();
 
 1;

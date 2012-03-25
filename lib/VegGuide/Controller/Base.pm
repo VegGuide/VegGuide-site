@@ -2,26 +2,7 @@ package VegGuide::Controller::Base;
 
 use strict;
 use warnings;
-
-use parent 'Catalyst::Controller';
-use MRO::Compat;
-
-# Normally I'd inherit from this class, but that seems to magically
-# break handling of "normal" views (the various *_GET_html
-# methods). Instead we'll manually "import" the handy status related
-# methods it provides, which is pretty lame.
-use Catalyst::Controller::REST;
-
-BEGIN {
-    for my $meth (
-        qw( status_ok status_created status_accepted
-        status_bad_request status_not_found )
-        ) {
-        no strict 'refs';
-        *{ __PACKAGE__ . '::' . $meth }
-            = \&{ 'Catalyst::Controller::REST::' . $meth };
-    }
-}
+use namespace::autoclean;
 
 use Alzabo::Runtime::UniqueRowCache;
 use HTTP::Status qw( RC_FORBIDDEN );
@@ -33,6 +14,10 @@ use VegGuide::SiteURI qw( site_uri );
 use VegGuide::Util qw( string_is_empty );
 use VegGuide::Web::CSS;
 use VegGuide::Web::Javascript;
+
+use Moose;
+
+BEGIN { extends 'Catalyst::Controller::REST' }
 
 sub begin : Private {
     my $self = shift;
@@ -161,5 +146,7 @@ sub _set_entity {
 
     return 1;
 }
+
+__PACKAGE__->meta()->make_immutable();
 
 1;

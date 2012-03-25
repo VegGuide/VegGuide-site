@@ -2,14 +2,17 @@ package VegGuide::Controller::AlzaboGUI;
 
 use strict;
 use warnings;
-
-use parent 'Catalyst::Controller';
+use namespace::autoclean;
 
 use Alzabo::Config;
 use File::Basename qw( basename );
 use File::Spec;
 use VegGuide::Config;
 use VegGuide::View::AlzaboGUI;
+
+use Moose;
+
+BEGIN { extends 'Catalyst::Controller'; }
 
 my $ShareDir = '/usr/local/share/alzabo/schema';
 
@@ -60,5 +63,7 @@ sub end : Private {
 
     return;
 }
+
+__PACKAGE__->meta()->make_immutable();
 
 1;

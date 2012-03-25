@@ -2,11 +2,12 @@ package VegGuide::Role::Controller::Search;
 
 use strict;
 use warnings;
-
-use Class::Trait 'base';
+use namespace::autoclean;
 
 use Scalar::Util qw( looks_like_number );
 use URI::FromHash qw( uri );
+
+use Moose::Role;
 
 sub _set_search_in_stash {
     my $self   = shift;

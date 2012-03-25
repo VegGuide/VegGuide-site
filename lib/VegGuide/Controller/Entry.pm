@@ -2,11 +2,7 @@ package VegGuide::Controller::Entry;
 
 use strict;
 use warnings;
-
-use parent 'VegGuide::Controller::Base';
-
-use Class::Trait 'VegGuide::Role::Controller::Comment';
-use Class::Trait 'VegGuide::Role::Controller::Search';
+use namespace::autoclean;
 
 use Lingua::EN::Inflect qw( PL );
 use Scalar::Util qw( looks_like_number );
@@ -17,6 +13,13 @@ use VegGuide::Search::Vendor::ByLatLong;
 use VegGuide::Search::Vendor::ByName;
 use VegGuide::SiteURI qw( entry_uri entry_image_uri region_uri );
 use VegGuide::Vendor;
+
+use Moose;
+
+BEGIN { extends 'VegGuide::Controller::Base'; }
+
+with 'VegGuide::Role::Controller::Comment',
+    'VegGuide::Role::Controller::Search';
 
 sub list : Path('') {
     my $self = shift;
@@ -1099,31 +1102,6 @@ sub ungeocoded_POST {
     $c->redirect_and_detach('/entry/ungeocoded');
 }
 
+__PACKAGE__->meta()->make_immutable();
+
 1;
-
-__END__
-
-=head1 NAME
-
-VegGuide::Controller::Entry - Catalyst Controller
-
-=head1 SYNOPSIS
-
-See L<VegGuide>
-
-=head1 DESCRIPTION
-
-Catalyst Controller.
-
-=head1 METHODS
-
-=head1 AUTHOR
-
-Dave Rolsky,,,
-
-=head1 LICENSE
-
-This library is free software, you can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut

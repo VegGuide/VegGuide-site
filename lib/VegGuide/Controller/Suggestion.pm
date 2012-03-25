@@ -2,11 +2,14 @@ package VegGuide::Controller::Suggestion;
 
 use strict;
 use warnings;
-
-use parent 'VegGuide::Controller::Base';
+use namespace::autoclean;
 
 use VegGuide::SiteURI qw( user_uri );
 use VegGuide::Vendor;
+
+use Moose;
+
+BEGIN { extends 'VegGuide::Controller::Base'; }
 
 sub _set_suggestion : Chained('/') : PathPart('suggestion') : CaptureArgs(1) {
     my $self          = shift;
@@ -53,5 +56,7 @@ sub suggestion_DELETE {
     $c->redirect_and_detach(
         user_uri( user => $c->vg_user(), path => 'suggestions' ) );
 }
+
+__PACKAGE__->meta()->make_immutable();
 
 1;

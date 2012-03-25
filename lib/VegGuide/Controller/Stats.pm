@@ -2,10 +2,13 @@ package VegGuide::Controller::Stats;
 
 use strict;
 use warnings;
-
-use parent 'VegGuide::Controller::DirectToView';
+use namespace::autoclean;
 
 use VegGuide::Chart;
+
+use Moose;
+
+BEGIN { extends 'VegGuide::Controller::DirectToView'; }
 
 sub _add_tabs {
     my $self = shift;
@@ -53,6 +56,8 @@ sub chart_data : Local {
     $c->response->body( VegGuide::Chart->GrowthOverTime()->as_ofc_data() );
 
 }
+
+__PACKAGE__->meta()->make_immutable();
 
 1;
 

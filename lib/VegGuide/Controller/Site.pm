@@ -2,10 +2,7 @@ package VegGuide::Controller::Site;
 
 use strict;
 use warnings;
-
-use parent 'VegGuide::Controller::DirectToView';
-
-use Class::Trait 'VegGuide::Role::Controller::Feed';
+use namespace::autoclean;
 
 use VegGuide::Geocoder;
 use VegGuide::Location;
@@ -16,6 +13,12 @@ use VegGuide::SiteURI qw( entry_uri news_item_uri region_uri );
 use VegGuide::SurveyResponse2008001;
 use VegGuide::Util qw( string_is_empty );
 use VegGuide::Vendor;
+
+use Moose;
+
+BEGIN { extends 'VegGuide::Controller::DirectToView'; }
+
+with 'VegGuide::Role::Controller::Feed';
 
 sub feed : LocalRegex('^recent.(atom|rss)') {
     my $self = shift;
@@ -436,5 +439,7 @@ sub survey_2008_1_details : Local {
 
     $c->stash()->{template} = '/site/survey-2008-1-details';
 }
+
+__PACKAGE__->meta()->make_immutable();
 
 1;

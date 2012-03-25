@@ -2,8 +2,7 @@ package VegGuide::Controller::Root;
 
 use strict;
 use warnings;
-
-use parent 'VegGuide::Controller::Base';
+use namespace::autoclean;
 
 use Geo::IP;
 use List::AllUtils qw( uniq );
@@ -13,6 +12,10 @@ use VegGuide::Search::Vendor::ByLatLong;
 use VegGuide::SiteURI qw( region_uri );
 use VegGuide::Util qw( string_is_empty );
 use VegGuide::Vendor;
+
+use Moose;
+
+BEGIN { extends 'VegGuide::Controller::Base'; }
 
 __PACKAGE__->config()->{namespace} = '';
 
@@ -199,36 +202,6 @@ sub test500 : Local {
     die "Test 500";
 }
 
-1;
-
-__END__
-
-=head1 NAME
-
-VegGuide::Controller::Root - Catalyst Controller
-
-=head1 SYNOPSIS
-
-See L<VegGuide>
-
-=head1 DESCRIPTION
-
-Catalyst Controller.
-
-=head1 METHODS
-
-=head2 default
-
-
-=head1 AUTHOR
-
-Dave Rolsky,,,
-
-=head1 LICENSE
-
-This library is free software, you can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
+__PACKAGE__->meta()->make_immutable();
 
 1;

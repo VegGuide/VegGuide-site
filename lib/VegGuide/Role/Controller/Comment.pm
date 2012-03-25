@@ -2,8 +2,9 @@ package VegGuide::Role::Controller::Comment;
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
-use Class::Trait 'base';
+use Moose::Role;
 
 sub _comment_post {
     my $self      = shift;

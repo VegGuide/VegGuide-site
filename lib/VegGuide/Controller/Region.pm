@@ -2,12 +2,7 @@ package VegGuide::Controller::Region;
 
 use strict;
 use warnings;
-
-use parent 'VegGuide::Controller::Base';
-
-use Class::Trait 'VegGuide::Role::Controller::Comment';
-use Class::Trait 'VegGuide::Role::Controller::Feed';
-use Class::Trait 'VegGuide::Role::Controller::Search';
+use namespace::autoclean;
 
 use Scalar::Util qw( blessed );
 use URI::FromHash qw( uri );
@@ -19,6 +14,14 @@ use VegGuide::Search::Vendor::ByLocation;
 use VegGuide::SiteURI qw( entry_uri region_uri site_uri );
 use VegGuide::Util qw( string_is_empty );
 use VegGuide::Vendor;
+
+use Moose;
+
+BEGIN { extends 'VegGuide::Controller::Base'; }
+
+with 'VegGuide::Role::Controller::Comment',
+    'VegGuide::Role::Controller::Feed',
+    'VegGuide::Role::Controller::Search';
 
 sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1) {
     my $self        = shift;
@@ -843,8 +846,6 @@ sub maintainers : Local {
     $c->stash()->{template} = '/site/admin/region-maintainer-list';
 }
 
+__PACKAGE__->meta()->make_immutable();
+
 1;
-
-__END__
-
-=head1 NAME

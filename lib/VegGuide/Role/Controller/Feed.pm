@@ -2,11 +2,12 @@ package VegGuide::Role::Controller::Feed;
 
 use strict;
 use warnings;
-
-use Class::Trait 'base';
+use namespace::autoclean;
 
 use File::Basename qw( basename );
 use URI::FromHash qw( uri );
+
+use Moose::Role;
 
 my %XMLFeedType = (
     rss  => 'RSS',

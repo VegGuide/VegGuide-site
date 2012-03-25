@@ -2,8 +2,11 @@ package VegGuide::Controller::DirectToView;
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
-use parent 'VegGuide::Controller::Base';
+use Moose;
+
+BEGIN { extends 'VegGuide::Controller::Base'; }
 
 sub auto : Private {
     my $self = shift;
@@ -54,5 +57,7 @@ sub default : Private {
 
     return 1;
 }
+
+__PACKAGE__->meta()->make_immutable();
 
 1;
