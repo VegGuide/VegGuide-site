@@ -19,6 +19,7 @@ use List::Util qw( sum );
 use Sys::Hostname ();
 use URI::FromHash qw( uri );
 use VegGuide::Config;
+use VegGuide::Cursor::UserWithAggregate;
 use VegGuide::Email;
 use VegGuide::Image;
 use VegGuide::Location;
