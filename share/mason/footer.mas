@@ -1,25 +1,16 @@
 <div id="ft">
   <div id="footer-nav">
 
-% if ( $c->vg_user()->skin_count() || $c->vg_user()->viewable_suggestion_count() || $c->vg_user()->is_admin() ) {
-    <ul>
-%   if ( $c->vg_user()->skin_count() || $c->vg_user()->is_admin() ) {
-      <li class="first">
-        <a href="<% user_uri( user => $c->vg_user(), path => 'skins' ) | h %>" title="Skins"
-           >Skins</a>
-      </li>
-%   }
-%   if ( $c->vg_user()->viewable_suggestion_count() ) {
-      <li class="<% $c->vg_user()->skin_count() ? '' : 'first' %>">
+% if ( $c->vg_user()->viewable_suggestion_count() ) {
+      <li class="first <% $c->vg_user()->is_admin() ? 'last' : q{} %>">
         <a href="<% user_uri( user => $c->vg_user(), path => 'suggestions' ) | h %>" title="Suggestions"
            >Suggestions (<% $c->vg_user()->viewable_suggestion_count() %>)</a>
       </li>
-%   }
-%   if ( $c->vg_user()->is_admin() ) {
-      <li class="last"><a href="/site/admin/menu" title="Admin">Admin</a></li>
-%   }
-    </ul>
 % }
+% if ( $c->vg_user()->is_admin() ) {
+      <li class="<% $c->vg_user()->viewable_suggestion_count() ? 'first' : q{} %> last"><a href="/site/admin/menu" title="Admin">Admin</a></li>
+% }
+    </ul>
 
     <ul>
       <li class="first"><a href="/site/about" title="About VegGuide.Org">About</a></li>
