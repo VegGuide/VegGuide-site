@@ -19,6 +19,7 @@ use Moose;
 BEGIN { extends 'VegGuide::Controller::Base'; }
 
 with 'VegGuide::Role::Controller::Comment',
+    'VegGuide::Role::Controller::REST',
     'VegGuide::Role::Controller::Search';
 
 sub list : Path('') {
@@ -104,6 +105,19 @@ sub _set_vendor : Chained('/') : PathPart('entry') : CaptureArgs(1) {
 
 sub entry : Chained('_set_vendor') : PathPart('') : Args(0) :
     ActionClass('+VegGuide::Action::REST') {
+}
+
+sub entry_GET : Private {
+    my $self = shift;
+    my $c    = shift;
+
+    my $vendor = $c->stash()->{vendor};
+
+    $self->_rest_response(
+        $c,
+        'application/vnd.vegguide-entry+json; version=1.0',
+        $vendor,
+    );
 }
 
 sub entry_GET_html : Private {

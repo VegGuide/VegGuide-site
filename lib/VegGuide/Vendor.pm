@@ -2305,11 +2305,36 @@ sub rest_data {
     my $self = shift;
 
     my %rest = map { $_ => $self->$_() }
-        map { $_->name() } $self->table()->columns();
-    delete @rest{qw( vendor_id last_featured_date price_range_id location_id )
-        };
+        grep { !/_id$/ }
+        map  { $_->name() } $self->table()->columns();
+
+    delete $rest{$_}
+        for qw( canonical_address last_featured_date latitude longitude );
+
+    if ( $self->price_range_id() ) {
+        $rest{price_range} = $self->price_range()->description();
+    }
+
+    if ( $self->has_hours_info() ) {
+        $rest{hours} = [ $self->hours_as_descriptions() ];
+    }
+
+    $rest{website} = delete $rest{home_page};
+
+    $rest{veg_level_description} = $self->veg_description();
+
+    for my $dt (qw( creation_datetime last_modified_datetime )) {
+        my $meth = $dt . '_object';
+        $rest{$dt} = $self->$meth()->clone()->set_time_zone('America/Denver')
+            ->set_time_zone('UTC')->iso8601();
+    }
+
+    if ( $self->close_date() ) {
+        $rest{close_date} = $self->close_date_object()->ymd();
+    }
 
     $rest{uri} = entry_uri( vendor => $self );
+    $rest{reviews_uri} = entry_uri( vendor => $self, path => 'reviews' );
     $rest{region_uri} = region_uri( location => $self->location() );
 
     $rest{categories} = [ map { $_->name() } $self->categories() ];
