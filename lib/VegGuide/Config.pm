@@ -332,18 +332,6 @@ sub reCAPTCHAPublicKey {
             maps => 'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBQEo6hVy4-bEjn28'
                 . 'puWiBmyTXGfmhQbdEayETtkVC4lkm8RGbQWyVvclg'
         },
-        athens => {
-            maps => 'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBTcQmQQ2mZt-02hL'
-                . 'kjX_NOaznUqVBTEBoKSqS0KH_qgwa1om3-rA5iKXw'
-        },
-        uchicago => {
-            maps => 'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBT7qJHrd'
-                . 'Rp3VQtBO0K3HbGqdeu-GRSNdyAw1rvumVrqPsnkEtHnFtItEQ'
-        },
-        veganworldorder => {
-            maps => 'ABQIAAAAjHnXmSTxRbss2TGS1AOjhBQHEmXL3Rq-W61Jg'
-                . '93uM0BMQKISshS2stTq0WK1au4NVBBTqIvbNEUoUg'
-        },
 
         # XXX - this is probably wrong, since the API key needs to
         # be for the hostname without the port, but whatever (for
