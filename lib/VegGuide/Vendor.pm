@@ -2333,9 +2333,11 @@ sub rest_data {
         $rest{close_date} = $self->close_date_object()->ymd();
     }
 
-    $rest{uri} = entry_uri( vendor => $self );
-    $rest{reviews_uri} = entry_uri( vendor => $self, path => 'reviews' );
-    $rest{region_uri} = region_uri( location => $self->location() );
+    $rest{uri} = entry_uri( vendor => $self, with_host => 1 );
+    $rest{reviews_uri}
+        = entry_uri( vendor => $self, path => 'reviews', with_host => 1 );
+    $rest{region_uri}
+        = region_uri( location => $self->location(), with_host => 1 );
 
     $rest{categories} = [ map { $_->name() } $self->categories() ];
     $rest{cuisines}   = [ map { $_->name() } $self->cuisines() ];

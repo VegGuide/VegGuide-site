@@ -19,7 +19,6 @@ use Moose;
 BEGIN { extends 'VegGuide::Controller::Base'; }
 
 with 'VegGuide::Role::Controller::Comment',
-    'VegGuide::Role::Controller::REST',
     'VegGuide::Role::Controller::Search';
 
 sub list : Path('') {
@@ -113,10 +112,12 @@ sub entry_GET : Private {
 
     my $vendor = $c->stash()->{vendor};
 
-    $self->_rest_response(
+    $c->response()
+        ->content_type('application/vnd.vegguide-entry+json; version=1.0');
+
+    $self->status_ok(
         $c,
-        'application/vnd.vegguide-entry+json; version=1.0',
-        $vendor,
+        entity => $vendor->rest_data(),
     );
 }
 
@@ -380,6 +381,24 @@ sub new_review_form : Chained('_set_vendor') : PathPart('review_form') :
 
 sub reviews : Chained('_set_vendor') : PathPart('reviews') : Args(0) :
     ActionClass('+VegGuide::Action::REST') {
+}
+
+sub reviews_GET : Private {
+    my $self = shift;
+    my $c    = shift;
+
+    my $vendor = $c->stash()->{vendor};
+
+    $c->response()
+        ->content_type('application/vnd.vegguide-entry-reviews+json; version=1.0');
+
+    $self->status_ok(
+        $c,
+        entity => {
+            reviews =>
+                [ map { $_->[0]->rest_data() } $vendor->comments()->all() ],
+        },
+    );
 }
 
 sub reviews_GET_html : Private {

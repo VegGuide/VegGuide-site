@@ -10,9 +10,16 @@ use VegGuide::Validate qw( validate VENDOR_TYPE LOCATION_TYPE USER_TYPE
     NEWS_ITEM_TYPE VENDOR_IMAGE_TYPE
     SCALAR_TYPE HASHREF_TYPE BOOLEAN_TYPE );
 
-our @EXPORT_OK = qw( entry_uri entry_image_uri entry_review_uri
-    news_item_uri region_uri user_uri site_uri
-    static_uri );
+our @EXPORT_OK = qw(
+    entry_image_uri
+    entry_review_uri
+    entry_uri
+    news_item_uri
+    region_uri
+    site_uri
+    static_uri
+    user_uri
+);
 
 {
     my $spec = {

@@ -11,7 +11,7 @@ use parent 'VegGuide::Comment';
 
 use Class::Trait qw( VegGuide::Role::FeedEntry );
 
-use VegGuide::SiteURI qw( entry_review_uri );
+use VegGuide::SiteURI qw( entry_uri user_uri );
 
 use VegGuide::Validate qw( validate SCALAR );
 
@@ -78,6 +78,30 @@ sub delete {
     );
 
     $self->SUPER::delete;
+}
+
+sub rest_data {
+    my $self = shift;
+
+    my %rest = (
+        review => $self->comment(),
+        rating => $self->vendor()->rating_from_user( $self->user() ),
+        user   => $self->user()->real_name(),
+        last_modified_datetime =>
+            $self->last_modified_datetime_object()->clone()
+            ->set_time_zone('America/Denver')->set_time_zone('UTC')
+            ->iso8601(),
+        entry_uri => entry_uri(
+            vendor    => $self->vendor(),
+            with_host => 1,
+        ),
+        user_uri => user_uri(
+            user      => $self->user(),
+            with_host => 1,
+        ),
+    );
+
+    return \%rest;
 }
 
 sub All {

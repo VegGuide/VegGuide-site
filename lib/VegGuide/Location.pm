@@ -1230,9 +1230,8 @@ sub rest_data {
     my $self = shift;
 
     my %rest = (
-        name        => $self->name(),
-        uri         => region_uri( location => $self ),
-        location_id => $self->location_id(),
+        name => $self->name(),
+        uri  => region_uri( location => $self ),
     );
 
     if ( my $parent = $self->parent() ) {
