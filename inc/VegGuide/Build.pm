@@ -3,6 +3,8 @@ package VegGuide::Build;
 use strict;
 use warnings;
 
+use lib 'inc';
+
 use parent 'Module::Build';
 
 use File::Basename qw( basename dirname );
@@ -142,8 +144,8 @@ sub _install_extra {
     $self->dispatch('make_cache_dir');
     $self->dispatch('generate_combined_js');
     $self->dispatch('generate_combined_css');
-    $self->dispatch('copy_alzabo_schema');
-    $self->dispatch('sync_db');
+    $self->dispatch('migrate_database');
+    $self->dispatch('write_alzabo_schema');
     $self->dispatch('generate_secrets');
     $self->dispatch('manual_reminder');
 }
@@ -437,38 +439,17 @@ sub ACTION_generate_combined_css {
     $self->log_info(" ... at $file\n");
 }
 
-sub ACTION_copy_alzabo_schema {
+sub ACTION_write_alzabo_schema {
     my $self = shift;
 
     require Alzabo::Config;
+    require Alzabo::Create::Schema;
 
-    my $schema_repo_dir = File::Spec->catdir( $self->base_dir(),
-        qw( data alzabo schemas RegVeg ) );
-
-    my $to_dir = File::Spec->catdir( Alzabo::Config::schema_dir(), 'RegVeg' );
-
-    foreach
-        my $file ( glob File::Spec->catfile( $schema_repo_dir, 'RegVeg.*' ) )
-    {
-        if ($FAKE) {
-            $self->log_info("Copying $file -> $to_dir\n");
-            next;
-        }
-
-        $self->copy_if_modified(
-            from    => $file,
-            to_dir  => $to_dir,
-            flatten => 1,
-        );
-    }
-}
-
-sub ACTION_sync_db {
-    my $self = shift;
-
-    return if $FAKE;
-
-    $self->do_system( $^X, './script/vegguide_sync_db.pl', '--data' );
+    Alzabo::Create::Schema->reverse_enginner(
+        name  => 'RegVeg',
+        rdbms => 'MySQL',
+        user  => 'root',
+    );
 }
 
 sub ACTION_generate_secrets {
@@ -509,6 +490,18 @@ sub _generate_mac_secret {
     $secret .= $chars[ rand @chars ] for 1 .. 12;
 
     return $secret;
+}
+
+sub ACTION_migrate_database {
+    my $self = shift;
+
+    return if $FAKE;
+
+    require VegGuide::Migrator;
+
+    VegGuide::Migrator->new()->install_or_update_schema();
+
+    return;
 }
 
 sub ACTION_manual_reminder {
