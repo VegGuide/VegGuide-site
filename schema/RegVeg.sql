@@ -1,0 +1,790 @@
+-- MySQL dump 10.13  Distrib 5.1.61, for debian-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: RegVeg
+-- ------------------------------------------------------
+-- Server version	5.1.61-0ubuntu0.11.04.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `AddressFormat`
+--
+
+DROP TABLE IF EXISTS `AddressFormat`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `AddressFormat` (
+  `address_format_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `format` varchar(100) NOT NULL DEFAULT '',
+  PRIMARY KEY (`address_format_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Attribute`
+--
+
+DROP TABLE IF EXISTS `Attribute`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Attribute` (
+  `attribute_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL DEFAULT '',
+  PRIMARY KEY (`attribute_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Category`
+--
+
+DROP TABLE IF EXISTS `Category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Category` (
+  `category_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL DEFAULT '',
+  `display_order` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`category_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Cuisine`
+--
+
+DROP TABLE IF EXISTS `Cuisine`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Cuisine` (
+  `cuisine_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(40) NOT NULL DEFAULT '',
+  `parent_cuisine_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`cuisine_id`),
+  UNIQUE KEY `Cuisine___name` (`name`),
+  KEY `Cuisine___parent_cuisine_id` (`parent_cuisine_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Locale`
+--
+
+DROP TABLE IF EXISTS `Locale`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Locale` (
+  `locale_id` int(11) NOT NULL AUTO_INCREMENT,
+  `locale_code` varchar(15) NOT NULL DEFAULT '',
+  `address_format_id` tinyint(4) NOT NULL DEFAULT '0',
+  `requires_localized_addresses` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`locale_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `LocaleEncoding`
+--
+
+DROP TABLE IF EXISTS `LocaleEncoding`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `LocaleEncoding` (
+  `locale_id` int(11) NOT NULL DEFAULT '0',
+  `encoding_name` varchar(15) NOT NULL DEFAULT '',
+  PRIMARY KEY (`locale_id`,`encoding_name`),
+  KEY `LocaleEncoding___locale_id` (`locale_id`),
+  KEY `LocaleEncoding___encoding_name` (`encoding_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Location`
+--
+
+DROP TABLE IF EXISTS `Location`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Location` (
+  `location_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) NOT NULL DEFAULT '',
+  `localized_name` varchar(200) DEFAULT NULL,
+  `time_zone_name` varchar(100) DEFAULT NULL,
+  `can_have_vendors` tinyint(1) NOT NULL DEFAULT '0',
+  `is_country` tinyint(1) NOT NULL DEFAULT '0',
+  `parent_location_id` int(10) unsigned DEFAULT NULL,
+  `locale_id` int(11) DEFAULT NULL,
+  `creation_datetime` datetime NOT NULL DEFAULT '2007-01-01 00:00:00',
+  `user_id` int(11) NOT NULL DEFAULT '1',
+  `has_addresses` tinyint(1) NOT NULL DEFAULT '1',
+  `has_hours` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`location_id`),
+  KEY `Location___name___parent_location_id` (`name`,`parent_location_id`),
+  KEY `Location___locale_id` (`locale_id`),
+  KEY `Location___parent_location_id` (`parent_location_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2203 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `LocationComment`
+--
+
+DROP TABLE IF EXISTS `LocationComment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `LocationComment` (
+  `location_id` int(11) NOT NULL DEFAULT '0',
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `comment` text NOT NULL,
+  `last_modified_datetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`location_id`,`user_id`),
+  KEY `LocationComment___user_id` (`user_id`),
+  KEY `LocationComment___location_id` (`location_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `LocationEvent`
+--
+
+DROP TABLE IF EXISTS `LocationEvent`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `LocationEvent` (
+  `uid` varchar(255) NOT NULL,
+  `location_id` int(11) NOT NULL,
+  `summary` mediumtext,
+  `description` text,
+  `url` varchar(255) DEFAULT NULL,
+  `start_datetime` datetime NOT NULL,
+  `end_datetime` datetime DEFAULT NULL,
+  `is_all_day` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `LocationEventURI`
+--
+
+DROP TABLE IF EXISTS `LocationEventURI`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `LocationEventURI` (
+  `location_id` int(11) NOT NULL,
+  `uri` varchar(255) NOT NULL,
+  PRIMARY KEY (`location_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `LocationOwner`
+--
+
+DROP TABLE IF EXISTS `LocationOwner`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `LocationOwner` (
+  `location_id` int(11) NOT NULL DEFAULT '0',
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`location_id`,`user_id`),
+  KEY `LocationOwner___user_id` (`user_id`),
+  KEY `LocationOwner___location_id` (`location_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `NewsItem`
+--
+
+DROP TABLE IF EXISTS `NewsItem`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `NewsItem` (
+  `item_id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(250) NOT NULL,
+  `creation_datetime` datetime NOT NULL,
+  `body` mediumtext NOT NULL,
+  PRIMARY KEY (`item_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `PaymentOption`
+--
+
+DROP TABLE IF EXISTS `PaymentOption`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `PaymentOption` (
+  `payment_option_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL DEFAULT '',
+  PRIMARY KEY (`payment_option_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `PersonalList`
+--
+
+DROP TABLE IF EXISTS `PersonalList`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `PersonalList` (
+  `personal_list_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(250) NOT NULL DEFAULT '',
+  `is_public` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`personal_list_id`),
+  UNIQUE KEY `PersonalList___user_id___name` (`user_id`,`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `PersonalListVendor`
+--
+
+DROP TABLE IF EXISTS `PersonalListVendor`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `PersonalListVendor` (
+  `personal_list_id` int(11) NOT NULL DEFAULT '0',
+  `vendor_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`personal_list_id`,`vendor_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `PriceRange`
+--
+
+DROP TABLE IF EXISTS `PriceRange`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `PriceRange` (
+  `price_range_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `description` varchar(30) NOT NULL,
+  `display_order` tinyint(3) unsigned NOT NULL,
+  PRIMARY KEY (`price_range_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Session`
+--
+
+DROP TABLE IF EXISTS `Session`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Session` (
+  `id` varchar(72) NOT NULL,
+  `session_data` blob NOT NULL,
+  `expires` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Skin`
+--
+
+DROP TABLE IF EXISTS `Skin`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Skin` (
+  `skin_id` int(11) NOT NULL AUTO_INCREMENT,
+  `hostname` varchar(50) NOT NULL DEFAULT '',
+  `tagline` mediumtext,
+  `owner_user_id` int(11) NOT NULL DEFAULT '0',
+  `home_location_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`skin_id`),
+  UNIQUE KEY `Skin___skin_id` (`skin_id`),
+  KEY `Skin___owner_user_id` (`owner_user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=288 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `SurveyResponse2008001`
+--
+
+DROP TABLE IF EXISTS `SurveyResponse2008001`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `SurveyResponse2008001` (
+  `survey_response_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ip_address` varchar(15) NOT NULL,
+  `visit_frequency` varchar(20) NOT NULL,
+  `diet` varchar(15) NOT NULL,
+  `browse_with_purpose` tinyint(1) NOT NULL DEFAULT '0',
+  `browse_for_fun` tinyint(1) NOT NULL DEFAULT '0',
+  `search_by_name` tinyint(1) NOT NULL DEFAULT '0',
+  `search_by_address` tinyint(1) NOT NULL DEFAULT '0',
+  `front_page_new_entries` tinyint(1) NOT NULL DEFAULT '0',
+  `front_page_new_reviews` tinyint(1) NOT NULL DEFAULT '0',
+  `rate_review` tinyint(1) NOT NULL DEFAULT '0',
+  `add_entries` tinyint(1) NOT NULL DEFAULT '0',
+  `just_restaurants` tinyint(1) NOT NULL DEFAULT '0',
+  `listing_filter` tinyint(1) NOT NULL DEFAULT '0',
+  `map_listings` tinyint(1) NOT NULL DEFAULT '0',
+  `printable_listings` tinyint(1) NOT NULL DEFAULT '0',
+  `watch_lists` tinyint(1) NOT NULL DEFAULT '0',
+  `openid` tinyint(1) NOT NULL DEFAULT '0',
+  `vegdining` tinyint(1) NOT NULL DEFAULT '0',
+  `happycow` tinyint(1) NOT NULL DEFAULT '0',
+  `citysearch` tinyint(1) NOT NULL DEFAULT '0',
+  `yelp` tinyint(1) NOT NULL DEFAULT '0',
+  `vegcity` tinyint(1) NOT NULL DEFAULT '0',
+  `other_sites_other` mediumtext,
+  `improvements` mediumtext,
+  `email_address` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`survey_response_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=310 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Team`
+--
+
+DROP TABLE IF EXISTS `Team`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Team` (
+  `team_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(250) NOT NULL DEFAULT '',
+  `description` text NOT NULL,
+  `home_page` varchar(250) DEFAULT NULL,
+  `owner_user_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`team_id`),
+  UNIQUE KEY `Team___owner_user_id` (`owner_user_id`),
+  UNIQUE KEY `Team___name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `User`
+--
+
+DROP TABLE IF EXISTS `User`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `User` (
+  `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `email_address` varchar(150) NOT NULL DEFAULT '',
+  `password` varchar(40) NOT NULL DEFAULT '',
+  `real_name` varchar(100) NOT NULL DEFAULT '',
+  `home_page` varchar(150) DEFAULT NULL,
+  `creation_datetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `forgot_password_digest` varchar(40) DEFAULT NULL,
+  `forgot_password_digest_datetime` datetime DEFAULT NULL,
+  `is_admin` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `allows_email` tinyint(1) NOT NULL DEFAULT '0',
+  `team_id` int(11) DEFAULT NULL,
+  `entries_per_page` int(11) NOT NULL DEFAULT '20',
+  `openid_uri` varchar(255) DEFAULT NULL,
+  `bio` mediumtext,
+  `how_veg` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `image_extension` varchar(3) DEFAULT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `User___email_address` (`email_address`),
+  UNIQUE KEY `User___real_name` (`real_name`),
+  UNIQUE KEY `User___openid_uri` (`openid_uri`)
+) ENGINE=InnoDB AUTO_INCREMENT=8975 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `UserActivityLog`
+--
+
+DROP TABLE IF EXISTS `UserActivityLog`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `UserActivityLog` (
+  `user_activity_log_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `user_activity_log_type_id` tinyint(4) NOT NULL DEFAULT '0',
+  `activity_datetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `comment` text,
+  `vendor_id` int(11) DEFAULT NULL,
+  `location_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`user_activity_log_id`),
+  KEY `UserActivityLog___user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=958001 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `UserActivityLogType`
+--
+
+DROP TABLE IF EXISTS `UserActivityLogType`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `UserActivityLogType` (
+  `user_activity_log_type_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(30) NOT NULL DEFAULT '',
+  PRIMARY KEY (`user_activity_log_type_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `UserLocationSubscription`
+--
+
+DROP TABLE IF EXISTS `UserLocationSubscription`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `UserLocationSubscription` (
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `location_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`user_id`,`location_id`),
+  KEY `UserLocationSubscription___user_id` (`user_id`),
+  KEY `UserLocationSubscription___location_id` (`location_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Vendor`
+--
+
+DROP TABLE IF EXISTS `Vendor`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Vendor` (
+  `vendor_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL DEFAULT '',
+  `localized_name` varchar(100) DEFAULT NULL,
+  `short_description` varchar(250) NOT NULL DEFAULT '',
+  `localized_short_description` varchar(250) DEFAULT NULL,
+  `long_description` text,
+  `address1` varchar(255) DEFAULT NULL,
+  `localized_address1` varchar(255) DEFAULT NULL,
+  `address2` varchar(255) DEFAULT NULL,
+  `localized_address2` varchar(255) DEFAULT NULL,
+  `neighborhood` varchar(250) DEFAULT NULL,
+  `localized_neighborhood` varchar(250) DEFAULT NULL,
+  `directions` mediumtext,
+  `city` varchar(150) DEFAULT NULL,
+  `localized_city` varchar(150) DEFAULT NULL,
+  `region` varchar(100) DEFAULT NULL,
+  `localized_region` varchar(100) DEFAULT NULL,
+  `postal_code` varchar(30) DEFAULT NULL,
+  `phone` varchar(25) DEFAULT NULL,
+  `home_page` varchar(150) DEFAULT NULL,
+  `veg_level` tinyint(3) unsigned NOT NULL DEFAULT '1',
+  `allows_smoking` tinyint(1) DEFAULT NULL,
+  `is_wheelchair_accessible` tinyint(1) DEFAULT NULL,
+  `accepts_reservations` tinyint(1) DEFAULT NULL,
+  `creation_datetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `last_modified_datetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `last_featured_date` date DEFAULT NULL,
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `location_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `price_range_id` tinyint(4) NOT NULL DEFAULT '0',
+  `localized_long_description` text,
+  `latitude` float DEFAULT NULL,
+  `longitude` float DEFAULT NULL,
+  `is_cash_only` tinyint(1) NOT NULL DEFAULT '0',
+  `close_date` date DEFAULT NULL,
+  `canonical_address` mediumtext,
+  `external_unique_id` varchar(255) DEFAULT NULL,
+  `vendor_source_id` int(11) DEFAULT NULL,
+  `sortable_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`vendor_id`),
+  UNIQUE KEY `Vendor___external_unique_id___vendor_source_id` (`external_unique_id`,`vendor_source_id`),
+  KEY `Vendor___location_id` (`location_id`),
+  KEY `Vendor___postal_code___5` (`postal_code`(5)),
+  KEY `Vendor___user_id` (`user_id`),
+  KEY `Vendor___price_range_id` (`price_range_id`),
+  KEY `Vendor___canonical_address___200` (`canonical_address`(200))
+) ENGINE=InnoDB AUTO_INCREMENT=14226 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `VendorAttribute`
+--
+
+DROP TABLE IF EXISTS `VendorAttribute`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `VendorAttribute` (
+  `vendor_id` int(11) NOT NULL DEFAULT '0',
+  `attribute_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`vendor_id`,`attribute_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `VendorCategory`
+--
+
+DROP TABLE IF EXISTS `VendorCategory`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `VendorCategory` (
+  `vendor_id` int(11) NOT NULL DEFAULT '0',
+  `category_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`vendor_id`,`category_id`),
+  KEY `VendorCategory___category_id` (`category_id`),
+  KEY `VendorCategory___vendor_id` (`vendor_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `VendorComment`
+--
+
+DROP TABLE IF EXISTS `VendorComment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `VendorComment` (
+  `vendor_id` int(11) NOT NULL DEFAULT '0',
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `comment` text,
+  `last_modified_datetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`vendor_id`,`user_id`),
+  KEY `VendorComment___user_id` (`user_id`),
+  KEY `VendorComment___vendor_id` (`vendor_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `VendorCuisine`
+--
+
+DROP TABLE IF EXISTS `VendorCuisine`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `VendorCuisine` (
+  `vendor_id` int(11) NOT NULL DEFAULT '0',
+  `cuisine_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`vendor_id`,`cuisine_id`),
+  KEY `VendorCuisine___cuisine_id` (`cuisine_id`),
+  KEY `VendorCuisine___vendor_id` (`vendor_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `VendorHours`
+--
+
+DROP TABLE IF EXISTS `VendorHours`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `VendorHours` (
+  `vendor_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `day` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `open_minute` int(11) NOT NULL DEFAULT '0',
+  `close_minute` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`vendor_id`,`day`,`open_minute`,`close_minute`),
+  KEY `VendorHours___vendor_id` (`vendor_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `VendorImage`
+--
+
+DROP TABLE IF EXISTS `VendorImage`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `VendorImage` (
+  `vendor_image_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `vendor_id` int(11) NOT NULL,
+  `display_order` tinyint(3) unsigned NOT NULL,
+  `extension` varchar(3) NOT NULL,
+  `caption` mediumtext,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`vendor_image_id`),
+  KEY `VendorImage___vendor_id___display_order` (`vendor_id`,`display_order`)
+) ENGINE=InnoDB AUTO_INCREMENT=5698 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `VendorPaymentOption`
+--
+
+DROP TABLE IF EXISTS `VendorPaymentOption`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `VendorPaymentOption` (
+  `payment_option_id` int(11) NOT NULL DEFAULT '0',
+  `vendor_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`payment_option_id`,`vendor_id`),
+  KEY `VendorPaymentOption___vendor_id` (`vendor_id`),
+  KEY `VendorPaymentOption___payment_option_id` (`payment_option_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `VendorRating`
+--
+
+DROP TABLE IF EXISTS `VendorRating`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `VendorRating` (
+  `vendor_id` int(11) NOT NULL DEFAULT '0',
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `rating` tinyint(4) NOT NULL,
+  `rating_datetime` datetime NOT NULL,
+  PRIMARY KEY (`vendor_id`,`user_id`),
+  KEY `VendorRating___user_id` (`user_id`),
+  KEY `VendorRating___vendor_id` (`vendor_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `VendorSource`
+--
+
+DROP TABLE IF EXISTS `VendorSource`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `VendorSource` (
+  `vendor_source_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `display_uri` varchar(255) NOT NULL,
+  `feed_uri` varchar(255) NOT NULL,
+  `filter_class` varchar(50) NOT NULL,
+  `last_processed_datetime` datetime DEFAULT NULL,
+  PRIMARY KEY (`vendor_source_id`),
+  UNIQUE KEY `VendorSource___feed_uri` (`feed_uri`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `VendorSourceExcludedId`
+--
+
+DROP TABLE IF EXISTS `VendorSourceExcludedId`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `VendorSourceExcludedId` (
+  `vendor_source_id` int(11) NOT NULL,
+  `external_unique_id` varchar(255) NOT NULL,
+  PRIMARY KEY (`vendor_source_id`,`external_unique_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `VendorSuggestion`
+--
+
+DROP TABLE IF EXISTS `VendorSuggestion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `VendorSuggestion` (
+  `vendor_suggestion_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(10) NOT NULL DEFAULT '',
+  `suggestion` blob NOT NULL,
+  `comment` text,
+  `user_wants_notification` tinyint(1) NOT NULL DEFAULT '0',
+  `creation_datetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `vendor_id` int(11) NOT NULL DEFAULT '0',
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`vendor_suggestion_id`),
+  KEY `VendorSuggestion___user_id` (`user_id`),
+  KEY `VendorSuggestion___vendor_id` (`vendor_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+DROP FUNCTION IF EXISTS WEIGHTED_RATING;
+delimiter //
+CREATE FUNCTION
+  WEIGHTED_RATING (vendor_id INTEGER, min INTEGER, overall_mean FLOAT)
+                  RETURNS FLOAT
+  DETERMINISTIC
+  READS SQL DATA
+BEGIN
+  DECLARE v_mean FLOAT;
+  DECLARE v_count FLOAT;
+  DECLARE l_mean FLOAT;
+
+  SELECT AVG(rating), COUNT(rating) INTO v_mean, v_count
+    FROM VendorRating
+   WHERE VendorRating.vendor_id = vendor_id;
+
+  IF v_count = 0 THEN
+    RETURN 0.0;
+  END IF;
+
+  RETURN ( v_count / ( v_count + min ) ) * v_mean + ( min / ( v_count + min ) ) * overall_mean;
+END//
+
+delimiter ;
+
+DROP FUNCTION IF EXISTS GREAT_CIRCLE_DISTANCE;
+delimiter //
+CREATE FUNCTION
+  GREAT_CIRCLE_DISTANCE ( radius DOUBLE,
+                          v_lat DOUBLE, v_long DOUBLE,
+                          p_lat DOUBLE, p_long DOUBLE )
+                        RETURNS DOUBLE
+  DETERMINISTIC
+BEGIN
+
+  RETURN (2
+          * radius
+          * ATAN2( SQRT( @x := ( POW( SIN( ( RADIANS(v_lat) - RADIANS(p_lat) ) / 2 ), 2 )
+                                 + COS( RADIANS( p_lat ) ) * COS( RADIANS(v_lat) )
+                                 * POW( SIN( ( RADIANS(v_long) - RADIANS(p_long) ) / 2 ), 2 )
+                               )
+                       ),
+                   SQRT( 1 - @x ) )
+         );
+
+
+END//
+
+delimiter ;
+
+INSERT INTO UserActivityLogType (type)
+VALUES ('add vendor'),
+       ('update vendor'),
+       ('suggest a change'),
+       ('suggestion accepted'),
+       ('suggestion rejected'),
+       ('add review'),
+       ('update review'),
+       ('delete review'),
+       ('add image'),
+       ('add region');
+
+INSERT INTO AddressFormat (format)
+VALUES ('standard'), ('Hungarian');
+
+INSERT INTO Category (name, display_order)
+VALUES ('Restaurant',                  1 ),
+       ('Coffee/Tea/Juice',            2 ),
+       ('Bar',                         3 ),
+       ('Food Court or Street Vendor', 4 ),
+       ('Grocery/Bakery/Deli',         5 ),
+       ('Caterer',                     6 ),
+       ('General Store',               7 ),
+       ('Organization',                8 ),
+       ('Hotel/B&B',                   9 ),
+       ('Other',                      10 );
+
+INSERT INTO PriceRange (description, display_order)
+VALUES ('$ - inexpensive', 1),
+       ('$$ - average',    2),
+       ('$$$ - expensive', 3);
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2012-04-01 10:36:38

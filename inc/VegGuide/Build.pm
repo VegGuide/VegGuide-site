@@ -445,7 +445,7 @@ sub ACTION_write_alzabo_schema {
     require Alzabo::Config;
     require Alzabo::Create::Schema;
 
-    Alzabo::Create::Schema->reverse_enginner(
+    Alzabo::Create::Schema->reverse_engineer(
         name  => 'RegVeg',
         rdbms => 'MySQL',
         user  => 'root',

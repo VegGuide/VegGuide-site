@@ -55,10 +55,11 @@ sub _build_schema_file {
 sub _build_schema_dir {
     my $self = shift;
 
-    my $pm_file = __PACKAGE__ =~ s{::}{/} r;
+    my $pm_file = __PACKAGE__ =~ s{::}{/}r;
     $pm_file .= '.pm';
 
-    return dir( $INC{$pm_file} )->parent()->parent()->subdir('schema');
+    return dir( $INC{$pm_file} )->parent()->parent()->parent()
+        ->subdir('schema');
 }
 
 1;
