@@ -145,7 +145,6 @@ sub _install_extra {
     $self->dispatch('copy_alzabo_schema');
     $self->dispatch('sync_db');
     $self->dispatch('generate_secrets');
-    $self->dispatch('run_migrations');
     $self->dispatch('manual_reminder');
 }
 
@@ -510,17 +509,6 @@ sub _generate_mac_secret {
     $secret .= $chars[ rand @chars ] for 1 .. 12;
 
     return $secret;
-}
-
-sub ACTION_run_migrations {
-    my $self = shift;
-
-    return if $FAKE;
-
-    mkpath( '/etc/vegguide', 1, 0755 )
-        unless $FAKE;
-
-    $self->do_system( $^X, qw( script/vegguide_run_migrations.pl ) );
 }
 
 sub ACTION_manual_reminder {
