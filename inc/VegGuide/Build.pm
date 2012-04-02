@@ -54,6 +54,7 @@ my %Requires = (
     'DateTime::Format::W3CDTF'   => '0',
     'DateTime::Locale'           => '0.3',
     'DateTime::TimeZone'         => '0.66',
+    'DBD::mysql'                 => '0',
     'Digest::SHA1'               => '0',
     'Email::Address'             => '1.886',
     'Email::Date'                => '1.101',
