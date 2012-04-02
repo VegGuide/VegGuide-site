@@ -1,70 +1,22 @@
--- MySQL dump 10.13  Distrib 5.1.61, for debian-linux-gnu (x86_64)
---
--- Host: localhost    Database: RegVeg
--- ------------------------------------------------------
--- Server version	5.1.61-0ubuntu0.11.04.1
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `AddressFormat`
---
-
-DROP TABLE IF EXISTS `AddressFormat`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `AddressFormat` (
   `address_format_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `format` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`address_format_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `Attribute`
---
-
-DROP TABLE IF EXISTS `Attribute`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Attribute` (
   `attribute_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`attribute_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `Category`
---
-
-DROP TABLE IF EXISTS `Category`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Category` (
   `category_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL DEFAULT '',
   `display_order` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`category_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `Cuisine`
---
-
-DROP TABLE IF EXISTS `Cuisine`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Cuisine` (
   `cuisine_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(40) NOT NULL DEFAULT '',
@@ -73,15 +25,7 @@ CREATE TABLE `Cuisine` (
   UNIQUE KEY `Cuisine___name` (`name`),
   KEY `Cuisine___parent_cuisine_id` (`parent_cuisine_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `Locale`
---
-
-DROP TABLE IF EXISTS `Locale`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Locale` (
   `locale_id` int(11) NOT NULL AUTO_INCREMENT,
   `locale_code` varchar(15) NOT NULL DEFAULT '',
@@ -89,15 +33,7 @@ CREATE TABLE `Locale` (
   `requires_localized_addresses` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`locale_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `LocaleEncoding`
---
-
-DROP TABLE IF EXISTS `LocaleEncoding`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `LocaleEncoding` (
   `locale_id` int(11) NOT NULL DEFAULT '0',
   `encoding_name` varchar(15) NOT NULL DEFAULT '',
@@ -105,15 +41,7 @@ CREATE TABLE `LocaleEncoding` (
   KEY `LocaleEncoding___locale_id` (`locale_id`),
   KEY `LocaleEncoding___encoding_name` (`encoding_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `Location`
---
-
-DROP TABLE IF EXISTS `Location`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Location` (
   `location_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL DEFAULT '',
@@ -132,15 +60,7 @@ CREATE TABLE `Location` (
   KEY `Location___locale_id` (`locale_id`),
   KEY `Location___parent_location_id` (`parent_location_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2203 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `LocationComment`
---
-
-DROP TABLE IF EXISTS `LocationComment`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `LocationComment` (
   `location_id` int(11) NOT NULL DEFAULT '0',
   `user_id` int(11) NOT NULL DEFAULT '0',
@@ -150,15 +70,7 @@ CREATE TABLE `LocationComment` (
   KEY `LocationComment___user_id` (`user_id`),
   KEY `LocationComment___location_id` (`location_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `LocationEvent`
---
-
-DROP TABLE IF EXISTS `LocationEvent`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `LocationEvent` (
   `uid` varchar(255) NOT NULL,
   `location_id` int(11) NOT NULL,
@@ -170,29 +82,13 @@ CREATE TABLE `LocationEvent` (
   `is_all_day` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `LocationEventURI`
---
-
-DROP TABLE IF EXISTS `LocationEventURI`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `LocationEventURI` (
   `location_id` int(11) NOT NULL,
   `uri` varchar(255) NOT NULL,
   PRIMARY KEY (`location_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `LocationOwner`
---
-
-DROP TABLE IF EXISTS `LocationOwner`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `LocationOwner` (
   `location_id` int(11) NOT NULL DEFAULT '0',
   `user_id` int(11) NOT NULL DEFAULT '0',
@@ -200,15 +96,7 @@ CREATE TABLE `LocationOwner` (
   KEY `LocationOwner___user_id` (`user_id`),
   KEY `LocationOwner___location_id` (`location_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `NewsItem`
---
-
-DROP TABLE IF EXISTS `NewsItem`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `NewsItem` (
   `item_id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(250) NOT NULL,
@@ -216,29 +104,13 @@ CREATE TABLE `NewsItem` (
   `body` mediumtext NOT NULL,
   PRIMARY KEY (`item_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `PaymentOption`
---
-
-DROP TABLE IF EXISTS `PaymentOption`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `PaymentOption` (
   `payment_option_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`payment_option_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `PersonalList`
---
-
-DROP TABLE IF EXISTS `PersonalList`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `PersonalList` (
   `personal_list_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL DEFAULT '0',
@@ -247,59 +119,27 @@ CREATE TABLE `PersonalList` (
   PRIMARY KEY (`personal_list_id`),
   UNIQUE KEY `PersonalList___user_id___name` (`user_id`,`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `PersonalListVendor`
---
-
-DROP TABLE IF EXISTS `PersonalListVendor`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `PersonalListVendor` (
   `personal_list_id` int(11) NOT NULL DEFAULT '0',
   `vendor_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`personal_list_id`,`vendor_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `PriceRange`
---
-
-DROP TABLE IF EXISTS `PriceRange`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `PriceRange` (
   `price_range_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `description` varchar(30) NOT NULL,
   `display_order` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`price_range_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `Session`
---
-
-DROP TABLE IF EXISTS `Session`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Session` (
   `id` varchar(72) NOT NULL,
   `session_data` blob NOT NULL,
   `expires` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `Skin`
---
-
-DROP TABLE IF EXISTS `Skin`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Skin` (
   `skin_id` int(11) NOT NULL AUTO_INCREMENT,
   `hostname` varchar(50) NOT NULL DEFAULT '',
@@ -310,15 +150,7 @@ CREATE TABLE `Skin` (
   UNIQUE KEY `Skin___skin_id` (`skin_id`),
   KEY `Skin___owner_user_id` (`owner_user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=288 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `SurveyResponse2008001`
---
-
-DROP TABLE IF EXISTS `SurveyResponse2008001`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `SurveyResponse2008001` (
   `survey_response_id` int(11) NOT NULL AUTO_INCREMENT,
   `ip_address` varchar(15) NOT NULL,
@@ -348,15 +180,7 @@ CREATE TABLE `SurveyResponse2008001` (
   `email_address` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`survey_response_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=310 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `Team`
---
-
-DROP TABLE IF EXISTS `Team`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Team` (
   `team_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(250) NOT NULL DEFAULT '',
@@ -367,15 +191,7 @@ CREATE TABLE `Team` (
   UNIQUE KEY `Team___owner_user_id` (`owner_user_id`),
   UNIQUE KEY `Team___name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `User`
---
-
-DROP TABLE IF EXISTS `User`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `User` (
   `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `email_address` varchar(150) NOT NULL DEFAULT '',
@@ -398,15 +214,7 @@ CREATE TABLE `User` (
   UNIQUE KEY `User___real_name` (`real_name`),
   UNIQUE KEY `User___openid_uri` (`openid_uri`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8975 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `UserActivityLog`
---
-
-DROP TABLE IF EXISTS `UserActivityLog`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `UserActivityLog` (
   `user_activity_log_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL DEFAULT '0',
@@ -418,29 +226,13 @@ CREATE TABLE `UserActivityLog` (
   PRIMARY KEY (`user_activity_log_id`),
   KEY `UserActivityLog___user_id` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=958001 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `UserActivityLogType`
---
-
-DROP TABLE IF EXISTS `UserActivityLogType`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `UserActivityLogType` (
   `user_activity_log_type_id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`user_activity_log_type_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `UserLocationSubscription`
---
-
-DROP TABLE IF EXISTS `UserLocationSubscription`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `UserLocationSubscription` (
   `user_id` int(11) NOT NULL DEFAULT '0',
   `location_id` int(11) NOT NULL DEFAULT '0',
@@ -448,15 +240,7 @@ CREATE TABLE `UserLocationSubscription` (
   KEY `UserLocationSubscription___user_id` (`user_id`),
   KEY `UserLocationSubscription___location_id` (`location_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `Vendor`
---
-
-DROP TABLE IF EXISTS `Vendor`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Vendor` (
   `vendor_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL DEFAULT '',
@@ -505,29 +289,13 @@ CREATE TABLE `Vendor` (
   KEY `Vendor___price_range_id` (`price_range_id`),
   KEY `Vendor___canonical_address___200` (`canonical_address`(200))
 ) ENGINE=InnoDB AUTO_INCREMENT=14226 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `VendorAttribute`
---
-
-DROP TABLE IF EXISTS `VendorAttribute`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `VendorAttribute` (
   `vendor_id` int(11) NOT NULL DEFAULT '0',
   `attribute_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`vendor_id`,`attribute_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `VendorCategory`
---
-
-DROP TABLE IF EXISTS `VendorCategory`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `VendorCategory` (
   `vendor_id` int(11) NOT NULL DEFAULT '0',
   `category_id` int(11) NOT NULL DEFAULT '0',
@@ -535,15 +303,7 @@ CREATE TABLE `VendorCategory` (
   KEY `VendorCategory___category_id` (`category_id`),
   KEY `VendorCategory___vendor_id` (`vendor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `VendorComment`
---
-
-DROP TABLE IF EXISTS `VendorComment`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `VendorComment` (
   `vendor_id` int(11) NOT NULL DEFAULT '0',
   `user_id` int(11) NOT NULL DEFAULT '0',
@@ -553,15 +313,7 @@ CREATE TABLE `VendorComment` (
   KEY `VendorComment___user_id` (`user_id`),
   KEY `VendorComment___vendor_id` (`vendor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `VendorCuisine`
---
-
-DROP TABLE IF EXISTS `VendorCuisine`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `VendorCuisine` (
   `vendor_id` int(11) NOT NULL DEFAULT '0',
   `cuisine_id` int(11) NOT NULL DEFAULT '0',
@@ -569,15 +321,7 @@ CREATE TABLE `VendorCuisine` (
   KEY `VendorCuisine___cuisine_id` (`cuisine_id`),
   KEY `VendorCuisine___vendor_id` (`vendor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `VendorHours`
---
-
-DROP TABLE IF EXISTS `VendorHours`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `VendorHours` (
   `vendor_id` int(10) unsigned NOT NULL DEFAULT '0',
   `day` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -586,15 +330,7 @@ CREATE TABLE `VendorHours` (
   PRIMARY KEY (`vendor_id`,`day`,`open_minute`,`close_minute`),
   KEY `VendorHours___vendor_id` (`vendor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `VendorImage`
---
-
-DROP TABLE IF EXISTS `VendorImage`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `VendorImage` (
   `vendor_image_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `vendor_id` int(11) NOT NULL,
@@ -605,15 +341,7 @@ CREATE TABLE `VendorImage` (
   PRIMARY KEY (`vendor_image_id`),
   KEY `VendorImage___vendor_id___display_order` (`vendor_id`,`display_order`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5698 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `VendorPaymentOption`
---
-
-DROP TABLE IF EXISTS `VendorPaymentOption`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `VendorPaymentOption` (
   `payment_option_id` int(11) NOT NULL DEFAULT '0',
   `vendor_id` int(11) NOT NULL DEFAULT '0',
@@ -621,15 +349,7 @@ CREATE TABLE `VendorPaymentOption` (
   KEY `VendorPaymentOption___vendor_id` (`vendor_id`),
   KEY `VendorPaymentOption___payment_option_id` (`payment_option_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `VendorRating`
---
-
-DROP TABLE IF EXISTS `VendorRating`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `VendorRating` (
   `vendor_id` int(11) NOT NULL DEFAULT '0',
   `user_id` int(11) NOT NULL DEFAULT '0',
@@ -639,15 +359,7 @@ CREATE TABLE `VendorRating` (
   KEY `VendorRating___user_id` (`user_id`),
   KEY `VendorRating___vendor_id` (`vendor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `VendorSource`
---
-
-DROP TABLE IF EXISTS `VendorSource`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `VendorSource` (
   `vendor_source_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -658,29 +370,13 @@ CREATE TABLE `VendorSource` (
   PRIMARY KEY (`vendor_source_id`),
   UNIQUE KEY `VendorSource___feed_uri` (`feed_uri`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `VendorSourceExcludedId`
---
-
-DROP TABLE IF EXISTS `VendorSourceExcludedId`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `VendorSourceExcludedId` (
   `vendor_source_id` int(11) NOT NULL,
   `external_unique_id` varchar(255) NOT NULL,
   PRIMARY KEY (`vendor_source_id`,`external_unique_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `VendorSuggestion`
---
-
-DROP TABLE IF EXISTS `VendorSuggestion`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `VendorSuggestion` (
   `vendor_suggestion_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(10) NOT NULL DEFAULT '',
@@ -694,8 +390,6 @@ CREATE TABLE `VendorSuggestion` (
   KEY `VendorSuggestion___user_id` (`user_id`),
   KEY `VendorSuggestion___vendor_id` (`vendor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 DROP FUNCTION IF EXISTS WEIGHTED_RATING;
 delimiter //
@@ -778,13 +472,3 @@ INSERT INTO PriceRange (description, display_order)
 VALUES ('$ - inexpensive', 1),
        ('$$ - average',    2),
        ('$$$ - expensive', 3);
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2012-04-01 10:36:38
