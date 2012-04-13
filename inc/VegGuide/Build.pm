@@ -2,6 +2,7 @@ package VegGuide::Build;
 
 use strict;
 use warnings;
+use autodie;
 
 use lib 'inc';
 
@@ -193,12 +194,9 @@ sub ACTION_copy_share_files {
     }
 
     my $touch_file = VegGuide::Config->MasonTouchFile();
-    open my $fh, '>', $touch_file
-        or die "Cannot write to $touch_file: $!";
-    print $fh time
-        or die "Cannot write to $touch_file: $!";
-    close $fh
-        or die "Cannot close $touch_file: $!";
+    open my $fh, '>', $touch_file;
+    print {$fh} time;
+    close $fh;
 }
 
 sub ACTION_copy_system_files {
@@ -246,20 +244,17 @@ sub ACTION_copy_system_files {
         );
 
         if ( -f $file && -x _ ) {
-            chmod 0554, $to
-                or die "Cannot chmod 0554 $file: $!";
+            chmod 0554, $to;
         }
     }
 
     my $dir = '/var/log/nginx/vegguide.org';
     mkpath( $dir, 0, 0755 )
         unless -d $dir;
-    chmod 0755, $dir
-        or die "Cannot chmod 0755 $dir: $!";
+    chmod 0755, $dir;
 
     my $adm_gid = getgrnam('adm');
-    chown 0, $adm_gid, $dir
-        or die "Cannot chown 0:$adm_gid $dir: $!";
+    chown 0, $adm_gid, $dir;
 }
 
 sub _find_things {
@@ -299,8 +294,7 @@ sub ACTION_make_entry_images_dir {
 
     my ( $uid, $gid ) = $self->_server_uid_gid();
 
-    chown $uid, $gid, $target_dir
-        or die "Cannot chown $uid:$gid $target_dir: $!";
+    chown $uid, $gid, $target_dir;
 }
 
 sub ACTION_make_user_images_dir {
@@ -316,8 +310,7 @@ sub ACTION_make_user_images_dir {
 
     my ( $uid, $gid ) = $self->_server_uid_gid();
 
-    chown $uid, $gid, $target_dir
-        or die "Cannot chown $uid:$gid $target_dir: $!";
+    chown $uid, $gid, $target_dir;
 }
 
 sub ACTION_make_skin_images_dir {
@@ -333,8 +326,7 @@ sub ACTION_make_skin_images_dir {
 
     my ( $uid, $gid ) = $self->_server_uid_gid();
 
-    chown $uid, $gid, $target_dir
-        or die "Cannot chown $uid:$gid $target_dir: $!";
+    chown $uid, $gid, $target_dir;
 }
 
 sub _server_uid_gid {
@@ -367,10 +359,8 @@ sub ACTION_write_revision_file {
 
     my $file = File::Spec->catdir( VegGuide::Config->EtcDir(), 'revision' );
 
-    open my $fh, '>', $file
-        or die "Cannot write to $file: $!";
-    print $fh $revision
-        or die "Cannot write to $file: $!";
+    open my $fh, '>', $file;
+    print {$fh} $revision;
     close $fh;
 }
 
@@ -388,8 +378,7 @@ sub ACTION_make_cache_dir {
 
     my ( $uid, $gid ) = $self->_server_uid_gid();
 
-    chown $uid, $gid, $rss_cache_dir
-        or die "Cannot chown $uid:$gid $rss_cache_dir: $!";
+    chown $uid, $gid, $rss_cache_dir;
 }
 
 sub ACTION_generate_combined_js {
@@ -410,8 +399,7 @@ sub ACTION_generate_combined_js {
     $js->create_single_file();
 
     my $file = $js->target_file();
-    chmod 0644, $file
-        or die "Cannot chmod 0644 $file: $!";
+    chmod 0644, $file;
 
     $self->log_info(" ... at $file\n");
 }
@@ -434,8 +422,7 @@ sub ACTION_generate_combined_css {
     $css->create_single_file();
 
     my $file = $css->target_file();
-    chmod 0644, $file
-        or die "Cannot chmod 0644 $file: $!";
+    chmod 0644, $file;
 
     $self->log_info(" ... at $file\n");
 }
@@ -471,16 +458,11 @@ sub ACTION_generate_secrets {
 
         next if $FAKE;
 
-        open my $fh, '>', $f
-            or die "Cannot write to $f: $!";
-
-        print $fh $self->_generate_mac_secret()
-            or die "Cannot write to $f: $!";
-
+        open my $fh, '>', $f;
+        print {$fh} $self->_generate_mac_secret();
         close $fh;
 
-        chmod 0644, $f
-            or die "Cannot chmod 0644 $f: $!";
+        chmod 0644, $f;
     }
 }
 
