@@ -500,7 +500,7 @@ sub ACTION_migrate_database {
 
     require VegGuide::Migrator;
 
-    VegGuide::Migrator->new()->install_or_update_schema();
+    VegGuide::Migrator->new()->create_or_update_database();
 
     return;
 }
