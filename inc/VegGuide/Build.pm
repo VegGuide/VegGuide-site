@@ -248,6 +248,9 @@ sub ACTION_copy_system_files {
         }
     }
 
+    symlink '../sites-available/vegguide.org' => '/etc/nginx/sites-enabled/vegguide.org'
+        unless -l '/etc/nginx/sites-enabled/vegguide.org';
+
     my $dir = '/var/log/nginx/vegguide.org';
     mkpath( $dir, 0, 0755 )
         unless -d $dir;
