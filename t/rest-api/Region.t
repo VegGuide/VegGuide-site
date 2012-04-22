@@ -26,8 +26,9 @@ use_test_database();
     my $region = json_ok($response);
 
     my %expect = (
-        name => 'North America',
-        uri  => '/region/1',
+        name        => 'North America',
+        uri         => '/region/1',
+        entries_uri => '/region/1/entries',
     );
 
     for my $key ( sort keys %expect ) {
@@ -54,16 +55,19 @@ use_test_database();
         $region->{children},
         [
             {
-                name => 'Canada',
-                uri  => '/region/19',
+                name        => 'Canada',
+                uri         => '/region/19',
+                entries_uri => '/region/19/entries',
             },
             {
-                name => 'Mexico',
-                uri  => '/region/25',
+                name        => 'Mexico',
+                uri         => '/region/25',
+                entries_uri => '/region/25/entries',
             },
             {
-                name => 'USA',
-                uri  => '/region/2',
+                name        => 'USA',
+                uri         => '/region/2',
+                entries_uri => '/region/2/entries',
             },
         ],
         'region has Canada, Mexico, and USA as children',
@@ -76,8 +80,9 @@ use_test_database();
     my $region = json_ok($response);
 
     my %expect = (
-        name => 'New York City',
-        uri  => '/region/4',
+        name        => 'New York City',
+        uri         => '/region/4',
+        entries_uri => '/region/4/entries',
     );
 
     for my $key ( sort keys %expect ) {
@@ -121,6 +126,32 @@ use_test_database();
             },
         ],
         'got the expected comments'
+    );
+}
+
+{
+    my $response = request( rest_request( GET => '/region/116/entries' ) );
+
+    is( $response->code(), '200', 'got a 200 response' );
+
+    is(
+        $response->header('Content-Type'),
+        'application/vnd.vegguide.org-entries+json;charset=UTF-8',
+        'got the right RESTful content type'
+    );
+
+    my $entries = json_ok($response);
+
+    is(
+        scalar @{ $entries || [] },
+        12,
+        'got 12 entries'
+    );
+
+    is(
+        $entries->[0]{name},
+        'Alberta Co-op Grocery',
+        'first entry is Alberta Co-op Grocery'
     );
 }
 

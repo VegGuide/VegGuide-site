@@ -153,6 +153,39 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1) {
         $c->detach('filter');
     }
 
+    sub entries : Chained('_set_location') : PathPart('entries') : Args(0)
+        ActionClass('+VegGuide::Action::REST') {
+    }
+
+    sub entries_GET {
+        my $self = shift;
+        my $c    = shift;
+
+        # The printable search doesn't do paging - it also doesn't include
+        # entries mark closed.
+        $self->_set_printable_search_in_stash(
+            $c,
+            %SearchConfig,
+        );
+
+        return unless $c->stash()->{search};
+
+        my @entries;
+
+        my $vendors = $c->stash()->{search}->vendors();
+        while ( my $vendor = $vendors->next() ) {
+            push @entries, $vendor->rest_data( include_related => 0 );
+        }
+
+        $self->_rest_response(
+            $c,
+            'entries',
+            \@entries,
+        );
+
+        return;
+    }
+
     sub filter : Chained('_set_location') : PathPart('filter') : Args(1) :
         ActionClass('+VegGuide::Action::REST') {
     }

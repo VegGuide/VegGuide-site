@@ -127,6 +127,8 @@ sub _search_from_request {
     delete $p{$_} for grep {/^possible/} keys %p;
     delete @p{qw( order_by sort_order page limit )};
     delete $p{'ie-hack'};
+    # used for forcing a JSON response
+    delete $p{'content-type'};
 
     return $class->new(%p);
 }

@@ -2304,6 +2304,10 @@ sub is_smoke_free {
 
 sub rest_data {
     my $self = shift;
+    my %p    = validate(
+        @_,
+        { include_related => { type => BOOLEAN, default => 1 } }
+    );
 
     my %rest = map { $_ => $self->$_() }
         grep { !/_id$/ }
@@ -2340,11 +2344,14 @@ sub rest_data {
     $rest{uri} = entry_uri( vendor => $self, with_host => 1 );
     $rest{reviews_uri}
         = entry_uri( vendor => $self, path => 'reviews', with_host => 1 );
-    $rest{region_uri}
-        = region_uri( location => $self->location(), with_host => 1 );
 
     $rest{categories} = [ map { $_->name() } $self->categories() ];
     $rest{cuisines}   = [ map { $_->name() } $self->cuisines() ];
+
+    if ( $p{include_related} ) {
+        $rest{region} = $self->location()->rest_data( include_related => 0 );
+        $rest{user} = $self->user()->rest_data( include_related => 0 );
+    }
 
     return \%rest;
 }

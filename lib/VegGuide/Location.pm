@@ -1235,8 +1235,12 @@ sub rest_data {
 
 
     my %rest = (
-        name => $self->name(),
-        uri  => region_uri( location => $self ),
+        name        => $self->name(),
+        uri         => region_uri( location => $self ),
+        entries_uri => region_uri(
+            location => $self,
+            path     => 'entries',
+        ),
     );
 
     if ( $p{include_related} ) {
