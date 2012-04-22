@@ -10,7 +10,6 @@ use Moose;
 extends 'Database::Migrator::mysql';
 
 has '+database' => (
-    init_arg => undef,
     required => 0,
     default  => 'RegVeg',
 );
