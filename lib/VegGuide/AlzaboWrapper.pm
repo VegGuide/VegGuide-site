@@ -21,17 +21,9 @@ sub import {
 
     my $caller = ( caller(0) )[0];
 
-    my %skip_decode;
-    if ( $p{skip_decode} ) {
-        %skip_decode
-            = map { $_ => 1 }
-            ref $p{skip_decode} ? @{ $p{skip_decode} } : $p{skip_decode};
-    }
-
     my @char_cols = (
-        grep { !$skip_decode{$_} }
         map  { $_->name }
-        grep { $_->is_character || $_->is_blob } $p{table}->columns
+        grep { $_->is_character } $p{table}->columns
     );
 
     $p{skip} = $p{skip} ? [ @{ $p{skip} }, @char_cols ] : \@char_cols;

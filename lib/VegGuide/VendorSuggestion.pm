@@ -5,8 +5,7 @@ use warnings;
 
 use VegGuide::Schema;
 use VegGuide::AlzaboWrapper (
-    table       => VegGuide::Schema->Schema->VendorSuggestion_t,
-    skip_decode => 'suggestion',
+    table => VegGuide::Schema->Schema->VendorSuggestion_t,
 );
 
 use VegGuide::Email;
