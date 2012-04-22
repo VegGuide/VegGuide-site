@@ -1151,6 +1151,23 @@ sub external_uri {
     }
 }
 
+sub rest_data {
+    my $self = shift;
+    my %p    = validate(
+        @_,
+        { include_related => { type => BOOLEAN, default => 1 } }
+    );
+
+    my %rest = (
+        name => $self->real_name(),
+    );
+
+    $rest{image_uri} = $self->small_image_uri()
+        if $self->has_image();
+
+    return \%rest;
+}
+
 sub is_guest     {0}
 sub is_logged_in {1}
 

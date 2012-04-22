@@ -1241,15 +1241,17 @@ sub rest_data {
 
     if ( $p{include_related} ) {
         if ( my $parent = $self->parent() ) {
-            $rest{parent} = {
-                name => $parent->name(),
-                uri  => region_uri( location => $parent ),
-            };
+            $rest{parent} = $parent->rest_data( include_related => 0 );
         }
 
         for my $child ( $self->children() ) {
             push @{ $rest{children} },
                 $child->rest_data( include_related => 0 );
+        }
+
+        my $comments = $self->comments();
+        while ( my ( $comment, $user ) = $comments->next() ) {
+            push @{ $rest{comments} }, $comment->rest_data();
         }
     }
 

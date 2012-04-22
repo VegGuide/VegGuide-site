@@ -5,6 +5,7 @@ use warnings;
 
 use parent 'VegGuide::AlzaboWrapper';
 
+use DateTime::Format::RFC3339;
 use DateTime::Format::MySQL;
 use VegGuide::User;
 use VegGuide::Util qw( clean_text );
@@ -34,6 +35,24 @@ sub user {
 sub last_modified_date {
     DateTime::Format::MySQL->parse_datetime( $_[0]->last_modified_datetime() )
         ->ymd();
+}
+
+sub rest_data {
+    my $self = shift;
+
+    my $dt
+        = DateTime::Format::RFC3339->format_datetime(
+        $self->last_modified_datetime_object()->clone()
+            ->set_time_zone('America/Denver')->set_time_zone('UTC') );
+
+    return {
+        body => {
+            content      => $self->comment(),
+            content_type => 'text/vnd.vegguide.org-wikitext',
+        },
+        last_modified_datetime => $dt,
+        user => $self->user()->rest_data( include_related => 0 ),
+    };
 }
 
 1;

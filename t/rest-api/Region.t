@@ -44,6 +44,12 @@ use_test_database();
         'region has 3 children',
     );
 
+    is(
+        scalar @{ $region->{comments} || [] },
+        0,
+        'region has 0 comments',
+    );
+
     is_deeply(
         $region->{children},
         [
@@ -61,6 +67,60 @@ use_test_database();
             },
         ],
         'region has Canada, Mexico, and USA as children',
+    );
+}
+
+{
+    my $response = request( rest_request( GET => '/region/4' ) );
+
+    my $region = json_ok($response);
+
+    my %expect = (
+        name => 'New York City',
+        uri  => '/region/4',
+    );
+
+    for my $key ( sort keys %expect ) {
+        is(
+            $region->{$key},
+            $expect{$key},
+            "response included the correct value for $key"
+        );
+    }
+
+    is(
+        scalar @{ $region->{comments} || [] },
+        2,
+        'region has 2 comments',
+    );
+
+    is_deeply(
+        $region->{comments},
+        [
+            {
+                body => {
+                    content =>
+                        '[http://www.supervegan.com|Super Vegan] is an awesome site "by vegans for vegans" with NYC related news and NYC restaurant guide.',
+                    content_type => 'text/vnd.vegguide.org-wikitext',
+                },
+                last_modified_datetime => '2008-03-22T18:36:33Z',
+                user                   => {
+                    name => 'banu',
+                },
+            },
+            {
+                body => {
+                    content =>
+                        'NYC has many restaurants which are cash only.  Please be aware that this is the norm, especially in Chinatown.',
+                    content_type => 'text/vnd.vegguide.org-wikitext',
+                },
+                last_modified_datetime => '2005-04-27T15:59:02Z',
+                user                   => {
+                    name => 'inah',
+                },
+            },
+        ],
+        'got the expected comments'
     );
 }
 

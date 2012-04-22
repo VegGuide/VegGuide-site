@@ -12,6 +12,7 @@ use VegGuide::AlzaboWrapper (
     table => VegGuide::Schema->Schema()->Vendor_t() );
 
 use DateTime;
+use DateTime::Format::RFC3339;
 use DateTime::Format::MySQL;
 use DateTime::Format::Strptime;
 use File::Copy;
@@ -2325,12 +2326,15 @@ sub rest_data {
 
     for my $dt (qw( creation_datetime last_modified_datetime )) {
         my $meth = $dt . '_object';
-        $rest{$dt} = $self->$meth()->clone()->set_time_zone('America/Denver')
-            ->set_time_zone('UTC')->iso8601();
+        $rest{$dt}
+            = DateTime::Format::RFC3339->format_datetime(
+            $self->$meth()->clone()->set_time_zone('America/Denver')
+                ->set_time_zone('UTC') );
     }
 
     if ( $self->close_date() ) {
-        $rest{close_date} = $self->close_date_object()->ymd();
+        $rest{close_date} = DateTime::Format::RFC3339->format_datetime(
+            $self->close_date_object()->clone()->set_time_zone('UTC') );
     }
 
     $rest{uri} = entry_uri( vendor => $self, with_host => 1 );
