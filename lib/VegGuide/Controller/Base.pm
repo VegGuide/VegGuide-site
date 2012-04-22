@@ -137,6 +137,34 @@ sub _params_from_path_query {
     return %p;
 }
 
+{
+    my %ContentTypes = map {
+              $_ => 'application/vnd.vegguide.org-' 
+            . $_
+            . '+json;charset=UTF-8'
+    } qw( entry entries region regions reviews user users );
+
+    sub _rest_response {
+        my $self   = shift;
+        my $c      = shift;
+        my $type   = shift;
+        my $entity = shift;
+        my $status = shift // 'ok';
+
+        die "Unknown type ($type)" unless $ContentTypes{$type};
+
+        $c->response()->content_type( $ContentTypes{$type} );
+
+        my $meth = 'status_' . $status;
+        $self->$meth(
+            $c,
+            entity => $entity,
+        );
+
+        return;
+    }
+}
+
 sub _set_entity {
     my $self   = shift;
     my $c      = shift;

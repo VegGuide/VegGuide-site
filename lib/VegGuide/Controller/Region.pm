@@ -113,6 +113,19 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1) {
         ActionClass('+VegGuide::Action::REST') {
     }
 
+    sub region_GET : Private {
+        my $self = shift;
+        my $c    = shift;
+
+        $self->_rest_response(
+            $c,
+            'region',
+            $c->stash()->{location}->rest_data(),
+        );
+
+        return;
+    }
+
     sub region_GET_html : Private {
         my $self = shift;
         my $c    = shift;

@@ -1228,17 +1228,29 @@ sub _data_feed_handle {
 
 sub rest_data {
     my $self = shift;
+    my %p    = validate(
+        @_,
+        { include_related => { type => BOOLEAN, default => 1 } }
+    );
+
 
     my %rest = (
         name => $self->name(),
         uri  => region_uri( location => $self ),
     );
 
-    if ( my $parent = $self->parent() ) {
-        $rest{parent} = {
-            name => $parent->name(),
-            uri  => region_uri( location => $parent ),
-        };
+    if ( $p{include_related} ) {
+        if ( my $parent = $self->parent() ) {
+            $rest{parent} = {
+                name => $parent->name(),
+                uri  => region_uri( location => $parent ),
+            };
+        }
+
+        for my $child ( $self->children() ) {
+            push @{ $rest{children} },
+                $child->rest_data( include_related => 0 );
+        }
     }
 
     return \%rest;
