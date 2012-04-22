@@ -391,6 +391,10 @@ CREATE TABLE `VendorSuggestion` (
   KEY `VendorSuggestion___vendor_id` (`vendor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE AppliedMigration (
+    migration  VARCHAR(250)  PRIMARY KEY
+);
+
 DROP FUNCTION IF EXISTS WEIGHTED_RATING;
 delimiter //
 CREATE FUNCTION
