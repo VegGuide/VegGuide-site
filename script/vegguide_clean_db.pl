@@ -24,5 +24,13 @@ while ( my $user = $users->next() ) {
         password               => 'password',
         password2              => 'password',
         forgot_password_digest => undef,
+        openid_uri             => undef,
     );
 }
+
+my $dbh = VegGuide::Schema->Connect()->driver()->handle();
+$dbh->do(
+    'UPDATE SurveyResponse2008001 SET email_address = ?',
+    undef,
+    'sanitized@example.com'
+);
