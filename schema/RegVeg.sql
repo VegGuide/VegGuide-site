@@ -473,6 +473,6 @@ VALUES ( 1, 'Restaurant',                  1 ),
        (10, 'Other',                      10 );
 
 INSERT INTO PriceRange (price_range_id, description, display_order)
-VALUES ('$ - inexpensive', 1),
-       ('$$ - average',    2),
-       ('$$$ - expensive', 3);
+VALUES (1, '$ - inexpensive', 1),
+       (2, '$$ - average',    2),
+       (3, '$$$ - expensive', 3);
