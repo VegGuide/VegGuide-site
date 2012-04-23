@@ -139,7 +139,7 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1) {
         $c->stash()->{template} = '/region/view';
     }
 
-    # This would not be necessary is chained actions could have a
+    # This would not be necessary if chained actions could have a
     # variable number of Args.
     sub empty_filter : Chained('_set_location') : PathPart('filter') : Args(0)
     {
