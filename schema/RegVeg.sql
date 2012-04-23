@@ -461,16 +461,16 @@ INSERT INTO AddressFormat (format)
 VALUES ('standard'), ('Hungarian');
 
 INSERT INTO Category (name, display_order)
-VALUES ('Restaurant',                  1 ),
-       ('Coffee/Tea/Juice',            2 ),
-       ('Bar',                         3 ),
-       ('Food Court or Street Vendor', 4 ),
-       ('Grocery/Bakery/Deli',         5 ),
-       ('Caterer',                     6 ),
-       ('General Store',               7 ),
-       ('Organization',                8 ),
-       ('Hotel/B&B',                   9 ),
-       ('Other',                      10 );
+VALUES ('Restaurant',                  1),
+       ('Coffee/Tea/Juice',            2),
+       ('Bar',                         3),
+       ('Food Court or Street Vendor', 4),
+       ('Grocery/Bakery/Deli',         5),
+       ('Caterer',                     6),
+       ('General Store',               7),
+       ('Organization',                8),
+       ('Hotel/B&B',                   9),
+       ('Other',                      10);
 
 INSERT INTO PriceRange (description, display_order)
 VALUES ('$ - inexpensive', 1),
