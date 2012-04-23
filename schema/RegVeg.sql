@@ -445,34 +445,34 @@ END//
 
 delimiter ;
 
-INSERT INTO UserActivityLogType (type)
-VALUES ('add vendor'),
-       ('update vendor'),
-       ('suggest a change'),
-       ('suggestion accepted'),
-       ('suggestion rejected'),
-       ('add review'),
-       ('update review'),
-       ('delete review'),
-       ('add image'),
-       ('add region');
+INSERT INTO UserActivityLogType (user_activity_log_type_id, type)
+VALUES ( 1, 'add vendor'),
+       ( 2, 'update vendor'),
+       ( 3, 'suggest a change'),
+       ( 4, 'suggestion accepted'),
+       ( 5, 'suggestion rejected'),
+       ( 6, 'add review'),
+       ( 7, 'update review'),
+       ( 8, 'delete review'),
+       ( 9, 'add image'),
+       (10, 'add region');
 
-INSERT INTO AddressFormat (format)
-VALUES ('standard'), ('Hungarian');
+INSERT INTO AddressFormat (address_format_id, format)
+VALUES (1, 'standard'), (2, 'Hungarian');
 
-INSERT INTO Category (name, display_order)
-VALUES ('Restaurant',                  1),
-       ('Coffee/Tea/Juice',            2),
-       ('Bar',                         3),
-       ('Food Court or Street Vendor', 4),
-       ('Grocery/Bakery/Deli',         5),
-       ('Caterer',                     6),
-       ('General Store',               7),
-       ('Organization',                8),
-       ('Hotel/B&B',                   9),
-       ('Other',                      10);
+INSERT INTO Category (category_id, name, display_order)
+VALUES ( 1, 'Restaurant',                  1 ),
+       ( 2, 'Coffee/Tea/Juice',            2 ),
+       ( 3, 'Bar',                         3 ),
+       ( 4, 'Food Court or Street Vendor', 4 ),
+       ( 5, 'Grocery/Bakery/Deli',         5 ),
+       ( 6, 'Caterer',                     6 ),
+       ( 7, 'General Store',               7 ),
+       ( 8, 'Organization',                8 ),
+       ( 9, 'Hotel/B&B',                   9 ),
+       (10, 'Other',                      10 );
 
-INSERT INTO PriceRange (description, display_order)
+INSERT INTO PriceRange (price_range_id, description, display_order)
 VALUES ('$ - inexpensive', 1),
        ('$$ - average',    2),
        ('$$$ - expensive', 3);
