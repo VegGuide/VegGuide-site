@@ -5,7 +5,7 @@ use lib 't/lib';
 
 use Catalyst::Test 'VegGuide';
 use Test::More 0.88;
-use Test::VegGuide qw( json_ok rest_request use_test_database );
+use Test::VegGuide qw( json_ok path_to_uri rest_request use_test_database );
 
 use_test_database();
 
@@ -24,8 +24,8 @@ use_test_database();
 
     my %expect = (
         name        => 'North America',
-        uri         => '/region/1',
-        entries_uri => '/region/1/entries',
+        uri         => path_to_uri('/region/1'),
+        entries_uri => path_to_uri('/region/1/entries'),
     );
 
     for my $key ( sort keys %expect ) {
@@ -53,18 +53,18 @@ use_test_database();
         [
             {
                 name        => 'Canada',
-                uri         => '/region/19',
-                entries_uri => '/region/19/entries',
+                uri         => path_to_uri('/region/19'),
+                entries_uri => path_to_uri('/region/19/entries'),
             },
             {
                 name        => 'Mexico',
-                uri         => '/region/25',
-                entries_uri => '/region/25/entries',
+                uri         => path_to_uri('/region/25'),
+                entries_uri => path_to_uri('/region/25/entries'),
             },
             {
                 name        => 'USA',
-                uri         => '/region/2',
-                entries_uri => '/region/2/entries',
+                uri         => path_to_uri('/region/2'),
+                entries_uri => path_to_uri('/region/2/entries'),
             },
         ],
         'region has Canada, Mexico, and USA as children',
@@ -78,8 +78,8 @@ use_test_database();
 
     my %expect = (
         name        => 'New York City',
-        uri         => '/region/4',
-        entries_uri => '/region/4/entries',
+        uri         => path_to_uri('/region/4'),
+        entries_uri => path_to_uri('/region/4/entries'),
     );
 
     for my $key ( sort keys %expect ) {
@@ -108,6 +108,7 @@ use_test_database();
                 last_modified_datetime => '2008-03-22T18:36:33Z',
                 user                   => {
                     name => 'banu',
+                    uri  => path_to_uri('/user/4126'),
                 },
             },
             {
@@ -119,6 +120,7 @@ use_test_database();
                 last_modified_datetime => '2005-04-27T15:59:02Z',
                 user                   => {
                     name => 'inah',
+                    uri  => path_to_uri('/user/18'),
                 },
             },
         ],

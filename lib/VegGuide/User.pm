@@ -23,6 +23,7 @@ use VegGuide::Cursor::UserWithAggregate;
 use VegGuide::Email;
 use VegGuide::Image;
 use VegGuide::Location;
+use VegGuide::SiteURI qw( user_uri );
 use VegGuide::UserActivityLog;
 use VegGuide::User::Guest;
 use VegGuide::Util qw( string_is_empty );
@@ -1160,6 +1161,10 @@ sub rest_data {
 
     my %rest = (
         name => $self->real_name(),
+        uri  => user_uri(
+            user      => $self,
+            with_host => 1,
+        ),
     );
 
     $rest{image_uri} = $self->small_image_uri()

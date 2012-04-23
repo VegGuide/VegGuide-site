@@ -1233,13 +1233,16 @@ sub rest_data {
         { include_related => { type => BOOLEAN, default => 1 } }
     );
 
-
     my %rest = (
-        name        => $self->name(),
-        uri         => region_uri( location => $self ),
+        name => $self->name(),
+        uri  => region_uri(
+            location  => $self,
+            with_host => 1,
+        ),
         entries_uri => region_uri(
-            location => $self,
-            path     => 'entries',
+            location  => $self,
+            path      => 'entries',
+            with_host => 1,
         ),
     );
 
