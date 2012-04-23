@@ -442,18 +442,6 @@ sub can_delete_user {
     return 1 if $self->is_admin;
 }
 
-sub can_edit_team {
-    my $self = shift;
-    my ($team) = validate_pos(
-        @_,
-        { isa => 'VegGuide::Team' },
-    );
-
-    return 1 if $self->is_admin;
-
-    return $team->owner_user_id == $self->user_id;
-}
-
 sub vendor_count {
     my $self = shift;
     my %p = validate( @_, { location => LOCATION_TYPE( default => undef ) } );
@@ -889,23 +877,6 @@ sub subscribed_locations {
             order_by => [ $schema->Location_t->name_c, 'ASC' ],
         )
     );
-}
-
-sub is_team_member {
-    my $self = shift;
-    my $team = shift;
-
-    return 1 if $self->team_id && $self->team_id == $team->team_id;
-}
-
-sub team {
-    my $self = shift;
-
-    return $self->{team} if $self->{team};
-
-    return unless $self->team_id;
-
-    return $self->{team} = VegGuide::Team->new( team_id => $self->team_id );
 }
 
 sub viewable_suggestion_count {

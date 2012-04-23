@@ -38,8 +38,6 @@ sub can_delete_vendor_image {0}
 
 sub can_edit_user {0}
 
-sub can_edit_team {0}
-
 sub is_guest     {1}
 sub is_logged_in {0}
 
