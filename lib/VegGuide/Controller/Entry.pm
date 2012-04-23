@@ -112,12 +112,10 @@ sub entry_GET : Private {
 
     my $vendor = $c->stash()->{vendor};
 
-    $c->response()
-        ->content_type('application/vnd.vegguide-entry+json; version=1.0');
-
-    $self->status_ok(
+    $self->_rest_response(
         $c,
-        entity => $vendor->rest_data(),
+        'entry',
+        $vendor->rest_data(),
     );
 }
 
