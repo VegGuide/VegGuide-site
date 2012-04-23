@@ -7,9 +7,6 @@ use Catalyst::Test 'VegGuide';
 use Test::More 0.88;
 use Test::VegGuide qw( json_ok rest_request use_test_database );
 
-use HTTP::Request;
-use VegGuide::JSON;
-
 use_test_database();
 
 {
