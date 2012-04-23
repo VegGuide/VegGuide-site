@@ -2348,9 +2348,10 @@ sub rest_data {
     $rest{categories} = [ map { $_->name() } $self->categories() ];
     $rest{cuisines}   = [ map { $_->name() } $self->cuisines() ];
 
+    $rest{user} = $self->user()->rest_data( include_related => 0 );
+
     if ( $p{include_related} ) {
         $rest{region} = $self->location()->rest_data( include_related => 0 );
-        $rest{user} = $self->user()->rest_data( include_related => 0 );
     }
 
     return \%rest;
