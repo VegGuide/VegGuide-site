@@ -19,7 +19,7 @@ use_test_database();
 
     is(
         $response->header('Content-Type'),
-        'application/vnd.vegguide.org-region+json;charset=UTF-8',
+        'application/vnd.vegguide.org-region+json; charset=UTF-8; version=0.1',
         'got the right RESTful content type'
     );
 
@@ -136,7 +136,7 @@ use_test_database();
 
     is(
         $response->header('Content-Type'),
-        'application/vnd.vegguide.org-entries+json;charset=UTF-8',
+        'application/vnd.vegguide.org-entries+json; charset=UTF-8; version=0.1',
         'got the right RESTful content type'
     );
 
