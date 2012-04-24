@@ -395,6 +395,48 @@ CREATE TABLE AppliedMigration (
     migration  VARCHAR(250)  PRIMARY KEY
 );
 
+ALTER TABLE Cuisine
+    ADD FOREIGN KEY (parent_cuisine_id)
+    REFERENCES Cuisine (cuisine_id)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE;
+
+ALTER TABLE Locale
+    ADD FOREIGN KEY (address_format_id)
+    REFERENCES AddressFormat (address_format_id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE;
+
+ALTER TABLE LocaleEncoding
+    ADD FOREIGN KEY (locale_id)
+    REFERENCES Locale (locale_id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
+
+ALTER TABLE Location
+    ADD FOREIGN KEY (locale_id)
+    REFERENCES Locale (locale_id)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE;
+
+ALTER TABLE Location
+    ADD FOREIGN KEY (user_id)
+    REFERENCES User (user_id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE;
+
+ALTER TABLE LocationComment
+    ADD FOREIGN KEY (location_id)
+    REFERENCES Location (location_id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE;
+
+ALTER TABLE LocationComment
+    ADD FOREIGN KEY (user_id)
+    REFERENCES User (user_id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE;
+
 DROP FUNCTION IF EXISTS WEIGHTED_RATING;
 delimiter //
 CREATE FUNCTION
