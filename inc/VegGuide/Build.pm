@@ -433,14 +433,20 @@ sub ACTION_generate_combined_css {
 sub ACTION_write_alzabo_schema {
     my $self = shift;
 
+    # XXX - need to resolve issues with foreign key handling and Alzabo before
+    # moving forward on this.
+    return;
+
     require Alzabo::Config;
     require Alzabo::Create::Schema;
 
-    Alzabo::Create::Schema->reverse_engineer(
+    my $schema = Alzabo::Create::Schema->reverse_engineer(
         name  => 'RegVeg',
         rdbms => 'MySQL',
         user  => 'root',
     );
+
+    $schema->save_to_file();
 }
 
 sub ACTION_generate_secrets {
