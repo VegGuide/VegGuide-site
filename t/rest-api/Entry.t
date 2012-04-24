@@ -61,6 +61,7 @@ use_test_database();
         phone        => '651-291-5411',
         postal_code  => 55102,
         price_range  => '$ - inexpensive',
+        rating_count => 4,
         region       => {
             name        => 'Twin Cities',
             uri         => path_to_uri('/region/13'),
@@ -77,7 +78,8 @@ use_test_database();
         },
         veg_level             => 2,
         veg_level_description => 'Vegan-Friendly',
-        website               => 'www.chipotle.com'
+        website               => 'www.chipotle.com',
+        weighted_rating       => 2.9,
     };
 
     is_deeply(

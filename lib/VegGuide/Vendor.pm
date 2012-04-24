@@ -2341,14 +2341,17 @@ sub rest_data {
             $self->close_date_object()->clone()->set_time_zone('UTC') );
     }
 
-    $rest{uri} = entry_uri( vendor => $self, with_host => 1 );
-    $rest{reviews_uri}
-        = entry_uri( vendor => $self, path => 'reviews', with_host => 1 );
+    @rest{ 'weighted_rating', 'rating_count' }
+        = $self->weighted_rating_and_count();
 
     $rest{categories} = [ map { $_->name() } $self->categories() ];
     $rest{cuisines}   = [ map { $_->name() } $self->cuisines() ];
 
     $rest{user} = $self->user()->rest_data( include_related => 0 );
+
+    $rest{uri} = entry_uri( vendor => $self, with_host => 1 );
+    $rest{reviews_uri}
+        = entry_uri( vendor => $self, path => 'reviews', with_host => 1 );
 
     if ( $p{include_related} ) {
         $rest{region} = $self->location()->rest_data( include_related => 0 );
