@@ -387,16 +387,33 @@ sub reviews_GET : Private {
 
     my $vendor = $c->stash()->{vendor};
 
-    $c->response()
-        ->content_type('application/vnd.vegguide-entry-reviews+json; version=1.0');
-
-    $self->status_ok(
+    $self->_rest_response(
         $c,
-        entity => {
-            reviews =>
-                [ map { $_->[0]->rest_data() } $vendor->comments()->all() ],
-        },
+        'entry-reviews',
+        [
+            ( map { $_->[0]->rest_data() } $vendor->comments()->all() ),
+            (
+                map { $self->_rating_as_rest_data( @{$_} ) }
+                    $vendor->ratings_without_reviews()->all()
+            ),
+        ],
     );
+}
+
+# XXX - eventually we should combine rating and review into the same table and
+# just allow empty reviews.
+sub _rating_as_rest_data {
+    my $self   = shift;
+    my $rating = shift;
+    my $user   = shift;
+
+    return {
+        last_modified_datetime => undef,
+        review                 => undef,
+        body                   => { content => undef },
+        rating                 => $rating->rating(),
+        user                   => $user->rest_data( include_related => 0 ),
+    };
 }
 
 sub reviews_GET_html : Private {

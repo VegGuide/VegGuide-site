@@ -89,4 +89,78 @@ use_test_database();
     );
 }
 
+{
+    my $response = request( rest_request( GET => '/entry/557/reviews' ) );
+
+    is( $response->code(), '200', 'got a 200 response' );
+
+    is(
+        $response->header('Content-Type'),
+        'application/vnd.vegguide.org-entry-reviews+json; charset=UTF-8; version=0.1',
+        'got the right RESTful content type'
+    );
+
+    my $reviews = json_ok($response);
+
+    is( scalar @{$reviews}, 4, 'got 4 reviews back' );
+
+    my $expect = [
+        {
+            body => {
+                content =>
+                    q{I like this place, it's nice. I think it's awesome that you have to share with people in order to eat the whole thing- it lowers the cost, especially if the friend you're with has no $$. I also like that you can choose how hot you'd like the burrito. Where I live, it's either hot or...REALLY hot. I also like the fact that you can watch them make it so you know exactly what's going in it!},
+                content_type => 'text/vnd.vegguide.org-wikitext',
+            },
+            last_modified_datetime => '2004-12-15T18:51:41Z',
+            rating                 => 4,
+            user                   => {
+                name => 'Alison Edlund',
+                uri  => path_to_uri('/user/770'),
+            }
+        },
+        {
+            body => {
+                content =>
+                    q{"Veggie fajita. Hot. Just guac & lettuce." Those six words garner me an adequate burrito that I can eat all day long. Chipotle is the only fast food franchise I can tolerate and I tend to get a burrito from them for lunch nearly once a week.},
+                content_type => 'text/vnd.vegguide.org-wikitext',
+            },
+            last_modified_datetime => '2004-06-28T23:32:28Z',
+            rating                 => 3,
+            user                   => {
+                name => 'vaxjo',
+                uri  => path_to_uri('/user/225'),
+            }
+        },
+        {
+            body => {
+                content =>
+                    'The food is good and the prices are decent, but the portions are too much for one person. Definitely beneficial to split with a friend.',
+                content_type => 'text/vnd.vegguide.org-wikitext',
+            },
+            last_modified_datetime => '2004-06-03T18:16:23Z',
+            rating                 => 2,
+            user                   => {
+                name => 'Emily K',
+                uri  => path_to_uri('/user/446'),
+            }
+        },
+        {
+            body                   => { content => undef },
+            last_modified_datetime => undef,
+            rating                 => 1,
+            review                 => undef,
+            user                   => {
+                name => 'Nicholas',
+                uri  => path_to_uri('/user/2370'),
+            }
+        }
+    ];
+
+    is_deeply(
+        $reviews,
+        $expect,
+        'got expected data back for reviews'
+    );
+}
+
 done_testing();

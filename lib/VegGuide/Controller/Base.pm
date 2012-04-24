@@ -142,7 +142,7 @@ sub _params_from_path_query {
               $_ => 'application/vnd.vegguide.org-' 
             . $_
             . '+json; charset=UTF-8; version=0.1'
-    } qw( entry entries region regions reviews user users );
+    } qw( entry entries entry-reviews region reviews user users );
 
     sub _rest_response {
         my $self   = shift;
