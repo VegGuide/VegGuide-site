@@ -24,16 +24,6 @@
   </div>
 
   <div id="footer-copyright">
-    <&| /lib/link/license.mas &><img id="cc-logo" src="http://i.creativecommons.org/l/by-sa/3.0/us/88x31.png" alt="Creative Commons License" /></&>
-
-    <p>
-      <a href="http://www.vegguide.org/" title="Home">VegGuide.Org</a>
-      and its contents are Copyright &copy;
-      2003-<% DateTime->now()->year() %>
-      <a href="http://www.exploreveg.org/" title="Compassionate Action for
-         Animals">Compassionate Action for Animals</a>.
-      <a href="/site/about#copyright">Some rights reserved</a>.
-    </p>
 
     <div id="logos">
       <a href="http://www.facebook.com/VegGuide"
@@ -50,5 +40,15 @@
       <a href="http://www.veganoutreach.org/"><img src="/images/vo-logo.gif" alt="Vegan Outreach logo" title="Vegan Outreach" height="44" width="217" /></a>
     </div>
 
+    <div id="copyright">
+      <&| /lib/link/license.mas &><img id="cc-logo" src="http://i.creativecommons.org/l/by-sa/3.0/us/88x31.png" alt="Creative Commons License" /></&>
+
+      <a href="http://www.vegguide.org/" title="Home">VegGuide.Org</a>
+      and its contents are Copyright &copy;
+      2003-<% DateTime->now()->year() %>
+      <a href="http://www.exploreveg.org/" title="Compassionate Action for
+         Animals">Compassionate Action for Animals</a>.
+      <a href="/site/about#copyright">Some rights reserved</a>.
+    </div>
   </div>
 </div>

@@ -404,14 +404,19 @@ a.action-button-medium:visited, a.action-button-small:visited {
     margin: 0.4em 0 0.4em 100px;
 }
 
+#ft #copyright {
+    margin: 0 auto;
+}
+
 #ft #cc-logo {
     border: none;
     float: left;
+    margin-right: 0.5em;
 }
 
 #ft #logos {
     clear: both;
-    margin-top: 2em;
+    margin-bottom: 2em;
     text-align: center;
 }
 
