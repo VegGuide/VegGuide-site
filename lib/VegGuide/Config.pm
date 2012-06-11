@@ -177,7 +177,7 @@ sub AlzaboRootDir {
 
     unless ( __PACKAGE__->IsProduction() ) {
         $BaseConfig{static} = {
-            dirs         => [qw( images js css static w3c )],
+            dirs         => [qw( entry-images images js css static w3c )],
             include_path => [
                 __PACKAGE__->ShareDir(),
                 __PACKAGE__->VarLibDir()
