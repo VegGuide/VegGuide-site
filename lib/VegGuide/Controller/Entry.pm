@@ -794,10 +794,6 @@ sub images_form : Chained('_set_vendor') : PathPart('images_form') : Args(0) {
     $c->stash()->{template} = '/entry/images-form';
 }
 
-sub image : Chained('_set_vendor') : PathPart('image') : Args(0) :
-    ActionClass('+VegGuide::Action::REST') {
-}
-
 sub image_POST {
     my $self = shift;
     my $c    = shift;
