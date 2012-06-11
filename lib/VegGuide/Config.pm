@@ -180,7 +180,7 @@ sub AlzaboRootDir {
             dirs         => [qw( entry-images images js css static w3c )],
             include_path => [
                 __PACKAGE__->ShareDir(),
-                __PACKAGE__->VarLibDir()
+                __PACKAGE__->VarLibDir(),
             ],
             debug => 1,
         };
