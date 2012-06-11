@@ -19,6 +19,7 @@ use Image::Size qw( imgsize );
 use VegGuide::Config;
 use VegGuide::Image;
 use VegGuide::Vendor;
+use VegGuide::SiteURI qw( site_uri );
 
 {
     my $spec = {
@@ -138,13 +139,18 @@ BEGIN {
 
         my $filename_meth_name = $size . '_filename';
         my $path_method        = sub {
-            return File::Spec->catfile( $_[0]->dir(),
-                $_[0]->$filename_meth_name() );
+            return File::Spec->catfile(
+                $_[0]->dir(),
+                $_[0]->$filename_meth_name(),
+            );
         };
 
         my $uri_method = sub {
-            return File::Spec::Unix->catfile( '', $_[0]->_uri_prefix(),
-                $_[0]->$filename_meth_name() );
+            return File::Spec::Unix->catfile(
+                '',
+                $_[0]->_uri_prefix(),
+                $_[0]->$filename_meth_name(),
+            );
         };
 
         my $path_meth_name = $size . '_path';
@@ -188,8 +194,15 @@ sub _uri_prefix {
 sub dir {
     my $self = shift;
 
-    return File::Spec->catdir( VegGuide::Config->VarLibDir(),
-        $self->_uri_prefix() );
+    return File::Spec->catdir(
+        't/share',
+        $self->_uri_prefix(),
+    ) if $ENV{HARNESS_ACTIVE};
+
+    return File::Spec->catdir(
+        VegGuide::Config->VarLibDir(),
+        $self->_uri_prefix(),
+    );
 }
 
 sub base_filename {
@@ -258,15 +271,20 @@ EOF
 sub rest_data {
     my $self = shift;
 
-    return (
-        uri            => $self->large_uri(),
-        caption        => $self->caption(),
-        height         => $self->large_height(),
-        width          => $self->large_width(),
-        original_uri   => $self->original_uri(),
-        user_id        => $self->user_id(),
-        user_real_name => $self->user()->real_name(),
-    );
+    return {
+        uri     => site_uri( path => $self->large_uri(), with_host => 1 ),
+        caption => $self->caption(),
+        height      => $self->large_height(),
+        width       => $self->large_width(),
+        mini_uri    => site_uri( path => $self->mini_uri(), with_host => 1 ),
+        mini_height => $self->mini_height(),
+        mini_width  => $self->mini_width(),
+        original_uri =>
+            site_uri( path => $self->original_uri(), with_host => 1 ),
+        original_height => $self->original_height(),
+        original_width  => $self->original_width(),
+        user            => $self->user()->rest_data,
+    };
 }
 
 sub vendor {

@@ -697,25 +697,25 @@ sub image_GET {
 
     my $vendor = $c->stash()->{vendor};
 
-    my %image;
+    my $rest_data;
 
     my $image = $c->stash()->{image};
 
     if ($image) {
-        %image = $image->rest_data();
+        $rest_data = $image->rest_data();
 
         my $display_order = $image->display_order();
 
         my $image_count = $vendor->image_count();
-        $image{next} = $display_order + 1
+        $rest_data->{next} = $display_order + 1
             if $display_order + 1 <= $image_count;
-        $image{previous} = $display_order - 1
+        $rest_data->{previous} = $display_order - 1
             if $display_order > 1;
     }
 
     return $self->status_ok(
         $c,
-        entity => \%image,
+        entity => $rest_data,
     );
 }
 
@@ -794,11 +794,11 @@ sub images_form : Chained('_set_vendor') : PathPart('images_form') : Args(0) {
     $c->stash()->{template} = '/entry/images-form';
 }
 
-sub images : Chained('_set_vendor') : PathPart('image') : Args(0) :
+sub image : Chained('_set_vendor') : PathPart('image') : Args(0) :
     ActionClass('+VegGuide::Action::REST') {
 }
 
-sub images_POST {
+sub image_POST {
     my $self = shift;
     my $c    = shift;
 
@@ -830,6 +830,23 @@ sub images_POST {
 
     $c->redirect_and_detach(
         entry_uri( vendor => $vendor, path => 'images_form' ) );
+}
+
+sub images : Chained('_set_vendor') : PathPart('images') : Args(0) :
+    ActionClass('+VegGuide::Action::REST') {
+}
+
+sub images_GET : Private {
+    my $self = shift;
+    my $c    = shift;
+
+    $self->_rest_response(
+        $c,
+        'entry-images',
+        [
+            map { $_->rest_data() } $c->stash()->{vendor}->images()
+        ],
+    );
 }
 
 {

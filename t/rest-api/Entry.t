@@ -163,4 +163,97 @@ use_test_database();
     );
 }
 
+{
+    my $response = request( rest_request( GET => '/entry/37/images' ) );
+
+    is( $response->code(), '200', 'got a 200 response' );
+
+    is(
+        $response->header('Content-Type'),
+        'application/vnd.vegguide.org-entry-images+json; charset=UTF-8; version=0.1',
+        'got the right RESTful content type'
+    );
+
+    my $images = json_ok($response);
+
+    is( scalar @{$images}, 4, 'got 4 images back' );
+
+    my $expect = [
+        {
+            caption     => undef,
+            height      => 190,
+            mini_height => 91,
+            mini_uri    => path_to_uri('/entry-images/37/37-1983-mini.png'),
+            mini_width  => 120,
+            original_height => 190,
+            original_uri =>
+                path_to_uri('/entry-images/37/37-1983-original.png'),
+            original_width => 250,
+            uri  => path_to_uri('/entry-images/37/37-1983-large.png'),
+            user => {
+                name => 'Admin',
+                uri  => path_to_uri('/user/1'),
+            },
+            width => 250
+        },
+        {
+            caption     => undef,
+            height      => 400,
+            mini_height => 90,
+            mini_uri    => path_to_uri('/entry-images/37/37-1984-mini.png'),
+            mini_width  => 120,
+            original_height => 480,
+            original_uri =>
+                path_to_uri('/entry-images/37/37-1984-original.png'),
+            original_width => 640,
+            uri  => path_to_uri('/entry-images/37/37-1984-large.png'),
+            user => {
+                name => 'Admin',
+                uri  => path_to_uri('/user/1'),
+            },
+            width => 533
+        },
+        {
+            caption     => 'Interior of restaurant.',
+            height      => 400,
+            mini_height => 90,
+            mini_uri    => path_to_uri('/entry-images/37/37-4334-mini.jpg'),
+            mini_width  => 120,
+            original_height => 1200,
+            original_uri =>
+                path_to_uri('/entry-images/37/37-4334-original.jpg'),
+            original_width => 1600,
+            uri  => path_to_uri('/entry-images/37/37-4334-large.jpg'),
+            user => {
+                name => 'conde.kedar',
+                uri  => path_to_uri('/user/4795'),
+            },
+            width => 533
+        },
+        {
+            caption     => 'Eggplant with Thai Basil',
+            height      => 400,
+            mini_height => 90,
+            mini_uri    => path_to_uri('/entry-images/37/37-5563-mini.jpg'),
+            mini_width  => 120,
+            original_height => 2304,
+            original_uri =>
+                path_to_uri('/entry-images/37/37-5563-original.jpg'),
+            original_width => 3072,
+            uri  => path_to_uri('/entry-images/37/37-5563-large.jpg'),
+            user => {
+                name => 'Danielle S',
+                uri  => path_to_uri('/user/8070'),
+            },
+            width => 533
+        }
+    ];
+
+    is_deeply(
+        $images,
+        $expect,
+        'got expected data back for images'
+    );
+}
+
 done_testing();

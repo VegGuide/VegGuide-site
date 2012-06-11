@@ -135,8 +135,8 @@ VegGuide.EntryImageSlideshow.prototype._showImage = function (imageNumber) {
 
     var attribution = document.createTextNode( ' Uploaded by ' );
     var user_link = document.createElement("a");
-    user_link.href = "/user/" + image.user_id;
-    user_link.appendChild( document.createTextNode( image.user_real_name ) );
+    user_link.href = image.user.uri;
+    user_link.appendChild( document.createTextNode( image.user.real_name ) );
 
     this.attributionContainer.appendChild(attribution);
     this.attributionContainer.appendChild(user_link);
