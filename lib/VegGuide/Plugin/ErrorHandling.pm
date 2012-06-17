@@ -19,6 +19,7 @@ use VegGuide::JSON;
 {
 
     package Catalyst;
+    use HTTP::Status qw( RC_NOT_FOUND );
 
     no warnings 'redefine';
 
@@ -69,8 +70,7 @@ sub _log_error {
     my $error = shift;
 
     return if $error =~ /Software caused connection abort/;
-
-    #    if ( $error =~ /unknown resource/ )
+    return if $error =~ /unknown resource/i;
 
     my %error = (
         uri   => $self->request()->uri() . '',
@@ -97,11 +97,6 @@ sub _log_error {
 sub finalize_error {
     my $self = shift;
 
-    if ( $self->debug() ) {
-        $self->_finalize_error_with_debug( $self, @_ );
-        return;
-    }
-
     my @errors = @{ $self->error() || [] };
 
     my $status
@@ -113,7 +108,14 @@ sub finalize_error {
 
     $self->response()->content_type('text/html; charset=utf-8');
     $self->response()->status($status);
-    $self->response()->body( $self->subreq("/error/$status") );
+
+    if ( $self->debug() ) {
+        $self->_finalize_error_with_debug( $self, @_ );
+        return;
+    }
+    else {
+        $self->response()->body( $self->subreq("/error/$status") );
+    }
 }
 
 # copied from Catalyst::Engine->finalize_error just so we can set the
