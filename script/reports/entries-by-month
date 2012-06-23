@@ -4,7 +4,7 @@ use warnings;
 use DateTime;
 use DateTime::Format::MySQL;
 use Getopt::Long;
-use VegGuide;
+use VegGuide::Schema;
 
 my $year;
 GetOptions( 'year:i' => \$year );
@@ -15,7 +15,7 @@ my $cutoff = DateTime->new( year => $year );
 my $dbh = VegGuide::Schema->Connect()->driver()->handle();
 
 my $sql = <<'EOF';
-SELECT COUNT(*), EXTRACT( YEAR_MONTH FROM creation_datetime ) AS ym
+SELECT EXTRACT( YEAR_MONTH FROM creation_datetime ) AS ym, COUNT(*)
   FROM Vendor
  WHERE creation_datetime >= ?
 GROUP BY ym
@@ -23,9 +23,11 @@ EOF
 
 my $rows = $dbh->selectall_arrayref(
     $sql,
+    undef,
     DateTime::Format::MySQL->format_datetime($cutoff),
 );
 
-for my $row ( @{ $row // [] } ) {
-    printf "%-4d  %s\n", @{$row};
+for my $row ( @{ $rows // [] } ) {
+    my ( $y, $m ) = $row->[0] =~ /(\d\d\d\d)(\d\d)/;
+    printf "%s-%s  %4d\n", $y, $m, $row->[1];
 }
