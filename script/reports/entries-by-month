@@ -1,0 +1,31 @@
+use strict;
+use warnings;
+
+use DateTime;
+use DateTime::Format::MySQL;
+use Getopt::Long;
+use VegGuide;
+
+my $year;
+GetOptions( 'year:i' => \$year );
+$year //= DateTime->today()->year();
+
+my $cutoff = DateTime->new( year => $year );
+
+my $dbh = VegGuide::Schema->Connect()->driver()->handle();
+
+my $sql = <<'EOF';
+SELECT COUNT(*), EXTRACT( YEAR_MONTH FROM creation_datetime ) AS ym
+  FROM Vendor
+ WHERE creation_datetime >= ?
+GROUP BY ym
+EOF
+
+my $rows = $dbh->selectall_arrayref(
+    $sql,
+    DateTime::Format::MySQL->format_datetime($cutoff),
+);
+
+for my $row ( @{ $row // [] } ) {
+    printf "%-4d  %s\n", @{$row};
+}
