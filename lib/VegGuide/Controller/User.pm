@@ -52,7 +52,7 @@ sub _set_user : Chained('/') : PathPart('user') : CaptureArgs(1) {
             },
             );
 
-        if ( $c->vg_user()->can_edit_user($user) ) {
+        if ( $c->vg_user()->can_edit_user($user) && $user->has_subscriptions() ) {
             $c->add_tab(
                 {
                     uri   => user_uri( user => $user, path => 'watch_list' ),
