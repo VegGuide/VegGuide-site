@@ -1,5 +1,4 @@
     <div class="column-header">
-      <& /lib/rounded-corners-top.mas &>
       <h2>Reviews</h2>
     </div>
 

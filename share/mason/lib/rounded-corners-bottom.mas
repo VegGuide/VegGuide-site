@@ -1,8 +1,0 @@
-<b class="rounded-corners-container">\
-% for my $n ( reverse 1..4 ) {
-<b class="rounded-corners-<% $n %>" style="border-color: <% $color %>"></b>\
-% }
-</b>
-<%args>
-$color => 'white'
-</%args>

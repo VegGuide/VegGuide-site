@@ -336,6 +336,11 @@ a.action-button-medium:visited, a.action-button-small:visited {
 
 .column-header {
     background-color: #8cc63f;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    padding-top: 3px;
 }
 
 .column-header h2 {
@@ -1002,39 +1007,6 @@ button.filter {
 
 #top-restaurants .rating {
     font-weight: bold;
-}
-
-.rounded-corners-container, .rounded-corners-container * {
-    background-color: transparent;
-    display: block;
-}
-
-.rounded-corners-container * {
-    border-style: solid;
-    border-width: 0px 1px;
-    border-color: white;
-    font-size: 1px;
-    height: 1px;
-    overflow: hidden;
-}
-
-.rounded-corners-1 {
-    border-left-width: 5px;
-    border-right-width: 5px;
-}
-
-.rounded-corners-2 {
-    border-left-width: 3px;
-    border-right-width: 3px;
-}
-
-.rounded-corners-3 {
-    border-left-width: 2px;
-    border-right-width: 2px;
-}
-
-.rounded-corners-4 {
-    height: 2px;
 }
 
 .force-clear {

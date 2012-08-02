@@ -1,6 +1,5 @@
   <div class="yui-u column">
     <div class="column-header">
-      <& /lib/rounded-corners-top.mas &>
       <h2>Recent</h2>
     </div>
 
