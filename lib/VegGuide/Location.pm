@@ -1452,7 +1452,35 @@ sub _DataFeedHandle {
 
 sub DataFeedDynamicLimit {500}
 
-sub RootLocations { $_[0]->_cached_roots }
+sub OrderedRootLocations {
+    my $class = shift;
+
+    my %roots = map { $_->name() => $_ } $class->_cached_roots();
+
+    return (
+        primary => [
+            map { $roots{$_} || () } (
+                'North America',
+                'Europe',
+                'Asia',
+                'Central America',
+                'South America',
+                'Caribbean',
+                'Australia',
+                'New Zealand',
+                'Africa',
+                'Middle East',
+                'Pacific Islands',
+            )
+        ],
+        secondary => [
+            map { $roots{$_} || () } (
+                'Airports',
+                'Internet',
+            )
+        ]
+    );
+}
 
 sub All {
     my $class = shift;

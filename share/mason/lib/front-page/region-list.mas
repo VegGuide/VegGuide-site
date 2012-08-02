@@ -4,14 +4,14 @@
     
     <div class="column-content">
       <ul>
-% for my $location ( @locations{@browse_main} ) {
+% for my $location ( @{ $locations{'primary'} } ) {
 %   my $count = $location->descendants_vendor_count();
         <li><& /lib/link/location.mas, location => $location &> (<% $count %>)</li>
 % }
       </ul>
 
       <ul class="secondary">
-% for my $location ( @locations{@browse_sec} ) {
+% for my $location ( @{ $locations{'secondary'} } ) {
 %   my $count = $location->descendants_vendor_count();
         <li><& /lib/link/location.mas, location => $location &> (<% $count %>)</li>
 % }
@@ -23,24 +23,5 @@
     </div>
 
 <%init>
-my %locations = map { $_->name() => $_ } VegGuide::Location->RootLocations();
-
-my @browse_main = grep { exists $locations{$_} } (
-    'North America',
-    'Europe',
-    'Asia',
-    'Central America',
-    'South America',
-    'Caribbean',
-    'Australia',
-    'New Zealand',
-    'Africa',
-    'Middle East',
-    'Pacific Islands',
-);
-
-my @browse_sec = grep { exists $locations{$_} } (
-    'Airports',
-    'Internet',
-);
+my %locations = VegGuide::Location->OrderedRootLocations();
 </%init>
