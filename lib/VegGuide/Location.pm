@@ -1244,6 +1244,7 @@ sub rest_data {
             path      => 'entries',
             with_host => 1,
         ),
+        entry_count => $self->open_vendor_count(),
     );
 
     if ( $p{include_related} ) {

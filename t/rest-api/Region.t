@@ -26,6 +26,7 @@ use_test_database();
         name        => 'North America',
         uri         => path_to_uri('/region/1'),
         entries_uri => path_to_uri('/region/1/entries'),
+        entry_count => 0,
     );
 
     for my $key ( sort keys %expect ) {
@@ -55,16 +56,19 @@ use_test_database();
                 name        => 'Canada',
                 uri         => path_to_uri('/region/19'),
                 entries_uri => path_to_uri('/region/19/entries'),
+                entry_count => 0,
             },
             {
                 name        => 'Mexico',
                 uri         => path_to_uri('/region/25'),
                 entries_uri => path_to_uri('/region/25/entries'),
+                entry_count => 0,
             },
             {
                 name        => 'USA',
                 uri         => path_to_uri('/region/2'),
                 entries_uri => path_to_uri('/region/2/entries'),
+                entry_count => 1,
             },
         ],
         'region has Canada, Mexico, and USA as children',
@@ -80,6 +84,7 @@ use_test_database();
         name        => 'New York City',
         uri         => path_to_uri('/region/4'),
         entries_uri => path_to_uri('/region/4/entries'),
+        entry_count => 0,
     );
 
     for my $key ( sort keys %expect ) {

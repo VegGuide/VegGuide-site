@@ -39,6 +39,7 @@ use_test_database();
         name        => 'North America',
         uri         => path_to_uri('/region/1'),
         entries_uri => path_to_uri('/region/1/entries'),
+        entry_count => 0,
     );
 
     is_deeply(

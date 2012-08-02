@@ -66,6 +66,7 @@ use_test_database();
             name        => 'Twin Cities',
             uri         => path_to_uri('/region/13'),
             entries_uri => path_to_uri('/region/13/entries'),
+            entry_count => 116,
         },
         reviews_uri => path_to_uri('/entry/557/reviews'),
         short_description =>
