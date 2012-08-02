@@ -139,10 +139,20 @@ sub _params_from_path_query {
 
 {
     my %ContentTypes = map {
-              $_ => 'application/vnd.vegguide.org-' 
+              $_ => 'application/vnd.vegguide.org-'
             . $_
             . '+json; charset=UTF-8; version=1.0.0'
-    } qw( entry entries entry-images entry-reviews region reviews user users );
+        } qw(
+        entry
+        entries
+        entry-images
+        entry-reviews
+        region
+        regions
+        reviews
+        user
+        users
+    );
 
     sub _rest_response {
         my $self   = shift;
