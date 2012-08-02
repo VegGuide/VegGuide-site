@@ -150,6 +150,7 @@ sub _params_from_path_query {
         region
         regions
         reviews
+        root-regions
         user
         users
     );

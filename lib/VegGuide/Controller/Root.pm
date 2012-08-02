@@ -19,7 +19,9 @@ BEGIN { extends 'VegGuide::Controller::Base'; }
 
 __PACKAGE__->config()->{namespace} = '';
 
-sub index : Path('/') : Args(0) {
+sub index : Path('/') : Args(0) : ActionClass('+VegGuide::Action::REST') { }
+
+sub index_GET_html {
     my $self = shift;
     my $c    = shift;
 
@@ -78,6 +80,25 @@ sub index : Path('/') : Args(0) {
     $c->stash()->{news_item} = VegGuide::NewsItem->MostRecent();
 
     $c->stash()->{template} = '/index';
+}
+
+sub index_GET {
+    my $self = shift;
+    my $c    = shift;
+
+    my %roots = VegGuide::Location->OrderedRootLocations();
+
+    $self->_rest_response(
+        $c,
+        'root-regions',
+        {
+            regions => {
+                primary => [ map { $_->rest_data() } @{ $roots{primary} } ],
+                secondary =>
+                    [ map { $_->rest_data() } @{ $roots{secondary} } ],
+            },
+        },
+    );
 }
 
 sub recent : Local : Args(0) {
