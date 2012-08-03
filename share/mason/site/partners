@@ -1,8 +1,89 @@
 <p>
-  All we currently ask of our partner organizations is that they promote
-  VegGuide.org where it makes sense. This means linking to it from your
-  website(s) as well as mentioning it in print literature the next time your
-  revise any relevant literature.
+  This page describes the responsibilities and benefits of becoming a
+  VegGuide.org partner organization. It also provides guidelines linking and
+  messaging.
+</p>
+
+<h2>What You Get</h2>
+
+<p>
+  The most important thing you get is the opportunity to take credit for and
+  promote a great resource for helping people eat fewer animal products. This
+  site exists to help people as they transition towards a plant-based diet, as
+  well as to support existing vegetarians and vegans.
+</p>
+
+<p>
+  We will add your organization's logo and a link to your site on the bottom
+  of every page. Logos are currently in alphabetical order, though this may
+  change for aesthetic reasons, depending on the shape and size of each
+  partner's logo.
+</p>
+
+<p>
+  Compassionate Action for Animals is committed to keeping VegGuide.org
+  ad-free and not-for-profit. This means that we will never show ads on the
+  site. We will never offer to promote specific entries in exchange for
+  funds. We will never ask users to pay for access to features or data. We do,
+  however, ask users to donate, and those donations (such as they are) come to
+  Compassionate Action for Animals.
+</p>
+
+<p>
+  The site's source code is licensed under
+  the <a href="http://www.perlfoundation.org/artistic_license_2_0">Artistic
+  License 2.0</a>. This means that the site's source code is freely available
+  for anyone to study, modify, and share. The site's data is licensed under
+  the <a href="http://creativecommons.org/licenses/by-sa/3.0/us/">Creative
+  Commons Attribution-ShareAlike 3.0 United States</a> license. Like the
+  source code, all of the site's data is available for study, modification, or
+  sharing. The only exception is personal information about our users, which
+  is not shared with anyone except site admins.
+</p>
+
+<h2>Responsibilities</h2>
+
+<p>
+  The main thing we currently ask of our partner organizations is that they
+  promote VegGuide.org where it makes sense. This means linking to it from
+  your website(s) as well as mentioning it in print literature the next time
+  your revise any relevant literature.
+</p>
+
+<p>
+  Partners are also invited to participate in the governance of the site. This
+  may include decisions about how to promote the site, when to spend money on
+  it, and where that money comes from.
+</p>
+
+<h3>Financial Commitment (there is none)</h3>
+
+<p>
+  Being a partner organization requires no financial commitment on your
+  part. Currently, the site has no ongoing operating costs. If this changes in
+  the future, we may ask you to contribute to hosting costs, but there will
+  not be an obligation to do so. Operating costs are unlikely to ever exceed
+  $1,000 per year in total.
+</p>
+
+<p>
+  In the future, we may want to raise money to more actively promote the site,
+  pay for design work, hire programmers, etc. By becoming a partner, you can
+  have a voice in how we raise money and how we spend that money.
+</p>
+
+<h3>Joining the Cabal</h3>
+
+<p>
+  The Cabal mailing list is a very low traffic list used for discussing
+  decisions about the site. Partner organizations are welcome to have a
+  representative on the list, but this is not required.
+</p>
+
+<p>
+  The Cabal discusses topics like new partners, site policies, etc. This is
+  where decisions about the site are made. Traffic is currently very low,
+  usually 5-15 messages per month.
 </p>
 
 <h2>Linking</h2>
@@ -12,7 +93,7 @@
   may <strong>also</strong> choose to link to a region listing with entries,
   like <a href="/region/13">the Twin Cities region</a>. Please don't link to a
   region that just contains other regions, like North America. This makes for
-  a very confusing first experience.
+  a very confusing first user experience.
 </p>
 
 <h2>Messaging</h2>
@@ -20,8 +101,7 @@
 <p>
   We encourage partner organizations to talk about the site as something they
   own. Say "our online guide to ... VegGuide.org". We want your supporters to
-  view the site as something that your organization is completely part of, not
-  as a separate project.
+  view the site as part of your advocacy work.
 </p>
 
 <p>
@@ -54,45 +134,6 @@
   useful for everyone.
 </p>
 
-<h2>Financial Commitment (there is none)</h2>
-
-<p>
-  Being a partner organization requires no financial commitment on your
-  part. Currently, the site has no ongoing operating costs. If this changes in
-  the future, we may ask you to contribute to hosting costs, but there will
-  not be an obligation to do so. Operating costs are unlikely to ever exceed
-  $1,000 per year in total.
-</p>
-
-<p>
-  Compassionate Action for Animals has printed some VegGuide promo cards in
-  the past, and may print more. If you would like some of your own, we could
-  do a larger print run for partners who want to contribute to the cost of
-  printing or you could take the design and print it yourself.
-</p>
-
-<h2>What You Get</h2>
-
-<p>
-  We will add your organization's logo and a link to your site on the bottom
-  of every page. Logos are currently in alphabetical order, though this may
-  change for aesthetic reasons, depending on the shape and size of each
-  partner's logo.
-</p>
-
-<h2>Joining the Cabal</h2>
-
-<p>
-  The Cabal mailing list is a very low traffic list used for discussing
-  decisions about the site. Partner organizations are welcome to have a
-  representative on the list, but this is not required.
-</p>
-
-<p>
-  The Cabal discusses topics like new partners, site policies, etc. Traffic is
-  very low, usually 5-15 messages per month.
-</p>
-
 <%method page_title>
-VegGuide.org Partner Organizations
+Being a VegGuide Partner Organization
 </%method>
