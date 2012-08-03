@@ -358,6 +358,19 @@ sub user : Chained('_set_user') : PathPart('') : Args(0) :
     ActionClass('+VegGuide::Action::REST') {
 }
 
+sub user_GET {
+    my $self = shift;
+    my $c    = shift;
+
+    my $user = $c->stash()->{user};
+
+    $self->_rest_response(
+        $c,
+        'user',
+        $user->rest_data(),
+    );
+}
+
 sub user_GET_html {
     my $self = shift;
     my $c    = shift;
