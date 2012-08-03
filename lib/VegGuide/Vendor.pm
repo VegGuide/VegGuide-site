@@ -2341,8 +2341,7 @@ sub rest_data {
     }
 
     if ( $self->close_date() ) {
-        $rest{close_date} = DateTime::Format::RFC3339->format_datetime(
-            $self->close_date_object()->clone()->set_time_zone('UTC') );
+        $rest{close_date} = $self->close_date_object()->ymd('-');
     }
 
     @rest{ 'weighted_rating', 'rating_count' }

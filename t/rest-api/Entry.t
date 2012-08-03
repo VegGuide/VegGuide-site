@@ -275,4 +275,24 @@ use_test_database();
     }
 }
 
+{
+    my $response = request( rest_request( GET => '/entry/954' ) );
+
+    is( $response->code(), '200', 'got a 200 response' );
+
+    is(
+        $response->header('Content-Type'),
+        'application/vnd.vegguide.org-entry+json; charset=UTF-8; version=0.0.1',
+        'got the right RESTful content type'
+    );
+
+    my $entry = json_ok($response);
+
+    is(
+        $entry->{close_date},
+        '2009-07-14',
+        'close_date is returned as just a date'
+    );
+}
+
 done_testing();
