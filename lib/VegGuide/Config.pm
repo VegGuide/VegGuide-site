@@ -84,10 +84,16 @@ use Sys::Hostname qw( hostname );
 sub VarLibDir {
     my $class = shift;
 
-    return $class->IsProduction()
-        ? '/var/lib/vegguide'
-        : File::Spec->catdir( __PACKAGE__->_HomeDir(), '.vegguide', 'var',
-        'lib' );
+    return
+          $class->IsProduction() ? '/var/lib/vegguide'
+        : $ENV{HARNESS_ACTIVE}   ? dirname( $INC{'VegGuide/Config.pm'} )
+        . '/../../t/share'
+        : File::Spec->catdir(
+        __PACKAGE__->_HomeDir(),
+        '.vegguide',
+        'var',
+        'lib',
+        );
 }
 
 sub ShareDir {
