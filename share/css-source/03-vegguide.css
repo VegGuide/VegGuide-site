@@ -48,6 +48,11 @@ ul li {
     margin-left: 1.1em;
 }
 
+ul li ul {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
 .no-top-margin {
     margin-top: 0;
 }
@@ -654,13 +659,13 @@ div.pagination form select, div.pagination form select option {
     font-size: 80%;
 }
 
-.standard-table {
+.standard-table, .docs-table {
     border-collapse: collapse;
     margin: 0.5em 0 1em 0;
     width: 100%;
 }
 
-.standard-table th {
+.standard-table th, .docs-table th {
     background-color: #8cc63f;
     border-right: 1px dotted white;
     color: white;
@@ -671,7 +676,7 @@ div.pagination form select, div.pagination form select option {
     text-align: left;
 }
 
-.standard-table th, .standard-table td {
+.standard-table th, .standard-table td, .docs-table th, .docs-table td {
     border: none;
     vertical-align: top;
 }
@@ -680,16 +685,16 @@ div.pagination form select, div.pagination form select option {
     padding: 0.5em 0.4em;
 }
 
-.standard-table tbody tr:hover {
+.standard-table tbody tr:hover, .docs-table tbody tr:hover, .docs-table tbody tr:hover:nth-child(even) {
     background-color: #ddd;
 }
 
-.standard-table tr {
+.standard-table tr, .docs-table tr {
     border-left: 1px dotted #8cc63f;
     border-right: 1px dotted #8cc63f;
 }
 
-.standard-table thead {
+.standard-table thead, .docs-table thead {
     border-top: 1px dotted #8cc63f;
     border-bottom: 2px solid #8cc63f;
 }
@@ -705,6 +710,29 @@ div.pagination form select, div.pagination form select option {
 
 .standard-table tr.even {
     background-color: #f4f4f4;
+}
+
+.docs-table {
+    border-bottom: 1px dotted #8cc63f;
+}
+
+.docs-table tbody tr:nth-child(even) {
+    background-color: #f4f4f4;
+}
+
+.docs-table th {
+    white-space: nowrap;
+}
+
+.toc h2 {
+    font-size: 100%;
+    font-variant: small-caps;
+    margin-bottom: 0.5em;
+    margin-top: 0;
+}
+
+.toc ul {
+    margin-top: 0;
 }
 
 #entries-table .name {

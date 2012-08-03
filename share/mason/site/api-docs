@@ -1,0 +1,448 @@
+<div class="yui-ge">
+  <div class="yui-u first">
+    <% $toc->html_for_document_body( $m->request_comp()->name() ) | n %>
+  </div>
+  <div class="yui-u toc">
+    <h2>Table of Contents</h2>
+
+    <% $toc->html_for_toc() | n %>
+  </div>
+</div>
+
+<%init>
+my $docs = $m->scomp('.docs');
+
+my $toc = Text::TOC::HTML->new();
+$toc->add_file(
+    file    => $m->request_comp()->name(),
+    content => $docs,
+);
+</%init>
+
+<%def .docs>
+<p>
+  VegGuide currently supports a read-only REST API. This API allows you to
+  retrieve information about entries, regions, and users using a well-defined
+  set of URIs. Currently, all information is returned as JSON.
+</p>
+
+<h2>Versioning</h2>
+
+<p>
+  This document describes version <strong>0.0.1</strong> of the VegGuide REST
+  API. This version number follows the <a href="http://semver.org/">Semantic
+  Versioning Specification</a>. Since the major version number is
+  currently <strong>0</strong>, the API is still in the experimental phase,
+  and may change a fair bit before it is declared stable.
+</p>
+
+<p>
+  A new URI endpoint is considered a minor version change. Adding an
+  additional key to an existing document is also a minor version
+  change. Removing a key or changing an the type of an existing key in a
+  document is a major version change. Removing a URI endpoint or changing it's
+  document type entirely is a major version change.
+</p>
+
+<h2>Content Types</h2>
+
+<p>
+  All responses from this REST API are valid JSON documents. However, rather
+  than using a generic <em>application/json</em> <strong>Content-Type</strong>
+  header, we use a content type that specifies the data in the response.
+</p>
+
+<p>
+  For example, information about an entry is
+  returned <em>application/vnd.vegguide.org-entry+json; charset=UTF-8;
+  version=1.0.0</em>. The first part of the content type tells you that the
+  document contains information on a single entry. The rest indicates the
+  charset and version.
+</p>
+
+<p>
+  In the future, the minor and patch numbers of the version may change without
+  warning. If we ever need to update the major version number, we will almost
+  certainly honor the <strong>Accept</strong> header if it requests an older
+  (major) version number.
+</p>
+
+<p>
+  Each document describes either a single resource or a collection of
+  resources. Typically, these resources will be regions, entries, or
+  users. Depending on the document type, a resource may in turn contain
+  information about related resources. For example, a region resource may
+  include information about the entries it contains, or an entry may contain
+  information about the user who created it.
+</p>
+
+<h2>Core Data Structures</h2>
+
+<p>
+  The follow data types appear in many responses, and the documentation will
+  reference them rather than repeat their definitions over and over. Whenever
+  a data structure includes a URI, that URI will contain the full URI,
+  including scheme and hostname. The core data structures are always a JSON
+  object with a set of well-defined keys and values.
+</p>
+
+<p>
+  Some structures include both English data and localized data. The English
+  data should always be in the Latin-1 subset of Unicode. The localized data
+  may be in any script. In most cases, you can figure out the language of the
+  localized data by looking at the locale associated with the region.
+</p>
+
+<p>
+  If a key's value would be null, an empty string, or an empty array, it is
+  always omitted.
+</p>
+
+<a name="Region"></a>
+<h3>Region</h3>
+
+<p>
+  A region can be anything from a continent to a city. We also have some
+  special regions like "Internet", "Airports", or a specific airport like "MSP
+  - Twin Cities".
+</p>
+
+<p>
+  A region can contain entries, child regions, or in some rare cases, both. A
+  region data structure contains the following keys:
+</p>
+
+<table class="docs-table">
+  <thead>
+    <tr>
+      <th>Key name</th>
+      <th>Description</th>
+      <th>Always present?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>name</td>
+      <td>The name of the region in English.</td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>localized_name</td>
+      <td>The name of the region in the region's locale, if it has one.</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>is_country</td>
+      <td>A boolean indicating whether or not the region is a country.</td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>locale</td>
+      <td>
+        A locale code like "en_CA" or "zh_TW". This is the locale for any
+        localized data associated with the region's entries. Elements of the
+        locale code are separated by underscores ("_").
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>time_zone</td>
+      <td>
+        The name of the time zone associated with this region. This will be an
+        <a href="http://www.iana.org/time-zones/">IANA time zone</a> name like
+        "America/Chicago" or "Asia/Taipei".
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>entry_count</td>
+      <td>
+        The number of entries in the region. This only include entries which
+        are not marked closed. Also note that this does not recurse into the
+        child regions for this region. This may be zero.
+      </td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>uri</td>
+      <td>
+        The canonical URI for the region. This URI always returns the full
+        region data structure for the given region.
+      </td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>entries_uri</td>
+      <td>
+        A URI which returns the list of entries for the region.
+      </td>
+      <td>&#x2714;</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+  The following keys are only present when the data structure includes related
+  data.
+</p>
+
+<table class="docs-table">
+  <thead>
+    <tr>
+      <th>Key name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>parent</td>
+      <td>
+        The region's parent region, if it has one. This is a single Region
+        data structure without any related data. It may not be present if the
+        region is a top-level region.
+      </td>
+    </tr>
+    <tr>
+      <td>children</td>
+      <td>
+        An array of child regions contained in this region. For example, the
+        "USA" region contains the "Minnesota" and "New York" regions, among
+        others. The child regions are themselves Region data structures, but
+        they do not inclue any related data. This key may not be present if
+        the region does not have any child regions.
+      </td>
+    </tr>
+    <tr>
+      <td>comments</td>
+      <td>
+        An array of comment data structures. Comments for a region typically
+        contain some information about veg eating in the region. They may also
+        contain references to other websites of interest for the region. See
+        below for details on the <a href="#Comment">Comment data
+        structure</a>. This key may not be present if the region does not have
+        any comments.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Entry</h3>
+
+<p>
+  An entry is a single place in the database, such as a restaurant or grocery.
+</p>
+
+<table class="docs-table">
+  <thead>
+    <tr>
+      <th>Key name</th>
+      <th>Description</th>
+      <th>Always present?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>name</td>
+      <td>The entry's name in English.</td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>localized_name</td>
+      <td>The name of the entry in the language of region's locale, if it has one.</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>short_description</td>
+      <td>A short description of the entry.</td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>localized_short_description</td>
+      <td>A short description in the language of the region's locale.</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>long_description</td>
+      <td>
+        A longer description of the entry. This may
+        include <a href="#wikitext">VegGuide wikitext markup</a>.
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>localized_long_description</td>
+      <td>
+        A long description in the language of the region's locale. This may
+        include <a href="#wikitext">VegGuide wikitext markup</a>.
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>
+        address1,<br />
+        address2,<br />
+        neighborhood,<br />
+        city,<br />
+        region,<br />
+        postal_code
+      </td>
+      <td>
+        Address information for the entry. The <em>region</em> is the entry's
+        state or province.
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>
+        localized_address1,<br />
+        localized_address2,<br />
+        localized_neighborhood,<br />
+        localized_city,<br />
+        localized_region,<br />
+        postal_code
+      </td>
+      <td>Localized address information for the entry.</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>directions</td>
+      <td>Directions to the location of the entry.</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>phone</td>
+      <td>
+        A phone number for the entry. This will not be in any specific format,
+        and may not always include a country prefix.
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>website</td>
+      <td>
+        A website for the entry. This may be a Facebook page in some cases.
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>
+        veg_level,<br />
+        veg_level_description
+      </td>
+      <td>
+        <p>
+          How veg-friendly the entry is, from 0-5. The levels are:
+        </p>
+
+        <ul>
+% for my $level (0..5) {
+          <li><strong><% $level %></strong> - <% VegGuide::Vendor->VegLevelDescription($level) %></li>
+% }
+        </ul>
+
+        <p>
+          Level 0 and level 3 are both very rare in our database.
+        </p>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>allows_smoking</td>
+      <td>
+        A boolean indicating whether or not smoking is allows at this
+        place. Note that this field can be <em>null</em>, which means that we
+        do not know whether or not smoking is allowed.
+      </td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>is_wheelchair_accessible</td>
+      <td>
+        A boolean indicating whether or not this entry is
+        wheelchair-accessible. This field can be <em>null</em>, which means
+        that we do not know whether or not it is accessible.
+      </td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>accepts_reservations</td>
+      <td>
+        A boolean indicating whether or not this entry accepts
+        reservations. This field can be <em>null</em>, which means that we do
+        not know whether or not it accepts reservations.
+      </td>
+      <td>&#x2714;</td>
+    </tr>
+
+
+<!--
+allows_smoking              
+is_wheelchair_accessible    
+accepts_reservations        
+creation_datetime           
+last_modified_datetime      
+last_featured_date          
+user_id                     
+location_id                 
+price_range_id              
+localized_long_description  
+latitude                    
+longitude                   
+is_cash_only                
+close_date                  
+canonical_address           
+external_unique_id          
+vendor_source_id            
+sortable_name               
+-->
+  </tbody>
+</table>
+
+<h2>Entry Points</h2>
+
+<p>
+  The VegGuide REST API defines several well known entry points. These URIs
+  are guaranteed to exist, and their responses will generally contain links to
+  other site URIs.
+</p>
+
+<p>
+  Many of the URIs that the site offers include a numeric id, for
+  example <em>/region/13</em>. You are strongly encouraged <em>not</em> to
+  rely on the stability of these numbers. Instead, use one of the defined
+  entry points to find the items you are looking for.
+</p>
+
+<h3>Top-level URI</h3>
+
+<ul>
+  <li>
+    <strong>URI</strong>: <% $base_uri %>
+  </li>
+  <li>
+    <strong>Type</strong>: application/vnd.vegguide.org-regions+json
+  </li>
+</ul>
+
+<p>
+  The top-level URI returns a document containing a list of the top-level
+  regions.
+</p>
+
+<%init>
+my $uri = $c->request()->uri();
+
+my %port = $uri->port() != 80
+    && $uri->port() != 443 ? ( port => $uri->port() ) : ();
+
+my $base_uri = uri(
+    scheme => $uri->scheme(),
+    host   => $uri->host(),
+    %port,
+);
+</%init>
+</%def>
+
+<%method page_title>
+VegGuide.org REST API
+</%method>

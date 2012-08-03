@@ -13,6 +13,8 @@ use parent 'Catalyst::View::Mason';
     use Lingua::EN::Inflect qw( PL );
     use List::AllUtils qw( all any first );
     use Math::Round qw( nearest );
+    use Text::TOC 0.09;
+    use Text::TOC::HTML;
     use URI::FromHash qw( uri );
     use VegGuide::Geocoder;
     use VegGuide::JSON;
