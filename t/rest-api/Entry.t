@@ -64,8 +64,11 @@ use_test_database();
         sortable_name => 'Chipotle',
         uri           => path_to_uri('/entry/557'),
         user          => {
-            name => 'GBS',
-            uri  => path_to_uri('/user/112'),
+            name                  => 'GBS',
+            uri                   => path_to_uri('/user/112'),
+            website               => 'http://www.ExploreVeg.org',
+            veg_level             => 0,
+            veg_level_description => 'not telling',
         },
         veg_level             => 2,
         veg_level_description => 'Vegan-Friendly',
@@ -95,6 +98,8 @@ use_test_database();
 
     is( scalar @{$reviews}, 4, 'got 4 reviews back' );
 
+    delete $_->{user}{bio} for @{$reviews};
+
     my $expect = [
         {
             body => {
@@ -105,8 +110,10 @@ use_test_database();
             last_modified_datetime => '2004-12-15T18:51:41Z',
             rating                 => 4,
             user                   => {
-                name => 'Alison Edlund',
-                uri  => path_to_uri('/user/770'),
+                name                  => 'Alison Edlund',
+                uri                   => path_to_uri('/user/770'),
+                veg_level             => 0,
+                veg_level_description => 'not telling',
             }
         },
         {
@@ -118,8 +125,11 @@ use_test_database();
             last_modified_datetime => '2004-06-28T23:32:28Z',
             rating                 => 3,
             user                   => {
-                name => 'vaxjo',
-                uri  => path_to_uri('/user/225'),
+                name                  => 'vaxjo',
+                uri                   => path_to_uri('/user/225'),
+                website               => 'http://jarrin.net',
+                veg_level             => 4,
+                veg_level_description => 'vegan',
             }
         },
         {
@@ -131,8 +141,10 @@ use_test_database();
             last_modified_datetime => '2004-06-03T18:16:23Z',
             rating                 => 2,
             user                   => {
-                name => 'Emily K',
-                uri  => path_to_uri('/user/446'),
+                name                  => 'Emily K',
+                uri                   => path_to_uri('/user/446'),
+                veg_level             => 0,
+                veg_level_description => 'not telling',
             }
         },
         {
@@ -141,8 +153,10 @@ use_test_database();
             rating                 => 1,
             review                 => undef,
             user                   => {
-                name => 'Nicholas',
-                uri  => path_to_uri('/user/2370'),
+                name                  => 'Nicholas',
+                uri                   => path_to_uri('/user/2370'),
+                veg_level             => 0,
+                veg_level_description => 'not telling',
             }
         }
     ];
@@ -169,6 +183,8 @@ use_test_database();
 
     is( scalar @{$images}, 4, 'got 4 images back' );
 
+    delete $_->{user}{bio} for @{$images};
+
     my $expect = [
         {
             caption     => undef,
@@ -184,6 +200,9 @@ use_test_database();
             user => {
                 name => 'Admin',
                 uri  => path_to_uri('/user/1'),
+                website               => 'http://www.vegguide.org',
+                veg_level             => 4,
+                veg_level_description => 'vegan',
             },
             width => 250
         },
@@ -201,6 +220,9 @@ use_test_database();
             user => {
                 name => 'Admin',
                 uri  => path_to_uri('/user/1'),
+                website               => 'http://www.vegguide.org',
+                veg_level             => 4,
+                veg_level_description => 'vegan',
             },
             width => 533
         },
@@ -216,8 +238,11 @@ use_test_database();
             original_width => 1600,
             uri  => path_to_uri('/entry-images/37/37-4334-large.jpg'),
             user => {
-                name => 'conde.kedar',
-                uri  => path_to_uri('/user/4795'),
+                name                  => 'conde.kedar',
+                uri                   => path_to_uri('/user/4795'),
+                website               => 'http://www.exploreveg.org',
+                veg_level             => 4,
+                veg_level_description => 'vegan',
             },
             width => 533
         },
@@ -233,8 +258,10 @@ use_test_database();
             original_width => 3072,
             uri  => path_to_uri('/entry-images/37/37-5563-large.jpg'),
             user => {
-                name => 'Danielle S',
-                uri  => path_to_uri('/user/8070'),
+                name                  => 'Danielle S',
+                uri                   => path_to_uri('/user/8070'),
+                veg_level             => 4,
+                veg_level_description => 'vegan',
             },
             width => 533
         }
@@ -295,7 +322,6 @@ use_test_database();
     );
 }
 
-
 {
     my $response = request( rest_request( GET => '/entry/870' ) );
 
@@ -320,6 +346,5 @@ use_test_database();
         'rating_count is 0 for this entry'
     );
 }
-
 
 done_testing();

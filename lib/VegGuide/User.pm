@@ -1161,11 +1161,22 @@ sub rest_data {
 
     my %rest = (
         name => $self->real_name(),
-        uri  => user_uri(
+        veg_level             => $self->how_veg(),
+        veg_level_description => $self->veg_level_description(),
+        uri                   => user_uri(
             user      => $self,
             with_host => 1,
         ),
     );
+
+    if ( $self->bio() ) {
+        $rest{bio} = VegGuide::Util::text_to_html( text => $self->bio() );
+    }
+
+    if ( my $uri = $self->home_page() ) {
+        $uri = 'http://' . $uri unless $uri =~ m{http://};
+        $rest{website} = $uri;
+    }
 
     if ( $self->has_image() ) {
 
@@ -1194,6 +1205,8 @@ sub rest_data {
             },
         };
     }
+
+    delete $rest{$_} for grep { !defined $rest{$_} } keys %rest;
 
     return \%rest;
 }

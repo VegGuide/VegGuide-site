@@ -118,8 +118,10 @@ use_test_database();
                 },
                 last_modified_datetime => '2008-03-22T18:36:33Z',
                 user                   => {
-                    name => 'banu',
-                    uri  => path_to_uri('/user/4126'),
+                    name                  => 'banu',
+                    uri                   => path_to_uri('/user/4126'),
+                    veg_level             => 0,
+                    veg_level_description => 'not telling',
                 },
             },
             {
@@ -130,8 +132,10 @@ use_test_database();
                 },
                 last_modified_datetime => '2005-04-27T15:59:02Z',
                 user                   => {
-                    name => 'inah',
-                    uri  => path_to_uri('/user/18'),
+                    name                  => 'inah',
+                    uri                   => path_to_uri('/user/18'),
+                    veg_level             => 0,
+                    veg_level_description => 'not telling',
                 },
             },
         ],
