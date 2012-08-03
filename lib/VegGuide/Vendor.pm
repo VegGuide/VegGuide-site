@@ -2324,7 +2324,11 @@ sub rest_data {
         $rest{hours} = [ $self->hours_as_descriptions() ];
     }
 
-    $rest{website} = delete $rest{home_page};
+    if ( my $uri = delete $rest{home_page} ) {
+        $uri = 'http://'  . $uri
+            unless $uri =~ m{http://};
+        $rest{website} = $uri;
+    }
 
     $rest{veg_level_description} = $self->veg_description();
 
@@ -2356,6 +2360,15 @@ sub rest_data {
     if ( $p{include_related} ) {
         $rest{region} = $self->location()->rest_data( include_related => 0 );
     }
+
+    my %troolean = map { $_ => 1 } qw(
+        allows_smoking
+        is_wheelchair_accessible
+        accepts_reservations
+    );
+
+    delete $rest{$_}
+        for grep { !$troolean{$_} } grep { !defined $rest{$_} } keys %rest;
 
     return \%rest;
 }

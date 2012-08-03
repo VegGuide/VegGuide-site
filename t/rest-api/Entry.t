@@ -25,14 +25,11 @@ use_test_database();
     my $expect = {
         accepts_reservations => 0,
         address1             => '29 5th St. West',
-        address2             => undef,
         allows_smoking       => 0,
         categories           => ['Restaurant'],
         city                 => 'Saint Paul',
-        close_date           => undef,
         creation_datetime    => '2004-03-03T22:20:17Z',
         cuisines             => ['Mexican'],
-        directions           => undef,
         hours                => [
             {
                 days  => 'Mon - Fri',
@@ -43,27 +40,20 @@ use_test_database();
                 hours => ['closed']
             }
         ],
-        is_cash_only                => 0,
-        is_wheelchair_accessible    => undef,
-        last_modified_datetime      => '2008-04-30T17:02:52Z',
-        localized_address1          => undef,
-        localized_address2          => undef,
-        localized_city              => undef,
-        localized_long_description  => undef,
-        localized_name              => undef,
-        localized_neighborhood      => undef,
-        localized_region            => undef,
-        localized_short_description => undef,
+        is_cash_only             => 0,
+        is_wheelchair_accessible => undef,
+        last_modified_datetime   => '2008-04-30T17:02:52Z',
         long_description =>
             q{Chipotle restaurants have been sprouting up across the Twin Cities everywhere you turn.  Run like a Subway, you get to choose which toppings go on your burrito and which stay off.  A delicious vegetarian burrito/fajita is offered that can include roasted green peppers, black beans, rice, a choice of various salsas, guacomole, and shredded lettuce (for non-vegans there is also sour cream and shredded cheese).  One of these monsters is enough to fill anyone's appetite and they come down to a mere $5.  Beer and fountain drinks are available, along with nachos and other appetizer type dishes.},
         name         => 'Chipotle',
-        neighborhood => undef,
         phone        => '651-291-5411',
         postal_code  => 55102,
         price_range  => '$ - inexpensive',
         rating_count => 4,
         region       => {
             name        => 'Twin Cities',
+            is_country  => 0,
+            time_zone   => 'America/Chicago',
             uri         => path_to_uri('/region/13'),
             entries_uri => path_to_uri('/region/13/entries'),
             entry_count => 116,
@@ -79,7 +69,7 @@ use_test_database();
         },
         veg_level             => 2,
         veg_level_description => 'Vegan-Friendly',
-        website               => 'www.chipotle.com',
+        website               => 'http://www.chipotle.com',
         weighted_rating       => 2.9,
     };
 
@@ -255,6 +245,34 @@ use_test_database();
         $expect,
         'got expected data back for images'
     );
+}
+
+{
+    my $response = request( rest_request( GET => '/entry/997' ) );
+
+    is( $response->code(), '200', 'got a 200 response' );
+
+    is(
+        $response->header('Content-Type'),
+        'application/vnd.vegguide.org-entry+json; charset=UTF-8; version=0.0.1',
+        'got the right RESTful content type'
+    );
+
+    my $entry = json_ok($response);
+
+    for my $key (
+        qw( accepts_reservations allows_smoking is_wheelchair_accessible )) {
+
+        ok(
+            exists $entry->{$key},
+            "$key key exists in response"
+        );
+
+        is(
+            $entry->{$key}, undef,
+            "Got null for $key key"
+        );
+    }
 }
 
 done_testing();
