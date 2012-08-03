@@ -767,6 +767,8 @@ sub time_zone {
         my $tz = $l->time_zone_name;
         return $tz if $tz;
     }
+
+    return;
 }
 
 sub locale {
@@ -1234,8 +1236,12 @@ sub rest_data {
     );
 
     my %rest = (
-        name => $self->name(),
-        uri  => region_uri(
+        name           => $self->name(),
+        localized_name => $self->localized_name(),
+        is_country => $self->is_country(),
+        ( $self->locale() ? ( locale => $self->locale()->locale_code() ) : () ),
+        ( $self->time_zone() ? ( time_zone => $self->time_zone() ) : () ),
+        uri => region_uri(
             location  => $self,
             with_host => 1,
         ),
@@ -1262,6 +1268,8 @@ sub rest_data {
             push @{ $rest{comments} }, $comment->rest_data();
         }
     }
+
+    delete $rest{$_} for grep { ! defined $rest{$_} } keys %rest;
 
     return \%rest;
 }

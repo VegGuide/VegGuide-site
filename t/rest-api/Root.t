@@ -37,6 +37,7 @@ use_test_database();
 
     my %expect = (
         name        => 'North America',
+        is_country  => 0,
         uri         => path_to_uri('/region/1'),
         entries_uri => path_to_uri('/region/1/entries'),
         entry_count => 0,

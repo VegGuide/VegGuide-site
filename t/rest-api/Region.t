@@ -54,18 +54,22 @@ use_test_database();
         [
             {
                 name        => 'Canada',
+                is_country  => 1,
                 uri         => path_to_uri('/region/19'),
                 entries_uri => path_to_uri('/region/19/entries'),
                 entry_count => 0,
             },
             {
                 name        => 'Mexico',
+                is_country  => 1,
+                locale      => 'es_MX',
                 uri         => path_to_uri('/region/25'),
                 entries_uri => path_to_uri('/region/25/entries'),
                 entry_count => 0,
             },
             {
                 name        => 'USA',
+                is_country  => 1,
                 uri         => path_to_uri('/region/2'),
                 entries_uri => path_to_uri('/region/2/entries'),
                 entry_count => 1,
@@ -82,6 +86,8 @@ use_test_database();
 
     my %expect = (
         name        => 'New York City',
+        is_country  => 0,
+        time_zone   => 'America/New_York',
         uri         => path_to_uri('/region/4'),
         entries_uri => path_to_uri('/region/4/entries'),
         entry_count => 0,
