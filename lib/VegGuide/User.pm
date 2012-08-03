@@ -23,7 +23,7 @@ use VegGuide::Cursor::UserWithAggregate;
 use VegGuide::Email;
 use VegGuide::Image;
 use VegGuide::Location;
-use VegGuide::SiteURI qw( user_uri );
+use VegGuide::SiteURI qw( static_uri user_uri );
 use VegGuide::UserActivityLog;
 use VegGuide::User::Guest;
 use VegGuide::Util qw( string_is_empty );
@@ -1167,8 +1167,33 @@ sub rest_data {
         ),
     );
 
-    $rest{image_uri} = $self->small_image_uri()
-        if $self->has_image();
+    if ( $self->has_image() ) {
+
+        # The small user image is closer to the mini vendor image. Similarly,
+        # the large user image is closer to the small vendor image. We want to
+        # use the same keys for all types of images.
+        $rest{image} = {
+            mime_type =>
+                VegGuide::Image->new( file => $self->small_image_path() )
+                ->type(),
+            mini_uri => static_uri(
+                path      => $self->small_image_uri(),
+                with_host => 1,
+            ),
+            mini_dimensions => {
+                height => $self->small_image_height(),
+                width  => $self->small_image_width(),
+            },
+            small_uri        => static_uri(
+                path      => $self->large_image_uri(),
+                with_host => 1,
+            ),
+            small_dimensions => {
+                height => $self->large_image_height(),
+                width  => $self->large_image_width(),
+            },
+        };
+    }
 
     return \%rest;
 }
