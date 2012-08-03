@@ -1,7 +1,7 @@
 <p>
   This page describes the responsibilities and benefits of becoming a
-  VegGuide.org partner organization. It also provides guidelines linking and
-  messaging.
+  VegGuide.org partner organization. It also provides guidelines for linking
+  and messaging.
 </p>
 
 <h2>What You Get</h2>
@@ -14,11 +14,13 @@
 </p>
 
 <p>
-  We will add your organization's logo and a link to your site on the bottom
-  of every page. Logos are currently in alphabetical order, though this may
-  change for aesthetic reasons, depending on the shape and size of each
-  partner's logo.
+  All partner organization's logos are visible on the bottom of every page,
+  and logos are linked to the relevant website. Logos are currently in
+  alphabetical order, though this may change for aesthetic reasons, depending
+  on the shape and size of each partner's logo.
 </p>
+
+<h2>Our Commitments to Partners</h2>
 
 <p>
   Compassionate Action for Animals is committed to keeping VegGuide.org
@@ -39,6 +41,11 @@
   source code, all of the site's data is available for study, modification, or
   sharing. The only exception is personal information about our users, which
   is not shared with anyone except site admins.
+</p>
+
+<p>
+  Compassionate Action for Animals is committed to keeping the site's source
+  code and data open and freely available.
 </p>
 
 <h2>Responsibilities</h2>
@@ -62,7 +69,7 @@
   Being a partner organization requires no financial commitment on your
   part. Currently, the site has no ongoing operating costs. If this changes in
   the future, we may ask you to contribute to hosting costs, but there will
-  not be an obligation to do so. Operating costs are unlikely to ever exceed
+  not be an obligation to do so. Hosting costs are unlikely to ever exceed
   $1,000 per year in total.
 </p>
 
@@ -75,9 +82,9 @@
 <h3>Joining the Cabal</h3>
 
 <p>
-  The Cabal mailing list is a very low traffic list used for discussing
-  decisions about the site. Partner organizations are welcome to have a
-  representative on the list, but this is not required.
+  The Cabal mailing list is te mailing list where we discuss decisions about
+  the site. Partner organizations are welcome to have a representative on the
+  list, but this is not required.
 </p>
 
 <p>
@@ -135,5 +142,5 @@
 </p>
 
 <%method page_title>
-Being a VegGuide Partner Organization
+VegGuide Partnership Benefits and Responsibilities
 </%method>
