@@ -82,9 +82,9 @@ policy</a> for details on how we handle allegations of copyright infringement.
 <h2>Source Code</h2>
 
 <p>
-The source code for this site is licensed under the same terms as
-Perl, and is available from our <a href="/site/source" title="Source
-Code">source repository</a>.
+The source code for this site is licensed under the Artistic License 2.0, and
+is available from our <a href="/site/source" title="Source Code">source
+repository</a>.
 </p>
 
 <p>
@@ -107,12 +107,11 @@ In March of 2003, the site moved to its own domain, regveg.org
 </p>
 
 <p>
-The design of the site saw various revisions until February of 2004
-brought us what I consider to be VegGuide 1.0. Look at that
-lovely <a
-href="http://web.archive.org/web/20040405155331/http://www.vegguide.org/">three-column
-design in purple, white, and black</a>. Needless to say, this was a
-look that only a geek (like me) could love.
+The design of the site saw various revisions until February of 2004 brought us
+what we consider to be VegGuide 1.0. Look at that
+lovely <a href="http://web.archive.org/web/20040405155331/http://www.vegguide.org/">three-column
+design in purple, white, and black</a>. Needless to say, this was a look that
+only a geek could love.
 </p>
 
 <p>
@@ -121,21 +120,19 @@ thought was more easily pronouncable and rememberable.
 </p>
 
 <p>
-In April of 2005, we released what I consider to be VegGuide 2.0. This
-was
-a <a
-href="http://web.archive.org/web/20050419075716/http://www.vegguide.org/">new
-color scheme and layout</a> intended to be easier to use and easier on
-the eyes. Unfortunately, at the time I didn't really know a much of
-anything about UI design or usability, so it was still not the most
-intuitive or friendly UI.
+In April of 2005, we released what we consider to be VegGuide 2.0. This was
+a <a href="http://web.archive.org/web/20050419075716/http://www.vegguide.org/">new
+color scheme and layout</a> intended to be easier to use and easier on the
+eyes. Unfortunately, at the time Dave didn't really know a much of anything
+about UI design or usability, so it was still not a very intuitive or friendly
+UI.
 </p>
 
 <p>
-On January 1 of 2008, we released VegGuide 3.0, the layout you're
-looking at now. Besides the new UI, there are various new features,
-and there was a lot of reworking of the underlying code that drives
-the site. I hope that this UI is more usable and intuitive.
+On January 1 of 2008, we released VegGuide 3.0, the layout you're looking at
+now. Besides the new UI, there are various new features, and there was a lot
+of reworking of the underlying code that drives the site. We hope that this UI
+is more usable and intuitive.
 </p>
 
 
