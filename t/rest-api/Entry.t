@@ -295,4 +295,31 @@ use_test_database();
     );
 }
 
+
+{
+    my $response = request( rest_request( GET => '/entry/870' ) );
+
+    is( $response->code(), '200', 'got a 200 response' );
+
+    is(
+        $response->header('Content-Type'),
+        'application/vnd.vegguide.org-entry+json; charset=UTF-8; version=0.0.1',
+        'got the right RESTful content type'
+    );
+
+    my $entry = json_ok($response);
+
+    ok(
+        !exists $entry->{weighted_rating},
+        'no weighted_rating for this entry'
+    );
+
+    is(
+        $entry->{rating_count},
+        0,
+        'rating_count is 0 for this entry'
+    );
+}
+
+
 done_testing();

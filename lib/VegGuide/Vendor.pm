@@ -2347,6 +2347,8 @@ sub rest_data {
     @rest{ 'weighted_rating', 'rating_count' }
         = $self->weighted_rating_and_count();
 
+    delete $rest{weighted_rating} unless $rest{rating_count};
+
     $rest{categories} = [ map { $_->name() } $self->categories() ];
     $rest{cuisines}   = [ map { $_->name() } $self->cuisines() ];
 
