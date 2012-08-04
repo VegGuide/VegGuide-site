@@ -173,6 +173,18 @@ sub clean_text (\$) {
     }
 }
 
+# XXX - want to offer Markdown eventually too.
+sub text_for_rest_response {
+    my $text = shift;
+
+    my $html = text_to_html( text => $text );
+
+    return {
+        'text/html'                      => $html,
+        'text/vnd.vegguide.org-wikitext' => $text,
+    };
+}
+
 # For some reason, Text::WikiFormat doesn't do HTML entity
 # escaping. This is a nasty hack to make that happen.
 {

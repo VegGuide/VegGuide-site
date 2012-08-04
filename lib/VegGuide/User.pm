@@ -1170,7 +1170,7 @@ sub rest_data {
     );
 
     if ( $self->bio() ) {
-        $rest{bio} = VegGuide::Util::text_to_html( text => $self->bio() );
+        $rest{bio} = VegGuide::Util::text_for_rest_response( $self->bio() );
     }
 
     if ( my $uri = $self->home_page() ) {

@@ -28,14 +28,24 @@ use_test_database();
     );
 
     my $bio = delete $entry->{bio};
+    ok(
+        exists $bio->{'text/html'},
+        'bio has text/html key'
+    );
+
+    ok(
+        exists $bio->{'text/vnd.vegguide.org-wikitext'},
+        'bio has text/vnd.vegguide.org-wikitext key'
+    );
+
     like(
-        $bio,
+        $bio->{'text/html'},
         qr/programmer/,
         'bio contains expected text'
     );
 
     like(
-        $bio,
+        $bio->{'text/html'},
         qr/<p>/,
         'bio contains HTML tags'
     );
