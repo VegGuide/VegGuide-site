@@ -1187,22 +1187,28 @@ sub rest_data {
             mime_type =>
                 VegGuide::Image->new( file => $self->small_image_path() )
                 ->type(),
-            mini_uri => static_uri(
-                path      => $self->small_image_uri(),
-                with_host => 1,
-            ),
-            mini_dimensions => {
-                height => $self->small_image_height(),
-                width  => $self->small_image_width(),
-            },
-            small_uri        => static_uri(
-                path      => $self->large_image_uri(),
-                with_host => 1,
-            ),
-            small_dimensions => {
-                height => $self->large_image_height(),
-                width  => $self->large_image_width(),
-            },
+            sizes => [
+                {
+                    uri => static_uri(
+                        path      => $self->small_image_uri(),
+                        with_host => 1,
+                    ),
+                    dimensions => {
+                        height => $self->small_image_height(),
+                        width  => $self->small_image_width(),
+                    },
+                },
+                {
+                    uri => static_uri(
+                        path      => $self->large_image_uri(),
+                        with_host => 1,
+                    ),
+                    dimensions => {
+                        height => $self->large_image_height(),
+                        width  => $self->large_image_width(),
+                    },
+                },
+            ],
         };
     }
 

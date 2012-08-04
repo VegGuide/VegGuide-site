@@ -49,17 +49,23 @@ use_test_database();
             veg_level             => 4,
             veg_level_description => 'vegan',
             image                 => {
-                mime_type       => 'image/jpeg',
-                mini_dimensions => {
-                    height => 30,
-                    width  => 40,
-                },
-                mini_uri         => path_to_uri('/user-images/3-small.jpg'),
-                small_dimensions => {
-                    height => 76,
-                    width  => 100,
-                },
-                small_uri => path_to_uri('/user-images/3-large.jpg'),
+                mime_type => 'image/jpeg',
+                sizes     => [
+                    {
+                        dimensions => {
+                            height => 30,
+                            width  => 40,
+                        },
+                        uri => path_to_uri('/user-images/3-small.jpg'),
+                    },
+                    {
+                        dimensions => {
+                            height => 76,
+                            width  => 100,
+                        },
+                        uri => path_to_uri('/user-images/3-large.jpg'),
+                    },
+                ],
             },
         },
         'got the expected response for a user'
