@@ -2349,8 +2349,10 @@ sub rest_data {
 
     delete $rest{weighted_rating} unless $rest{rating_count};
 
-    $rest{categories} = [ map { $_->name() } $self->categories() ];
-    $rest{cuisines}   = [ map { $_->name() } $self->cuisines() ];
+    $rest{categories} = [ map      { $_->name() } $self->categories() ];
+    $rest{cuisines}   = [ sort map { $_->name() } $self->cuisines() ];
+    $rest{tags}       = [ sort map { $_->name() } $self->attributes() ]
+        if $self->attributes();
 
     $rest{user} = $self->user()->rest_data( include_related => 0 );
 
