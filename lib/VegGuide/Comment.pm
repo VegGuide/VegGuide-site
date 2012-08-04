@@ -3,6 +3,8 @@ package VegGuide::Comment;
 use strict;
 use warnings;
 
+use Class::Trait qw( VegGuide::Role::RestData );
+
 use parent 'VegGuide::AlzaboWrapper';
 
 use DateTime::Format::RFC3339;
@@ -37,7 +39,7 @@ sub last_modified_date {
         ->ymd();
 }
 
-sub rest_data {
+sub _core_rest_data {
     my $self = shift;
 
     my $dt

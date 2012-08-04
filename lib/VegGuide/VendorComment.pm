@@ -80,10 +80,10 @@ sub delete {
     $self->SUPER::delete;
 }
 
-sub rest_data {
+sub _core_rest_data {
     my $self = shift;
 
-    my $rest = $self->SUPER::rest_data();
+    my $rest = $self->SUPER::_core_rest_data();
 
     $rest->{rating} = $self->vendor()->rating_from_user( $self->user() );
 

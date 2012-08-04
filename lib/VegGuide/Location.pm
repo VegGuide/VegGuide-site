@@ -5,6 +5,8 @@ use warnings;
 
 use parent 'VegGuide::CachedHierarchy';
 
+use Class::Trait qw( VegGuide::Role::RestData );
+
 use VegGuide::Schema;
 use VegGuide::AlzaboWrapper (
     table => VegGuide::Schema->Schema->Location_t,
@@ -1228,12 +1230,8 @@ sub _data_feed_handle {
     }
 }
 
-sub rest_data {
+sub _core_rest_data {
     my $self = shift;
-    my %p    = validate(
-        @_,
-        { include_related => { type => BOOLEAN, default => 1 } }
-    );
 
     my %rest = (
         name           => $self->name(),
@@ -1253,25 +1251,29 @@ sub rest_data {
         entry_count => $self->open_vendor_count(),
     );
 
-    if ( $p{include_related} ) {
-        if ( my $parent = $self->parent() ) {
-            $rest{parent} = $parent->rest_data( include_related => 0 );
-        }
-
-        for my $child ( $self->children() ) {
-            push @{ $rest{children} },
-                $child->rest_data( include_related => 0 );
-        }
-
-        my $comments = $self->comments();
-        while ( my ( $comment, $user ) = $comments->next() ) {
-            push @{ $rest{comments} }, $comment->rest_data();
-        }
-    }
-
     delete $rest{$_} for grep { ! defined $rest{$_} } keys %rest;
 
     return \%rest;
+}
+
+sub _related_rest_data {
+    my $self = shift;
+
+    my %rest;
+    if ( my $parent = $self->parent() ) {
+        $rest{parent} = $parent->rest_data( include_related => 0 );
+    }
+
+    for my $child ( $self->children() ) {
+        push @{ $rest{children} }, $child->rest_data( include_related => 0 );
+    }
+
+    my $comments = $self->comments();
+    while ( my ( $comment, $user ) = $comments->next() ) {
+        push @{ $rest{comments} }, $comment->rest_data();
+    }
+
+    return %rest;
 }
 
 sub NewVendorsAndReviewsFeed {

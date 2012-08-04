@@ -3,7 +3,7 @@ package VegGuide::Vendor;
 use strict;
 use warnings;
 
-use Class::Trait qw( VegGuide::Role::FeedEntry );
+use Class::Trait qw( VegGuide::Role::FeedEntry VegGuide::Role::RestData );
 
 use VegGuide::Exceptions qw( auth_error data_validation_error );
 
@@ -2302,12 +2302,8 @@ sub is_smoke_free {
     return 1 if defined $smoking && !$smoking;
 }
 
-sub rest_data {
+sub _core_rest_data {
     my $self = shift;
-    my %p    = validate(
-        @_,
-        { include_related => { type => BOOLEAN, default => 1 } }
-    );
 
     my %rest = map { $_ => $self->$_() }
         grep { !/(?:_id|long_description)$/ }
@@ -2366,10 +2362,6 @@ sub rest_data {
     $rest{reviews_uri}
         = entry_uri( vendor => $self, path => 'reviews', with_host => 1 );
 
-    if ( $p{include_related} ) {
-        $rest{region} = $self->location()->rest_data( include_related => 0 );
-    }
-
     if ( $self->images() ) {
         $rest{images} = [ map { $_->rest_data() } $self->images() ];
         delete $rest{images} unless @{ $rest{images} };
@@ -2385,6 +2377,12 @@ sub rest_data {
         for grep { !$troolean{$_} } grep { !defined $rest{$_} } keys %rest;
 
     return \%rest;
+}
+
+sub _related_rest_data {
+    my $self = shift;
+
+    return ( region => $self->location()->rest_data( include_related => 0 ) );
 }
 
 sub feed_title {

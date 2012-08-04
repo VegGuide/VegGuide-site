@@ -3,6 +3,8 @@ package VegGuide::User;
 use strict;
 use warnings;
 
+use Class::Trait qw( VegGuide::Role::RestData );
+
 use VegGuide::Exceptions qw( auth_error data_validation_error );
 use VegGuide::Validate
     qw( validate validate_with validate_pos SCALAR UNDEF BOOLEAN LOCATION_TYPE );
@@ -1152,12 +1154,8 @@ sub external_uri {
     }
 }
 
-sub rest_data {
+sub _core_rest_data {
     my $self = shift;
-    my %p    = validate(
-        @_,
-        { include_related => { type => BOOLEAN, default => 1 } }
-    );
 
     my %rest = (
         name => $self->real_name(),

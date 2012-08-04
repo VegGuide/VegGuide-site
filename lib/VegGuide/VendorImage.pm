@@ -3,6 +3,8 @@ package VegGuide::VendorImage;
 use strict;
 use warnings;
 
+use Class::Trait qw( VegGuide::Role::RestData );
+
 use VegGuide::Schema;
 use VegGuide::AlzaboWrapper (
     table => VegGuide::Schema->Schema()->VendorImage_t() );
@@ -268,10 +270,10 @@ EOF
     );
 }
 
-sub rest_data {
+sub _core_rest_data {
     my $self = shift;
 
-    return unless -f $self->small_path();
+    return {} unless -f $self->small_path();
 
     my %rest = (
         mime_type =>
