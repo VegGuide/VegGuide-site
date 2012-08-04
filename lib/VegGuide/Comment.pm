@@ -46,10 +46,7 @@ sub rest_data {
             ->set_time_zone('America/Denver')->set_time_zone('UTC') );
 
     return {
-        body => {
-            content      => $self->comment(),
-            content_type => 'text/vnd.vegguide.org-wikitext',
-        },
+        body => VegGuide::Util::text_for_rest_response( $self->comment() ),
         last_modified_datetime => $dt,
         user => $self->user()->rest_data( include_related => 0 ),
     };

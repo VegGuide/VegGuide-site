@@ -108,9 +108,11 @@ use_test_database();
     my $expect = [
         {
             body => {
-                content =>
+                'text/vnd.vegguide.org-wikitext' =>
                     q{I like this place, it's nice. I think it's awesome that you have to share with people in order to eat the whole thing- it lowers the cost, especially if the friend you're with has no $$. I also like that you can choose how hot you'd like the burrito. Where I live, it's either hot or...REALLY hot. I also like the fact that you can watch them make it so you know exactly what's going in it!},
-                content_type => 'text/vnd.vegguide.org-wikitext',
+                'text/html' =>
+                    q{<p>I like this place, it's nice. I think it's awesome that you have to share with people in order to eat the whole thing- it lowers the cost, especially if the friend you're with has no $$. I also like that you can choose how hot you'd like the burrito. Where I live, it's either hot or...REALLY hot. I also like the fact that you can watch them make it so you know exactly what's going in it!</p>}
+                    . "\n",
             },
             last_modified_datetime => '2004-12-15T18:51:41Z',
             rating                 => 4,
@@ -123,9 +125,11 @@ use_test_database();
         },
         {
             body => {
-                content =>
+                'text/vnd.vegguide.org-wikitext' =>
                     q{"Veggie fajita. Hot. Just guac & lettuce." Those six words garner me an adequate burrito that I can eat all day long. Chipotle is the only fast food franchise I can tolerate and I tend to get a burrito from them for lunch nearly once a week.},
-                content_type => 'text/vnd.vegguide.org-wikitext',
+                'text/html' =>
+                    '<p>&quot;Veggie fajita. Hot. Just guac &amp; lettuce.&quot; Those six words garner me an adequate burrito that I can eat all day long. Chipotle is the only fast food franchise I can tolerate and I tend to get a burrito from them for lunch nearly once a week.</p>'
+                    . "\n",
             },
             last_modified_datetime => '2004-06-28T23:32:28Z',
             rating                 => 3,
@@ -139,9 +143,11 @@ use_test_database();
         },
         {
             body => {
-                content =>
+                'text/vnd.vegguide.org-wikitext' =>
                     'The food is good and the prices are decent, but the portions are too much for one person. Definitely beneficial to split with a friend.',
-                content_type => 'text/vnd.vegguide.org-wikitext',
+                'text/html' =>
+                    '<p>The food is good and the prices are decent, but the portions are too much for one person. Definitely beneficial to split with a friend.</p>'
+                    . "\n",
             },
             last_modified_datetime => '2004-06-03T18:16:23Z',
             rating                 => 2,
@@ -153,10 +159,7 @@ use_test_database();
             }
         },
         {
-            body                   => { content => undef },
-            last_modified_datetime => undef,
             rating                 => 1,
-            review                 => undef,
             user                   => {
                 name                  => 'Nicholas',
                 uri                   => path_to_uri('/user/2370'),

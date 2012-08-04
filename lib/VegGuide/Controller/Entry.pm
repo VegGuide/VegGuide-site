@@ -408,11 +408,8 @@ sub _rating_as_rest_data {
     my $user   = shift;
 
     return {
-        last_modified_datetime => undef,
-        review                 => undef,
-        body                   => { content => undef },
-        rating                 => $rating->rating(),
-        user                   => $user->rest_data( include_related => 0 ),
+        rating => $rating->rating(),
+        user   => $user->rest_data( include_related => 0 ),
     };
 }
 

@@ -112,9 +112,11 @@ use_test_database();
         [
             {
                 body => {
-                    content =>
+                    'text/vnd.vegguide.org-wikitext' =>
                         '[http://www.supervegan.com|Super Vegan] is an awesome site "by vegans for vegans" with NYC related news and NYC restaurant guide.',
-                    content_type => 'text/vnd.vegguide.org-wikitext',
+                    'text/html' =>
+                        '<p><a rel="nofollow" href="http://www.supervegan.com">Super Vegan</a> is an awesome site &quot;by vegans for vegans&quot; with NYC related news and NYC restaurant guide.</p>'
+                        . "\n",
                 },
                 last_modified_datetime => '2008-03-22T18:36:33Z',
                 user                   => {
@@ -126,9 +128,11 @@ use_test_database();
             },
             {
                 body => {
-                    content =>
+                    'text/vnd.vegguide.org-wikitext' =>
                         'NYC has many restaurants which are cash only.  Please be aware that this is the norm, especially in Chinatown.',
-                    content_type => 'text/vnd.vegguide.org-wikitext',
+                    'text/html' =>
+                        '<p>NYC has many restaurants which are cash only.  Please be aware that this is the norm, especially in Chinatown.</p>'
+                        . "\n",
                 },
                 last_modified_datetime => '2005-04-27T15:59:02Z',
                 user                   => {
