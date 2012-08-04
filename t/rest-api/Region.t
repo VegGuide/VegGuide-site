@@ -169,4 +169,24 @@ use_test_database();
     );
 }
 
+{
+    my $response = request( rest_request( GET => '/region/13/entries' ) );
+
+    is( $response->code(), '200', 'got a 200 response' );
+
+    is(
+        $response->header('Content-Type'),
+        'application/vnd.vegguide.org-entries+json; charset=UTF-8; version=0.0.1',
+        'got the right RESTful content type'
+    );
+
+    my $entries = json_ok($response);
+
+    is(
+        scalar @{ $entries || [] },
+        116,
+        'got 116 (open) entries'
+    );
+}
+
 done_testing();
