@@ -2370,6 +2370,11 @@ sub rest_data {
         $rest{region} = $self->location()->rest_data( include_related => 0 );
     }
 
+    if ( $self->images() ) {
+        $rest{images} = [ map { $_->rest_data() } $self->images() ];
+        delete $rest{images} unless @{ $rest{images} };
+    }
+
     my %troolean = map { $_ => 1 } qw(
         allows_smoking
         is_wheelchair_accessible

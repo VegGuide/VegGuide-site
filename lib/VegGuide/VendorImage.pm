@@ -19,7 +19,7 @@ use Image::Size qw( imgsize );
 use VegGuide::Config;
 use VegGuide::Image;
 use VegGuide::Vendor;
-use VegGuide::SiteURI qw( site_uri );
+use VegGuide::SiteURI qw( static_uri );
 
 {
     my $spec = {
@@ -271,20 +271,35 @@ EOF
 sub rest_data {
     my $self = shift;
 
-    return {
-        uri     => site_uri( path => $self->large_uri(), with_host => 1 ),
-        caption => $self->caption(),
-        height      => $self->large_height(),
-        width       => $self->large_width(),
-        mini_uri    => site_uri( path => $self->mini_uri(), with_host => 1 ),
-        mini_height => $self->mini_height(),
-        mini_width  => $self->mini_width(),
-        original_uri =>
-            site_uri( path => $self->original_uri(), with_host => 1 ),
-        original_height => $self->original_height(),
-        original_width  => $self->original_width(),
-        user            => $self->user()->rest_data,
-    };
+    return unless -f $self->small_path();
+
+    my %rest = (
+        mime_type =>
+            VegGuide::Image->new( file => $self->small_path() )->type(),
+        user => $self->user()->rest_data(),
+    );
+
+    if ( $self->caption() ) {
+        $rest{caption} = $self->caption();
+    }
+
+    $rest{files} = [
+        map {
+            my $uri_meth    = $_ . '_uri';
+            my $height_meth = $_ . '_height';
+            my $width_meth  = $_ . '_width';
+            {
+                uri => static_uri(
+                    path      => $self->$uri_meth(),
+                    with_host => 1,
+                ),
+                height => $self->$height_meth(),
+                width  => $self->$width_meth(),
+            }
+        } qw( mini small large original )
+    ];
+
+    return \%rest;
 }
 
 sub vendor {

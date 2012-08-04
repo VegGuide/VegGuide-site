@@ -192,56 +192,97 @@ use_test_database();
 
     my $expect = [
         {
-            caption     => undef,
-            height      => 190,
-            mini_height => 91,
-            mini_uri    => path_to_uri('/entry-images/37/37-1983-mini.png'),
-            mini_width  => 120,
-            original_height => 190,
-            original_uri =>
-                path_to_uri('/entry-images/37/37-1983-original.png'),
-            original_width => 250,
-            uri  => path_to_uri('/entry-images/37/37-1983-large.png'),
+            mime_type => 'image/png',
+            files     => [
+                {
+                    uri => path_to_uri('/entry-images/37/37-1983-mini.png'),
+                    height => 91,
+                    width  => 120,
+                },
+                {
+                    uri => path_to_uri('/entry-images/37/37-1983-small.png'),
+                    height => 190,
+                    width  => 250,
+                },
+                {
+                    uri => path_to_uri('/entry-images/37/37-1983-large.png'),
+                    height => 190,
+                    width  => 250,
+                },
+                {
+                    uri =>
+                        path_to_uri('/entry-images/37/37-1983-original.png'),
+                    height => 190,
+                    width  => 250,
+                },
+            ],
             user => {
-                name => 'Admin',
-                uri  => path_to_uri('/user/1'),
+                name                  => 'Admin',
+                uri                   => path_to_uri('/user/1'),
                 website               => 'http://www.vegguide.org',
                 veg_level             => 4,
                 veg_level_description => 'vegan',
             },
-            width => 250
         },
         {
-            caption     => undef,
-            height      => 400,
-            mini_height => 90,
-            mini_uri    => path_to_uri('/entry-images/37/37-1984-mini.png'),
-            mini_width  => 120,
-            original_height => 480,
-            original_uri =>
-                path_to_uri('/entry-images/37/37-1984-original.png'),
-            original_width => 640,
-            uri  => path_to_uri('/entry-images/37/37-1984-large.png'),
+            mime_type => 'image/png',
+            files     => [
+                {
+                    uri => path_to_uri('/entry-images/37/37-1984-mini.png'),
+                    height => 90,
+                    width  => 120,
+                },
+                {
+                    uri => path_to_uri('/entry-images/37/37-1984-small.png'),
+                    height => 187,
+                    width  => 250,
+                },
+                {
+                    uri => path_to_uri('/entry-images/37/37-1984-large.png'),
+                    height => 400,
+                    width  => 533,
+                },
+                {
+                    uri =>
+                        path_to_uri('/entry-images/37/37-1984-original.png'),
+                    height => 480,
+                    width  => 640,
+                },
+            ],
             user => {
-                name => 'Admin',
-                uri  => path_to_uri('/user/1'),
+                name                  => 'Admin',
+                uri                   => path_to_uri('/user/1'),
                 website               => 'http://www.vegguide.org',
                 veg_level             => 4,
                 veg_level_description => 'vegan',
             },
-            width => 533
         },
         {
-            caption     => 'Interior of restaurant.',
-            height      => 400,
-            mini_height => 90,
-            mini_uri    => path_to_uri('/entry-images/37/37-4334-mini.jpg'),
-            mini_width  => 120,
-            original_height => 1200,
-            original_uri =>
-                path_to_uri('/entry-images/37/37-4334-original.jpg'),
-            original_width => 1600,
-            uri  => path_to_uri('/entry-images/37/37-4334-large.jpg'),
+            caption   => 'Interior of restaurant.',
+            mime_type => 'image/jpeg',
+            files     => [
+                {
+                    uri => path_to_uri('/entry-images/37/37-4334-mini.jpg'),
+                    height => 90,
+                    width  => 120,
+                },
+                {
+                    uri => path_to_uri('/entry-images/37/37-4334-small.jpg'),
+                    height => 187,
+                    width  => 250,
+                },
+                {
+                    uri => path_to_uri('/entry-images/37/37-4334-large.jpg'),
+                    height => 400,
+                    width  => 533,
+                },
+                {
+                    uri =>
+                        path_to_uri('/entry-images/37/37-4334-original.jpg'),
+                    height => 1200,
+                    width  => 1600,
+                },
+            ],
             user => {
                 name                  => 'conde.kedar',
                 uri                   => path_to_uri('/user/4795'),
@@ -249,26 +290,39 @@ use_test_database();
                 veg_level             => 4,
                 veg_level_description => 'vegan',
             },
-            width => 533
         },
         {
-            caption     => 'Eggplant with Thai Basil',
-            height      => 400,
-            mini_height => 90,
-            mini_uri    => path_to_uri('/entry-images/37/37-5563-mini.jpg'),
-            mini_width  => 120,
-            original_height => 2304,
-            original_uri =>
-                path_to_uri('/entry-images/37/37-5563-original.jpg'),
-            original_width => 3072,
-            uri  => path_to_uri('/entry-images/37/37-5563-large.jpg'),
+            caption   => 'Eggplant with Thai Basil',
+            mime_type => 'image/jpeg',
+            files     => [
+                {
+                    uri => path_to_uri('/entry-images/37/37-5563-mini.jpg'),
+                    height => 90,
+                    width  => 120,
+                },
+                {
+                    uri => path_to_uri('/entry-images/37/37-5563-small.jpg'),
+                    height => 187,
+                    width  => 250,
+                },
+                {
+                    uri => path_to_uri('/entry-images/37/37-5563-large.jpg'),
+                    height => 400,
+                    width  => 533,
+                },
+                {
+                    uri =>
+                        path_to_uri('/entry-images/37/37-5563-original.jpg'),
+                    height => 2304,
+                    width  => 3072,
+                },
+            ],
             user => {
                 name                  => 'Danielle S',
                 uri                   => path_to_uri('/user/8070'),
                 veg_level             => 4,
                 veg_level_description => 'vegan',
             },
-            width => 533
         }
     ];
 

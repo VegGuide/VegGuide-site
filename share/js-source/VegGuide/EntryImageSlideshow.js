@@ -107,10 +107,10 @@ VegGuide.EntryImageSlideshow.prototype._showImage = function (imageNumber) {
 
     var img = document.createElement("img");
 
-    img.src    = image.uri;
+    img.src    = image.sizes[2].uri;
     img.alt    = "";
-    img.height = image.height;
-    img.width  = image.width;
+    img.height = image.sizes[2].height;
+    img.width  = image.sizes[2].width;
     img.style.marginTop  = image.margin_top;
     img.style.marginLeft = image.margin_left;
 
@@ -118,7 +118,7 @@ VegGuide.EntryImageSlideshow.prototype._showImage = function (imageNumber) {
 
     var link = document.createElement("a");
     link.title  = "View the full size image";
-    link.href   = image.original_uri;
+    link.href   = image.sizes[3].uri;
     link.target = "_new";
 
     link.appendChild(img);
@@ -186,8 +186,8 @@ VegGuide.EntryImageSlideshow.prototype._getImage = function (imageNumber) {
         var container_height = this.imageContainer.offsetHeight;
         var container_width  = this.lb.content.offsetWidth;
 
-        image.margin_top  = ( ( container_height - image.height ) / 2 ) + "px";
-        image.margin_left = ( ( container_width - image.width ) / 2 ) + "px";
+        image.margin_top  = ( ( container_height - image.sizes[2].height ) / 2 ) + "px";
+        image.margin_left = ( ( container_width - image.sizes[2].width ) / 2 ) + "px";
 
         this.images[ imageNumber - 1 ] = image;
     }

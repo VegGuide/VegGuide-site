@@ -60,20 +60,16 @@ use_test_database();
             veg_level_description => 'vegan',
             image                 => {
                 mime_type => 'image/jpeg',
-                sizes     => [
+                files     => [
                     {
-                        dimensions => {
-                            height => 30,
-                            width  => 40,
-                        },
-                        uri => path_to_uri('/user-images/3-small.jpg'),
+                        uri    => path_to_uri('/user-images/3-small.jpg'),
+                        height => 30,
+                        width  => 40,
                     },
                     {
-                        dimensions => {
-                            height => 76,
-                            width  => 100,
-                        },
-                        uri => path_to_uri('/user-images/3-large.jpg'),
+                        uri    => path_to_uri('/user-images/3-large.jpg'),
+                        height => 76,
+                        width  => 100,
                     },
                 ],
             },
