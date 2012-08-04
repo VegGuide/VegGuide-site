@@ -2310,8 +2310,14 @@ sub rest_data {
     );
 
     my %rest = map { $_ => $self->$_() }
-        grep { !/_id$/ }
+        grep { !/(?:_id|long_description)$/ }
         map  { $_->name() } $self->table()->columns();
+
+    for my $key (qw( long_description localized_long_description )) {
+        my $val = $self->$key();
+        next unless defined $val && length $val;
+        $rest{$key} = VegGuide::Util::text_for_rest_response($val);
+    }
 
     delete $rest{$_}
         for qw( canonical_address last_featured_date latitude longitude );
