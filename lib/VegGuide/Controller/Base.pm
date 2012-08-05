@@ -151,6 +151,7 @@ sub _params_from_path_query {
         regions
         reviews
         root-regions
+        search
         user
         users
     );
