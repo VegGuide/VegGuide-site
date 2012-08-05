@@ -53,8 +53,8 @@ with 'VegGuide::Role::Controller::Search';
             . $search->longitude();
 
         my %rest = (
-            count => $search->count(),
-            uri   => static_uri(
+            entry_count => $search->count(),
+            uri         => static_uri(
                 path  => $path,
                 query => {
                     distance => $search->distance(),
