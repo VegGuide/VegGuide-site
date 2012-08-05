@@ -724,6 +724,12 @@ div.pagination form select, div.pagination form select option {
     white-space: nowrap;
 }
 
+.docs-table th, .docs-table td {
+    border-color: #8cc63f;
+    border-style: dotted;
+    border-width: 0px 1px 0px 1px;
+}
+
 .toc h2 {
     font-size: 100%;
     font-variant: small-caps;

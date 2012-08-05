@@ -90,12 +90,19 @@ $toc->add_file(
   Some structures include both English data and localized data. The English
   data should always be in the Latin-1 subset of Unicode. The localized data
   may be in any script. In most cases, you can figure out the language of the
-  localized data by looking at the locale associated with the region.
+  localized data by looking at the locale associated with the region. All
+  strings are in UTF-8 encoding.
 </p>
 
 <p>
   If a key's value would be null, an empty string, or an empty array, it is
   always omitted.
+</p>
+
+<p>
+  All datetimes are
+  returned <a href="http://tools.ietf.org/html/rfc3339">RFC3339</a>
+  format. Datetimes are always in the UTC time zone.
 </p>
 
 <a name="Region"></a>
@@ -116,6 +123,7 @@ $toc->add_file(
   <thead>
     <tr>
       <th>Key name</th>
+      <th>Type</th>
       <th>Description</th>
       <th>Always present?</th>
     </tr>
@@ -123,21 +131,25 @@ $toc->add_file(
   <tbody>
     <tr>
       <td>name</td>
+      <td>string</td>
       <td>The name of the region in English.</td>
       <td>&#x2714;</td>
     </tr>
     <tr>
       <td>localized_name</td>
+      <td>string</td>
       <td>The name of the region in the region's locale, if it has one.</td>
       <td></td>
     </tr>
     <tr>
       <td>is_country</td>
-      <td>A boolean indicating whether or not the region is a country.</td>
+      <td>boolean</td>
+      <td>Indicates whether or not the region is a country.</td>
       <td>&#x2714;</td>
     </tr>
     <tr>
       <td>locale</td>
+      <td>string</td>
       <td>
         A locale code like "en_CA" or "zh_TW". This is the locale for any
         localized data associated with the region's entries. Elements of the
@@ -147,6 +159,7 @@ $toc->add_file(
     </tr>
     <tr>
       <td>time_zone</td>
+      <td>string</td>
       <td>
         The name of the time zone associated with this region. This will be an
         <a href="http://www.iana.org/time-zones/">IANA time zone</a> name like
@@ -156,15 +169,17 @@ $toc->add_file(
     </tr>
     <tr>
       <td>entry_count</td>
+      <td>integer&nbsp;(>=&nbsp;0)</td>
       <td>
         The number of entries in the region. This only include entries which
         are not marked closed. Also note that this does not recurse into the
-        child regions for this region. This may be zero.
+        child regions for this region. This may be 0.
       </td>
       <td>&#x2714;</td>
     </tr>
     <tr>
       <td>uri</td>
+      <td>URI</td>
       <td>
         The canonical URI for the region. This URI always returns the full
         region data structure for the given region.
@@ -173,47 +188,43 @@ $toc->add_file(
     </tr>
     <tr>
       <td>entries_uri</td>
+      <td>URI</td>
       <td>
         A URI which returns the list of entries for the region.
       </td>
       <td>&#x2714;</td>
     </tr>
-  </tbody>
-</table>
-
-<p>
-  The following keys are only present when the data structure includes related
-  data.
-</p>
-
-<table class="docs-table">
-  <thead>
     <tr>
-      <th>Key name</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>parent</td>
-      <td>
-        The region's parent region, if it has one. This is a single Region
-        data structure without any related data. It may not be present if the
-        region is a top-level region.
+      <td colspan="4">
+        <strong>The following keys are only present when the data structure
+        includes related data.</strong>
       </td>
     </tr>
     <tr>
+      <td>parent</td>
+      <td><a href="#Region">Region</a></td>
+      <td>
+        The region's parent region, if it has one. This is a
+        single <a href="#Region">Region</a> data structure without any related
+        data. It may not be present if the region is a top-level region.
+      </td>
+      <td></td>
+    </tr>
+    <tr>
       <td>children</td>
+      <td>array of <a href="#Region">Regions</a></td>
       <td>
         An array of child regions contained in this region. For example, the
         "USA" region contains the "Minnesota" and "New York" regions, among
         others. The child regions are themselves Region data structures, but
-        they do not inclue any related data. This key may not be present if
+        they do not include any related data. This key may not be present if
         the region does not have any child regions.
       </td>
+      <td></td>
     </tr>
     <tr>
       <td>comments</td>
+      <td>array of <a href="#Comment">Comments</a></td>
       <td>
         An array of comment data structures. Comments for a region typically
         contain some information about veg eating in the region. They may also
@@ -222,6 +233,7 @@ $toc->add_file(
         structure</a>. This key may not be present if the region does not have
         any comments.
       </td>
+      <td></td>
     </tr>
   </tbody>
 </table>
@@ -236,6 +248,7 @@ $toc->add_file(
   <thead>
     <tr>
       <th>Key name</th>
+      <th>Type</th>
       <th>Description</th>
       <th>Always present?</th>
     </tr>
@@ -243,26 +256,40 @@ $toc->add_file(
   <tbody>
     <tr>
       <td>name</td>
+      <td>string</td>
       <td>The entry's name in English.</td>
       <td>&#x2714;</td>
     </tr>
     <tr>
+      <td>sortable_name</td>
+      <td>string</td>
+      <td>
+        The entry's name in English, but with words like "A" and "The"
+        removed. This is only done for English words.
+      </td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
       <td>localized_name</td>
+      <td>string</td>
       <td>The name of the entry in the language of region's locale, if it has one.</td>
       <td></td>
     </tr>
     <tr>
       <td>short_description</td>
+      <td>string</td>
       <td>A short description of the entry.</td>
       <td>&#x2714;</td>
     </tr>
     <tr>
       <td>localized_short_description</td>
+      <td>string</td>
       <td>A short description in the language of the region's locale.</td>
       <td></td>
     </tr>
     <tr>
       <td>long_description</td>
+      <td><a href="#Formatted-Text">Formatted Text</a></td>
       <td>
         A longer description of the entry. This may
         include <a href="#wikitext">VegGuide wikitext markup</a>.
@@ -271,6 +298,7 @@ $toc->add_file(
     </tr>
     <tr>
       <td>localized_long_description</td>
+      <td><a href="Formatted-Text">Formatted Text</a></td>
       <td>
         A long description in the language of the region's locale. This may
         include <a href="#wikitext">VegGuide wikitext markup</a>.
@@ -286,6 +314,7 @@ $toc->add_file(
         region,<br />
         postal_code
       </td>
+      <td>string</td>
       <td>
         Address information for the entry. The <em>region</em> is the entry's
         state or province.
@@ -301,16 +330,19 @@ $toc->add_file(
         localized_region,<br />
         postal_code
       </td>
+      <td>string</td>
       <td>Localized address information for the entry.</td>
       <td></td>
     </tr>
     <tr>
       <td>directions</td>
+      <td>string</td>
       <td>Directions to the location of the entry.</td>
       <td></td>
     </tr>
     <tr>
       <td>phone</td>
+      <td>string</td>
       <td>
         A phone number for the entry. This will not be in any specific format,
         and may not always include a country prefix.
@@ -319,6 +351,7 @@ $toc->add_file(
     </tr>
     <tr>
       <td>website</td>
+      <td>URI</td>
       <td>
         A website for the entry. This may be a Facebook page in some cases.
       </td>
@@ -328,6 +361,10 @@ $toc->add_file(
       <td>
         veg_level,<br />
         veg_level_description
+      </td>
+      <td>
+        integer,<br />
+        string
       </td>
       <td>
         <p>
@@ -344,12 +381,45 @@ $toc->add_file(
           Level 0 and level 3 are both very rare in our database.
         </p>
       </td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>price_range</td>
+      <td>string</td>
+      <td>
+        <p>
+          A description of the entry's price range. Currently these can be:
+        </p>
+
+        <ul>
+% for my $pr ( VegGuide::PriceRange->All() ) {
+          <li><% $pr->description() %></li>
+% }
+        </ul>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>hours</td>
+      <td>array of objects</td>
+      <td>
+        <p>
+          This key describes the entry's hours of operations. It consists of
+          an array of objects. Each objects has two keys, <em>days</em>
+          and <em>hours</em>. The <em>days</em> key contains something like
+          "Mon" or "Mon - Fri". The <em>hours</em> key is itself an array of
+          strings. Each element of the array contains a time range. Some
+          places close between lunch and dinner, and these have two elements
+          in the array. There is an example at the end of this table.
+        </p>
+      </td>
       <td></td>
     </tr>
     <tr>
       <td>allows_smoking</td>
+      <td>boolean or null</td>
       <td>
-        A boolean indicating whether or not smoking is allows at this
+        Indicates whether or not smoking is allows at this
         place. Note that this field can be <em>null</em>, which means that we
         do not know whether or not smoking is allowed.
       </td>
@@ -357,6 +427,7 @@ $toc->add_file(
     </tr>
     <tr>
       <td>is_wheelchair_accessible</td>
+      <td>boolean or null</td>
       <td>
         A boolean indicating whether or not this entry is
         wheelchair-accessible. This field can be <em>null</em>, which means
@@ -366,6 +437,7 @@ $toc->add_file(
     </tr>
     <tr>
       <td>accepts_reservations</td>
+      <td>boolean or null</td>
       <td>
         A boolean indicating whether or not this entry accepts
         reservations. This field can be <em>null</em>, which means that we do
@@ -373,30 +445,425 @@ $toc->add_file(
       </td>
       <td>&#x2714;</td>
     </tr>
+    <tr>
+      <td>is_cash_only</td>
+      <td>boolean</td>
+      <td>Indicates whether or not this entry only accepts cash as payment.</td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>
+        creation_datetime,<br />
+        last_modified_datetime
+      </td>
+      <td>datetime</td>
+      <td>
+        When an entry is first created, these two datetimes are the same.
+      </td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>close_date</td>
+      <td>date</td>
+      <td>
+        This is set when an entry is no longer open. This is just a date
+        with a time in YYYY-MM-DD format, something like "2012-07-09".
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>rating_count</td>
+      <td>integer&nbsp;(>=&nbsp;0)</td>
+      <td>
+        The number of ratings for this entry. This may be 0.
+      </td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>weighted_rating</td>
+      <td>decimal</td>
+      <td>
+        The weighted rating for the entry. This will be a decimal number from
+        1 to 5. This will not be present if no one has rated the entry yet.
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>categories</td>
+      <td>array of strings</td>
+      <td>
+        <p>
+          An array of category names for the entry. Every entry has at least
+          one category. The current list of categories is:
+        </p>
 
-
-<!--
-allows_smoking              
-is_wheelchair_accessible    
-accepts_reservations        
-creation_datetime           
-last_modified_datetime      
-last_featured_date          
-user_id                     
-location_id                 
-price_range_id              
-localized_long_description  
-latitude                    
-longitude                   
-is_cash_only                
-close_date                  
-canonical_address           
-external_unique_id          
-vendor_source_id            
-sortable_name               
--->
+        <ul>
+% for my $category ( VegGuide::Category->All() ) {
+          <li><% $category->name() %></li>
+% }
+        </ul>
+      </td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>cuisines</td>
+      <td>array of strings</td>
+      <td>
+        <p>
+          An array of cuisines names for the entry. These are things like
+          "Chinese", "Indian", or "Pizza". This only applies to some
+          categories of entry, and not every entry has this key set. These are
+          always returned in alphabetically sorted order.
+        </p>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>tags</td>
+      <td>array of strings</td>
+      <td>
+        <p>
+          An array of tags for the entry. These are things like "Large
+          Group-Friendly" or "Romantic". These are returned in alphabetically
+          sorted order.
+        </p>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>images</td>
+      <td>array of <a href="#Image">Images</a></td>
+      <td>
+        An array of <a href="#Image">Image data structures</a> for the
+        entry. Each image will include four sizes. The first three are limited
+        to 120x120, 250x250, and 400x620 respectively. The last will be the
+        image that was originally uploaded, which can be any size, and may
+        potentially be quite large.
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>user</td>
+      <td><a href="#User">User</a></td>
+      <td>
+        A <a href="#User">User data structure</a> for the creator of this
+        entry. This data structure <em>does not</em> include related data.
+      </td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>uri</td>
+      <td>URI</td>
+      <td>
+        The canonical URI for the entry. This URI always returns the full
+        entry data structure for the given entry.
+      </td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>reviews_uri</td>
+      <td>URI</td>
+      <td>
+        A URI which returns the reviews and ratings for this entry.
+      </td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td colspan="4">
+        <strong>The following keys are only present when the data structure
+        includes related data.</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>region</td>
+      <td><a href="#Region">Region</a></td>
+      <td>
+        A <a href="#Region">Region</a> data structure for the creator of this
+        entry. This data structure <em>does not</em> include related data.
+      </td>
+      <td>&#x2714; (when related data is included)</td>
+    </tr>
   </tbody>
 </table>
+
+<p>
+  Here is example of the hours data structure:
+</p>
+
+<pre><code>[
+    {
+        days  => 'Mon - Fri',
+        hours => ['10:30am - 2pm', '5pm - 10pm']
+    },
+    {
+        days  => 'Sat - Sun',
+        hours => ['closed']
+    }
+]</code></pre>
+
+<a name="User"></a>
+<h3>User</h3>
+
+<table class="docs-table">
+  <thead>
+    <tr>
+      <th>Key name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Always present?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>name</td>
+      <td>string</td>
+      <td>The user's username.</td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>bio</td>
+      <td><a href="Formatted-Text">Formatted Text</a></td>
+      <td>
+        Biographical information about the user.
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>
+        veg_level,<br />
+        veg_level_description
+      </td>
+      <td>
+        integer,<br />
+        string
+      </td>
+      <td>
+        <p>
+          How vegetarian the user is, from 0-4. The levels are:
+        </p>
+
+
+        <ul>
+% for my $level (0..4) {
+          <li><strong><% $level %></strong> - <% VegGuide::User->VegLevelDescription($level) %></li>
+% }
+        </ul>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>website</td>
+      <td>URI</td>
+      <td>
+        The website for the user.
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>image</td>
+      <td><a href="#Image">Image</a></td>
+      <td>
+        An <a href="#Image">Image data structure</a> for the user. This will
+        include two sizes of image. The smaller of the two is limited to
+        40x40, and the larger to 100x100. The image data structure will not
+        include user information, since it is always the same to whom the
+        image belongs.
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>uri</td>
+      <td>URI</td>
+      <td>
+        The canonical URI for the user. This URI always returns the full user
+        data structure for the given user.
+      </td>
+      <td>&#x2714;</td>
+    </tr>
+  </tbody>
+</table>
+
+<a name="Comment"></a>
+<h3>Comment</h3>
+
+<p>
+  Both region comments and entry reviews are returned with essentially the
+  same data structure, though reviews have some additional data.
+</p>
+
+<p>
+  Note that an entry review may contain just a body, just a rating, or both.
+</p>
+
+<table class="docs-table">
+  <thead>
+    <tr>
+      <th>Key name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Always present?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>body</td>
+      <td><a href="#Formatted-Text">Formatted Text</a></td>
+      <td>
+        The comment body as a <a href="#Formatted-Text">Formatted Text data
+        structure</a>.
+      </td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>user</td>
+      <td><a href="#User">User</a></td>
+      <td>
+        A <a href="#User">User data structure</a> for the author of the
+        comment. This data structure <em>does not</em> include related data.
+      </td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>
+        last_modified_datetime
+      </td>
+      <td>datetime</td>
+      <td>
+        When this comment was created or most recently updated.
+      </td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>rating</td>
+      <td>integer (1-5)</td>
+      <td>
+        A rating from 1 to 5, where 1 is terrible and 5 is excellent. This is
+        only present for entry reviews, not region comments.
+      </td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+<a name="Image"></a>
+<h3>Image</h3>
+
+<p>
+  An image is a single picture, usually available in multiple sizes. The image
+  data may include a caption, as well as information about the user who
+  uploaded the image.
+</p>
+
+<table class="docs-table">
+  <thead>
+    <tr>
+      <th>Key name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Always present?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>mime_type</td>
+      <td>string</td>
+      <td>
+        This will be one of <em>image/gif</em>, <em>image/jpeg</em>,
+        or <em>image/png</em>.
+      </td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>caption</td>
+      <td>string</td>
+      <td>A caption for the image.</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>files</td>
+      <td>array of <a href="#Image-File">Image Files</a></td>
+      <td>
+        This is an array of image file structures. Each structure provides
+        information about an image file with a specified size. The array is
+        always sorted by size. The possible dimensions for each image file
+        depends on whether this is a user or entry image.
+      </td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>user</td>
+      <td><a href="#User">User</a></td>
+      <td>
+        A <a href="#User">User data structure</a> for the creator of this
+        entry. This data structure <em>does not</em> include related data.
+      </td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+<a name="Image-File"></a>
+<h3>Image File</h3>
+
+<p>
+  This data structure contains information about a specific file for an image.
+</p>
+
+<table class="docs-table">
+  <thead>
+    <tr>
+      <th>Key name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Always present?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>uri</td>
+      <td>URI</td>
+      <td>The URI for this image file.</td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>height</td>
+      <td>positive integer</td>
+      <td>The height of the image.</td>
+      <td>&#x2714;</td>
+    </tr>
+    <tr>
+      <td>width</td>
+      <td>positive integer</td>
+      <td>The width of the image.</td>
+      <td>&#x2714;</td>
+    </tr>
+  </tbody>
+</table>
+
+<a name="Formatted-Text"></a>
+<h3>Formatted Text</h3>
+
+<p>
+  Some fields contain a type of wikitext which is rendered as HTML on the
+  website. These fields are returned as objects where the attribute names are
+  a MIME type and the attribute values are the text in that format. Currently,
+  this data structure return two MIME types, <em>text/html</em>,
+  and <em>text/vnd.vegguide.org-wikitext</em>. The wikitext format VegGuide
+  uses is <a href="/site/help#wiki-formatting">described on the help page</a>.
+</p>
+
+<code><pre>
+    {
+        'text/html':                      '&lt;p&gt;Blah blah blah&lt;/p&gt;',
+        'text/vnd.vegguide.org-wikitext': 'Blah blah blah'
+    }
+</pre></code>
+
+<p>
+  In the future, the site will use Markdown internally, and the existing
+  wikitext format will go away. You are encouraged to use the HTML
+  representation if you can.
+</p>
 
 <h2>Entry Points</h2>
 
@@ -413,7 +880,7 @@ sortable_name
   entry points to find the items you are looking for.
 </p>
 
-<h3>Top-level URI</h3>
+<h3>Top-level</h3>
 
 <ul>
   <li>
@@ -425,8 +892,116 @@ sortable_name
 </ul>
 
 <p>
-  The top-level URI returns a document containing a list of the top-level
-  regions.
+  The top-level URI returns a document containing an array of the top-level
+  regions as a <a href="#Region">Region data structure</a>.
+</p>
+
+<h3>Geographical Search</h3>
+
+<ul>
+  <li>
+    <strong>URI</strong>: <% $base_uri %>
+  </li>
+  <li>
+    <strong>Type</strong>: application/vnd.vegguide.org-entries+json
+  </li>
+</ul>
+
+<p>
+  ...
+</p>
+
+<h2>Other URIs</h2>
+
+<p>
+  These URIs will show up in other data structures, so understanding their
+  document structures is important when coding to this API. All of these URIs
+  include a numeric id, and you are encouraged not to rely on these numbers
+  remaining stable.
+</p>
+
+<h3>Region</h3>
+
+<ul>
+  <li>
+    <strong>URI</strong>: <% $base_uri %>/region/{id}
+  </li>
+  <li>
+    <strong>Type</strong>: application/vnd.vegguide.org-region+json
+  </li>
+</ul>
+
+<p>
+  Returns a <a href="#Region">Region data structure</a>. These URIs show up in
+  any response that includes region URIs, including the top level response, a
+  region's list of child regions, and an entry's link to its containing
+  region.
+</p>
+
+<h3>Region Entries</h3>
+
+<ul>
+  <li>
+    <strong>URI</strong>: <% $base_uri %>/region/{id}/entries
+  </li>
+  <li>
+    <strong>Type</strong>: application/vnd.vegguide.org-entries+json
+  </li>
+</ul>
+
+<p>
+  Returns an array of <a href="#Region">Entry data structures</a>.
+  region. This document only includes entries that are not marked as closed.
+</p>
+
+<h3>Entry</h3>
+
+<ul>
+  <li>
+    <strong>URI</strong>: <% $base_uri %>/entry/{id}
+  </li>
+  <li>
+    <strong>Type</strong>: application/vnd.vegguide.org-entry+json
+  </li>
+</ul>
+
+<p>
+  Returns a <a href="#Entry">Entry data structure</a>. These URIs show up in
+  any response that includes entry URIs, such as a region's entries list or
+  search results.
+</p>
+
+<h3>Entry Reviews</h3>
+
+<ul>
+  <li>
+    <strong>URI</strong>: <% $base_uri %>/entry/{id}/reviews
+  </li>
+  <li>
+    <strong>Type</strong>: application/vnd.vegguide.org-entry-reviews+json
+  </li>
+</ul>
+
+<p>
+  Returns an array of <a href="#Comment">Comment data structures</a>. These
+  URIs show up in any response that includes entry review URIs, such as a
+  entry's reviews list.
+</p>
+
+<h3>User</h3>
+
+<ul>
+  <li>
+    <strong>URI</strong>: <% $base_uri %>/user/{id}
+  </li>
+  <li>
+    <strong>Type</strong>: application/vnd.vegguide.org-user+json
+  </li>
+</ul>
+
+<p>
+  Returns a <a href="#User">User data structure</a>. These URIs show up in any
+  response that includes user URIs, such as an entry or image data structure.
 </p>
 
 <%init>
