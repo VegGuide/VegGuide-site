@@ -892,15 +892,32 @@ $toc->add_file(
 </ul>
 
 <p>
-  The top-level URI returns a document containing an array of the top-level
-  regions as a <a href="#Region">Region data structure</a>.
+  The top-level URI returns a document enumerating the top-level regions.
+</p>
+
+<p>
+  The structure of the document is as follows:
+</p>
+
+<pre><code>{
+    "regions": {
+        "primary":   [ ... ],
+        "secondary": [ ... ]
+    }
+}</code></pre>
+
+<p>
+  The primary and secondary keys contain an array of <a href="#Region">Region
+  data structures</a> with related data. The primary regions are continents
+  and oceanic areas. The secondary regions are currently just "Internet" and
+  "Airports".
 </p>
 
 <h3>Geographical Search</h3>
 
 <ul>
   <li>
-    <strong>URI</strong>: <% $base_uri %>
+    <strong>URI</strong>: <% $base_uri %>/search/by-lat-long/{latitude},{longitude}
   </li>
   <li>
     <strong>Type</strong>: application/vnd.vegguide.org-entries+json
@@ -908,7 +925,22 @@ $toc->add_file(
 </ul>
 
 <p>
-  ...
+  This document returns the result of a search around a given latitude and
+  longitude.
+</p>
+
+<pre><code>{
+    "uri":         "http://...",
+    "entry_count": 123,
+    "entries":     [ ... ],
+    "region":      { ... }
+}</code></pre>
+
+<p>
+  The <em>entries</em> key contains an array of <a href="#Entry">Entry data
+  structures</a> without related data. The <em>regions</em> key contains the
+  region associated with the nearest entry. This is a<a href="#Region">Region
+  data structure</a> without related data.
 </p>
 
 <h2>Other URIs</h2>
