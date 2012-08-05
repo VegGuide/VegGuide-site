@@ -28,11 +28,11 @@ with 'VegGuide::Role::Controller::Search';
         },
     );
 
-    sub geographical :
-        LocalRegex('^geographical/(-?[\d\.]+),(-?[\d\.]+)(?:/filter(?:/(.*)))?$')
+    sub by_lat_long :
+        LocalRegex('^by-lat-long/(-?[\d\.]+),(-?[\d\.]+)(?:/filter(?:/(.*)))?$')
         : ActionClass('+VegGuide::Action::REST') { }
 
-    sub geographical_GET : Private {
+    sub by_lat_long_GET : Private {
         my $self = shift;
         my $c    = shift;
 
@@ -48,7 +48,7 @@ with 'VegGuide::Role::Controller::Search';
         );
 
         my $path
-            = '/search/geographical/'
+            = '/search/by-lat-long/'
             . $search->latitude() . ','
             . $search->longitude();
 

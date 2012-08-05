@@ -14,7 +14,7 @@ use_test_database();
 {
     my $response = request(
         rest_request(
-            GET => '/search/geographical/44.9479791,-93.2935778?distance=1'
+            GET => '/search/by-lat-long/44.9479791,-93.2935778?distance=1'
         )
     );
 
@@ -31,7 +31,7 @@ use_test_database();
     my $uri = URI->new( $entry->{uri} );
     is(
         $uri->path(),
-        '/search/geographical/44.9479791,-93.2935778',
+        '/search/by-lat-long/44.9479791,-93.2935778',
         'got expected uri path for search'
     );
 
