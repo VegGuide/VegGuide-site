@@ -261,6 +261,19 @@ $toc->add_file(
       <td>&#x2714;</td>
     </tr>
     <tr>
+      <td>distance</td>
+      <td>string</td>
+      <td>
+        The entry's distance from a search location. This is only present when
+        searching for entries near a specific location. The string will
+        include a number and units, something like "1.3 miles".
+      </td>
+      <td>
+        This is always present for entries in geographical search results,
+        and never present otherwise.
+      </td>
+    </tr>
+    <tr>
       <td>sortable_name</td>
       <td>string</td>
       <td>
@@ -938,8 +951,9 @@ $toc->add_file(
 
 <p>
   The <em>entries</em> key contains an array of <a href="#Entry">Entry data
-  structures</a> without related data. The <em>regions</em> key contains the
-  region associated with the nearest entry. This is a<a href="#Region">Region
+  structures</a> without related data. The entry data structures <em>will</em>
+  include a <em>distance</em> key. The <em>regions</em> key contains the
+  region associated with the nearest entry. This is a <a href="#Region">Region
   data structure</a> without related data.
 </p>
 
