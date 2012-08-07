@@ -39,10 +39,10 @@ use_test_database();
         $search->{region},
         {
             is_country  => 0,
-            entries_uri => 'http://quasar:3000/region/13/entries',
+            entries_uri => path_to_uri('/region/13/entries'),
             name        => 'Twin Cities',
             time_zone   => 'America/Chicago',
-            uri         => 'http://quasar:3000/region/13',
+            uri         => path_to_uri('/region/13'),
             entry_count => 116,
         },
         'got Twin Cities region back for search'
