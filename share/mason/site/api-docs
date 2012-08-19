@@ -53,11 +53,11 @@ $toc->add_file(
 </p>
 
 <p>
-  For example, information about an entry is
-  returned <em>application/vnd.vegguide.org-entry+json; charset=UTF-8;
-  version=1.0.0</em>. The first part of the content type tells you that the
-  document contains information on a single entry. The rest indicates the
-  charset and version.
+  For example, information about an entry is returned with the content
+  type <em style="white-space:nowrap">application/vnd.vegguide.org-entry+json;
+  charset=UTF-8; version=1.0.0</em>. The first part of the content type tells
+  you that the document contains information on a single entry. The rest
+  indicates the charset and version.
 </p>
 
 <p>
@@ -329,8 +329,8 @@ $toc->add_file(
       </td>
       <td>string</td>
       <td>
-        Address information for the entry. The <em>region</em> is the entry's
-        state or province.
+        Address information for the entry. The <code>region</code> is the
+        entry's state or province.
       </td>
       <td></td>
     </tr>
@@ -418,12 +418,13 @@ $toc->add_file(
       <td>
         <p>
           This key describes the entry's hours of operations. It consists of
-          an array of objects. Each objects has two keys, <em>days</em>
-          and <em>hours</em>. The <em>days</em> key contains something like
-          "Mon" or "Mon - Fri". The <em>hours</em> key is itself an array of
-          strings. Each element of the array contains a time range. Some
-          places close between lunch and dinner, and these have two elements
-          in the array. There is an example at the end of this table.
+          an array of objects. Each objects has two keys, <code>days</code>
+          and <code>hours</code>. The <code>days</code> key contains something
+          like "Mon" or "Mon - Fri". The <code>hours</code> key is itself an
+          array of strings. Each element of the array contains a time
+          range. Some places close between lunch and dinner, and these have
+          two elements in the array. There is an example at the end of this
+          table.
         </p>
       </td>
       <td></td>
@@ -432,9 +433,9 @@ $toc->add_file(
       <td>allows_smoking</td>
       <td>boolean or null</td>
       <td>
-        Indicates whether or not smoking is allows at this
-        place. Note that this field can be <em>null</em>, which means that we
-        do not know whether or not smoking is allowed.
+        Indicates whether or not smoking is allows at this place. Note that
+        this field can be <code>null</code>, which means that we do not know
+        whether or not smoking is allowed.
       </td>
       <td>&#x2714;</td>
     </tr>
@@ -443,8 +444,8 @@ $toc->add_file(
       <td>boolean or null</td>
       <td>
         A boolean indicating whether or not this entry is
-        wheelchair-accessible. This field can be <em>null</em>, which means
-        that we do not know whether or not it is accessible.
+        wheelchair-accessible. This field can be <code>null</code>, which
+        means that we do not know whether or not it is accessible.
       </td>
       <td>&#x2714;</td>
     </tr>
@@ -453,8 +454,8 @@ $toc->add_file(
       <td>boolean or null</td>
       <td>
         A boolean indicating whether or not this entry accepts
-        reservations. This field can be <em>null</em>, which means that we do
-        not know whether or not it accepts reservations.
+        reservations. This field can be <code>null</code>, which means that we
+        do not know whether or not it accepts reservations.
       </td>
       <td>&#x2714;</td>
     </tr>
@@ -600,7 +601,7 @@ $toc->add_file(
 </table>
 
 <p>
-  Here is example of the hours data structure:
+  Here is an example of the hours data structure:
 </p>
 
 <pre><code>[
@@ -861,8 +862,9 @@ $toc->add_file(
   website. These fields are returned as objects where the attribute names are
   a MIME type and the attribute values are the text in that format. Currently,
   this data structure return two MIME types, <em>text/html</em>,
-  and <em>text/vnd.vegguide.org-wikitext</em>. The wikitext format VegGuide
-  uses is <a href="/site/help#wiki-formatting">described on the help page</a>.
+  and <em style="white-space:nowrap">text/vnd.vegguide.org-wikitext</em>. The
+  wikitext format VegGuide uses
+  is <a href="/site/help#wiki-formatting">described on the help page</a>.
 </p>
 
 <code><pre>
@@ -888,9 +890,9 @@ $toc->add_file(
 
 <p>
   Many of the URIs that the site offers include a numeric id, for
-  example <em>/region/13</em>. You are strongly encouraged <em>not</em> to
+  example <code>/region/13</code>. You are strongly encouraged <em>not</em> to
   rely on the stability of these numbers. Instead, use one of the defined
-  entry points to find the items you are looking for.
+  entry points to find items of interest for your applications.
 </p>
 
 <h3>Top-level</h3>
@@ -926,11 +928,20 @@ $toc->add_file(
   "Airports".
 </p>
 
-<h3>Geographical Search</h3>
+<h3>Geographical Searches</h3>
+
+<p>
+  There are two different entry point URIs for geographical searches. You can
+  search by address or by latitude and longitude. Both URIs return the same
+  response.
+</p>
 
 <ul>
   <li>
-    <strong>URI</strong>: <% $base_uri %>/search/by-lat-long/{latitude},{longitude}
+    <strong>Address URI</strong>: <% $base_uri %>search/by-address/<code>{address}</code>
+  </li>
+  <li>
+    <strong>Lat/Long URI</strong>: <% $base_uri %>search/by-lat-long/<code>{latitude}</code>,<code>{longitude}</code>
   </li>
   <li>
     <strong>Type</strong>: application/vnd.vegguide.org-entries+json
@@ -938,8 +949,59 @@ $toc->add_file(
 </ul>
 
 <p>
-  This document returns the result of a search around a given latitude and
-  longitude.
+  These searches accept the following query parameters:
+</p>
+
+<table class="docs-table">
+  <thead>
+    <tr>
+      <th>Key name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>distance</td>
+      <td>positive number</td>
+      <td>5</td>
+      <td>The search radius in miles or kilometers.</td>
+    </tr>
+    <tr>
+      <td>unit</td>
+      <td>enum</td>
+      <td>see description</td>
+      <td>
+        This can be either <code>mile</code> or <code>km</code>. If the search
+        is for an address in the US, this defaults to <code>mile</code>,
+        otherwise it defaults to <code>km</code>.
+      </td>
+    </tr>
+    <tr>
+      <td>limit</td>
+      <td>positive integer</td>
+      <td>50</td>
+      <td>
+        The maximum number of entries to return. This cannot be greater than
+        100.
+      </td>
+    </tr>
+    <tr>
+      <td>page</td>
+      <td>positive integer</td>
+      <td>1</td>
+      <td>
+        If there are more than <code>limit</code> entries in the search, this
+        parameter lets you fetch subsequent pages of results.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+  This document returns the result of a search around a specific address or
+  latitude and longitude.
 </p>
 
 <pre><code>{
@@ -957,6 +1019,11 @@ $toc->add_file(
   data structure</a> without related data.
 </p>
 
+<p>
+  If you search by address and the address does not resolve to a latitude and
+  longitude, we return a <a href="#Not-Found">404 Not Found</a> response.
+</p>
+
 <h2>Other URIs</h2>
 
 <p>
@@ -970,7 +1037,7 @@ $toc->add_file(
 
 <ul>
   <li>
-    <strong>URI</strong>: <% $base_uri %>/region/{id}
+    <strong>URI</strong>: <% $base_uri %>region/<code>{id}</code>
   </li>
   <li>
     <strong>Type</strong>: application/vnd.vegguide.org-region+json
@@ -988,7 +1055,7 @@ $toc->add_file(
 
 <ul>
   <li>
-    <strong>URI</strong>: <% $base_uri %>/region/{id}/entries
+    <strong>URI</strong>: <% $base_uri %>region/<code>{id}</code>/entries
   </li>
   <li>
     <strong>Type</strong>: application/vnd.vegguide.org-entries+json
@@ -1004,7 +1071,7 @@ $toc->add_file(
 
 <ul>
   <li>
-    <strong>URI</strong>: <% $base_uri %>/entry/{id}
+    <strong>URI</strong>: <% $base_uri %>entry/<code>{id}</code>
   </li>
   <li>
     <strong>Type</strong>: application/vnd.vegguide.org-entry+json
@@ -1021,7 +1088,7 @@ $toc->add_file(
 
 <ul>
   <li>
-    <strong>URI</strong>: <% $base_uri %>/entry/{id}/reviews
+    <strong>URI</strong>: <% $base_uri %>entry/<code>{id}</code>/reviews
   </li>
   <li>
     <strong>Type</strong>: application/vnd.vegguide.org-entry-reviews+json
@@ -1038,7 +1105,7 @@ $toc->add_file(
 
 <ul>
   <li>
-    <strong>URI</strong>: <% $base_uri %>/user/{id}
+    <strong>URI</strong>: <% $base_uri %>user/<code>{id}</code>
   </li>
   <li>
     <strong>Type</strong>: application/vnd.vegguide.org-user+json
@@ -1048,6 +1115,21 @@ $toc->add_file(
 <p>
   Returns a <a href="#User">User data structure</a>. These URIs show up in any
   response that includes user URIs, such as an entry or image data structure.
+</p>
+
+<a name="Error-Responses"></a>
+<h2>Error Responses</h2>
+
+<p>
+  Error responses are accompanied by a JSON document body describing the error
+  except for errors in the 5xx range, which typically mean something went
+  wrong server side. The content type for errors is
+  always <em>application/vnd.vegguide.org-error+json</em>
+</p>
+
+<p>
+  Error bodies are a JSON object containing one key, <code>error</code>. The
+  value for this key is a user-readable message describing the error.
 </p>
 
 <%init>
