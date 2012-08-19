@@ -80,7 +80,7 @@ with 'VegGuide::Role::Controller::Search';
         unless ($result) {
             $self->_rest_error_response(
                 $c,
-                "The address your provided ($address) could not be resolved to a ltitude and longitude.",
+                "The address your provided ($address) could not be resolved to a latitude and longitude.",
                 'not_found',
             );
 

@@ -154,6 +154,14 @@ use_test_database();
     );
 
     is( $response->code(), '404', 'got a 404 response for bad address' );
+
+    my $error = json_ok($response);
+
+    is(
+        $error->{error},
+        'The address your provided (not-found) could not be resolved to a latitude and longitude.',
+        'got the expected error message in the JSON response'
+    );
 }
 
 {
