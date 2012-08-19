@@ -11,7 +11,7 @@ use parent 'VegGuide::Comment';
 
 use Class::Trait qw( VegGuide::Role::FeedEntry );
 
-use VegGuide::SiteURI qw( entry_uri user_uri );
+use VegGuide::SiteURI qw( entry_uri entry_review_uri user_uri );
 
 use VegGuide::Validate qw( validate SCALAR );
 
