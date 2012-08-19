@@ -22,6 +22,7 @@ VegGuide.LocationSearch._populateLocationList = function ( res, div ) {
     }
 
     var ul = document.createElement("ul");
+    ul.className = "inline-search";
 
     for ( var i = 0; i < locations.length; i++ ) {
         var loc = locations[i];
@@ -51,6 +52,7 @@ VegGuide.LocationSearch._populateLocationList = function ( res, div ) {
         var li = document.createElement("li");
 
         li.appendChild(radio);
+        li.appendChild( document.createTextNode(" ") );
         li.appendChild(label);
 
         ul.appendChild(li);

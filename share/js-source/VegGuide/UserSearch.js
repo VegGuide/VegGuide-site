@@ -22,6 +22,7 @@ VegGuide.UserSearch._populateUserList = function ( res, div ) {
     }
 
     var ul = document.createElement("ul");
+    ul.className = "inline-search";
 
     for ( var i = 0; i < users.length; i++ ) {
         var user = users[i];
@@ -44,6 +45,7 @@ VegGuide.UserSearch._populateUserList = function ( res, div ) {
         var li = document.createElement("li");
 
         li.appendChild(radio);
+        li.appendChild( document.createTextNode(" ") );
         li.appendChild(label);
 
         ul.appendChild(li);
