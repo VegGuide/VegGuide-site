@@ -900,7 +900,7 @@ $toc->add_file(
 <ul>
   <li>
     <strong>URI</strong>: <% $base_uri %>
-  </li>
+g  </li>
   <li>
     <strong>Type</strong>: application/vnd.vegguide.org-regions+json
   </li>
@@ -978,24 +978,7 @@ $toc->add_file(
         otherwise it defaults to <code>km</code>.
       </td>
     </tr>
-    <tr>
-      <td>limit</td>
-      <td>positive integer</td>
-      <td>50</td>
-      <td>
-        The maximum number of entries to return. This cannot be greater than
-        100.
-      </td>
-    </tr>
-    <tr>
-      <td>page</td>
-      <td>positive integer</td>
-      <td>1</td>
-      <td>
-        If there are more than <code>limit</code> entries in the search, this
-        parameter lets you fetch subsequent pages of results.
-      </td>
-    </tr>
+<& .paging-param-rows &>
   </tbody>
 </table>
 
@@ -1063,7 +1046,7 @@ $toc->add_file(
 </ul>
 
 <p>
-  Returns an array of <a href="#Region">Entry data structures</a>.
+  Returns an array of <a href="#Region">Entry data structures</a> for the
   region. This document only includes entries that are not marked as closed.
 </p>
 
@@ -1149,3 +1132,24 @@ my $base_uri = uri(
 <%method page_title>
 VegGuide.org REST API
 </%method>
+
+<%def .paging-param-rows>
+    <tr>
+      <td>limit</td>
+      <td>positive integer</td>
+      <td>50</td>
+      <td>
+        The maximum number of entries to return. This cannot be greater than
+        100.
+      </td>
+    </tr>
+    <tr>
+      <td>page</td>
+      <td>positive integer</td>
+      <td>1</td>
+      <td>
+        If there are more than <code>limit</code> entries in the search, this
+        parameter lets you fetch subsequent pages of results.
+      </td>
+    </tr>
+</%def>
