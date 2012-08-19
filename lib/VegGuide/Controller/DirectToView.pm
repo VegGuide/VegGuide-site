@@ -37,6 +37,7 @@ sub _breadcrumb_title {
     my $path = $uri->path();
     $path =~ s{^/$prefix/}{};
     $path =~ s/[_-]/ /g;
+    $path =~ s{/$}{};
 
     return ucfirst $path;
 }
