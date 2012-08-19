@@ -173,6 +173,31 @@ sub _params_from_path_query {
             entity => $entity,
         );
 
+        $c->detach();
+
+        return;
+    }
+}
+
+{
+    my $type
+        = 'application/vnd.vegguide.org-error+json; charset=UTF-8; version=0.0.1';
+
+    sub _rest_error_response {
+        my $self    = shift;
+        my $c       = shift;
+        my $message = shift;
+        my $status  = shift;
+
+        my $meth = 'status_' . $status;
+
+        $self->$meth(
+            $c,
+            message => $message,
+        );
+
+        $c->detach();
+
         return;
     }
 }
