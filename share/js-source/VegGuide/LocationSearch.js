@@ -26,13 +26,15 @@ VegGuide.LocationSearch._populateLocationList = function ( res, div ) {
 
     for ( var i = 0; i < locations.length; i++ ) {
         var loc = locations[i];
+        var matches = loc.uri.match( /\/(\d+)$/ );
+        var location_id = matches[1];
 
         var radio = document.createElement("input");
 
         radio.type  = "radio";
         radio.name  = "location_id";
-        radio.value = loc.location_id;
-        radio.id    = "location_id-" + loc.location_id;
+        radio.value = location_id;
+        radio.id    = "location_id-" + location_id;
         radio.className = "radio";
 
         var label = document.createElement("label");
