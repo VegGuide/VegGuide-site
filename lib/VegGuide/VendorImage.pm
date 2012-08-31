@@ -21,7 +21,7 @@ use Image::Size qw( imgsize );
 use VegGuide::Config;
 use VegGuide::Image;
 use VegGuide::Vendor;
-use VegGuide::SiteURI qw( static_uri );
+use VegGuide::SiteURI qw( site_uri );
 
 {
     my $spec = {
@@ -291,7 +291,7 @@ sub _core_rest_data {
             my $height_meth = $_ . '_height';
             my $width_meth  = $_ . '_width';
             {
-                uri => static_uri(
+                uri => site_uri(
                     path      => $self->$uri_meth(),
                     with_host => 1,
                 ),
