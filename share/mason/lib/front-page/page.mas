@@ -38,6 +38,16 @@
   vegan restaurants and shopping.
 </p>
 
+<h2>REST API</h2>
+
+<p>
+  Calling all developers! We've released an <a href="/site/api-docs">alpha
+  REST API</a>. It works, but we may change bits of it in the future. We'd
+  love to <a href="guide@vegguide.org">get your feedback</a> on this API. You
+  can also check out the <a href="https://github.com/autarch/VegGuide">site's
+  source on GitHub</a>. Pull requests are welcome.
+</p>
+
 % if ($news_item) {
 <h2>News</h2>
 
