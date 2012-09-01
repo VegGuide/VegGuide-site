@@ -2,13 +2,13 @@
   <div id="footer-nav">
 
 % if ( $c->vg_user()->viewable_suggestion_count() ) {
-      <li class="first <% $c->vg_user()->is_admin() ? 'last' : q{} %>">
+      <li class="first <% $c->vg_user()->is_admin() ? q{} : 'last' %>">
         <a href="<% user_uri( user => $c->vg_user(), path => 'suggestions' ) | h %>" title="Suggestions"
            >Suggestions (<% $c->vg_user()->viewable_suggestion_count() %>)</a>
       </li>
 % }
 % if ( $c->vg_user()->is_admin() ) {
-      <li class="<% $c->vg_user()->viewable_suggestion_count() ? 'first' : q{} %> last"><a href="/site/admin/menu" title="Admin">Admin</a></li>
+      <li class="<% $c->vg_user()->viewable_suggestion_count() ? q{} : 'first' %> last"><a href="/site/admin/menu" title="Admin">Admin</a></li>
 % }
     </ul>
 
