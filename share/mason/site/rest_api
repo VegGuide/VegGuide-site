@@ -1,8 +1,0 @@
-<p>
-The site uses REST to do its dirty work, and an expanded, documented
-API will be coming eventually.
-</p>
-
-<%method page_title>
-REST API
-</%method>
