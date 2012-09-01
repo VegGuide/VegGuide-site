@@ -5,6 +5,8 @@ use warnings;
 
 our $VERSION = '0.01';
 
+our $REST_VERSION = '0.0.1';
+
 use Catalyst;
 use DateTime;
 use VegGuide::Client;

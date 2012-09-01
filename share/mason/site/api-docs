@@ -29,9 +29,10 @@ $toc->add_file(
 <h2>Versioning</h2>
 
 <p>
-  This document describes version <strong>0.0.1</strong> of the VegGuide REST
-  API. This version number follows the <a href="http://semver.org/">Semantic
-  Versioning Specification</a>. Since the major version number is
+  This document describes version <strong><% $VegGuide::REST_VERSION
+  %></strong> of the VegGuide REST API. This version number follows
+  the <a href="http://semver.org/">Semantic Versioning
+  Specification</a>. Since the major version number is
   currently <strong>0</strong>, the API is still in the experimental phase,
   and may change a fair bit before it is declared stable.
 </p>
@@ -55,9 +56,9 @@ $toc->add_file(
 <p>
   For example, information about an entry is returned with the content
   type <em style="white-space:nowrap">application/vnd.vegguide.org-entry+json;
-  charset=UTF-8; version=1.0.0</em>. The first part of the content type tells
-  you that the document contains information on a single entry. The rest
-  indicates the charset and version.
+  charset=UTF-8; version=<% $VegGuide::REST_VERSION %></em>. The first part of
+  the content type tells you that the document contains information on a
+  single entry. The remainder indicates the charset and version.
 </p>
 
 <p>
@@ -1113,6 +1114,14 @@ g  </li>
 <p>
   Error bodies are a JSON object containing one key, <code>error</code>. The
   value for this key is a user-readable message describing the error.
+</p>
+
+<h2>Release History</h2>
+
+<h3>0.0.1 - September 1, 2012</h3>
+
+<p>
+  First release upon an unsuspecting world.
 </p>
 
 <%init>

@@ -141,7 +141,8 @@ sub _params_from_path_query {
     my %ContentTypes = map {
               $_ => 'application/vnd.vegguide.org-'
             . $_
-            . '+json; charset=UTF-8; version=0.0.1'
+            . '+json; charset=UTF-8; version='
+            . $VegGuide::REST_VERSION
         } qw(
         entry
         entries
