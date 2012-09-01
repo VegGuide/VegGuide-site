@@ -896,7 +896,8 @@ $toc->add_file(
   entry points to find items of interest for your applications.
 </p>
 
-<h3>Top-level</h3>
+<a name="Top-level"></a>
+<h3>Top-Level</h3>
 
 <ul>
   <li>
@@ -929,6 +930,7 @@ $toc->add_file(
   "Airports".
 </p>
 
+<a name="Geographical-Searches">
 <h3>Geographical Searches</h3>
 
 <p>
