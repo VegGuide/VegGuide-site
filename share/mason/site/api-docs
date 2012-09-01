@@ -901,7 +901,7 @@ $toc->add_file(
 <ul>
   <li>
     <strong>URI</strong>: <% $base_uri %>
-g  </li>
+  </li>
   <li>
     <strong>Type</strong>: application/vnd.vegguide.org-regions+json
   </li>
