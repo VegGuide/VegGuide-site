@@ -139,15 +139,14 @@ sub clone_entry_form : Local {
 
         my $looks_like_address = 0;
 
-        # Text contains some sort of postal code, possibly followed by
-        # a country name. _Or_ it has > 1 comma, in which case it
-        # pretty much has to be an address (I hope).
-        $looks_like_address = 1
-            if $text =~ /$PostalCodeRe (?:, \s* \D+)?$/xism
+        unless ( $c->request()->param('name_only') ) {
+            # Text contains some sort of postal code, possibly followed by
+            # a country name. _Or_ it has > 1 comma, in which case it
+            # pretty much has to be an address (I hope).
+            $looks_like_address = 1
+                if $text =~ /$PostalCodeRe (?:, \s* \D+)?$/xism
                 || $text =~ tr/,/,/ > 1;
-
-        $looks_like_address = 0
-            if $c->request()->param('name_only');
+        }
 
         # This handles things like "2600 Emerson Ave S, Minneapolis MN"
         if (  !$looks_like_address
