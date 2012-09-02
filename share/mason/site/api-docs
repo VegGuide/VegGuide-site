@@ -9,14 +9,20 @@
   </div>
 </div>
 
+<%once>
+my $toc;
+</%once>
+
 <%init>
 my $docs = $m->scomp('.docs');
 
-my $toc = Text::TOC::HTML->new();
-$toc->add_file(
-    file    => $m->request_comp()->name(),
-    content => $docs,
-);
+unless ($toc) {
+    $toc = Text::TOC::HTML->new();
+    $toc->add_file(
+        file    => $m->request_comp()->name(),
+        content => $docs,
+    );
+}
 </%init>
 
 <%def .docs>
