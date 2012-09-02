@@ -183,6 +183,30 @@
                  );
              };
 
+             E.prototype._instrumentYourLocation = function () {
+                 if ( ! navigator.geolocation ) {
+                     $("#your-location-li").remove();
+                     return;
+                 }
+
+                 var self = this;
+
+                 navigator.geolocation.getCurrentPosition(
+                     function (position) {
+                         var path =
+                             "/search/by-lat-long/" +
+                             encodeURI( position.coords.latitude ) +
+                             "," +
+                             encodeURI( position.coords.longitude );
+
+                         $("#your-location-a").attr( "href", path );
+                         $("#your-location-a").text( self._baseURI + path );
+
+                         self.instrumentAnchor( $("#your-location-a") );
+                     }
+                 );
+             };
+
              E.prototype.initPage = function () {
                  var self = this;
 
@@ -193,6 +217,7 @@
                  );
 
                  self._instrumentRequestForm();
+                 self._instrumentYourLocation();
 
                  $("span.base-uri").text( this._baseURI );
              };
