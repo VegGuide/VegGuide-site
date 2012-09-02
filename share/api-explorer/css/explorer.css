@@ -17,3 +17,9 @@ ul.entry-points li {
     list-style: none;
     margin-bottom: 1em;
 }
+
+pre.responseJSON {
+    background-color: #f9f9f9;
+    color: black;
+    font-size: 110%;
+}

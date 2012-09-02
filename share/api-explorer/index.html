@@ -6,6 +6,8 @@
     <link href="css/explorer.css" rel="stylesheet">
     <script src="js/bootstrap.min.js"></script>
     <script src="js/jquery-1.8.1.min.js"></script>
+    <script src="js/jquery.mustache.js"></script>
+    <script src="js/underscore-min.js"></script>
     <script src="js/Explorer.js"></script>
   </head>
   <body>
@@ -35,37 +37,10 @@
 </div>
 
 <div class="row-fluid">
-  <div class="span3 offset2">
-    <h2>Entry Points</h2>
-
-    <ul class="entry-points">
-      <li>
-        The <a href="/api-docs#Top-level">top-level entry point</a>
-        <br>
-        <a href="/" class="entry-point-uri">/</a>
-      </li>
-      <li>
-        A <a href="/api-docs#Geographical-Searches">geographical search by
-        latitude/longitude</a>. The lat/long in this example is for 2100 1st
-        Ave S, Minneapolis, MN.
-        <br>
-        <a href="/search/by-lat-long/44.9617005%2C-93.2766566"
-        class="entry-point-uri">/search/by-lat-long/4.9617005,-93.2766566</a>
-      </li>
-      <li>
-        A <a href="/api-docs#Geographical-Searches">geographical search by
-        latitude/longitude</a>. This particular search is for "2100 1st Ave
-        S, Minneapolis, MN".
-        <br>
-        <a href="/search/by-address/2100+1st+Ave+S%2C+Minneapolis%2C+MN"
-        class="entry-point-uri">/search/by-address/2100+1st+Ave+S,+Minneapolis,+MN</a>
-      </li>
-    </ul>
-  </div>
-  <div class="span5">
+  <div class="span5 offset2">
     <h2>Request</h2>
 
-    <form action="#">
+    <form action="#" id="request-form">
       <label for="uri">URI</label>
       <div class="input-prepend">
         <span class="add-on base-uri">http://...</span><br>
@@ -80,10 +55,43 @@
       </div>
     </form>
 
-    <h2>Response</h2>
+    <div id="request-display"></div>
+  </div>
+
+  <div class="span3">
+    <h2>Entry Points</h2>
+
+    <ul class="entry-points">
+      <li>
+        The <a href="/api-docs#Top-level">top-level entry point</a>
+        <br>
+        <a href="/" class="entry-point-uri">/</a>
+      </li>
+      <li>
+        A <a href="/api-docs#Geographical-Searches">geographical search by
+        latitude/longitude</a>. The lat/long in this example is for 2100 1st
+        Ave S, Minneapolis, MN.
+        <br>
+        <a href="/search/by-lat-long/44.9617005%2C-93.2766566"
+        class="entry-point-uri">/search/by-lat-long/44.9617005,-93.2766566</a>
+      </li>
+      <li>
+        A <a href="/api-docs#Geographical-Searches">geographical search by
+        latitude/longitude</a>. This particular search is for "2100 1st Ave
+        S, Minneapolis, MN".
+        <br>
+        <a href="/search/by-address/2100+1st+Ave+S%2C+Minneapolis%2C+MN"
+        class="entry-point-uri">/search/by-address/2100+1st+Ave+S,+Minneapolis,+MN</a>
+      </li>
+    </ul>
   </div>
 </div>
-  
+
+<div class="row-fluid">
+  <div class="span8 offset2">
+    <div id="response-display"></div>
+  </div>
+</div>
 
   </body>
 </html>
