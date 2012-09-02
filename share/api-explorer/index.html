@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>VegGuide REST API Explorer</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/explorer.css" rel="stylesheet">
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery-1.8.1.min.js"></script>
+    <script src="js/Explorer.js"></script>
+  </head>
+  <body>
+
+<div class="row-fluid header">
+    <div class="span3 offset2">
+      <a href="/">
+        <img src="/images/vegguide-logo.png"
+             width="300" height="50" alt="VegGuide.Org Logo" />
+      </a>
+    </div>
+
+    <div class="span5">
+      <h1>VegGuide REST API Explorer</h1>
+    </div>
+  </div>
+</div>
+
+<div class="row-fluid">
+  <div class="span8 offset2">
+    <p>
+      Welcome to the VegGuide <a href="/site/api-docs">REST API</a> explorer. This
+      tool should help you get a sense of the data available from the VegGuide
+      REST API and how you can use that API to build great applications.
+    </p>
+  </div>
+</div>
+
+<div class="row-fluid">
+  <div class="span3 offset2">
+    <h2>Entry Points</h2>
+
+    <ul class="entry-points">
+      <li>
+        The <a href="/api-docs#Top-level">top-level entry point</a>
+        <br>
+        <a href="/" class="entry-point-uri">/</a>
+      </li>
+      <li>
+        A <a href="/api-docs#Geographical-Searches">geographical search by
+        latitude/longitude</a>. The lat/long in this example is for 2100 1st
+        Ave S, Minneapolis, MN.
+        <br>
+        <a href="/search/by-lat-long/44.9617005%2C-93.2766566"
+        class="entry-point-uri">/search/by-lat-long/4.9617005,-93.2766566</a>
+      </li>
+      <li>
+        A <a href="/api-docs#Geographical-Searches">geographical search by
+        latitude/longitude</a>. This particular search is for "2100 1st Ave
+        S, Minneapolis, MN".
+        <br>
+        <a href="/search/by-address/2100+1st+Ave+S%2C+Minneapolis%2C+MN"
+        class="entry-point-uri">/search/by-address/2100+1st+Ave+S,+Minneapolis,+MN</a>
+      </li>
+    </ul>
+  </div>
+  <div class="span5">
+    <h2>Request</h2>
+
+    <form action="#">
+      <label for="uri">URI</label>
+      <div class="input-prepend">
+        <span class="add-on base-uri">http://...</span><br>
+        <input type="text" class="input-xxlarge" name="uri" id="uri" value="/">
+      </div>
+
+      <label for="accept">Accept</label>
+      <input type="text" name="accept" id="accept" value="application/json">
+
+      <div class="controls">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+
+    <h2>Response</h2>
+  </div>
+</div>
+  
+
+  </body>
+</html>
+
