@@ -41,6 +41,10 @@
                          .replace(
                              /((&quot;|_)uri&quot;\s*:\s*&quot;)(.+)(&quot;,?)/g,
                              function (match, p1, p2, uri, p4) {
+                                 if ( /\.\w+$/.test(uri) ) {
+                                     return p1 + uri + p4;
+                                 }
+
                                  return p1 + self._makeAnchor(uri) + p4;
                              }
                          );
