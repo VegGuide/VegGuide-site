@@ -26,6 +26,13 @@ $toc->add_file(
   set of URIs. Currently, all information is returned as JSON.
 </p>
 
+<h2>API Explorer</h2>
+
+<p>
+  There is an <a href="/api-explorer/">API explorer</a> app if you'd like to
+  learn more about the API by playing with it.
+</p>
+
 <h2>Versioning</h2>
 
 <p>
