@@ -44,6 +44,10 @@ server {
         alias $var_dir/$1;
     }
 
+    location ~ ^/api-explorer {
+        alias $share_dir/api-explorer
+    }
+
     location ~ ^(?:/\w+)?/(css|images)(.+) {
         expires max;
         alias $share_dir/$1$2;
