@@ -215,6 +215,9 @@
 
                  $("ul.entry-points a.entry-point-uri").each(
                      function () {
+                         if ( $(this).attr("id") == "your-location-a" ) {
+                             return;
+                         }
                          self.instrumentAnchor( $(this) );
                      }
                  );
