@@ -134,7 +134,6 @@
                      }
                  ).done(
                      function (response, status, xhr) {
-                         console.log(response);
                          self._response.displayResponse( response, xhr );
                      }
                  );
