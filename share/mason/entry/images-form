@@ -29,7 +29,7 @@
       license URL as well.
     </p>
 
-    <form action="<% entry_uri( vendor => $vendor, path => 'image' ) %>"
+    <form action="<% entry_uri( vendor => $vendor, path => 'images' ) %>"
           method="post" enctype="multipart/form-data">
 
      <& /lib/form/errors.mas &>

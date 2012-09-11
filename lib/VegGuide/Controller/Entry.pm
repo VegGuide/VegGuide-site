@@ -791,7 +791,24 @@ sub images_form : Chained('_set_vendor') : PathPart('images_form') : Args(0) {
     $c->stash()->{template} = '/entry/images-form';
 }
 
-sub image_POST {
+sub images : Chained('_set_vendor') : PathPart('images') : Args(0) :
+    ActionClass('+VegGuide::Action::REST') {
+}
+
+sub images_GET : Private {
+    my $self = shift;
+    my $c    = shift;
+
+    $self->_rest_response(
+        $c,
+        'entry-images',
+        [
+            map { $_->rest_data() } $c->stash()->{vendor}->images()
+        ],
+    );
+}
+
+sub images_POST {
     my $self = shift;
     my $c    = shift;
 
@@ -823,23 +840,6 @@ sub image_POST {
 
     $c->redirect_and_detach(
         entry_uri( vendor => $vendor, path => 'images_form' ) );
-}
-
-sub images : Chained('_set_vendor') : PathPart('images') : Args(0) :
-    ActionClass('+VegGuide::Action::REST') {
-}
-
-sub images_GET : Private {
-    my $self = shift;
-    my $c    = shift;
-
-    $self->_rest_response(
-        $c,
-        'entry-images',
-        [
-            map { $_->rest_data() } $c->stash()->{vendor}->images()
-        ],
-    );
 }
 
 {
