@@ -3023,6 +3023,8 @@ sub TopRated {
                 $schema->sqlmaker->COUNT
                     ( $schema->VendorRating_t->rating_c ),
                 'DESC',
+                $schema->Vendor_t->name_c,
+                'ASC',
             ],
             limit => $p{limit},
         )
