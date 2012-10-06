@@ -69,11 +69,8 @@ use_test_database();
         sortable_name => 'Chipotle',
         uri           => path_to_uri('/entry/557'),
         user          => {
-            name                  => 'GBS',
-            uri                   => path_to_uri('/user/112'),
-            website               => 'http://www.ExploreVeg.org',
-            veg_level             => 0,
-            veg_level_description => 'not telling',
+            name => 'GBS',
+            uri  => path_to_uri('/user/112'),
         },
         veg_level             => 2,
         veg_level_description => 'Vegan-Friendly',
@@ -159,8 +156,8 @@ use_test_database();
             }
         },
         {
-            rating                 => 1,
-            user                   => {
+            rating => 1,
+            user   => {
                 name                  => 'Nicholas',
                 uri                   => path_to_uri('/user/2370'),
                 veg_level             => 0,
@@ -220,11 +217,8 @@ use_test_database();
                 },
             ],
             user => {
-                name                  => 'Admin',
-                uri                   => path_to_uri('/user/1'),
-                website               => 'http://www.vegguide.org',
-                veg_level             => 4,
-                veg_level_description => 'vegan',
+                name => 'Admin',
+                uri  => path_to_uri('/user/1'),
             },
         },
         {
@@ -253,11 +247,8 @@ use_test_database();
                 },
             ],
             user => {
-                name                  => 'Admin',
-                uri                   => path_to_uri('/user/1'),
-                website               => 'http://www.vegguide.org',
-                veg_level             => 4,
-                veg_level_description => 'vegan',
+                name => 'Admin',
+                uri  => path_to_uri('/user/1'),
             },
         },
         {
@@ -287,11 +278,8 @@ use_test_database();
                 },
             ],
             user => {
-                name                  => 'conde.kedar',
-                uri                   => path_to_uri('/user/4795'),
-                website               => 'http://www.exploreveg.org',
-                veg_level             => 4,
-                veg_level_description => 'vegan',
+                name => 'conde.kedar',
+                uri  => path_to_uri('/user/4795'),
             },
         },
         {
@@ -321,10 +309,8 @@ use_test_database();
                 },
             ],
             user => {
-                name                  => 'Danielle S',
-                uri                   => path_to_uri('/user/8070'),
-                veg_level             => 4,
-                veg_level_description => 'vegan',
+                name => 'Danielle S',
+                uri  => path_to_uri('/user/8070'),
             },
         }
     ];

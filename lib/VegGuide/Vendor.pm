@@ -2356,7 +2356,10 @@ sub _core_rest_data {
     $rest{tags}       = [ sort map { $_->name() } $self->attributes() ]
         if $self->attributes();
 
-    $rest{user} = $self->user()->rest_data( include_related => 0 );
+    $rest{user} = $self->user()->rest_data(
+        include_related         => 0,
+        include_complete_record => 0,
+    );
 
     $rest{uri} = entry_uri( vendor => $self, with_host => 1 );
     $rest{reviews_uri}

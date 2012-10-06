@@ -278,7 +278,10 @@ sub _core_rest_data {
     my %rest = (
         mime_type =>
             VegGuide::Image->new( file => $self->small_path() )->type(),
-        user => $self->user()->rest_data(),
+        user => $self->user()->rest_data(
+            include_related         => 0,
+            include_complete_record => 0,
+        ),
     );
 
     if ( $self->caption() ) {

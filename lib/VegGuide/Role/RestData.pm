@@ -13,10 +13,14 @@ sub rest_data {
     my $self = shift;
     my %p    = validate(
         @_,
-        { include_related => { type => BOOLEAN, default => 1 } }
+        {
+            include_related         => { type => BOOLEAN, default => 1 },
+            include_complete_record => { type => BOOLEAN, default => 1 },
+        }
     );
 
-    $self->{core_rest_data} ||= $self->_core_rest_data();
+    $self->{core_rest_data}
+        ||= $self->_core_rest_data( $p{include_complete_record} );
 
     return unless keys %{ $self->{core_rest_data} };
 

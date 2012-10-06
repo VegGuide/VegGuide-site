@@ -1155,17 +1155,22 @@ sub external_uri {
 }
 
 sub _core_rest_data {
-    my $self = shift;
+    my $self             = shift;
+    my $include_complete = shift;
 
     my %rest = (
         name => $self->real_name(),
-        veg_level             => $self->how_veg(),
-        veg_level_description => $self->veg_level_description(),
-        uri                   => user_uri(
+        uri  => user_uri(
             user      => $self,
             with_host => 1,
         ),
+
     );
+
+    return \%rest unless $include_complete;
+
+    $rest{veg_level}             = $self->how_veg();
+    $rest{veg_level_description} = $self->veg_level_description();
 
     if ( $self->bio() ) {
         $rest{bio} = VegGuide::Util::text_for_rest_response( $self->bio() );

@@ -574,8 +574,9 @@ unless ($toc) {
       <td>user</td>
       <td><a href="#User">User</a></td>
       <td>
-        A <a href="#User">User data structure</a> for the creator of this
-        entry. This data structure <em>does not</em> include related data.
+        A minimal <a href="#User">User data structure</a> (<code>uri</code>
+        and <code>name</code> only) for the creator of this entry. This data
+        structure <em>does not</em> include related data.
       </td>
       <td>&#x2714;</td>
     </tr>
@@ -709,6 +710,14 @@ unless ($toc) {
   </tbody>
 </table>
 
+<p>
+  User data structures come in two variations. In some cases, an end point
+  only provides the <code>uri</code> and <code>name</code> keys for a
+  user. The documentation calls this a <strong>minimal User data
+  structure</strong>, as opposed to a <strong>complete User data
+  structure</strong>.
+</p>
+
 <a name="Comment"></a>
 <h3>Comment</h3>
 
@@ -744,8 +753,9 @@ unless ($toc) {
       <td>user</td>
       <td><a href="#User">User</a></td>
       <td>
-        A <a href="#User">User data structure</a> for the author of the
-        comment. This data structure <em>does not</em> include related data.
+        A complete <a href="#User">User data structure</a> for the author of
+        the comment. This data structure <em>does not</em> include related
+        data.
       </td>
       <td>&#x2714;</td>
     </tr>
@@ -820,8 +830,9 @@ unless ($toc) {
       <td>user</td>
       <td><a href="#User">User</a></td>
       <td>
-        A <a href="#User">User data structure</a> for the creator of this
-        entry. This data structure <em>does not</em> include related data.
+        A minimal <a href="#User">User data structure</a> (<code>uri</code>
+        and <code>name</code> only) for the user who uploaded this image. This
+        data structure <em>does not</em> include related data.
       </td>
       <td></td>
     </tr>
@@ -1110,8 +1121,9 @@ unless ($toc) {
 </ul>
 
 <p>
-  Returns a <a href="#User">User data structure</a>. These URIs show up in any
-  response that includes user URIs, such as an entry or image data structure.
+  Returns a complete <a href="#User">User data structure</a>. These URIs show
+  up in any response that includes user URIs, such as an entry or image data
+  structure.
 </p>
 
 <a name="Error-Responses"></a>
@@ -1130,6 +1142,17 @@ unless ($toc) {
 </p>
 
 <h2>Release History</h2>
+
+<h3>0.0.2 - October 6, 2012</h3>
+
+<ul>
+  <li>
+    Some REST end points have been changed to only return partial User data,
+    just the name and uri keys. This was changed for search results, entry
+    listings, and entry images. The user end point and entry review end points
+    still return the complete User data structure.
+  </li>
+</ul>
 
 <h3>0.0.1 - September 1, 2012</h3>
 

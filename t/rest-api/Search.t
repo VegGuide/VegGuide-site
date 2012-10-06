@@ -67,6 +67,15 @@ use_test_database();
         '0.2 miles',
         'entry data has a distance key with the expected value'
     );
+
+    is_deeply(
+        $entry->{user},
+        {
+            name => 'Matt Mackall',
+            uri  => 'http://houseabsolute.urth.org:3000/user/2',
+        },
+        'user data for search results only includes name and uri'
+    );
 }
 
 {
