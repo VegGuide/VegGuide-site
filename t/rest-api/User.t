@@ -16,7 +16,8 @@ use_test_database();
 
     is(
         $response->header('Content-Type'),
-        'application/vnd.vegguide.org-user+json; charset=UTF-8; version=0.0.1',
+        'application/vnd.vegguide.org-user+json; charset=UTF-8; version='
+            . $VegGuide::REST_VERSION,
         'got the right RESTful content type'
     );
 

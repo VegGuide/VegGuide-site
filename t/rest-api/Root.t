@@ -17,7 +17,8 @@ use_test_database();
 
     is(
         $response->header('Content-Type'),
-        'application/vnd.vegguide.org-root-regions+json; charset=UTF-8; version=0.0.1',
+        'application/vnd.vegguide.org-root-regions+json; charset=UTF-8; version='
+            . $VegGuide::REST_VERSION,
         'got the right RESTful content type'
     );
 
@@ -27,7 +28,7 @@ use_test_database();
         for qw( primary secondary );
 
     my $na = first { $_->{name} eq 'North America' }
-        @{ $regions->{regions}{primary} };
+    @{ $regions->{regions}{primary} };
 
     my $children = delete $na->{children};
     ok(
