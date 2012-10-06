@@ -669,8 +669,6 @@ unless ($toc) {
         <p>
           How vegetarian the user is, from 0-4. The levels are:
         </p>
-
-
         <ul>
 % for my $level (0..4) {
           <li><strong><% $level %></strong> - <% VegGuide::User->VegLevelDescription($level) %></li>
