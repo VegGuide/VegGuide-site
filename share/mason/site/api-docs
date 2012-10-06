@@ -1152,6 +1152,11 @@ unless ($toc) {
     listings, and entry images. The user end point and entry review end points
     still return the complete User data structure.
   </li>
+  <li>
+    Lat/long searches always returned results based on miles, even though the
+    docs said that miles are only used for locations inside the USA. This has
+    been fixed.
+  </li>
 </ul>
 
 <h3>0.0.1 - September 1, 2012</h3>

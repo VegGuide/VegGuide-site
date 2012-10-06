@@ -87,15 +87,12 @@ with 'VegGuide::Role::Controller::Search';
             return;
         }
 
-        my $unit = $geocoder->country() eq 'USA' ? 'mile' : 'km';
-
         my %config = %SearchConfig;
         $config{extra_params} = sub {
             return (
                 latitude  => $result->latitude(),
                 longitude => $result->longitude(),
                 address   => $address,
-                unit      => $unit,
             );
         };
 
@@ -139,18 +136,14 @@ sub _search_rest_response {
 
     my %rest = (
         entry_count => $search->count(),
-        uri         => static_uri(
-            path  => $path,
-            query => {
-                distance => $search->distance(),
-                unit     => $search->unit(),
-            },
-            with_host => 1,
-        )
     );
 
+    my $country;
     my $vendors = $search->vendors();
+
     while ( my $vendor = $vendors->next() ) {
+        $country ||= $vendor->location()->country();
+
         my $entry_rest = $vendor->rest_data( include_related => 0 );
         my $distance = $vendor->distance_from(
             latitude  => $search->latitude(),
@@ -168,6 +161,15 @@ sub _search_rest_response {
         $rest{region}
             ||= $vendor->location()->rest_data( include_related => 0 );
     }
+
+    $rest{uri} = static_uri(
+        path  => $path,
+        query => {
+            distance => $search->distance(),
+            unit     => ( $country && $country eq 'USA' ? 'mile' : 'km' ),
+        },
+        with_host => 1,
+    );
 
     $self->_rest_response(
         $c,

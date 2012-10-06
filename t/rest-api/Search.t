@@ -8,6 +8,7 @@ use Test::More 0.88;
 use Test::VegGuide qw( json_ok path_to_uri rest_request use_test_database );
 
 use URI;
+use URI::QueryParam;
 
 use_test_database();
 
@@ -22,7 +23,8 @@ use_test_database();
 
     is(
         $response->header('Content-Type'),
-        'application/vnd.vegguide.org-search+json; charset=UTF-8; version=' . $VegGuide::REST_VERSION,
+        'application/vnd.vegguide.org-search+json; charset=UTF-8; version='
+            . $VegGuide::REST_VERSION,
         'got the right RESTful content type'
     );
 
@@ -33,6 +35,12 @@ use_test_database();
         $uri->path(),
         '/search/by-lat-long/44.9479791,-93.2935778',
         'got expected uri path for search'
+    );
+
+    is(
+        $uri->query_param('unit'),
+        'mile',
+        'unit query param is mile for lat/long in USA'
     );
 
     is_deeply(
@@ -81,7 +89,8 @@ use_test_database();
 {
     my $response = request(
         rest_request(
-            GET => '/search/by-lat-long/44.9479791,-93.2935778?distance=1;limit=5'
+            GET =>
+                '/search/by-lat-long/44.9479791,-93.2935778?distance=1;limit=5'
         )
     );
 
@@ -89,7 +98,8 @@ use_test_database();
 
     is(
         $response->header('Content-Type'),
-        'application/vnd.vegguide.org-search+json; charset=UTF-8; version=' . $VegGuide::REST_VERSION,
+        'application/vnd.vegguide.org-search+json; charset=UTF-8; version='
+            . $VegGuide::REST_VERSION,
         'got the right RESTful content type'
     );
 
@@ -116,8 +126,24 @@ use_test_database();
 
 {
     my $response = request(
+        rest_request( GET => '/search/by-lat-long/48.1189,11.5713' ) );
+
+    my $search = json_ok($response);
+
+    my $uri = URI->new( $search->{uri} );
+
+    is(
+        $uri->query_param('unit'),
+        'km',
+        'unit query param is km for lat/long in Germany'
+    );
+}
+
+{
+    my $response = request(
         rest_request(
-            GET => '/search/by-lat-long/44.9479791,-93.2935778?distance=1;limit=5;page=2'
+            GET =>
+                '/search/by-lat-long/44.9479791,-93.2935778?distance=1;limit=5;page=2'
         )
     );
 
@@ -125,7 +151,8 @@ use_test_database();
 
     is(
         $response->header('Content-Type'),
-        'application/vnd.vegguide.org-search+json; charset=UTF-8; version=' . $VegGuide::REST_VERSION,
+        'application/vnd.vegguide.org-search+json; charset=UTF-8; version='
+            . $VegGuide::REST_VERSION,
         'got the right RESTful content type'
     );
 
@@ -157,10 +184,7 @@ use_test_database();
     };
 
     my $response = request(
-        rest_request(
-            GET => '/search/by-address/not-found?distance=1'
-        )
-    );
+        rest_request( GET => '/search/by-address/not-found?distance=1' ) );
 
     is( $response->code(), '404', 'got a 404 response for bad address' );
 
@@ -185,10 +209,7 @@ use_test_database();
     };
 
     my $response = request(
-        rest_request(
-            GET => '/search/by-address/good-address?distance=1'
-        )
-    );
+        rest_request( GET => '/search/by-address/good-address?distance=1' ) );
 
     is( $response->code(), '200', 'got a 200 response for good address' );
 
@@ -199,6 +220,12 @@ use_test_database();
         $uri->path(),
         '/search/by-address/good-address',
         'got expected uri path for search'
+    );
+
+    is(
+        $uri->query_param('unit'),
+        'mile',
+        'unit query param is mile for address in USA'
     );
 
     is_deeply(
@@ -232,6 +259,31 @@ use_test_database();
         $entry->{distance},
         '0.2 miles',
         'entry data has a distance key with the expected value'
+    );
+}
+
+{
+    no warnings 'redefine';
+    local *VegGuide::Geocoder::geocode_full_address = sub {
+        return VegGuide::Geocoder::Result->new(
+            {
+                Point   => { coordinates => [ 11.5713, 48.1189 ] },
+                address => 'good address',
+            },
+        );
+    };
+
+    my $response
+        = request( rest_request( GET => '/search/by-address/good-address' ) );
+
+    my $search = json_ok($response);
+
+    my $uri = URI->new( $search->{uri} );
+
+    is(
+        $uri->query_param('unit'),
+        'km',
+        'unit query param is km for lat/long in Germany'
     );
 }
 
