@@ -72,8 +72,14 @@ use_test_database();
 
     is(
         $entry->{distance},
-        '0.2 miles',
+        '0.232580025603212',
         'entry data has a distance key with the expected value'
+    );
+
+    is(
+        $search->{distance_unit},
+        'mile',
+        'distance_unit for search is mile'
     );
 
     is_deeply(
@@ -253,11 +259,17 @@ use_test_database();
         'entry_count is same as the number of entries returned'
     );
 
+    is(
+        $search->{distance_unit},
+        'mile',
+        'distance_unit for search is mile'
+    );
+
     my $entry = $search->{entries}[0];
 
     is(
         $entry->{distance},
-        '0.2 miles',
+        '0.232580025603212',
         'entry data has a distance key with the expected value'
     );
 }
@@ -279,6 +291,12 @@ use_test_database();
     my $search = json_ok($response);
 
     my $uri = URI->new( $search->{uri} );
+
+    is(
+        $search->{distance_unit},
+        'mile',
+        'distance_unit for search is mile'
+    );
 
     is(
         $uri->query_param('unit'),

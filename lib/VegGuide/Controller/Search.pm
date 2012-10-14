@@ -135,7 +135,8 @@ sub _search_rest_response {
     my $path   = shift;
 
     my %rest = (
-        entry_count => $search->count(),
+        entry_count   => $search->count(),
+        distance_unit => $search->unit(),
     );
 
     my $country;
@@ -151,10 +152,7 @@ sub _search_rest_response {
             unit      => $search->unit(),
         );
 
-        my $with_units = $distance . ' ' . $search->unit();
-        $with_units .= 's' unless $distance == 1;
-
-        $entry_rest->{distance} = $with_units;
+        $entry_rest->{distance} = $distance;
 
         push @{ $rest{entries} }, $entry_rest;
 
