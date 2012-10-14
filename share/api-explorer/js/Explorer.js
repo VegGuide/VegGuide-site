@@ -81,6 +81,20 @@
                  return div.html();
              };
 
+             var _errorTemplate =
+                 '<h2>An Error Occurred</h2>' +
+                 '<p>{{status}} {{error}}</p>';
+
+             R.prototype.displayError = function (xhr, error) {
+                 var self = this;
+
+                 var view = {
+                     "status": xhr.status,
+                     "error":  error
+                 };
+                 $("#response-display").html( $.mustache( _errorTemplate, view ) );
+             };
+
              return R;
          }
      )();
@@ -135,6 +149,10 @@
                  ).done(
                      function (response, status, xhr) {
                          self._response.displayResponse( response, xhr );
+                     }
+                 ).fail(
+                     function (xhr, status, error) {
+                         self._response.displayError( xhr, error );
                      }
                  );
              };
