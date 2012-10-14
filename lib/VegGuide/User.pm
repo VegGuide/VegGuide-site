@@ -1177,8 +1177,7 @@ sub _core_rest_data {
     }
 
     if ( my $uri = $self->home_page() ) {
-        $uri = 'http://' . $uri unless $uri =~ m{http://};
-        $rest{website} = $uri;
+        $rest{website} = $self->external_uri();
     }
 
     if ( $self->has_image() ) {

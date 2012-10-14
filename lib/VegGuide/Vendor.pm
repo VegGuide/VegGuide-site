@@ -2327,9 +2327,7 @@ sub _core_rest_data {
     }
 
     if ( my $uri = delete $rest{home_page} ) {
-        $uri = 'http://'  . $uri
-            unless $uri =~ m{http://};
-        $rest{website} = $uri;
+        $rest{website} = $self->external_uri();
     }
 
     $rest{veg_level_description} = $self->veg_description();
