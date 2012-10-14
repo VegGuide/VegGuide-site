@@ -82,7 +82,7 @@ if ( $search->can('location') )
     </td>
 % if ($distance) {
     <td class="distance">
-      <% $distance %> <% PL( $search->unit(), $distance ) %>
+      <% sprintf( '%.1f', $distance ) %> <% PL( $search->unit(), $distance ) %>
     </td>
 % }
     <td class="summary">

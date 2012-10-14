@@ -52,7 +52,7 @@ if ($search) {
                   longitude => $search->longitude(),
                   unit      => $search->unit(),
                 );
-        push @vendors, [ $distance, $vendor ];
+        push @vendors, [ sprintf( '%.1f', $distance ), $vendor ];
     }
 
     @vendors = sort { $a->[0] <=> $b->[0] } @vendors;

@@ -73,11 +73,9 @@ sub earth_radius {
         my ( $long1, $long2 )
             = map { deg2rad($_) } @p{qw( longitude1 longitude2 )};
 
-        return sprintf(
-            '%.1f',
-            great_circle_distance(
-                $long1, $lat1, $long2, $lat2, $EarthRadius{ $p{unit} }
-            )
+        return great_circle_distance(
+            $long1, $lat1, $long2, $lat2,
+            $EarthRadius{ $p{unit} }
         );
     }
 }

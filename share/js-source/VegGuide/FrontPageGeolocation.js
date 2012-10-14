@@ -51,7 +51,12 @@ VegGuide.FrontPageGeolocation._updateNearbyList = function (res) {
         var list = "<ul>";
 
         for ( var i = 0; i < response.entries.length; i++ ) {
-            list = list + '<li><a href="' + response.entries[i].uri + '">' + response.entries[i].name + " - " + response.entries[i].distance + "</a></li>";
+            var distance10 = parseFloat( response.entries[i].distance, 10 ) * 10;
+            list = list + '<li><a href="'
+                + response.entries[i].uri
+                + '">' + response.entries[i].name
+                + " - " + ( Math.round(distance10) / 10 )
+                + "</a></li>";
         }
 
         var loc_name = response.location.name;
