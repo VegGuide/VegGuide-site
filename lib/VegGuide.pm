@@ -5,7 +5,7 @@ use warnings;
 
 our $VERSION = '0.01';
 
-our $REST_VERSION = '0.0.2';
+our $REST_VERSION = '0.0.3';
 
 use Catalyst;
 use DateTime;

@@ -276,11 +276,12 @@ unless ($toc) {
     </tr>
     <tr>
       <td>distance</td>
-      <td>string</td>
+      <td>floating point number</td>
       <td>
         The entry's distance from a search location. This is only present when
-        searching for entries near a specific location. The string will
-        include a number and units, something like "1.3 miles".
+        searching for entries near a specific location. There may be many
+        digits after the decimal point, so client libraries should round this
+        value as needed for display.
       </td>
       <td>
         This is always present for entries in geographical search results,
@@ -1013,10 +1014,11 @@ unless ($toc) {
 </p>
 
 <pre><code>{
-    "uri":         "http://...",
-    "entry_count": 123,
-    "entries":     [ ... ],
-    "region":      { ... }
+    "uri":           "http://...",
+    "entry_count":   123,
+    "distance_unit": "mile",
+    "entries":       [ ... ],
+    "region":        { ... }
 }</code></pre>
 
 <p>
@@ -1025,6 +1027,10 @@ unless ($toc) {
   include a <em>distance</em> key. The <em>regions</em> key contains the
   region associated with the nearest entry. This is a <a href="#Region">Region
   data structure</a> without related data.
+</p>
+
+<p>
+  The <em>distance_unit</em> key is always "mile" or "km".
 </p>
 
 <p>
@@ -1142,6 +1148,17 @@ unless ($toc) {
 </p>
 
 <h2>Release History</h2>
+
+<h3>0.0.3 - October 14, 2012</h3>
+
+<ul>
+  <li>
+    The Entry structures for geographical now return the distance as an
+    unrounded floating point number. The search response itself now includes
+    a <em>distance_unit</em> key ("mile" or "km"). Client libraries should
+    round the distance as needed for display.
+  </li>
+</ul>
 
 <h3>0.0.2 - October 6, 2012</h3>
 
