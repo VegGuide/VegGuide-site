@@ -916,7 +916,7 @@ sub images_POST {
                 unit      => $search->unit(),
             );
 
-            my $with_units = $distance . ' ' . $search->unit();
+            my $with_units = sprintf( '%.1f', $distance ) . ' ' . $search->unit();
             $with_units .= 's' unless $distance == 1;
 
             push @entries, {
