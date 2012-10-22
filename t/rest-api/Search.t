@@ -208,8 +208,13 @@ use_test_database();
     local *VegGuide::Geocoder::geocode_full_address = sub {
         return VegGuide::Geocoder::Result->new(
             {
-                Point   => { coordinates => [ -93.2935778, 44.9479791 ] },
-                address => 'good address',
+                geometry => {
+                    location => {
+                        lng => -93.2935778,
+                        lat => 44.9479791,
+                    }
+                },
+                formatted_address => 'good address',
             },
         );
     };
@@ -279,8 +284,13 @@ use_test_database();
     local *VegGuide::Geocoder::geocode_full_address = sub {
         return VegGuide::Geocoder::Result->new(
             {
-                Point   => { coordinates => [ 11.5713, 48.1189 ] },
-                address => 'good address',
+                geometry => {
+                    location => {
+                        lat => 48.1189,
+                        lng => 11.5713,
+                    }
+                },
+                formatted_address => 'good address',
             },
         );
     };
