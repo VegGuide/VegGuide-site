@@ -167,4 +167,13 @@ sub _taiwan_geocode_address {
     );
 }
 
+sub _singapore_geocode_address {
+    my $self = shift;
+    my %p    = @_;
+
+    return $p{postal_code} if defined $p{postal_code};
+
+    return $self->_standard_geocode_address(%p);
+}
+
 1;
