@@ -3329,19 +3329,10 @@ sub ActiveVendors {
 sub UnGeocoded {
     my $class = shift;
 
-    my @location_ids
-        = map { ( $_->descendant_ids(), $_->location_id() ) }
-        map { VegGuide::Location->new( name => $_ ) }
-        VegGuide::Geocoder->Countries();
-
     my $table = $class->table();
 
     return $class->VendorsWhere(
         where => [
-            [
-                $table->location_id_c(),
-                'IN', @location_ids
-            ],
             [ $table->latitude_c(), '=',        undef ],
             [ $table->address1_c(), '!=',       undef ],
             [ $table->address1_c(), 'NOT LIKE', 'po%' ],
