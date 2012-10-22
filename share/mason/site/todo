@@ -1,9 +1,27 @@
 <p>
-The items here are lised in some sort of vague order based on
-importance and feasibility.
+The items here are not listed in any particular order.
 </p>
 
 <ul class="todo">
+ <li>
+  Apps for Android and iPhone.
+ </li>
+
+ <li>
+  Wiki-ize all data. Let anyone edit but make it easy to rollback changes.
+ </li>
+
+ <li>
+  Better search. Identify things like cuisines ("Chinese") in search and do
+  something intelligent with this so "Chinese in Minneapolis" just works.
+ </li>
+
+ <li>
+  Interesting-ness ranking, based on veg-friendliness level, recency, new
+  reviews/ratings, # of reviews/ratings, and some sort of manual "this is
+  cool/boring" flag. This would let you filter out "boring" entries like
+  chains if you don't want to see them.
+ </li>
 
  <li>
   Pull relevant event data from sites like Meetup.com and associate it
@@ -11,17 +29,10 @@ importance and feasibility.
  </li>
 
  <li>
-  Look into creating importers for the
-  various <a href="http://openguides.org/">OpenGuides</a>. They
-  publish their data under a compatible CC license in RDF format.
- </li>
-
- <li>
-  Sort of related to the above. It might be useful to allow a set of
-  links to be associated with a region, especially travel guides,
-  local veg groups, etc. The question is how much this overlaps the
-  existing listings, and if it just makes a mess. Of course, lists of
-  links also invite spam.
+  It might be useful to allow a set of links to be associated with a region,
+  especially travel guides, local veg groups, etc. The question is how much
+  this overlaps the existing listings, and if it just makes a mess. Of course,
+  lists of links also invite spam.
  </li>
 
  <li>
@@ -41,7 +52,7 @@ importance and feasibility.
  </li>
 
  <li>
-  The left side listing key for the Google Maps view of an entry list
+  The side listing key for the Google Maps view of an entry list
   could be improved with more useful info.
  </li>
 
@@ -93,13 +104,8 @@ importance and feasibility.
  </li>
 
  <li>
-  Consider giving newer ratings more weight than old ones.
- </li>
-
- <li>
-  Investigate how well the site works on mobile devices and improve it
-  as necessary. This may become less of an issue as more devices
-  provide real browsers as opposed to WAP-based browsers.
+  Consider giving newer ratings more weight than old ones. Also consider
+  giving rating w/ reviews more weight.
  </li>
 
  <li>
@@ -161,10 +167,6 @@ free to ignore this, it's just for our reference.
   Implement some form of admin tool for cuisines & entry
   features. These change rarely enough that this could be a simple CLI
   tool.
- </li>
-
- <li>
-  Provide a non-JS version listing filter form?
  </li>
 
  <li>
