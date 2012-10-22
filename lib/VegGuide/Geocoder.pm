@@ -47,6 +47,7 @@ use VegGuide::Validate qw( validate SCALAR_TYPE );
         my $country = shift;
 
         my $code = country2code($country);
+        return unless $code;
 
         return $exception{$code} // $code;
     }
