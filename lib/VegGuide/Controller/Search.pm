@@ -73,7 +73,6 @@ with 'VegGuide::Role::Controller::Search';
 
         my $country = ( split /,\s*/, $address )[-1];
         my $geocoder = VegGuide::Geocoder->new( country => $country );
-        $geocoder ||= VegGuide::Geocoder->new( country => 'USA' );
 
         my $result = $geocoder->geocode_full_address($address);
 

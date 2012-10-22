@@ -16,8 +16,8 @@ sub new {
     return unless $geocode_info;
 
     return bless {
-        latitude  => $geocode_info->{results}{geometry}{location}{lat},
-        longitude => $geocode_info->{results}{geometry}{location}{lng},
+        latitude  => $geocode_info->{geometry}{location}{lat},
+        longitude => $geocode_info->{geometry}{location}{lng},
         canonical_address => $geocode_info->{formatted_address},
     };
 }

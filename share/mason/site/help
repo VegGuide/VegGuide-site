@@ -287,18 +287,13 @@ region and click on "Add Region".
 <h2>What countries are supported for address searches?</h2>
 
 <p>
-The following countries are supported:
+In theory, all countries that Google Maps has data for are supported.
 </p>
 
-<ul>
-% for my $c ( sort VegGuide::Geocoder->Countries() ) {
- <li><% $c | h %></li>
-% }
-</ul>
-
 <p>
-Note that for searches in Japan and Taiwan, the address must be in the
-native language, not a romanized version.
+Note that for searches in countries that don't use the Roman alphabet (for
+example Japan and Taiwan), the address must be in the native language, not a
+romanized version.
 </p>
 </%def>
 

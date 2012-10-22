@@ -234,7 +234,6 @@ sub _search_by_address {
 
     my $country = ( split /,\s*/, $text )[-1];
     my $geocoder = VegGuide::Geocoder->new( country => $country );
-    $geocoder ||= VegGuide::Geocoder->new( country => 'USA' );
 
     my $result = $geocoder->geocode_full_address($text);
 

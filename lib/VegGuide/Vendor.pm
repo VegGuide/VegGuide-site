@@ -1849,7 +1849,7 @@ sub map_uri {
     if ( $geocoder && !string_is_empty( $self->canonical_address() ) ) {
         return uri(
             scheme => 'http',
-            host   => $geocoder->hostname(),
+            host   => 'maps.google.com',
             path   => '/maps',
             query =>
                 { q => Encode::encode( 'utf8', $self->canonical_address() ) },

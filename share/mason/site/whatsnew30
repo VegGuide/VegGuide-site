@@ -31,8 +31,7 @@ possible.
 
 <p>
 One of the things we're really excited about is that this feature
-works in many locations all around the world. The countries included
-so far are <% list_to_english( sort VegGuide::Geocoder->Countries() ) | h %>.
+works in many locations all around the world.
 </p>
 
 <h3>Listing filters</h3>

@@ -16,7 +16,6 @@ use parent 'Catalyst::View::Mason';
     use Text::TOC 0.09;
     use Text::TOC::HTML;
     use URI::FromHash qw( uri );
-    use VegGuide::Geocoder;
     use VegGuide::JSON;
     use VegGuide::SiteURI qw( entry_uri entry_image_uri entry_review_uri
         news_item_uri region_uri user_uri site_uri

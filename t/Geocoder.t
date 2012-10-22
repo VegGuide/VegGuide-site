@@ -46,12 +46,10 @@ BEGIN {
         my $long = shift;
 
         return {
-            results => {
-                geometry => {
-                    location => {
-                        lat => $lat,
-                        lng => $long,
-                    },
+            geometry => {
+                location => {
+                    lat => $lat,
+                    lng => $long,
                 },
             },
         };
