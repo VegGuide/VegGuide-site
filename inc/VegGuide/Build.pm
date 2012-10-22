@@ -84,6 +84,7 @@ my %Requires = (
     'JSON::XS'                   => '0',
     'Lingua::EN::Inflect'        => '0',
     'List::AllUtils'             => '0',
+    'Locale::Country'            => '3.23',
     'LockFile::Simple'           => '0',
     'LWPx::ParanoidAgent'        => '0',
     'LWP::Simple'                => '0',

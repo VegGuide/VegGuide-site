@@ -4,82 +4,52 @@ use strict;
 use warnings;
 
 use Geo::Coder::Google 0.06;
+use Locale::Country 3.23 qw( country2code );
 use VegGuide::Config;
 use VegGuide::Geocoder::Result;
 use VegGuide::Util qw( string_is_empty );
 use VegGuide::Validate qw( validate SCALAR_TYPE );
 
-my %Geocoders = (
-    map {
-        lc $_->[0] => {
-            geocoder => Geo::Coder::Google->new(
-                host   => $_->[1],
-                apikey => VegGuide::Config->GoogleAPIKey(),
-            ),
-            hostname => $_->[1],
-            country  => $_->[0],
-            }
-        }[ 'Australia' => 'maps.google.com.au' ],
-    [ 'Austria'        => 'maps.google.com' ],
-    [ 'Belgium'        => 'maps.google.com' ],
-    [ 'Brazil'         => 'maps.google.com' ],
-    [ 'Canada'         => 'maps.google.ca' ],
-    [ 'Czech Republic' => 'maps.google.com' ],
-    [ 'Denmark'        => 'maps.google.dk' ],
-    [ 'Finland'        => 'maps.google.fi' ],
-    [ 'France'         => 'maps.google.fr' ],
-    [ 'Germany'        => 'maps.google.de' ],
-    [ 'Hong Kong'      => 'maps.google.com' ],
-    [ 'Hungary'        => 'maps.google.com' ],
-    [ 'India'          => 'maps.google.com' ],
-    [ 'Ireland'        => 'maps.google.com' ],
-    [ 'Italy'          => 'maps.google.it' ],
-    [ 'Japan'          => 'maps.google.co.jp' ],
-    [ 'Luxembourg'     => 'maps.google.com' ],
-    [ 'Netherlands'    => 'maps.google.nl' ],
-    [ 'New Zealand'    => 'maps.google.com' ],
-    [ 'Poland'         => 'maps.google.com' ],
-    [ 'Portugal'       => 'maps.google.com' ],
-    [ 'Puerto Rico'    => 'maps.google.com' ],
-    [ 'Singapore'      => 'maps.google.com' ],
-    [ 'Spain'          => 'maps.google.es' ],
-    [ 'Sweden'         => 'maps.google.se' ],
-    [ 'Switzerland'    => 'maps.google.com' ],
-    [ 'Taiwan'         => 'maps.google.com.tw' ],
-    [ 'United Kingdom' => 'maps.google.com' ],
-    [ 'USA'            => 'maps.google.com' ],
-);
-
 {
-    my $spec = { country => SCALAR_TYPE };
+    my $spec = {
+        country => SCALAR_TYPE,
+    };
 
     sub new {
         my $class = shift;
         my %p = validate( @_, $spec );
 
-        my $country = lc $p{country};
+        my $country = $p{country};
 
-        $country = 'usa'
+        $country = 'USA'
             if $country =~ /^(?:US|United States)/i;
 
-        return unless $Geocoders{$country};
-
-        my $meth = '_' . $country . '_geocode_address';
+        my $meth = '_' . ( lc $country ) . '_geocode_address';
         $meth =~ s/ /_/g;
 
         $meth = $class->can($meth) || '_standard_geocode_address';
 
         return bless {
-            geocoder => $Geocoders{$country}{geocoder},
-            hostname => $Geocoders{$country}{hostname},
-            country  => $Geocoders{$country}{country},
-            method   => $meth,
+            method  => $meth,
+            country => $country,
+            cctld   => $class->_cctld_for_country($country),
         };
     }
 }
 
-sub Countries {
-    return map { $_->{country} } values %Geocoders;
+{
+    my %exception = (
+        gb => 'uk',
+    );
+
+    sub _cctld_for_country {
+        shift;
+        my $country = shift;
+
+        my $code = country2code($country);
+
+        return $exception{$code} // $code;
+    }
 }
 
 {
@@ -109,14 +79,17 @@ sub geocode_full_address {
     my $self    = shift;
     my $address = shift;
 
-    return VegGuide::Geocoder::Result->new(
-        $self->{geocoder}->geocode($address) );
-}
+    my %region;
+    $region{region} = $self->{cctld}
+        if $self->{cctld};
 
-sub hostname {
-    my $self = shift;
+    my $geocoder = Geo::Coder::Google->new(
+        apiver => 3,
+        key    => VegGuide::Config->GoogleAPIKey(),
+        %region,
+    );
 
-    return $self->{hostname};
+    return VegGuide::Geocoder::Result->new( $geocoder->geocode($address) );
 }
 
 sub country {
@@ -171,7 +144,7 @@ sub _japan_geocode_address {
 
     return (
         join ', ',
-        grep {defined}
+        grep { defined }
             $p{localized_region}, $address
     );
 }
@@ -188,7 +161,7 @@ sub _taiwan_geocode_address {
 
     return (
         join ', ',
-        grep {defined}
+        grep { defined }
             $p{localized_city}, $address
     );
 }

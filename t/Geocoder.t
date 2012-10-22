@@ -1,5 +1,6 @@
 use strict;
 use warnings;
+use utf8;
 
 use Test::More;
 use VegGuide::Config;
@@ -44,7 +45,16 @@ BEGIN {
         my $lat  = shift;
         my $long = shift;
 
-        return { Point => { coordinates => [ $long, $lat ] } };
+        return {
+            results => {
+                geometry => {
+                    location => {
+                        lat => $lat,
+                        lng => $long,
+                    },
+                },
+            },
+        };
     }
 }
 
@@ -52,22 +62,6 @@ require VegGuide::Geocoder;
 
 my %addresses = address_test_data();
 
-NEW:
-{
-    ok(
-        !VegGuide::Geocoder->new( country => 'does not exist' ),
-        'Cannot make Geocoder for an invalid country'
-    );
-
-    for my $c ( sort keys %addresses ) {
-        ok(
-            VegGuide::Geocoder->new( country => $c ),
-            "Can make Geocoder for $c"
-        );
-    }
-}
-
-GEOCODE:
 {
     for my $c ( sort keys %addresses ) {
         my $geocoder = VegGuide::Geocoder->new( country => $c );
@@ -85,7 +79,6 @@ GEOCODE:
     }
 }
 
-ADDRESS_PROCESSING:
 {
     for my $c ( sort keys %addresses ) {
         my $geocoder = VegGuide::Geocoder->new( country => $c );
