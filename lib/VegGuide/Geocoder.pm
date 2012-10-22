@@ -19,7 +19,7 @@ use VegGuide::Validate qw( validate SCALAR_TYPE );
         my $class = shift;
         my %p = validate( @_, $spec );
 
-        my $country = $p{country};
+        my $country = $p{country} // 'USA';
 
         $country = 'USA'
             if $country =~ /^(?:US|United States)/i;
@@ -47,7 +47,7 @@ use VegGuide::Validate qw( validate SCALAR_TYPE );
         my $country = shift;
 
         my $code = country2code($country);
-        return unless $code;
+        return undef unless $code;
 
         return $exception{$code} // $code;
     }
