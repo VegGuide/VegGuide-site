@@ -1,0 +1,228 @@
+#!/usr/bin/env perl
+
+package Importer;
+
+use strict;
+use warnings;
+use autodie;
+
+use IO::File;
+use List::AllUtils qw( uniq );
+use MooseX::Types::Moose qw( Int Str );
+use Text::CSV_XS;
+use VegGuide;
+use VegGuide::Geocoder;
+use VegGuide::Util qw( string_is_empty );
+use VegGuide::Vendor;
+
+use Moose;
+with 'MooseX::Getopt::Dashes';
+
+has file => (
+    is       => 'ro',
+    isa      => Str,
+    required => 1,
+);
+
+has location_id => (
+    is       => 'ro',
+    isa      => Int,
+    required => 1,
+);
+
+has _csv => (
+    is      => 'ro',
+    isa     => 'Text::CSV_XS',
+    lazy    => 1,
+    builder => '_build_csv',
+);
+
+sub run {
+    my $self = shift;
+
+    my $csv = $self->_csv();
+
+    my $fh = IO::File->new( $self->file(), 'r' );
+    $fh->binmode(':encoding(UTF-8)');
+
+    $csv->column_names( $csv->getline($fh) );
+
+    my $dbh = VegGuide::Schema->Schema()->driver()->handle();
+
+    while ( my $entry = $csv->getline_hr($fh) ) {
+        $self->_maybe_import_entry($entry);
+    }
+}
+
+sub _maybe_import_entry {
+    my $self  = shift;
+    my $entry = shift;
+
+    $entry = $self->_cleanup_entry($entry);
+
+    if ( $entry->{hide} ) {
+        $self->_output("$entry->{name} is marked as hidden");
+        return;
+    }
+
+    if ( $self->_already_exists($entry) ) {
+        $self->_output("$entry->{name} already exists in the database");
+        return;
+    }
+
+    $self->_add_entry($entry);
+}
+
+sub _cleanup_entry {
+    my $self  = shift;
+    my $entry = shift;
+
+    for my $key ( keys %{$entry} ) {
+        delete $entry->{$key} if $entry->{$key} eq 'NULL';
+    }
+
+    $entry->{name} =~ s/é/e/g;
+
+    return $entry;
+}
+
+sub _already_exists {
+    my $self  = shift;
+    my $entry = shift;
+
+    my %p = (
+        map { $_ => $entry->{$_} }
+            grep { !string_is_empty( $entry->{$_} ) }
+            qw( address1 city state zip )
+    );
+
+    $p{city}        = ucfirst $p{city} if $p{city};
+    $p{region}      = delete $p{state} if $p{state};
+    $p{postal_code} = delete $p{zip}   if $p{zip};
+
+    my $geocoder = VegGuide::Geocoder->new( country => 'USA' );
+
+    my $result = $geocoder->geocode(%p);
+
+    if ($result) {
+        $self->_output( "$entry->{name} - " . $result->canonical_address() );
+        return VegGuide::Vendor->new(
+            name              => $entry->{name},
+            canonical_address => $result->canonical_address(),
+        );
+    }
+
+    return 0;
+}
+
+{
+    my $creation_parser
+        = DateTime::Format::Strptime->new( pattern => '%Y-%m-%d' );
+    my $modified_parser
+        = DateTime::Format::Strptime->new( pattern => '%Y-%m-%d %H:%M:%S' );
+
+    sub _add_entry {
+        my $self  = shift;
+        my $entry = shift;
+
+        my %address = (
+            address1    => $entry->{address1},
+            address2    => $entry->{address2},
+            city        => $entry->{city},
+            region      => $entry->{state},
+            postal_code => $entry->{zip},
+        );
+
+        for my $key ( keys %address ) {
+            delete $address{$key} if string_is_empty( $address{$key} );
+        }
+
+        my %v = (
+            name => $entry->{name},
+            $self->_split_description( $entry->{description} ),
+            veg_level => ( $entry->{veg} ? 4 : 2 ),
+            %address,
+        );
+
+        for my $key (qw( phone website )) {
+            $v{$key} = $entry->{$key}
+                unless string_is_empty( $entry->{$key} );
+        }
+
+        $v{last_modified_datetime} = DateTime::Format::MySQL->format_datetime(
+            $modified_parser->parse_datetime( $entry->{last_update} ) );
+
+        if ( string_is_empty( $entry->{added} ) ) {
+            $v{creation_datetime} = $v{last_modified_datetime};
+        }
+        else {
+            $v{creation_datetime} = DateTime::Format::MySQL->format_datetime(
+                $creation_parser->parse_datetime( $entry->{added} ) );
+        }
+
+        my $vendor = VegGuide::Vendor->create(
+            %v,
+            category_id => [ $self->_map_cok_categories( $entry->{type} ) ],
+            price_range_id => 2,
+            location_id    => $self->location_id(),
+            user_id        => 1,
+        );
+    }
+}
+
+sub _split_description {
+    my $self        = shift;
+    my $description = shift;
+
+    $description =~ s/<[^>]+>//g;
+
+    if ( length $description > 100
+        && $description =~ s/^([^.]+)\.\s+// ) {
+
+        return (
+            short_description => $1,
+            long_description  => $description,
+        );
+    }
+    else {
+        return ( short_description => $description );
+    }
+}
+
+{
+    my %categories = (
+        B => VegGuide::Category->GroceryBakeryDeli()->category_id(),,
+        C => VegGuide::Category->new( name => 'Caterer' )->category_id(),
+        G => VegGuide::Category->GroceryBakeryDeli()->category_id(),
+        R => VegGuide::Category->Restaurant()->category_id(),
+        T => VegGuide::Category->new( name => 'Coffee/Tea/Juice' )->category_id(),
+        Z => VegGuide::Category->Organization()->category_id(),
+    );
+
+    sub _map_cok_categories {
+        my $self     = shift;
+        my $cok_type = shift;
+
+        return uniq(
+            map { $categories{$_} || die "Bad COK type: $cok_type" }
+
+                # Not sure what O is - only one place has it and its a restaurant
+                grep { $_ ne 'O' }
+                split /\s*,\s*/,
+            $cok_type
+        );
+    }
+}
+
+sub _build_csv {
+    return Text::CSV_XS->new( { binary => 1 } );
+}
+
+sub _output {
+    print "$_[1]\n";
+}
+
+package main;
+
+Importer->new_with_options()->run();
+exit 0;
