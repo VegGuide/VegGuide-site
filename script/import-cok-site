@@ -10,8 +10,8 @@ use IO::File;
 use List::AllUtils qw( uniq );
 use MooseX::Types::Moose qw( Int Str );
 use Text::CSV_XS;
-use VegGuide;
 use VegGuide::Geocoder;
+use VegGuide::Schema;
 use VegGuide::Util qw( string_is_empty );
 use VegGuide::Vendor;
 
