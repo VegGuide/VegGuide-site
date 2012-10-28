@@ -1,0 +1,56 @@
+CREATE TABLE `Session` (
+  `id` varchar(72) NOT NULL,
+  `session_data` blob NOT NULL,
+  `expires` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP FUNCTION IF EXISTS WEIGHTED_RATING;
+delimiter //
+CREATE FUNCTION
+  WEIGHTED_RATING (vendor_id INTEGER, min INTEGER, overall_mean FLOAT)
+                  RETURNS FLOAT
+  DETERMINISTIC
+  READS SQL DATA
+BEGIN
+  DECLARE v_mean FLOAT;
+  DECLARE v_count FLOAT;
+  DECLARE l_mean FLOAT;
+
+  SELECT AVG(rating), COUNT(rating) INTO v_mean, v_count
+    FROM VendorRating
+   WHERE VendorRating.vendor_id = vendor_id;
+
+  IF v_count = 0 THEN
+    RETURN 0.0;
+  END IF;
+
+  RETURN ( v_count / ( v_count + min ) ) * v_mean + ( min / ( v_count + min ) ) * overall_mean;
+END//
+
+delimiter ;
+
+DROP FUNCTION IF EXISTS GREAT_CIRCLE_DISTANCE;
+delimiter //
+CREATE FUNCTION
+  GREAT_CIRCLE_DISTANCE ( radius DOUBLE,
+                          v_lat DOUBLE, v_long DOUBLE,
+                          p_lat DOUBLE, p_long DOUBLE )
+                        RETURNS DOUBLE
+  DETERMINISTIC
+BEGIN
+
+  RETURN (2
+          * radius
+          * ATAN2( SQRT( @x := ( POW( SIN( ( RADIANS(v_lat) - RADIANS(p_lat) ) / 2 ), 2 )
+                                 + COS( RADIANS( p_lat ) ) * COS( RADIANS(v_lat) )
+                                 * POW( SIN( ( RADIANS(v_long) - RADIANS(p_long) ) / 2 ), 2 )
+                               )
+                       ),
+                   SQRT( 1 - @x ) )
+         );
+
+
+END//
+
+delimiter ;
