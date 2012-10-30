@@ -140,7 +140,7 @@ push @points, { latitude    => $vendor->latitude(),
                 longitude   => $vendor->longitude(),
                 title       => $vendor->name(),
                 category_id => $vendor->primary_category()->category_id(),
-		veg_level   => $vendor->veg_level(),
+                veg_level   => $vendor->veg_level(),
                 info_div    => 'entry-info-' . $vendor->vendor_id(),
               };
 
