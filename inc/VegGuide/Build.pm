@@ -93,6 +93,7 @@ my %Requires = (
     'Net::OpenID::Consumer'      => '1.03',
     'Params::Validate'           => '0',
     'Sys::Hostname'              => '0',
+    'Text::TOC'                  => '0',
     'Text::WikiFormat'           => '0',
     'Text::Wrap'                 => '0',
     'Tie::IxHash'                => '0',
