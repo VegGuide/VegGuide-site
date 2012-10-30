@@ -80,6 +80,7 @@ my %Requires = (
     'Image::Magick'              => '0',
     'Image::Size'                => '0',
     'IO::Async'                  => '0.46',
+    'IPC::Run3'                  => '0.46',
     'JavaScript::Squish'         => '0',
     'JSAN::ServerSide'           => '0.04',
     'JSON::XS'                   => '0',
