@@ -48,6 +48,7 @@ my %Requires = (
     'Data::Dumper::Concise'      => '0',
     'Data::Pageset'              => '0',
     'DateTime'                   => '0',
+    'DateTime::Format::RFC3339'  => '0',
     'DateTime::Format::HTTP'     => '0',
     'DateTime::Format::MySQL'    => '0',
     'DateTime::Format::Natural'  => '0',
