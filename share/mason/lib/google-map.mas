@@ -29,6 +29,11 @@
 
 <h3>Map icon key</h3>
 
+<p>
+  The color coding for veg-friendliness is used for restaurants, groceries,
+  bars, food court/street vendors, general stores, and lodging.
+</p>
+
 <div class="yui-g" id="map-icon-key">
   <div class="yui-u first">
     <ul class="no-top-margin">
