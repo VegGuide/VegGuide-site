@@ -1,3 +1,17 @@
+% if ( $location->location_id() == 218 ) {
+<p>
+  Order your <strong>free</strong>
+  printed <a href="http://order.cok.net/veg-austin/"><em>Vegetarian Guide to
+  Austin</em></a> from Compassion Over Killing while supplies last.
+</p>
+% } elsif  ( $location->location_id() == 311 ) {
+<p>
+  Order your <strong>free</strong>
+  printed <a href="http://order.cok.net/veg-baltimore/"><em>Vegetarian Guide
+  to Baltimore</em></a> from Compassion Over Killing while supplies last.
+</p>
+% }
+
 % if ( $c->vg_user()->is_admin() ) {
 <div id="region-creation-info">
   Created on <& /lib/format/datetime.mas, datetime => $location->creation_datetime_object() &>
