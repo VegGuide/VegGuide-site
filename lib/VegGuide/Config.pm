@@ -182,7 +182,7 @@ sub AlzaboRootDir {
     $BaseConfig{root} = __PACKAGE__->ShareDir();
 
     unless ( __PACKAGE__->IsProduction() ) {
-        $BaseConfig{static} = {
+        $BaseConfig{'Plugin::Static::Simple'} = {
             dirs         => [qw( entry-images images js css api-explorer static w3c )],
             include_path => [
                 __PACKAGE__->ShareDir(),
