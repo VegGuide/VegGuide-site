@@ -124,6 +124,9 @@ sub _search_from_request {
 
     $self->_redirect_on_bad_request( $c, $class, %p );
 
+    # Noise from COK Veg* redirects
+    delete @p{qw( sort q )};
+
     delete $p{$_} for grep {/^possible/} keys %p;
     delete @p{qw( order_by sort_order page limit )};
     delete $p{'ie-hack'};
