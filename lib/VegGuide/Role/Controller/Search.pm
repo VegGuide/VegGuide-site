@@ -6,6 +6,7 @@ use namespace::autoclean;
 
 use Scalar::Util qw( looks_like_number );
 use URI::FromHash qw( uri );
+use URI::QueryParam;
 
 use Moose::Role;
 
@@ -124,9 +125,6 @@ sub _search_from_request {
 
     $self->_redirect_on_bad_request( $c, $class, %p );
 
-    # Noise from COK Veg* redirects
-    delete @p{qw( sort q )};
-
     delete $p{$_} for grep {/^possible/} keys %p;
     delete @p{qw( order_by sort_order page limit )};
     delete $p{'ie-hack'};
@@ -141,6 +139,14 @@ sub _redirect_on_bad_request {
     my $c     = shift;
     my $class = shift;
     my %p     = @_;
+
+    if ( $p{sort} || $p{q} ) {
+
+        # Noise from COK Veg* redirects
+        my $uri = $c->request()->uri();
+        $uri->query_param_delete($_) for $uri->query_param();
+        $c->redirect_and_detach( $uri, 301 );
+    }
 
     # Some l33t hacker bot keeps trying to stick links in these
     # parameters
