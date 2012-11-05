@@ -140,7 +140,7 @@ sub _redirect_on_bad_request {
     my $class = shift;
     my %p     = @_;
 
-    if ( $p{sort} || $p{q} ) {
+    if ( $p{sort} || $p{q} || $p{url} ) {
 
         # Noise from COK Veg* redirects
         my $uri = $c->request()->uri();
