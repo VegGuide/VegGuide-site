@@ -268,24 +268,24 @@ sub news_GET_html : Private {
     my $limit = 10;
     my $start = ( $page - 1 ) * $limit;
 
-    my $total = VegGuide::NewsItem->Count();
+    my $news_items = VegGuide::DB->Schema()->resultset('NewsItem');
+
+    my $total = $news_items->count();
 
     $c->redirect_and_detach('/')
         if $start > $total;
 
-    $c->stash()->{news} = VegGuide::NewsItem->All(
-        limit => $limit,
-        start => $start,
+    my $current_rs = $news_items->search_rs(
+        undef,
+        {
+            order_by => { -desc => 'creation_datetime' },
+            page     => $page,
+            rows     => $limit,
+        }
     );
 
-    $c->stash()->{pager} = VegGuide::Pageset->new(
-        {
-            total_entries    => $total,
-            entries_per_page => $limit,
-            current_page     => $page,
-            pages_per_set    => 1,
-        },
-    );
+    $c->stash()->{news}  = $current_rs;
+    $c->stash()->{pager} = $current_rs->pager($total);
 
     $c->stash()->{template} = '/site/news';
 }
@@ -299,9 +299,11 @@ sub news_POST : Private {
 
     my $params = $c->request()->parameters();
 
-    VegGuide::NewsItem->create(
-        title => $params->{title},
-        body  => $params->{body},
+    VegGuide::DB->Schema()->resultset('NewsItem')->create(
+        {
+            title => $params->{title},
+            body  => $params->{body},
+        }
     );
 
     $c->add_message('News item added.');
@@ -320,8 +322,8 @@ sub news_item_PUT : Private {
     $c->redirect_and_detach('/')
         unless $c->vg_user()->is_admin();
 
-    my $item = VegGuide::NewsItem->new(
-        item_id => $c->request()->captures()->[0] );
+    my $item = VegGuide::DB->Schema()->resultset('NewsItem')
+        ->find( $c->request()->captures()->[0] );
 
     $c->redirect_and_detach('/')
         unless $item;
@@ -329,8 +331,10 @@ sub news_item_PUT : Private {
     my $params = $c->request()->parameters();
 
     $item->update(
-        title => $params->{title},
-        body  => $params->{body},
+        {
+            title => $params->{title},
+            body  => $params->{body},
+        }
     );
 
     $c->add_message('News item updated.');
@@ -345,8 +349,8 @@ sub news_item_DELETE : Private {
     $c->redirect_and_detach('/')
         unless $c->vg_user()->is_admin();
 
-    my $item = VegGuide::NewsItem->new(
-        item_id => $c->request()->captures()->[0] );
+    my $item = VegGuide::DB->Schema()->resultset('NewsItem')
+        ->find( $c->request()->captures()->[0] );
 
     $c->redirect_and_detach('/')
         unless $item;
@@ -365,8 +369,8 @@ sub news_item_edit_form : LocalRegex('^news/(\d+)/edit_form$') {
     $c->redirect_and_detach('/')
         unless $c->vg_user()->is_admin();
 
-    my $item = VegGuide::NewsItem->new(
-        item_id => $c->request()->captures()->[0] );
+    my $item = VegGuide::DB->Schema()->resultset('NewsItem')
+        ->find( $c->request()->captures()->[0] );
 
     $c->redirect_and_detach('/')
         unless $item;
@@ -384,8 +388,8 @@ sub news_item_deletion_confirmation :
     $c->redirect_and_detach('/')
         unless $c->vg_user()->is_admin();
 
-    my $item = VegGuide::NewsItem->new(
-        item_id => $c->request()->captures()->[0] );
+    my $item = VegGuide::DB->Schema()->resultset('NewsItem')
+        ->find( $c->request()->captures()->[0] );
 
     $c->stash()->{thing} = 'news item';
     $c->stash()->{name}  = $item->title();

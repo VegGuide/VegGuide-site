@@ -77,7 +77,7 @@ sub index_GET_html {
             ->set_cursor_params( limit => 10, order_by => 'rand' );
     }
 
-    $c->stash()->{news_item} = VegGuide::NewsItem->MostRecent();
+    $c->stash()->{news_item} = VegGuide::DB->Schema()->resultset('NewsItem')->most_recent();
 
     $c->stash()->{template} = '/index';
 }
@@ -105,7 +105,7 @@ sub recent : Local : Args(0) {
     my $self = shift;
     my $c    = shift;
 
-    $c->stash()->{news_item} = VegGuide::NewsItem->MostRecent();
+    $c->stash()->{news_item} = VegGuide::DB->Schema()->resultset('NewsItem')->most_recent();
 
     $c->stash()->{template} = '/recent';
 }

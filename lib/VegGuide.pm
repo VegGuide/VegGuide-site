@@ -24,6 +24,8 @@ use VegGuide::User;
 use VegGuide::Vendor;
 use VegGuide::VendorSource;
 
+use VegGuide::DB;
+
 use namespace::autoclean;
 use Moose;
 

@@ -1,7 +1,7 @@
 % if ( $pager->total_entries() ) {
 %   while ( my $item = $news->next() ) {
 <a name="item-<% $item->item_id() %>"></a>
-<h2><& /lib/format/date.mas, date => $item->creation_datetime_object() &> - <% $item->title() | h %></h2>
+<h2><& /lib/format/date.mas, date => $item->creation_datetime() &> - <% $item->title() | h %></h2>
 
 <% $item->body() %>
 

@@ -51,7 +51,15 @@ BEGIN {
 
     for my $class (qw( Location NewsItem User Vendor VendorImage )) {
         ( my $name = $class ) =~ s/([a-z])([A-Z])/${1}_$2/g;
-        $Types{ uc $name . '_TYPE' } = { isa => "VegGuide::${class}" };
+        $Types{ uc $name . '_TYPE' } = {
+            callbacks => {
+                "isa_$class" => sub {
+                    blessed $_[0]
+                        && ( $_[0]->isa("VegGuide::$class")
+                        || $_[0]->isa("VegGuide::DB::Result::$class") );
+                    }
+            }
+        };
     }
 
     for my $t ( keys %Types ) {
