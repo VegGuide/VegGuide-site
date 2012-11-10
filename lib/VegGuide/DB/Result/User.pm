@@ -4,12 +4,6 @@ package VegGuide::DB::Result::User;
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
-=head1 NAME
-
-VegGuide::DB::Result::User
-
-=cut
-
 use strict;
 use warnings;
 
@@ -17,134 +11,8 @@ use Moose;
 use MooseX::NonMoose;
 use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Core';
-
-=head1 COMPONENTS LOADED
-
-=over 4
-
-=item * L<DBIx::Class::InflateColumn::DateTime>
-
-=back
-
-=cut
-
-__PACKAGE__->load_components("InflateColumn::DateTime");
-
-=head1 TABLE: C<User>
-
-=cut
-
+__PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 __PACKAGE__->table("User");
-
-=head1 ACCESSORS
-
-=head2 user_id
-
-  data_type: 'integer'
-  extra: {unsigned => 1}
-  is_auto_increment: 1
-  is_nullable: 0
-
-=head2 email_address
-
-  data_type: 'varchar'
-  default_value: (empty string)
-  is_nullable: 0
-  size: 150
-
-=head2 password
-
-  data_type: 'varchar'
-  default_value: (empty string)
-  is_nullable: 0
-  size: 40
-
-=head2 real_name
-
-  data_type: 'varchar'
-  default_value: (empty string)
-  is_nullable: 0
-  size: 100
-
-=head2 home_page
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 150
-
-=head2 creation_datetime
-
-  data_type: 'datetime'
-  datetime_undef_if_invalid: 1
-  default_value: '0000-00-00 00:00:00'
-  is_nullable: 0
-  set_on_create: 1
-  set_on_update: (empty string)
-  timezone: 'local'
-
-=head2 forgot_password_digest
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 40
-
-=head2 forgot_password_digest_datetime
-
-  data_type: 'datetime'
-  datetime_undef_if_invalid: 1
-  is_nullable: 1
-  timezone: 'local'
-
-=head2 is_admin
-
-  data_type: 'tinyint'
-  default_value: 0
-  extra: {unsigned => 1}
-  is_nullable: 0
-
-=head2 allows_email
-
-  data_type: 'tinyint'
-  default_value: 0
-  is_nullable: 0
-
-=head2 team_id
-
-  data_type: 'integer'
-  is_nullable: 1
-
-=head2 entries_per_page
-
-  data_type: 'integer'
-  default_value: 20
-  is_nullable: 0
-
-=head2 openid_uri
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 255
-
-=head2 bio
-
-  data_type: 'mediumtext'
-  is_nullable: 1
-
-=head2 how_veg
-
-  data_type: 'tinyint'
-  default_value: 0
-  extra: {unsigned => 1}
-  is_nullable: 0
-
-=head2 image_extension
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 3
-
-=cut
-
 __PACKAGE__->add_columns(
   "user_id",
   {
@@ -165,10 +33,9 @@ __PACKAGE__->add_columns(
   {
     data_type                 => "datetime",
     datetime_undef_if_invalid => 1,
-    default_value             => "0000-00-00 00:00:00",
     is_nullable               => 0,
     set_on_create             => 1,
-    set_on_update             => "",
+    set_on_update             => 0,
     timezone                  => "local",
   },
   "forgot_password_digest",
@@ -207,60 +74,80 @@ __PACKAGE__->add_columns(
   "image_extension",
   { data_type => "varchar", is_nullable => 1, size => 3 },
 );
-
-=head1 PRIMARY KEY
-
-=over 4
-
-=item * L</user_id>
-
-=back
-
-=cut
-
 __PACKAGE__->set_primary_key("user_id");
-
-=head1 UNIQUE CONSTRAINTS
-
-=head2 C<User___email_address>
-
-=over 4
-
-=item * L</email_address>
-
-=back
-
-=cut
-
 __PACKAGE__->add_unique_constraint("User___email_address", ["email_address"]);
-
-=head2 C<User___openid_uri>
-
-=over 4
-
-=item * L</openid_uri>
-
-=back
-
-=cut
-
 __PACKAGE__->add_unique_constraint("User___openid_uri", ["openid_uri"]);
-
-=head2 C<User___real_name>
-
-=over 4
-
-=item * L</real_name>
-
-=back
-
-=cut
-
 __PACKAGE__->add_unique_constraint("User___real_name", ["real_name"]);
+__PACKAGE__->has_many(
+  "_X_location_owners",
+  "VegGuide::DB::Result::LocationOwner",
+  { "foreign.user_id" => "self.user_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
+  "_X_user_location_subscriptions",
+  "VegGuide::DB::Result::UserLocationSubscription",
+  { "foreign.user_id" => "self.user_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
+  "created_locations",
+  "VegGuide::DB::Result::Location",
+  { "foreign.user_id" => "self.user_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
+  "location_comments",
+  "VegGuide::DB::Result::LocationComment",
+  { "foreign.user_id" => "self.user_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
+  "user_activity_logs",
+  "VegGuide::DB::Result::UserActivityLog",
+  { "foreign.user_id" => "self.user_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
+  "vendor_comments",
+  "VegGuide::DB::Result::VendorComment",
+  { "foreign.user_id" => "self.user_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
+  "vendor_images",
+  "VegGuide::DB::Result::VendorImage",
+  { "foreign.user_id" => "self.user_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
+  "vendor_ratings",
+  "VegGuide::DB::Result::VendorRating",
+  { "foreign.user_id" => "self.user_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
+  "vendor_suggestions",
+  "VegGuide::DB::Result::VendorSuggestion",
+  { "foreign.user_id" => "self.user_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
+  "vendors",
+  "VegGuide::DB::Result::Vendor",
+  { "foreign.user_id" => "self.user_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->many_to_many("owned_locations", "_X_location_owners", "location");
+__PACKAGE__->many_to_many(
+  "subscribed_locations",
+  "_X_user_location_subscriptions",
+  "location",
+);
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-09 14:49:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mhUb8XS7VJiCFT3XvfKLVA
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-10 11:29:25
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sNsR1are/+t7jwXiBOC0ZQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

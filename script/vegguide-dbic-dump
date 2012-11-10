@@ -4,22 +4,34 @@ use strict;
 use warnings;
 
 use DBIx::Class::Schema::Loader qw( make_schema_at );
-make_schema_at(
-    'VegGuide::DB',
-    {
-        dump_directory        => './lib',
-        components            => ['InflateColumn::DateTime'],
-        use_moose             => 1,
-        datetime_timezone     => 'local',                       # XXX - I suck
-        custom_column_info    => \&_custom_column_info,
-        result_components_map => {
-            NewsItem => ['TimeStamp'],
+use Getopt::Long;
+use List::MoreUtils qw( any );
+use PadWalker qw( peek_my );
+
+sub main {
+    my $schema;
+    GetOptions( 'schema:s' => \$schema );
+
+    $schema //= 'RegVeg';
+
+    make_schema_at(
+        'VegGuide::DB',
+        {
+            dump_directory => './lib',
+            components     => [ 'InflateColumn::DateTime', 'TimeStamp' ],
+            use_moose      => 1,
+            datetime_timezone  => 'local',                  # XXX - I suck
+            custom_column_info => \&_custom_column_info,
+            generate_pod       => 0,
+            rel_name_map       => \&_custom_rel_name_map,
+            naming             => {
+                ALL         => 'v8',
+                force_ascii => 1,
+            },
         },
-    },
-    [
-        'dbi:mysql:database=RegVeg', 'root', undef,
-    ],
-);
+        [ 'dbi:mysql:database=' . $schema, 'root', undef, ],
+    );
+}
 
 sub _custom_column_info {
     my $table  = shift;
@@ -30,6 +42,63 @@ sub _custom_column_info {
 
     return {
         set_on_create => 1,
-        set_on_update => ( $column eq 'last_modified_datetime' ),
+        set_on_update => ( $column eq 'last_modified_datetime' ? 1 : 0 ),
     };
 }
+
+my @BridgeTables = qw(
+    LocationOwner
+    LocaleEncoding
+    UserLocationSubscription
+    VendorAttribute
+    VendorCategory
+    VendorCuisine
+);
+
+sub _custom_rel_name_map {
+    my $p = shift;
+
+    return '_X_' . $p->{name}
+        if ( $p->{type} eq 'belongs_to' || $p->{type} eq 'has_many' )
+        && any { $p->{remote_moniker} eq $_ } @BridgeTables;
+
+    if ( $p->{local_moniker} eq 'User' && $p->{remote_moniker} eq 'Location' )
+    {
+        return $p->{name} if $p->{type} eq 'belongs_to';
+
+        if ( $p->{type} eq 'many_to_many' ) {
+            my $pad = peek_my(2);
+            if ( ${ $pad->{'$class1_to_link_table_rel_name'} } eq
+                '_X_user_location_subscriptions' ) {
+
+                return 'subscribed_locations';
+            }
+            else {
+                return 'owned_locations';
+            }
+        }
+
+        return 'created_locations';
+    }
+    elsif ($p->{local_moniker} eq 'Location'
+        && $p->{remote_moniker} eq 'User' ) {
+
+        if ( $p->{type} eq 'many_to_many' ) {
+            my $pad = peek_my(2);
+            if ( ${ $pad->{'$class1_to_link_table_rel_name'} } eq
+                '_X_user_location_subscriptions' ) {
+
+                return 'subscribers';
+            }
+            else {
+                return 'owners';
+            }
+        }
+
+        return 'creator';
+    }
+
+    return $p->{name};
+}
+
+main();
