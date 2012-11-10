@@ -6,7 +6,6 @@ use namespace::autoclean;
 
 use VegGuide::Geocoder;
 use VegGuide::Location;
-use VegGuide::NewsItem;
 use VegGuide::Search::Vendor::ByLatLong;
 use VegGuide::Search::Vendor::ByName;
 use VegGuide::SiteURI qw( entry_uri news_item_uri region_uri );
