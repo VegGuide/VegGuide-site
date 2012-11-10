@@ -7,5 +7,6 @@ use lib 'lib';
 use VegGuide::Schema;
 
 my $schema = VegGuide::Schema->CreateSchema();
+local $schema->{instantiated} = 0;
 
 print "$_\n\n" for $schema->make_sql;
