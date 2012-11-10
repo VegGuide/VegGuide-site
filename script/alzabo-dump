@@ -1,0 +1,11 @@
+use strict;
+use warnings;
+
+use lib '/home/autarch/projects/obsolete/Alzabo/lib';
+use lib 'lib';
+
+use VegGuide::Schema;
+
+my $schema = VegGuide::Schema->CreateSchema();
+
+print "$_\n\n" for $schema->make_sql;
