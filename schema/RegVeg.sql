@@ -5,22 +5,22 @@ CREATE TABLE `AddressFormat` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `Attribute` (
-  `attribute_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `attribute_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`attribute_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `Category` (
-  `category_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `category_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL DEFAULT '',
   `display_order` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`category_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `Cuisine` (
-  `cuisine_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `cuisine_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(40) NOT NULL DEFAULT '',
-  `parent_cuisine_id` int(10) unsigned DEFAULT NULL,
+  `parent_cuisine_id` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`cuisine_id`),
   UNIQUE KEY `Cuisine___name` (`name`),
   KEY `Cuisine___parent_cuisine_id` (`parent_cuisine_id`)
@@ -29,7 +29,7 @@ CREATE TABLE `Cuisine` (
 CREATE TABLE `Locale` (
   `locale_id` int(11) NOT NULL AUTO_INCREMENT,
   `locale_code` varchar(15) NOT NULL DEFAULT '',
-  `address_format_id` tinyint(4) NOT NULL DEFAULT '0',
+  `address_format_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `requires_localized_addresses` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`locale_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=latin1;
@@ -38,21 +38,20 @@ CREATE TABLE `LocaleEncoding` (
   `locale_id` int(11) NOT NULL DEFAULT '0',
   `encoding_name` varchar(15) NOT NULL DEFAULT '',
   PRIMARY KEY (`locale_id`,`encoding_name`),
-  KEY `LocaleEncoding___locale_id` (`locale_id`),
   KEY `LocaleEncoding___encoding_name` (`encoding_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `Location` (
-  `location_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `location_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL DEFAULT '',
   `localized_name` varchar(200) DEFAULT NULL,
   `time_zone_name` varchar(100) DEFAULT NULL,
   `can_have_vendors` tinyint(1) NOT NULL DEFAULT '0',
   `is_country` tinyint(1) NOT NULL DEFAULT '0',
-  `parent_location_id` int(10) unsigned DEFAULT NULL,
+  `parent_location_id` int(11) unsigned DEFAULT NULL,
   `locale_id` int(11) DEFAULT NULL,
   `creation_datetime` datetime NOT NULL DEFAULT '2007-01-01 00:00:00',
-  `user_id` int(11) NOT NULL DEFAULT '1',
+  `user_id` int(11) unsigned NOT NULL DEFAULT '1',
   `has_addresses` tinyint(1) NOT NULL DEFAULT '1',
   `has_hours` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`location_id`),
@@ -62,18 +61,17 @@ CREATE TABLE `Location` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2203 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `LocationComment` (
-  `location_id` int(11) NOT NULL DEFAULT '0',
-  `user_id` int(11) NOT NULL DEFAULT '0',
+  `location_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   `comment` text NOT NULL,
   `last_modified_datetime` datetime NOT NULL,
   PRIMARY KEY (`location_id`,`user_id`),
-  KEY `LocationComment___user_id` (`user_id`),
-  KEY `LocationComment___location_id` (`location_id`)
+  KEY `LocationComment___user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `LocationEvent` (
   `uid` varchar(255) NOT NULL,
-  `location_id` int(11) NOT NULL,
+  `location_id` int(11) unsigned NOT NULL,
   `summary` mediumtext,
   `description` text,
   `url` varchar(255) DEFAULT NULL,
@@ -84,17 +82,16 @@ CREATE TABLE `LocationEvent` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `LocationEventURI` (
-  `location_id` int(11) NOT NULL,
+  `location_id` int(11) unsigned NOT NULL,
   `uri` varchar(255) NOT NULL,
   PRIMARY KEY (`location_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `LocationOwner` (
-  `location_id` int(11) NOT NULL DEFAULT '0',
-  `user_id` int(11) NOT NULL DEFAULT '0',
+  `location_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`location_id`,`user_id`),
-  KEY `LocationOwner___user_id` (`user_id`),
-  KEY `LocationOwner___location_id` (`location_id`)
+  KEY `LocationOwner___user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `NewsItem` (
@@ -106,14 +103,14 @@ CREATE TABLE `NewsItem` (
 ) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `PaymentOption` (
-  `payment_option_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `payment_option_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`payment_option_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `PersonalList` (
   `personal_list_id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL DEFAULT '0',
+  `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   `name` varchar(250) NOT NULL DEFAULT '',
   `is_public` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`personal_list_id`),
@@ -122,7 +119,7 @@ CREATE TABLE `PersonalList` (
 
 CREATE TABLE `PersonalListVendor` (
   `personal_list_id` int(11) NOT NULL DEFAULT '0',
-  `vendor_id` int(11) NOT NULL DEFAULT '0',
+  `vendor_id` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`personal_list_id`,`vendor_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
@@ -182,7 +179,7 @@ CREATE TABLE `SurveyResponse2008001` (
 ) ENGINE=InnoDB AUTO_INCREMENT=310 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `Team` (
-  `team_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `team_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(250) NOT NULL DEFAULT '',
   `description` text NOT NULL,
   `home_page` varchar(250) DEFAULT NULL,
@@ -193,7 +190,7 @@ CREATE TABLE `Team` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `User` (
-  `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `email_address` varchar(150) NOT NULL DEFAULT '',
   `password` varchar(40) NOT NULL DEFAULT '',
   `real_name` varchar(100) NOT NULL DEFAULT '',
@@ -216,13 +213,13 @@ CREATE TABLE `User` (
 ) ENGINE=InnoDB AUTO_INCREMENT=8975 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `UserActivityLog` (
-  `user_activity_log_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL DEFAULT '0',
-  `user_activity_log_type_id` tinyint(4) NOT NULL DEFAULT '0',
+  `user_activity_log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `user_activity_log_type_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `activity_datetime` datetime NOT NULL,
   `comment` text,
-  `vendor_id` int(11) DEFAULT NULL,
-  `location_id` int(11) DEFAULT NULL,
+  `vendor_id` int(11) unsigned DEFAULT NULL,
+  `location_id` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`user_activity_log_id`),
   KEY `UserActivityLog___user_id` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=958001 DEFAULT CHARSET=latin1;
@@ -234,15 +231,14 @@ CREATE TABLE `UserActivityLogType` (
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `UserLocationSubscription` (
-  `user_id` int(11) NOT NULL DEFAULT '0',
-  `location_id` int(11) NOT NULL DEFAULT '0',
+  `user_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `location_id` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`user_id`,`location_id`),
-  KEY `UserLocationSubscription___user_id` (`user_id`),
   KEY `UserLocationSubscription___location_id` (`location_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `Vendor` (
-  `vendor_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `vendor_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL DEFAULT '',
   `localized_name` varchar(100) DEFAULT NULL,
   `short_description` varchar(250) NOT NULL DEFAULT '',
@@ -269,9 +265,9 @@ CREATE TABLE `Vendor` (
   `creation_datetime` datetime NOT NULL,
   `last_modified_datetime` datetime NOT NULL,
   `last_featured_date` date DEFAULT NULL,
-  `user_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `location_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `price_range_id` tinyint(4) NOT NULL DEFAULT '0',
+  `user_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `location_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `price_range_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `localized_long_description` text,
   `latitude` float DEFAULT NULL,
   `longitude` float DEFAULT NULL,
@@ -279,7 +275,7 @@ CREATE TABLE `Vendor` (
   `close_date` date DEFAULT NULL,
   `canonical_address` mediumtext,
   `external_unique_id` varchar(255) DEFAULT NULL,
-  `vendor_source_id` int(11) DEFAULT NULL,
+  `vendor_source_id` int(11) unsigned DEFAULT NULL,
   `sortable_name` varchar(255) NOT NULL,
   PRIMARY KEY (`vendor_id`),
   UNIQUE KEY `Vendor___external_unique_id___vendor_source_id` (`external_unique_id`,`vendor_source_id`),
@@ -291,77 +287,71 @@ CREATE TABLE `Vendor` (
 ) ENGINE=InnoDB AUTO_INCREMENT=14226 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `VendorAttribute` (
-  `vendor_id` int(11) NOT NULL DEFAULT '0',
-  `attribute_id` int(11) NOT NULL DEFAULT '0',
+  `vendor_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `attribute_id` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`vendor_id`,`attribute_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `VendorCategory` (
-  `vendor_id` int(11) NOT NULL DEFAULT '0',
-  `category_id` int(11) NOT NULL DEFAULT '0',
+  `vendor_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `category_id` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`vendor_id`,`category_id`),
-  KEY `VendorCategory___category_id` (`category_id`),
-  KEY `VendorCategory___vendor_id` (`vendor_id`)
+  KEY `VendorCategory___category_id` (`category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `VendorComment` (
-  `vendor_id` int(11) NOT NULL DEFAULT '0',
-  `user_id` int(11) NOT NULL DEFAULT '0',
+  `vendor_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   `comment` text,
   `last_modified_datetime` datetime NOT NULL,
   PRIMARY KEY (`vendor_id`,`user_id`),
-  KEY `VendorComment___user_id` (`user_id`),
-  KEY `VendorComment___vendor_id` (`vendor_id`)
+  KEY `VendorComment___user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `VendorCuisine` (
-  `vendor_id` int(11) NOT NULL DEFAULT '0',
-  `cuisine_id` int(11) NOT NULL DEFAULT '0',
+  `vendor_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `cuisine_id` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`vendor_id`,`cuisine_id`),
-  KEY `VendorCuisine___cuisine_id` (`cuisine_id`),
-  KEY `VendorCuisine___vendor_id` (`vendor_id`)
+  KEY `VendorCuisine___cuisine_id` (`cuisine_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `VendorHours` (
-  `vendor_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `vendor_id` int(11) unsigned NOT NULL DEFAULT '0',
   `day` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `open_minute` int(11) NOT NULL DEFAULT '0',
-  `close_minute` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`vendor_id`,`day`,`open_minute`,`close_minute`),
-  KEY `VendorHours___vendor_id` (`vendor_id`)
+  `close_minute` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`vendor_id`,`day`,`open_minute`,`close_minute`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `VendorImage` (
-  `vendor_image_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `vendor_id` int(11) NOT NULL,
+  `vendor_image_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `vendor_id` int(11) unsigned NOT NULL,
   `display_order` tinyint(3) unsigned NOT NULL,
   `extension` varchar(3) NOT NULL,
   `caption` mediumtext,
-  `user_id` int(11) NOT NULL,
+  `user_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`vendor_image_id`),
   KEY `VendorImage___vendor_id___display_order` (`vendor_id`,`display_order`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5698 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `VendorPaymentOption` (
-  `payment_option_id` int(11) NOT NULL DEFAULT '0',
-  `vendor_id` int(11) NOT NULL DEFAULT '0',
+  `payment_option_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `vendor_id` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`payment_option_id`,`vendor_id`),
-  KEY `VendorPaymentOption___vendor_id` (`vendor_id`),
-  KEY `VendorPaymentOption___payment_option_id` (`payment_option_id`)
+  KEY `VendorPaymentOption___vendor_id` (`vendor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `VendorRating` (
-  `vendor_id` int(11) NOT NULL DEFAULT '0',
-  `user_id` int(11) NOT NULL DEFAULT '0',
+  `vendor_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   `rating` tinyint(4) NOT NULL,
   `rating_datetime` datetime NOT NULL,
   PRIMARY KEY (`vendor_id`,`user_id`),
-  KEY `VendorRating___user_id` (`user_id`),
-  KEY `VendorRating___vendor_id` (`vendor_id`)
+  KEY `VendorRating___user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `VendorSource` (
-  `vendor_source_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `vendor_source_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `display_uri` varchar(255) NOT NULL,
   `feed_uri` varchar(255) NOT NULL,
@@ -372,20 +362,20 @@ CREATE TABLE `VendorSource` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `VendorSourceExcludedId` (
-  `vendor_source_id` int(11) NOT NULL,
+  `vendor_source_id` int(11) unsigned NOT NULL,
   `external_unique_id` varchar(255) NOT NULL,
   PRIMARY KEY (`vendor_source_id`,`external_unique_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `VendorSuggestion` (
-  `vendor_suggestion_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `vendor_suggestion_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(10) NOT NULL DEFAULT '',
   `suggestion` blob NOT NULL,
   `comment` text,
   `user_wants_notification` tinyint(1) NOT NULL DEFAULT '0',
   `creation_datetime` datetime NOT NULL,
-  `vendor_id` int(11) NOT NULL DEFAULT '0',
-  `user_id` int(11) NOT NULL DEFAULT '0',
+  `vendor_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`vendor_suggestion_id`),
   KEY `VendorSuggestion___user_id` (`user_id`),
   KEY `VendorSuggestion___vendor_id` (`vendor_id`)
@@ -439,11 +429,236 @@ BEGIN
                        ),
                    SQRT( 1 - @x ) )
          );
-
-
 END//
 
 delimiter ;
+
+ALTER TABLE `Location`
+  ADD FOREIGN KEY ( user_id )
+  REFERENCES `User` ( user_id )
+  ON DELETE RESTRICT
+  ON UPDATE CASCADE;
+
+ALTER TABLE `Location`
+  ADD FOREIGN KEY ( locale_id )
+  REFERENCES `Locale` ( locale_id )
+  ON DELETE SET NULL
+  ON UPDATE CASCADE;
+
+ALTER TABLE `Location`
+  ADD FOREIGN KEY ( parent_location_id )
+  REFERENCES `Location` ( location_id )
+  ON DELETE SET NULL
+  ON UPDATE CASCADE;
+
+ALTER TABLE `LocationComment`
+  ADD FOREIGN KEY ( user_id )
+  REFERENCES `User` ( user_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `LocationComment`
+  ADD FOREIGN KEY ( location_id )
+  REFERENCES `Location` ( location_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `LocationOwner`
+  ADD FOREIGN KEY ( user_id )
+  REFERENCES `User` ( user_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `LocationOwner`
+  ADD FOREIGN KEY ( location_id )
+  REFERENCES `Location` ( location_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `Locale`
+  ADD FOREIGN KEY ( address_format_id )
+  REFERENCES `AddressFormat` ( address_format_id )
+  ON DELETE RESTRICT
+  ON UPDATE CASCADE;
+
+ALTER TABLE `LocaleEncoding`
+  ADD FOREIGN KEY ( locale_id )
+  REFERENCES `Locale` ( locale_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `Cuisine`
+  ADD FOREIGN KEY ( parent_cuisine_id )
+  REFERENCES `Cuisine` ( cuisine_id )
+  ON DELETE SET NULL
+  ON UPDATE CASCADE;
+
+ALTER TABLE `Vendor`
+  ADD FOREIGN KEY ( user_id )
+  REFERENCES `User` ( user_id )
+  ON DELETE RESTRICT
+  ON UPDATE CASCADE;
+
+ALTER TABLE `Vendor`
+  ADD FOREIGN KEY ( price_range_id )
+  REFERENCES `PriceRange` ( price_range_id )
+  ON DELETE RESTRICT
+  ON UPDATE CASCADE;
+
+ALTER TABLE `Vendor`
+  ADD FOREIGN KEY ( location_id )
+  REFERENCES `Location` ( location_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `Vendor`
+  ADD FOREIGN KEY ( vendor_source_id )
+  REFERENCES `VendorSource` ( vendor_source_id )
+  ON DELETE SET NULL
+  ON UPDATE CASCADE;
+
+ALTER TABLE `VendorHours`
+  ADD FOREIGN KEY ( vendor_id )
+  REFERENCES `Vendor` ( vendor_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `VendorImage`
+  ADD FOREIGN KEY ( user_id )
+  REFERENCES `User` ( user_id )
+  ON DELETE RESTRICT
+  ON UPDATE CASCADE;
+
+ALTER TABLE `VendorImage`
+  ADD FOREIGN KEY ( vendor_id )
+  REFERENCES `Vendor` ( vendor_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `VendorCuisine`
+  ADD FOREIGN KEY ( cuisine_id )
+  REFERENCES `Cuisine` ( cuisine_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `VendorCuisine`
+  ADD FOREIGN KEY ( vendor_id )
+  REFERENCES `Vendor` ( vendor_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `VendorComment`
+  ADD FOREIGN KEY ( user_id )
+  REFERENCES `User` ( user_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `VendorComment`
+  ADD FOREIGN KEY ( vendor_id )
+  REFERENCES `Vendor` ( vendor_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `VendorPaymentOption`
+  ADD FOREIGN KEY ( vendor_id )
+  REFERENCES `Vendor` ( vendor_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `VendorPaymentOption`
+  ADD FOREIGN KEY ( payment_option_id )
+  REFERENCES `PaymentOption` ( payment_option_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `VendorCategory`
+  ADD FOREIGN KEY ( vendor_id )
+  REFERENCES `Vendor` ( vendor_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `VendorCategory`
+  ADD FOREIGN KEY ( category_id )
+  REFERENCES `Category` ( category_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `VendorAttribute`
+  ADD FOREIGN KEY ( attribute_id )
+  REFERENCES `Attribute` ( attribute_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `VendorAttribute`
+  ADD FOREIGN KEY ( vendor_id )
+  REFERENCES `Vendor` ( vendor_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `VendorSourceExcludedId`
+  ADD FOREIGN KEY ( vendor_source_id )
+  REFERENCES `VendorSource` ( vendor_source_id )
+  ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `VendorRating`
+  ADD FOREIGN KEY ( user_id )
+  REFERENCES `User` ( user_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `VendorRating`
+  ADD FOREIGN KEY ( vendor_id )
+  REFERENCES `Vendor` ( vendor_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `VendorSuggestion`
+  ADD FOREIGN KEY ( user_id )
+  REFERENCES `User` ( user_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `VendorSuggestion`
+  ADD FOREIGN KEY ( vendor_id )
+  REFERENCES `Vendor` ( vendor_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `UserLocationSubscription`
+  ADD FOREIGN KEY ( user_id )
+  REFERENCES `User` ( user_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `UserLocationSubscription`
+  ADD FOREIGN KEY ( location_id )
+  REFERENCES `Location` ( location_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `UserActivityLog`
+  ADD FOREIGN KEY ( user_activity_log_type_id )
+  REFERENCES `UserActivityLogType` ( user_activity_log_type_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `UserActivityLog`
+  ADD FOREIGN KEY ( user_id )
+  REFERENCES `User` ( user_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `UserActivityLog`
+  ADD FOREIGN KEY ( location_id )
+  REFERENCES `Location` ( location_id )
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `UserActivityLog`
+  ADD FOREIGN KEY ( vendor_id )
+  REFERENCES `Vendor` ( vendor_id )
+  ON DELETE SET NULL
+  ON UPDATE CASCADE;
 
 INSERT INTO UserActivityLogType (user_activity_log_type_id, type)
 VALUES ( 1, 'add vendor'),
