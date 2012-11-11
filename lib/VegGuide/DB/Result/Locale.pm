@@ -35,17 +35,17 @@ __PACKAGE__->add_columns(
   },
 );
 __PACKAGE__->set_primary_key("locale_id");
-__PACKAGE__->has_many(
-  "_X_locales_encoding",
-  "VegGuide::DB::Result::LocaleEncoding",
-  { "foreign.locale_id" => "self.locale_id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
 __PACKAGE__->belongs_to(
   "address_format",
   "VegGuide::DB::Result::AddressFormat",
   { address_format_id => "address_format_id" },
   { is_deferrable => 1, on_delete => "RESTRICT", on_update => "CASCADE" },
+);
+__PACKAGE__->has_many(
+  "locales_encoding",
+  "VegGuide::DB::Result::LocaleEncoding",
+  { "foreign.locale_id" => "self.locale_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 __PACKAGE__->has_many(
   "locations",
@@ -55,8 +55,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-10 11:29:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jnrQCPDf+6U8uWGXurZH9g
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-10 22:50:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:edWfXolVWg8eYYA8aQqCtw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

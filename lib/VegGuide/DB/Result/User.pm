@@ -79,18 +79,6 @@ __PACKAGE__->add_unique_constraint("User___email_address", ["email_address"]);
 __PACKAGE__->add_unique_constraint("User___openid_uri", ["openid_uri"]);
 __PACKAGE__->add_unique_constraint("User___real_name", ["real_name"]);
 __PACKAGE__->has_many(
-  "_X_location_owners",
-  "VegGuide::DB::Result::LocationOwner",
-  { "foreign.user_id" => "self.user_id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-__PACKAGE__->has_many(
-  "_X_user_location_subscriptions",
-  "VegGuide::DB::Result::UserLocationSubscription",
-  { "foreign.user_id" => "self.user_id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-__PACKAGE__->has_many(
   "created_locations",
   "VegGuide::DB::Result::Location",
   { "foreign.user_id" => "self.user_id" },
@@ -103,8 +91,20 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 __PACKAGE__->has_many(
+  "location_owners",
+  "VegGuide::DB::Result::LocationOwner",
+  { "foreign.user_id" => "self.user_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
   "user_activity_logs",
   "VegGuide::DB::Result::UserActivityLog",
+  { "foreign.user_id" => "self.user_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
+  "user_location_subscriptions",
+  "VegGuide::DB::Result::UserLocationSubscription",
   { "foreign.user_id" => "self.user_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -138,16 +138,16 @@ __PACKAGE__->has_many(
   { "foreign.user_id" => "self.user_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
-__PACKAGE__->many_to_many("owned_locations", "_X_location_owners", "location");
+__PACKAGE__->many_to_many("owned_locations", "location_owners", "location");
 __PACKAGE__->many_to_many(
   "subscribed_locations",
-  "_X_user_location_subscriptions",
+  "user_location_subscriptions",
   "location",
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-10 11:29:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sNsR1are/+t7jwXiBOC0ZQ
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-10 22:50:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5FUIaWMiT1IJnQDYCmjM1w
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

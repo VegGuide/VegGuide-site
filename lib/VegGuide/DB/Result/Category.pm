@@ -33,16 +33,16 @@ __PACKAGE__->add_columns(
 );
 __PACKAGE__->set_primary_key("category_id");
 __PACKAGE__->has_many(
-  "_X_vendor_categories",
+  "vendor_categories",
   "VegGuide::DB::Result::VendorCategory",
   { "foreign.category_id" => "self.category_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
-__PACKAGE__->many_to_many("vendors", "_X_vendor_categories", "vendor");
+__PACKAGE__->many_to_many("vendors", "vendor_categories", "vendor");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-10 11:29:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:i151+nqUq5+FFkYK2RpgSg
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-10 22:50:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3C50gCgdfYSPcuIugCg7OA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

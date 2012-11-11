@@ -34,12 +34,6 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("cuisine_id");
 __PACKAGE__->add_unique_constraint("Cuisine___name", ["name"]);
 __PACKAGE__->has_many(
-  "_X_vendor_cuisines",
-  "VegGuide::DB::Result::VendorCuisine",
-  { "foreign.cuisine_id" => "self.cuisine_id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-__PACKAGE__->has_many(
   "cuisines",
   "VegGuide::DB::Result::Cuisine",
   { "foreign.parent_cuisine_id" => "self.cuisine_id" },
@@ -56,11 +50,17 @@ __PACKAGE__->belongs_to(
     on_update     => "CASCADE",
   },
 );
-__PACKAGE__->many_to_many("vendors", "_X_vendor_cuisines", "vendor");
+__PACKAGE__->has_many(
+  "vendor_cuisines",
+  "VegGuide::DB::Result::VendorCuisine",
+  { "foreign.cuisine_id" => "self.cuisine_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->many_to_many("vendors", "vendor_cuisines", "vendor");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-10 11:29:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kraK/jJ6Zvryc8tBj+PfFA
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-10 22:50:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IGoAGQgqBHfeEHaPA34XAw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

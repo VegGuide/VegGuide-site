@@ -155,24 +155,6 @@ __PACKAGE__->add_unique_constraint(
   "Vendor___external_unique_id___vendor_source_id",
   ["external_unique_id", "vendor_source_id"],
 );
-__PACKAGE__->has_many(
-  "_X_vendor_attributes",
-  "VegGuide::DB::Result::VendorAttribute",
-  { "foreign.vendor_id" => "self.vendor_id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-__PACKAGE__->has_many(
-  "_X_vendor_categories",
-  "VegGuide::DB::Result::VendorCategory",
-  { "foreign.vendor_id" => "self.vendor_id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-__PACKAGE__->has_many(
-  "_X_vendor_cuisines",
-  "VegGuide::DB::Result::VendorCuisine",
-  { "foreign.vendor_id" => "self.vendor_id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
 __PACKAGE__->belongs_to(
   "location",
   "VegGuide::DB::Result::Location",
@@ -198,8 +180,26 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 __PACKAGE__->has_many(
+  "vendor_attributes",
+  "VegGuide::DB::Result::VendorAttribute",
+  { "foreign.vendor_id" => "self.vendor_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
+  "vendor_categories",
+  "VegGuide::DB::Result::VendorCategory",
+  { "foreign.vendor_id" => "self.vendor_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
   "vendor_comments",
   "VegGuide::DB::Result::VendorComment",
+  { "foreign.vendor_id" => "self.vendor_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
+  "vendor_cuisines",
+  "VegGuide::DB::Result::VendorCuisine",
   { "foreign.vendor_id" => "self.vendor_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -244,14 +244,14 @@ __PACKAGE__->has_many(
   { "foreign.vendor_id" => "self.vendor_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
-__PACKAGE__->many_to_many("attributes", "_X_vendor_attributes", "attribute");
-__PACKAGE__->many_to_many("categories", "_X_vendor_categories", "category");
-__PACKAGE__->many_to_many("cuisines", "_X_vendor_cuisines", "cuisine");
+__PACKAGE__->many_to_many("attributes", "vendor_attributes", "attribute");
+__PACKAGE__->many_to_many("categories", "vendor_categories", "category");
+__PACKAGE__->many_to_many("cuisines", "vendor_cuisines", "cuisine");
 __PACKAGE__->many_to_many("payment_options", "vendor_payment_options", "payment_option");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-10 11:29:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EwVfMcbtW3Tjx6oasuwrBw
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-10 22:50:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bk1bg5oa+PgXr/5D3o/ExQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

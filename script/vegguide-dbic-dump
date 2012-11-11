@@ -58,10 +58,6 @@ my @BridgeTables = qw(
 sub _custom_rel_name_map {
     my $p = shift;
 
-    return '_X_' . $p->{name}
-        if ( $p->{type} eq 'belongs_to' || $p->{type} eq 'has_many' )
-        && any { $p->{remote_moniker} eq $_ } @BridgeTables;
-
     if ( $p->{local_moniker} eq 'User' && $p->{remote_moniker} eq 'Location' )
     {
         return $p->{name} if $p->{type} eq 'belongs_to';
@@ -69,7 +65,7 @@ sub _custom_rel_name_map {
         if ( $p->{type} eq 'many_to_many' ) {
             my $pad = peek_my(2);
             if ( ${ $pad->{'$class1_to_link_table_rel_name'} } eq
-                '_X_user_location_subscriptions' ) {
+                'user_location_subscriptions' ) {
 
                 return 'subscribed_locations';
             }
@@ -86,7 +82,7 @@ sub _custom_rel_name_map {
         if ( $p->{type} eq 'many_to_many' ) {
             my $pad = peek_my(2);
             if ( ${ $pad->{'$class1_to_link_table_rel_name'} } eq
-                '_X_user_location_subscriptions' ) {
+                'user_location_subscriptions' ) {
 
                 return 'subscribers';
             }

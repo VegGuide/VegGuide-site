@@ -64,18 +64,6 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 1, is_nullable => 0 },
 );
 __PACKAGE__->set_primary_key("location_id");
-__PACKAGE__->has_many(
-  "_X_location_owners",
-  "VegGuide::DB::Result::LocationOwner",
-  { "foreign.location_id" => "self.location_id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-__PACKAGE__->has_many(
-  "_X_user_location_subscriptions",
-  "VegGuide::DB::Result::UserLocationSubscription",
-  { "foreign.location_id" => "self.location_id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
 __PACKAGE__->belongs_to(
   "creator",
   "VegGuide::DB::Result::User",
@@ -96,6 +84,12 @@ __PACKAGE__->belongs_to(
 __PACKAGE__->has_many(
   "location_comments",
   "VegGuide::DB::Result::LocationComment",
+  { "foreign.location_id" => "self.location_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
+  "location_owners",
+  "VegGuide::DB::Result::LocationOwner",
   { "foreign.location_id" => "self.location_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -123,17 +117,23 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 __PACKAGE__->has_many(
+  "user_location_subscriptions",
+  "VegGuide::DB::Result::UserLocationSubscription",
+  { "foreign.location_id" => "self.location_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
   "vendors",
   "VegGuide::DB::Result::Vendor",
   { "foreign.location_id" => "self.location_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
-__PACKAGE__->many_to_many("owners", "_X_location_owners", "user");
-__PACKAGE__->many_to_many("subscribers", "_X_user_location_subscriptions", "user");
+__PACKAGE__->many_to_many("owners", "location_owners", "user");
+__PACKAGE__->many_to_many("subscribers", "user_location_subscriptions", "user");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-10 11:30:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:16E6c90782jwWlxA75c1PQ
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-10 22:50:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:D7yJJI5py95DIJuMPgYpug
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
