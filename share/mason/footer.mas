@@ -27,12 +27,8 @@
   <div id="footer-copyright">
 
     <div id="logos">
-      <a href="http://www.facebook.com/VegGuide"
-         ><img src="/images/facebook-badge.gif"
-               alt="Find us on Facebook"
-               height="44" width="144"
-               style="margin-bottom: 8px"
-               /></a>
+      <div class="fb-like" data-href="http://www.facebook.com/VegGuide" data-send="true" data-width="450" data-show-faces="false"></div>
+      <br />
       <br />
       <a href="http://www.exploreveg.org/"><img src="/images/caa-logo.png" alt="Compassionate Action for Animals logo" title="Compassionate Action for Animals" height="60" width="98" /></a>
       <a href="http://www.cok.net/"><img src="/images/cok-logo.png" alt="Compassion Over Killing logo" title="Compassion Over Killing" height="51" width="200" /></a>
