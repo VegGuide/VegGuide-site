@@ -5,8 +5,6 @@ use warnings;
 
 use DBIx::Class::Schema::Loader qw( make_schema_at );
 use Getopt::Long;
-use List::MoreUtils qw( any );
-use PadWalker qw( peek_my );
 
 sub main {
     my $schema;
@@ -54,15 +52,9 @@ sub _custom_rel_name_map {
         return $p->{name} if $p->{type} eq 'belongs_to';
 
         if ( $p->{type} eq 'many_to_many' ) {
-            my $pad = peek_my(2);
-            if ( ${ $pad->{'$class1_to_link_table_rel_name'} } eq
-                'user_location_subscriptions' ) {
-
-                return 'subscribed_locations';
-            }
-            else {
-                return 'owned_locations';
-            }
+            return $p->{link_moniker} eq 'UserLocationSubscription'
+                ? 'subscribed_locations'
+                : 'owned_locations';
         }
 
         return 'created_locations';
@@ -71,15 +63,9 @@ sub _custom_rel_name_map {
         && $p->{remote_moniker} eq 'User' ) {
 
         if ( $p->{type} eq 'many_to_many' ) {
-            my $pad = peek_my(2);
-            if ( ${ $pad->{'$class1_to_link_table_rel_name'} } eq
-                'user_location_subscriptions' ) {
-
-                return 'subscribers';
-            }
-            else {
-                return 'owners';
-            }
+            return $p->{link_moniker} eq 'UserLocationSubscription'
+                ? 'subscribers'
+                : 'owners';
         }
 
         return 'creator';
