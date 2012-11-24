@@ -27,7 +27,7 @@
   <div id="footer-copyright">
 
     <div id="logos">
-      <div class="fb-like" data-href="http://www.facebook.com/VegGuide" data-send="true" data-width="450" data-show-faces="false"></div>
+      <div class="fb-like-box" data-href="http://www.facebook.com/VegGuide" data-width="292" data-show-faces="false" data-stream="false" data-header="false"></div>
       <br />
       <br />
       <a href="http://www.exploreveg.org/"><img src="/images/caa-logo.png" alt="Compassionate Action for Animals logo" title="Compassionate Action for Animals" height="60" width="98" /></a>
