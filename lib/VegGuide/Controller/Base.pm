@@ -167,6 +167,7 @@ sub _params_from_path_query {
         die "Unknown type ($type)" unless $ContentTypes{$type};
 
         $c->response()->content_type( $ContentTypes{$type} );
+        $c->response()->header( 'Access-Control-Allow-Origin' => '*' );
 
         my $meth = 'status_' . $status;
         $self->$meth(
