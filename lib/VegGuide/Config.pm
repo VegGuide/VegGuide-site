@@ -27,7 +27,6 @@ use Sys::Hostname qw( hostname );
         AuthenCookie
         +VegGuide::Plugin::ErrorHandling
         +VegGuide::Plugin::FixupURI
-        +VegGuide::Plugin::InOutEncoding
         +VegGuide::Plugin::ResponseAttributes
         DR::Session
         Session::State::URI
@@ -38,6 +37,7 @@ use Sys::Hostname qw( hostname );
         Log::Dispatch
         RedirectAndDetach
         SubRequest
+        Unicode::Encoding
     );
 
     my @Imports;
