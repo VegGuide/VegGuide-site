@@ -330,8 +330,7 @@ else
 }
 
 my $client_wants_localized_fields
-    = $c->client()->localize_for_location($location)
-    || ( $c->vg_user()->is_admin() && $c->request()->params()->{localize} );
+    = $c->client()->localize_for_location($location);
 </%init>
 
 <%def .categories>

@@ -21,8 +21,11 @@ sub new {
     my $class   = shift;
     my $request = shift;
     my $locale  = shift;
+    my $always  = shift;
 
     my $self = bless {}, $class;
+
+    $self->{always_localize} = $always;
 
     $self->_get_encodings($request);
     $self->_get_languages($request);
@@ -32,8 +35,12 @@ sub new {
 
         $self->{encoding} = $encoding;
 
-        if (   $locale->language_code ne 'en'
-            && $self->{possible_languages}{ $locale->language_code } ) {
+        if (
+            $self->{always_localize}
+            || (   $locale->language_code ne 'en'
+                && $self->{possible_languages}{ $locale->language_code } )
+            ) {
+
             $self->{show_localized_content} = 1;
         }
     }
@@ -100,8 +107,9 @@ sub localize_for_location {
     return if $locale->language_code() =~ /^en/i;
 
     return 1
-        if $self->show_utf8
-            && $self->accepts_language( $locale->language_code );
+        if $self->{always_localize}
+        || ( $self->show_utf8
+        && $self->accepts_language( $locale->language_code ) );
 }
 
 sub _encoding_for_locale {

@@ -59,8 +59,11 @@ sub client {
     my $locale;
     $locale = $location->locale() if $location;
 
-    return $stash->{client}
-        = VegGuide::Client->new( $self->request(), $locale );
+    return $stash->{client} = VegGuide::Client->new(
+        $self->request(),
+        $locale,
+        $self->vg_user()->is_admin(),
+    );
 }
 
 {
