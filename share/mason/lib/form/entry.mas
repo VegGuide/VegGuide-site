@@ -61,7 +61,7 @@
 
      </fieldset>
 
-% if ( $c->client()->localize_for_location($location) ) {
+% if ($client_wants_localized_fields) {
      <fieldset>
       <legend>Basic Info in <% $location->locale()->language_name() | h %></legend>
 
@@ -146,7 +146,7 @@
 
      </fieldset>
 
-%   if ( $c->client()->localize_for_location($location) && $location->locale()->requires_localized_addresses() ) {
+%   if ( $client_wants_localized_fields && $location->locale()->requires_localized_addresses() ) {
      <fieldset>
       <legend><% $location->locale()->language_name() | h %> Address</legend>
 
@@ -328,6 +328,10 @@ else
 {
     $uri = region_uri( location => $location );
 }
+
+my $client_wants_localized_fields
+    = $c->client()->localize_for_location($location)
+    || ( $c->vg_user()->is_admin() && $c->request()->params()->{localize} );
 </%init>
 
 <%def .categories>
