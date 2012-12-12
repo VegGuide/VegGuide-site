@@ -60,7 +60,11 @@ sub feed_uri {
 sub feed_template_params {
     my $self = shift;
 
-    return ( '/vendor-comment-content.mas', comment => $self );
+    return (
+        '/vendor-comment-content.mas',
+        comment => $self,
+        ( $self->rating() ? ( rating => $self->rating() ) : () ),
+    );
 }
 
 sub delete {

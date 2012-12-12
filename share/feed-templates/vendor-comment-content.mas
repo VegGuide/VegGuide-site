@@ -1,5 +1,12 @@
 <% VegGuide::Util::text_to_html( text => $comment->comment() ) %>
 
+% if ($rating) {
+<p>
+  Rating: <% $rating %>/5
+</p>
+% }
+
 <%args>
 $comment
+$rating => undef
 </%args>
