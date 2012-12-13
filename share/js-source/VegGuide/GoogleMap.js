@@ -150,7 +150,7 @@ VegGuide.GoogleMap._makeIcons = function () {
         var name = icons[i][1];
 
         var image_uri = "/images/map-icons/" + name + ".png";
-        VegGuide.GoogleMap._Icons[key] = new GIcon( base_icon, image_uri );
+        VegGuide.GoogleMap._Icons[key] = new google.maps.Icon( base_icon, image_uri );
     }
 };
 
