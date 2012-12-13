@@ -9,7 +9,7 @@ if ( typeof VegGuide == "undefined" ) {
 VegGuide.GoogleMap = function ( div_id ) {
     var map_div = $(div_id);
 
-    if ( ! ( map_div && GBrowserIsCompatible() ) ) {
+    if ( ! map_div ) {
         return;
     }
 
@@ -18,7 +18,21 @@ VegGuide.GoogleMap = function ( div_id ) {
 }
 
 VegGuide.GoogleMap.prototype._createGoogleMap = function ( map_div ) {
-    var map = new GMap2(map_div);
+    var map = new google.maps.Map(
+        map_div,
+        {
+            zoom: 13,
+            mapTypeControl: true,
+            mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+            },
+            zoomControl: true,
+            zoomControlOptions: {
+                style: google.maps.ZoomControlStyle.SMALL
+            },
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+    );
 
     var height;
     if ( typeof window.innerHeight == "number" ) {
@@ -35,19 +49,16 @@ VegGuide.GoogleMap.prototype._createGoogleMap = function ( map_div ) {
         vendor_list.style.height = height + "px";
     }
 
-    map.addControl( new GSmallMapControl() );
-    map.addControl( new GMapTypeControl() );
-
     this.map = map;
 };
 
 VegGuide.GoogleMap.prototype.addMarkers = function (points) {
-    this.map.setCenter( new GLatLng( points[0].latitude, points[0].longitude ), 13 );
+    this.map.setCenter( new google.maps.LatLng( points[0].latitude, points[0].longitude ) );
 
     for ( var i = 0; i < points.length; i++ ) {
         var point = points[i];
 
-        var ll = new GLatLng ( point.latitude, point.longitude );
+        var ll = new google.maps.LatLng ( point.latitude, point.longitude );
 
         if ( point.info_div ) {
             var div = $( point.info_div ).cloneNode(true);
@@ -78,13 +89,10 @@ VegGuide.GoogleMap.prototype.showFirstInfoWindow = function () {
 VegGuide.GoogleMap._Icons = {};
 
 VegGuide.GoogleMap._makeIcons = function () {
-    var base_icon = new GIcon();
+    var base_icon = new google.maps.Icon();
 
-    base_icon.iconSize = new GSize( 29, 40 );
-    base_icon.iconAnchor = new GPoint( 15, 40 );
-    base_icon.infoWindowAnchor = new GPoint( 5, 1 );
-    base_icon.shadow = "/images/map-icons/shadow.png";
-    base_icon.shadowSize = new GSize( 60, 40 );
+    base_icon.Size = new google.maps.Size( 29, 40 );
+    base_icon.Anchor = new google.maps.Point( 15, 40 );
 
     /* The first element in each pair is the key and the second is the
        icon name. The keys are category ids, and things like "1.1"
