@@ -481,6 +481,14 @@ unless ($toc) {
       <td>&#x2714;</td>
     </tr>
     <tr>
+      <td>payment_options</td>
+      <td>array of strings</td>
+      <td>
+        An array of strings with payment options like "Check" or "Visa". These
+        are always returned in alphabetically sorted order.
+      </td>
+      <td></td>
+    <tr>
       <td>
         creation_datetime,<br />
         last_modified_datetime

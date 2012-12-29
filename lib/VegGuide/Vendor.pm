@@ -2322,6 +2322,11 @@ sub _core_rest_data {
         $rest{price_range} = $self->price_range()->description();
     }
 
+    my @options = $self->payment_options();
+    if (@options) {
+        $rest{payment_options} = [ map { $_->name() } @options ];
+    }
+
     if ( $self->has_hours_info() ) {
         $rest{hours} = [ $self->hours_as_descriptions() ];
     }

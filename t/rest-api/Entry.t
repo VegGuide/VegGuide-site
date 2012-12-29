@@ -415,6 +415,21 @@ use_test_database();
 
     my $entry = json_ok($response);
 
+    my @options = (
+        'American Express',
+        'Check',
+        q{Diner's Club},
+        'Discover',
+        'MasterCard',
+        'Visa'
+    );
+
+    is_deeply(
+        $entry->{payment_options},
+        \@options,
+        'got expected payment_options for entry'
+    );
+
     my @tags = (
         '(Mostly) Organic',
         'Large Group-Friendly',
