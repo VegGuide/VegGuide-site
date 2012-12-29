@@ -212,7 +212,7 @@ sub All {
 
     my @encodings
         = ( sort _sort_encodings grep { !( $exclude{$_} || /$exclude_re/ ) }
-            Encode->encodings() );
+            Encode::encodings() );
 
     sub Encodings {
         @encodings;
