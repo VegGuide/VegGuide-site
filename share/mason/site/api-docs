@@ -1187,10 +1187,10 @@ unless ($toc) {
 
 <ul>
   <li>
-    The Entry structures for geographical now return the distance as an
-    unrounded floating point number. The search response itself now includes
-    a <em>distance_unit</em> key ("mile" or "km"). Client libraries should
-    round the distance as needed for display.
+    The Entry structures for geographical searches now return the distance as
+    an unrounded floating point number. The search response itself now
+    includes a <em>distance_unit</em> key ("mile" or "km"). Client libraries
+    should round the distance as needed for display.
   </li>
 </ul>
 
