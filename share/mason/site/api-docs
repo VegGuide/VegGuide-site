@@ -539,6 +539,14 @@ unless ($toc) {
           <li><% $category->name() %></li>
 % }
         </ul>
+
+        <p>
+          For entries with more than one category, they will be ordered per
+          the list above. This is intended to reflect the relative importance
+          of each category. For example, many entries on the site are in both
+          the "Restaurant" and "Caterer" category, but the former is more
+          interesting (to most users) than the latter.
+        </p>
       </td>
       <td>&#x2714;</td>
     </tr>
