@@ -1165,6 +1165,14 @@ unless ($toc) {
 
 <h2>Release History</h2>
 
+<h3>0.0.5 - December 29, 2012</h3>
+
+<ul>
+  <li>
+    Added the <em>payment_options</em> key to the Entry data structure.
+  </li>
+</ul>
+
 <h3>0.0.4 - December 9, 2012</h3>
 
 <ul>
