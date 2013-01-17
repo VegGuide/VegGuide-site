@@ -148,6 +148,12 @@ sub _redirect_on_bad_request {
         $c->redirect_and_detach( $uri, 301 );
     }
 
+    if ( exists $p{fb_xd_fragment} ) {
+        my $uri = $c->request()->uri();
+        $uri->query_param_delete('fb_xd_fragment');
+        $c->redirect_and_detach( $uri, 301 );
+    }
+
     # Some l33t hacker bot keeps trying to stick links in these
     # parameters
     if ( grep { defined && /^http/ }
