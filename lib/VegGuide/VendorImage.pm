@@ -17,6 +17,7 @@ use File::Copy qw( copy );
 use File::LibMagic;
 use File::Path qw( mkpath );
 use File::Spec;
+use Image::ExifTool;
 use Image::Size qw( imgsize );
 use VegGuide::Config;
 use VegGuide::Image;
@@ -63,6 +64,10 @@ use VegGuide::SiteURI qw( site_uri );
     sub create_from_file {
         my $class = shift;
         my %p = validate( @_, $spec );
+
+        my $exif = Image::ExifTool->new();
+        $exif->SetNewValue('*');
+        $exif->WriteInfo( $p{file} );
 
         my $file = VegGuide::Image->new( file => $p{file} );
 

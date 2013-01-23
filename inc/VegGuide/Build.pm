@@ -78,6 +78,7 @@ my %Requires = (
     'Geography::States'          => '0',
     'HTML::Entities'             => '0',
     'HTML::FillInForm'           => '1.07',
+    'Image::ExifTool'            => '0',
     'Image::Magick'              => '0',
     'Image::Size'                => '0',
     'IO::Async'                  => '0.46',
