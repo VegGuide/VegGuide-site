@@ -142,7 +142,7 @@ sub AlzaboRootDir {
 {
     my %BaseConfig = (
         is_production        => __PACKAGE__->IsProduction(),
-        using_frontend_proxy => ( $ENV{PLACK_ENV} ? 1 : 0 ),
+        using_frontend_proxy => 1,
 
         default_view => 'Mason',
 
