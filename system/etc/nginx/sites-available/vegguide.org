@@ -276,6 +276,7 @@ server {
 }
 
 server {
+    ssl on
     listen 444;
     server_name lists.vegguide.org;
 
