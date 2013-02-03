@@ -4,7 +4,7 @@ server {
     listen 443 ssl;
     server_name www.vegguide.org;
 
-    ssl_certificate     /etc/ssl/certs/www.vegguide.org.crt;
+    ssl_certificate     /etc/ssl/certs/www.vegguide.org-chained.crt;
     ssl_certificate_key /etc/ssl/private/www.vegguide.org.key;
 
     error_log  /var/log/nginx/vegguide.org/error.log;
@@ -290,7 +290,7 @@ server {
     error_log  /var/log/nginx/error.log;
     access_log /var/log/nginx/access.log;
 
-    ssl_certificate     /etc/ssl/certs/lists.vegguide.org.crt;
+    ssl_certificate     /etc/ssl/certs/lists.vegguide.org-chained.crt;
     ssl_certificate_key /etc/ssl/private/lists.vegguide.org.key;
 
     root /usr/lib;
