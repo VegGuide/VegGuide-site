@@ -30,6 +30,7 @@ use_test_database();
         categories           => ['Restaurant'],
         city                 => 'Saint Paul',
         creation_datetime    => '2004-03-03T22:20:17Z',
+        country              => 'USA',
         cuisines             => ['Mexican'],
         hours                => [
             {

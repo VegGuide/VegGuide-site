@@ -340,7 +340,8 @@ unless ($toc) {
         neighborhood,<br />
         city,<br />
         region,<br />
-        postal_code
+        postal_code,<br />
+        country
       </td>
       <td>string</td>
       <td>

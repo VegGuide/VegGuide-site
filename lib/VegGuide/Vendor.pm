@@ -2318,6 +2318,9 @@ sub _core_rest_data {
     delete $rest{$_}
         for qw( canonical_address last_featured_date latitude longitude );
 
+    $rest{country} = $self->location()->country()
+        if $self->location()->country();
+
     if ( $self->price_range_id() ) {
         $rest{price_range} = $self->price_range()->description();
     }

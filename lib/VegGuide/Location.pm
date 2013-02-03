@@ -791,8 +791,10 @@ sub address_format {
 sub country {
     my $self = shift;
 
+    return $self->{country} if $self->{country};
+
     foreach my $l ( $self, $self->ancestors ) {
-        return $l->name if $l->is_country;
+        return $self->{country} =  $l->name if $l->is_country;
     }
 }
 
