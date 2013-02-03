@@ -222,7 +222,7 @@ sub _with_host {
     return unless $_[0];
 
     return (
-        scheme => 'http',
+        scheme => $ENV{SERVER_SCHEME},
         host   => VegGuide::Config->CanonicalWebHostname(),
     );
 }
