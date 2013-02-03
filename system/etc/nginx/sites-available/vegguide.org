@@ -276,8 +276,7 @@ server {
 }
 
 server {
-    ssl on
-    listen 444;
+    listen 444 ssl;
     server_name lists.vegguide.org;
 
     error_log  /var/log/nginx/error.log;
