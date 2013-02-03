@@ -121,6 +121,13 @@ sub exit : Path('/exit') : Args(0) {
     exit 0;
 }
 
+sub debug: Path('/debug') : Args(0) {
+    my $self = shift;
+    my $c    = shift;
+
+    $c->stash()->{template} = '/debug';
+}
+
 sub warn : Path('/warn') : Args(0) {
     my $self = shift;
     my $c    = shift;

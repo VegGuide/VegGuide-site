@@ -9,6 +9,7 @@ use parent 'Catalyst::View::Mason';
 
     package VegGuide::Mason;
 
+    use Data::Dumper::Concise;
     use Image::Size qw( html_imgsize );
     use Lingua::EN::Inflect qw( PL );
     use List::AllUtils qw( all any first );

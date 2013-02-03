@@ -35,6 +35,11 @@ server {
 
     error_page 503 $share_dir/static/503.html;
 
+    location = /debug {
+        allow 173.11.48.48/28;
+        deny all;
+    }
+
     location ~ .*favicon\.gif$ {
         rewrite  ^  /favicon.ico  permanent;
     }
