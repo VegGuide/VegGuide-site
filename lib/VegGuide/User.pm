@@ -25,7 +25,7 @@ use VegGuide::Cursor::UserWithAggregate;
 use VegGuide::Email;
 use VegGuide::Image;
 use VegGuide::Location;
-use VegGuide::SiteURI qw( static_uri user_uri );
+use VegGuide::SiteURI qw( site_uri static_uri user_uri );
 use VegGuide::UserActivityLog;
 use VegGuide::User::Guest;
 use VegGuide::Util qw( string_is_empty );
@@ -245,10 +245,9 @@ sub forgot_password {
             VegGuide::Schema->Connect()->sqlmaker()->NOW(),
     );
 
-    my $uri = uri(
-        scheme => 'http',
-        host   => VegGuide::Config->CanonicalWebHostname(),
-        path   => "/user/change_password_form/$digest",
+    my $uri = site_uri(
+        path      => "/user/change_password_form/$digest",
+        with_host => 1,
     );
 
     VegGuide::Email->Send(
