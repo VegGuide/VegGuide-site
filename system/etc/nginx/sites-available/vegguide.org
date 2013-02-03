@@ -38,6 +38,7 @@ server {
     location = /debug {
         allow 173.11.48.48/28;
         deny all;
+        try_files $uri @backend;
     }
 
     location ~ .*favicon\.gif$ {
