@@ -29,8 +29,7 @@ sub begin : Private {
             && $c->engine()->env()
             && $c->engine()->env()->{SERVER_PORT} != 80;
 
-    my $port = $c->engine()->env()->{HTTP_X_REAL_PORT};
-    $ENV{SERVER_SCHEME} = $port && $port == 443 ? 'https' : 'http';
+    $ENV{SERVER_SCHEME} = $c->engine()->env()->{'psgi.url_scheme'};
 
     if ( $self->_is_bad_request($c) ) {
         $c->redirect_and_detach( site_uri( path => '/', with_host => 1 ) );
