@@ -1,7 +1,11 @@
 # Static files and backend proxy
 server {
     listen 80;
+    listen 443 ssl;
     server_name www.vegguide.org;
+
+    ssl_certificate     /etc/ssl/certs/www.vegguide.org.crt;
+    ssl_certificate_key /etc/ssl/private/www.vegguide.org.key;
 
     error_log  /var/log/nginx/vegguide.org/error.log;
     access_log /var/log/nginx/vegguide.org/access.log;
@@ -13,11 +17,11 @@ server {
     add_header P3P "policyref=\"http://www.vegguide.org/w3c/p3p.xml\", CP=\"ALL DSP COR CURa ADMa \DEVa TAIa PSAa PSDa OUR IND PHY ONL COM NAV DEM STA\"";
 
     location ^~ /mailman {
-        rewrite  ^(.*)  https://lists.vegguide.org$1  permanent;
+        rewrite  ^(.*)  https://lists.vegguide.org:444$1  permanent;
     }
 
     location ^~ /pipermail {
-        rewrite  ^(.*)  https://lists.vegguide.org$1  permanent;
+        rewrite  ^(.*)  https://lists.vegguide.org:444$1  permanent;
     }
 
     #rewrite  !^/down.html$  /down.html  redirect;
@@ -272,15 +276,15 @@ server {
 }
 
 server {
-    listen 443;
+    listen 444;
     server_name lists.vegguide.org;
 
     error_log  /var/log/nginx/error.log;
     access_log /var/log/nginx/access.log;
 
     ssl on;
-    ssl_certificate     /etc/ssl/certs/www.vegguide.org.crt;
-    ssl_certificate_key /etc/ssl/private/www.vegguide.org.key;
+    ssl_certificate     /etc/ssl/certs/lists.vegguide.org.crt;
+    ssl_certificate_key /etc/ssl/private/lists.vegguide.org.key;
 
     root /usr/lib;
 
