@@ -138,6 +138,9 @@ sub _search_rest_response {
         distance_unit => $search->unit(),
     );
 
+    $rest{filters} = [ $search->long_descriptions() ]
+        if $search->has_filters();
+
     my $country;
     my $vendors = $search->vendors();
 

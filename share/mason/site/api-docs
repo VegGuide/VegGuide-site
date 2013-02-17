@@ -1035,7 +1035,8 @@ unless ($toc) {
     "entry_count":   123,
     "distance_unit": "mile",
     "entries":       [ ... ],
-    "region":        { ... }
+    "region":        { ... },
+    "filters"        [ ... ]
 }</code></pre>
 
 <p>
@@ -1048,6 +1049,16 @@ unless ($toc) {
 
 <p>
   The <em>distance_unit</em> key is always "mile" or "km".
+</p>
+
+<p>
+  The <em>filters</em> key is only included for search
+  with <a href="#Filtering-Search-Results">filters</a>. It is an array of
+  strings where each string describes one of the filters as a sentence
+  fragment. For example, when you filter for entries which are at least
+  vegetarian or vegan, the description is "which are at least Vegetarian". The
+  intent is that you can use these fragments in a sentence like "you searched
+  for entries ...".
 </p>
 
 <p>
