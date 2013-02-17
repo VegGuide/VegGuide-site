@@ -1055,6 +1055,76 @@ unless ($toc) {
   longitude, we return a <a href="#Not-Found">404 Not Found</a> response.
 </p>
 
+<a name="Filtering-Search-Results"></a>
+<h2>Filtering Search Results</h2>
+
+<p>
+  All search URIs support various filters. These are applied by appending
+  filters to the URI as path elements after the path
+  element <code>/filter</code>. For example, the path for a search address
+  would look something like:
+</p>
+
+<pre><code>/search/by-address/{address}/filter/key1=foo;key2=bar</code></pre>
+
+<p>
+  Multiple filters should be separated by a semi-colon (;) as in the example
+  above. With some filters, you may repeat the key with different values,
+  others can only be specified once.
+</p>
+
+<p>
+  The following filters are currently available:
+</p>
+
+<table class="docs-table">
+  <thead>
+    <tr>
+      <th>Key name</th>
+      <th>Type</th>
+      <th>Repeatable?</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>category_id</td>
+      <td>enum</td>
+      <td>yes</td>
+      <td>
+        <p>
+          This filter limits the search so it only returns entries in the
+          specified categories. Categories are identified by an integer id, as
+          follows:
+        </p>
+
+        <ul>
+% for my $category ( sort { $a->category_id() <=> $b->category_id() } VegGuide::Category->All() ) {
+          <li><strong><% $category->category_id() %></strong>: <% $category->name() %></li>
+% }
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>veg_level</td>
+      <td>enum</td>
+      <td>no</td>
+      <td>
+        <p>
+          This filter specifies the <strong>minimum</strong> veg-friendliness
+          for search results. The valid values are:
+        </p>
+
+        <ul>
+% for my $level ( reverse 1..5 ) {
+          <li><strong><% $level %></strong>: <% VegGuide::Vendor->VegLevelDescription($level) %></li>
+% }
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
 <h2>Other URIs</h2>
 
 <p>
