@@ -32,6 +32,13 @@ unless ($toc) {
   set of URIs. Currently, all information is returned as JSON.
 </p>
 
+<h2>SSL</h2>
+
+<p>
+  All REST API URIs may be accessed via <code>http</code>
+  or <code>https</code>.
+</p>
+
 <h2>API Explorer</h2>
 
 <p>
@@ -1254,6 +1261,14 @@ unless ($toc) {
 </p>
 
 <h2>Release History</h2>
+
+<h3>0.0.6 - February 3, 2013</h3>
+
+<ul>
+  <li>
+    Added support for SSL but forgot to document it.
+  </li>
+</ul>
 
 <h3>0.0.5 - December 29, 2012</h3>
 
