@@ -1262,6 +1262,14 @@ unless ($toc) {
 
 <h2>Release History</h2>
 
+<h3>0.0.7 - February 17, 2013</h3>
+
+<ul>
+  <li>
+    Added documentation for search filters.
+  </li>
+</ul>
+
 <h3>0.0.6 - February 3, 2013</h3>
 
 <ul>
