@@ -41,7 +41,7 @@
     </div>
 
     <div id="copyright">
-      <&| /lib/link/license.mas &><img id="cc-logo" src="http://i.creativecommons.org/l/by-sa/3.0/us/88x31.png" alt="Creative Commons License" /></&>
+      <&| /lib/link/license.mas &><img id="cc-logo" src="//i.creativecommons.org/l/by-sa/3.0/us/88x31.png" alt="Creative Commons License" /></&>
 
       <a href="http://www.vegguide.org/" title="Home">VegGuide.Org</a>
       and its contents are Copyright &copy;
