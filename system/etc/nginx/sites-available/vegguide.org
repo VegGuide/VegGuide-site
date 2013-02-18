@@ -6,6 +6,8 @@ server {
 
     ssl_certificate     /etc/ssl/certs/www.vegguide.org-chained.crt;
     ssl_certificate_key /etc/ssl/private/www.vegguide.org.key;
+    ssl_ciphers RC4:HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
 
     error_log  /var/log/nginx/vegguide.org/error.log;
     access_log /var/log/nginx/vegguide.org/access.log;
