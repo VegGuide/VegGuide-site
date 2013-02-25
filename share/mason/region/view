@@ -1,10 +1,4 @@
-% if ( $location->location_id() == 218 ) {
-<p>
-  Order your <strong>free</strong>
-  printed <a href="http://order.cok.net/veg-austin/"><em>Vegetarian Guide to
-  Austin</em></a> from Compassion Over Killing while supplies last.
-</p>
-% } elsif  ( $location->location_id() == 311 ) {
+% if  ( $location->location_id() == 311 ) {
 <p>
   Order your <strong>free</strong>
   printed <a href="http://order.cok.net/veg-baltimore/"><em>Vegetarian Guide
