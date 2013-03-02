@@ -26,18 +26,6 @@ DOM.Ready.onDOMDone( function () {
     <div class="map-info" id="map-entry-info" style="display: none">
       <h2><% $vendor->name() | h %></h2>
       <& /lib/format/address.mas, vendor => $vendor, address => $vendor->address_hash &>
-
-<%doc>
-It seems that with a Google map, it's not possible to use modern event
-listeners, since it seems that the map or the info window or something
-ends up eating the event.
-</%doc>
-      <form action="#" method="post" id="directions-form" onsubmit="map.showDirectionsFromForm(this); return false">
-        <label for="from">Directions from:</label>
-        <input type="text" class="text short" name="from" id="from" />
-        <input type="hidden" name="to" value="<% $address_for_directions | h %>" />
-      </form>
-
     </div>
   </div>
 

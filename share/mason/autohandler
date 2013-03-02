@@ -48,7 +48,7 @@
 </div>
 
 % if ( $m->request_comp()->attr('load_google_maps')) {
-<script src="//maps.google.com/maps/api/js?key=AIzaSyA7K5Bs2OYmAswhB5hyvbbUe0JzUrPz8BU&sensor=false"
+<script src="//maps.google.com/maps/api/js?key=AIzaSyCRSl_9eYOSC324DPKw6-6bGSX6VPZtwp8&sensor=false"
         type="text/javascript"></script>
 % }
 

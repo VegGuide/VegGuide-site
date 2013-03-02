@@ -65,7 +65,7 @@ VegGuide.GoogleMap.prototype.addMarkers = function (points) {
             DOM.Element.show(div);
         }
 
-        var marker = this._createMarker( ll, point, div );
+        var marker = this._createMarker( this.map, ll, point, div );
 
         if ( point.info_div ) {
             var show_link = $( "show-" + point.info_div );
@@ -74,8 +74,6 @@ VegGuide.GoogleMap.prototype.addMarkers = function (points) {
             }
         }
 
-        this.map.addOverlay(marker);
-
         if ( ! this.marker ) {
             this.marker = marker;
         }
@@ -83,16 +81,14 @@ VegGuide.GoogleMap.prototype.addMarkers = function (points) {
 };
 
 VegGuide.GoogleMap.prototype.showFirstInfoWindow = function () {
-    GEvent.trigger( this.marker, "click" );
+    google.maps.event.trigger( this.marker, "click" );
 };
 
 VegGuide.GoogleMap._Icons = {};
 
 VegGuide.GoogleMap._makeIcons = function () {
-    var base_icon = new google.maps.Icon();
-
-    base_icon.Size = new google.maps.Size( 29, 40 );
-    base_icon.Anchor = new google.maps.Point( 15, 40 );
+    var size = new google.maps.Size( 29, 40 );
+    var anchor = new google.maps.Point( 15, 40 );
 
     /* The first element in each pair is the key and the second is the
        icon name. The keys are category ids, and things like "1.1"
@@ -150,11 +146,15 @@ VegGuide.GoogleMap._makeIcons = function () {
         var name = icons[i][1];
 
         var image_uri = "/images/map-icons/" + name + ".png";
-        VegGuide.GoogleMap._Icons[key] = new google.maps.Icon( base_icon, image_uri );
+        VegGuide.GoogleMap._Icons[key] = {
+            anchor: anchor,
+            size: size,
+            url: image_uri
+        };
     }
 };
 
-VegGuide.GoogleMap.prototype._createMarker = function ( ll, point, div ) {
+VegGuide.GoogleMap.prototype._createMarker = function ( map, ll, point, div ) {
     var marker;
 
     if ( point.category_id && point.veg_level ) {
@@ -169,10 +169,10 @@ VegGuide.GoogleMap.prototype._createMarker = function ( ll, point, div ) {
             }
         }
 
-        marker = new GMarker( ll, { icon: icon } );
+        marker = new google.maps.Marker( { position: ll, map: map, icon: icon } );
     }
     else {
-        marker = new GMarker( ll, { title: point.title } );
+        marker = new google.maps.Marker( { position: ll, map: map, title: point.title } );
     }
 
     var self = this;
@@ -181,7 +181,26 @@ VegGuide.GoogleMap.prototype._createMarker = function ( ll, point, div ) {
         var new_div = div.cloneNode(true);
         new_div.id = "";
 
-        marker.bindInfoWindow(new_div);
+        var infoWindow = new google.maps.InfoWindow(
+            {
+                content: new_div
+            }
+        );
+
+        var self = this;
+        google.maps.event.addListener(
+            marker,
+            "click",
+            function () {
+                if ( self.lastWindow ) {
+                    self.lastWindow.close();
+                }
+
+                infoWindow.open( map, marker );
+
+                self.lastWindow = infoWindow;
+            }
+        );
     }
 
     return marker;
@@ -194,7 +213,7 @@ VegGuide.GoogleMap.prototype._instrumentShowLink = function ( link, marker ) {
         link,
         "click",
         function (e) {
-            GEvent.trigger( marker, "click" );
+            google.maps.event.trigger( marker, "click" );
 
             e.preventDefault();
             if ( e.stopPropogation ) {
@@ -202,13 +221,6 @@ VegGuide.GoogleMap.prototype._instrumentShowLink = function ( link, marker ) {
             }
         }
     );
-};
-
-VegGuide.GoogleMap.prototype.showDirectionsFromForm = function (form) {
-    var directions = new GDirections( this.map, $("google-maps-directions-text") );
-
-    var query = "from: " + form.elements["from"].value + " to: " + form.elements["to"].value;
-    directions.load(query);
 };
 
 DOM.Ready.onDOMDone( function () {

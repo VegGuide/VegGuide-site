@@ -160,7 +160,7 @@ my ( $weighted_average, $total_ratings )
   <h2><% $vendor->name() | h %></h2>
 
 % unless ( $vendor->is_organization() ) {
-  <span class="how-veg veg-level-<% $vendor->veg_level() %>"><% $vendor->veg_description() %></span>
+  <span class="how-veg veg-level-<% $vendor->veg_level() %>"><% $vendor->veg_description() %></span><br />
 % }
 
 % if ( @categories > 1 ) {

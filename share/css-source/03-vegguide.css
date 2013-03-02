@@ -978,9 +978,8 @@ h2.comment-attribution, h3.comment-attribution {
 }
 
 .map-info {
-    height: 15.5em;
     margin-top: -3%;
-    width: 30em;
+    min-width: 25em;
 }
 
 /* This is a hack to force content to stay inside the info window. Otherwise
