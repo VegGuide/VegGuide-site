@@ -319,7 +319,7 @@ sub reCAPTCHAPublicKey {
 sub GoogleAPIKey {
     my $class = shift;
 
-    return q{} if $ENV{TEST_HARNESS};
+    return q{} if $ENV{HARNESS_ACTIVE};
 
     return read_file(
         File::Spec->catfile( $class->EtcDir(), 'google-api-key' ) );
