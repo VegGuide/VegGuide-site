@@ -31,6 +31,14 @@ sub begin : Private {
 
     $ENV{SERVER_SCHEME} = $c->engine()->env()->{'psgi.url_scheme'};
 
+    # Lots of search engines and bots seem to pass this in for some reason
+    if ( $c->request()->parameters()->{'q'} ) {
+        my $uri = $c->request()->uri();
+        $uri->query_param_delete('q');
+
+        $c->redirect_and_detach($uri);
+    }
+
     if ( $self->_is_bad_request($c) ) {
         $c->redirect_and_detach( site_uri( path => '/', with_host => 1 ) );
     }
