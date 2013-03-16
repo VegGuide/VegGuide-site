@@ -3,12 +3,14 @@ use warnings;
 
 use Test::More;
 
+BEGIN {
+    $ENV{EMAIL_SENDER_TRANSPORT} = 'Test';
+}
+
 use VegGuide::Email;
 
-VegGuide::Email->TestMode();
-
 {
-    Email::Send::Test->clear();
+    Email::Sender::Simple->default_transport()->clear_deliveries();
     VegGuide::Email->Send(
         to       => 'to@example.com',
         from     => 'from@example.com',
@@ -17,40 +19,50 @@ VegGuide::Email->TestMode();
         params   => { uri => 'http://example.com' },
     );
 
-    my @emails = Email::Send::Test->emails();
+    my @emails = Email::Sender::Simple->default_transport()->deliveries();
+
     is( scalar @emails, 1, 'one email was sent' );
 
-    my $email = $emails[0];
+    my $email = Courriel->parse( text => $emails[0]{email}->as_string() );
+
+    my @to = $email->to();
     is(
-        $email->header('To'), 'to@example.com',
+        scalar @to,
+        1,
+        'one To address'
+    );
+    is(
+        $to[0]->address(),
+        'to@example.com',
         'check To address'
     );
     is(
-        $email->header('From'), 'from@example.com',
+        $email->from()->address(),
+        'from@example.com',
         'check From address'
     );
     is(
-        $email->header('Reply-To'), q|"VegGuide.Org" <guide@vegguide.org>|,
-        'check Reply-To address'
-    );
-    is(
-        $email->header('Subject'), 'Testing',
+        $email->subject(),
+        'Testing',
         'check Subject'
     );
     is(
-        $email->header('Content-Transfer-Encoding'), '8bit',
-        'check Content-Transfer-Encoding'
+        $email->headers()->get('Reply-To')->value(),
+        q|"VegGuide.Org" <guide@vegguide.org>|,
+        'check Reply-To address'
     );
     is(
-        $email->header('X-Sender'), 'VegGuide::Email',
+        $email->headers()->get('X-Sender')->value(),
+        'VegGuide::Email',
         'check X-Sender'
     );
-    like(
-        $email->content_type(), qr{multipart/alternative},
+    is(
+        $email->content_type()->mime_type(),
+        'multipart/alternative',
         'check Content-Type'
     );
-    ok( $email->header('Message-ID'), 'header has Message-ID' );
-    ok( $email->header('Date'),       'header has Date' );
+    ok( $email->headers()->get('Message-ID'), 'header has Message-ID' );
+    ok( $email->headers()->get('Date'),       'header has Date' );
 }
 
 done_testing();

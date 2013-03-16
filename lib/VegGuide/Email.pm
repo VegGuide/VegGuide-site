@@ -3,23 +3,14 @@ package VegGuide::Email;
 use strict;
 use warnings;
 
-use Email::Address;
-use Email::MessageID;
-use Email::Send;
-use Email::MIME::CreateHTML;
+use Courriel::Builder;
+use Email::Sender::Simple qw( sendmail );
 use Encode qw( encode );
 use HTML::Mason::Interp;
+use Try::Tiny;
 use VegGuide::Util;
 
 use VegGuide::Validate qw( validate SCALAR_TYPE HASHREF_TYPE BOOLEAN_TYPE );
-
-$Email::Send::Sendmail::SENDMAIL = '/usr/sbin/sendmail';
-my $Sender = Email::Send->new( { mailer => 'Sendmail' } );
-
-sub TestMode {
-    require Email::Send::Test;
-    $Sender = Email::Send->new( { mailer => 'Test' } );
-}
 
 {
     my $from_address
@@ -39,26 +30,18 @@ sub TestMode {
         my $class = shift;
         my %p = validate( @_, $spec );
 
-        my $text_body = _TextBody(%p);
+        my $plain_body = _PlainBody(%p);
 
         my $html_body = _HTMLBody(%p);
 
-        my %headers = (
-            From         => $p{from},
-            'Reply-To'   => $p{reply_to},
-            To           => $p{to},
-            Subject      => $p{subject},
-            'Message-ID' => q{<} . Email::MessageID->new() . q{>},
-            'Content-Transfer-Encoding' => '8bit',
-            'X-Sender'                  => 'VegGuide::Email',
-        );
-
-        my $email = Email::MIME->create_html(
-            header               => [%headers],
-            body_attributes      => { charset => 'UTF-8' },
-            text_body_attributes => { charset => 'UTF-8' },
-            body                 => encode( 'utf8', $html_body ),
-            text_body            => encode( 'utf8', $text_body ),
+        my $email = build_email(
+            from( $p{from} ),
+            to( $p{to} ),
+            subject( $p{subject} ),
+            header( 'Reply-To' => $p{reply_to} ),
+            header( 'X-Sender' => __PACKAGE__ ),
+            plain_body($plain_body),
+            html_body($html_body),
         );
 
         _Send($email);
@@ -99,7 +82,7 @@ sub TestMode {
 
     VegGuide::Util::chown_files_for_server( $Interp->files_written() );
 
-    sub _TextBody {
+    sub _PlainBody {
         my %p = @_;
 
         my $body;
@@ -123,9 +106,12 @@ sub TestMode {
 sub _Send {
     my $email = shift;
 
-    my $rv = $Sender->send($email);
-
-    warn $rv unless $rv;
+    try {
+        sendmail($email);
+    }
+    catch {
+        warn $_;
+    };
 }
 
 1;
