@@ -1816,13 +1816,18 @@ sub address_hash {
 sub localized_address_hash {
     my $self = shift;
 
-    return {
+    my %hash = (
         street1     => $self->localized_address1(),
         street2     => $self->localized_address2(),
         city        => $self->localized_city(),
         region      => $self->localized_region(),
-        postal_code => $self->postal_code(),
-    };
+    );
+
+    return {} unless grep { defined } values %hash;
+
+    $hash{postal_code} = $self->postal_code();
+
+    return \%hash;
 }
 
 sub city_region_postal_code {
