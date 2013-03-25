@@ -6,6 +6,7 @@ use namespace::autoclean;
 
 use Alzabo::Runtime::UniqueRowCache;
 use HTTP::Status qw( RC_FORBIDDEN );
+use List::AllUtils qw( any );
 use URI::Escape qw( uri_unescape );
 use URI::FromHash qw( uri );
 use VegGuide::AlzaboWrapper;
@@ -31,17 +32,7 @@ sub begin : Private {
 
     $ENV{SERVER_SCHEME} = $c->engine()->env()->{'psgi.url_scheme'};
 
-    # Lots of search engines and bots seem to pass this in for some reason
-    if ( $c->request()->parameters()->{'q'} ) {
-        my $uri = $c->request()->uri();
-        $uri->query_param_delete('q');
-
-        $c->redirect_and_detach($uri);
-    }
-
-    if ( $self->_is_bad_request($c) ) {
-        $c->redirect_and_detach( site_uri( path => '/', with_host => 1 ) );
-    }
+    $self->_redirect_on_bad_uri($c);
 
     Alzabo::Runtime::UniqueRowCache->clear();
     VegGuide::AlzaboWrapper->ClearCache();
@@ -93,7 +84,29 @@ sub end : Private {
     return;
 }
 
-sub _is_bad_request {
+{
+    my @broken_qs_keys = qw( _ pag pa q );
+
+    sub _redirect_on_bad_uri {
+        my $self = shift;
+        my $c    = shift;
+
+        if ( $self->_is_hack_attempt($c) ) {
+            $c->redirect_and_detach(
+                site_uri( path => '/', with_host => 1 ) );
+        }
+
+        my $params = $c->request()->parameters();
+        if ( any { exists $params->{$_} } @broken_qs_keys ) {
+            my $uri = $c->request()->uri();
+            $uri->query_param_delete($_) for @broken_qs_keys;
+
+            $c->redirect_and_detach($uri);
+        }
+    }
+}
+
+sub _is_hack_attempt {
     my $self = shift;
     my $c    = shift;
 
@@ -101,8 +114,6 @@ sub _is_bad_request {
 
     return 1 if grep { /(?:DECLARE|SET) \@S/ } keys %{$params};
     return 1 if exists $params->{iframe};
-    return 1 if exists $params->{pag};
-    return 1 if exists $params->{pa};
 
     return 0;
 }
