@@ -97,6 +97,25 @@ sub end : Private {
         }
 
         my $params = $c->request()->parameters();
+
+        # GoogleBot is making request for URIs like
+        # /region/362/filter?sort_order=ASC;page%3D2;order_by%3Dname;limit%3D20
+        if ( any { /^(?:page|order_by|limit)=/ } keys %{$params} ) {
+            for my $k ( keys %{$params} ) {
+                if ( $k =~ /(\w+)=(.+)/ ) {
+                    delete $params->{$k};
+                    $params->{$1} = $2;
+                }
+            }
+
+            $c->redirect_and_detach(
+                site_uri(
+                    path  => $c->request()->uri()->path(),
+                    query => $params,
+                )
+            );
+        }
+
         if ( any { exists $params->{$_} } @broken_qs_keys ) {
             my $uri = $c->request()->uri();
             $uri->query_param_delete($_) for @broken_qs_keys;
