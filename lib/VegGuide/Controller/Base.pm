@@ -85,7 +85,7 @@ sub end : Private {
 }
 
 {
-    my @broken_qs_keys = qw( _ pag pa q );
+    my @broken_qs_keys = qw( _ action pag pa q );
 
     sub _redirect_on_bad_uri {
         my $self = shift;
