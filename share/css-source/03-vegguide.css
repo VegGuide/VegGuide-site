@@ -380,6 +380,10 @@ a.action-button-medium:visited, a.action-button-small:visited {
     border-top: 1px solid #8cc63f;
 }
 
+#ft #fb-like {
+    margin: 5px 179px 0 179px;
+}
+
 #footer-nav {
     text-align: center;
 }
@@ -407,7 +411,6 @@ a.action-button-medium:visited, a.action-button-small:visited {
 
 #footer-copyright {
     font-size: 85%;
-    margin-top: 2em;
 }
 
 #footer-copyright p {

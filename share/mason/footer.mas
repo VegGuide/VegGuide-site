@@ -24,10 +24,13 @@
 
   </div>
 
+  <div id="fb-like">
+    <iframe src="//www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2FVegGuide&amp;width=292&amp;height=62&amp;show_faces=false&amp;colorscheme=light&amp;stream=false&amp;border_color&amp;header=false" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:292px; height:62px;" allowTransparency="true"></iframe>
+  </div>
+
   <div id="footer-copyright">
 
     <div id="logos">
-      <div class="fb-like-box" data-href="http://www.facebook.com/VegGuide" data-width="292" data-show-faces="false" data-stream="false" data-header="false"></div>
       <br />
       <br />
       <a href="http://www.exploreveg.org/"><img src="/images/caa-logo.png" alt="Compassionate Action for Animals logo" title="Compassionate Action for Animals" height="60" width="98" /></a>
