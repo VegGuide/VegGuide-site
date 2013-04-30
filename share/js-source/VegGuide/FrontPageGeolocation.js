@@ -19,10 +19,10 @@ VegGuide.FrontPageGeolocation.instrumentPage = function () {
 
     VegGuide.FrontPageGeolocation.nearby.innerHTML = "<p>Finding nearby restaurants ...</p>";
 
-    navigator.geolocation.getCurrentPosition( VegGuide.FrontPageGeolocation._getNearbyList );
+    geoip2.city( VegGuide.FrontPageGeolocation._getNearbyList );
 };
 
-VegGuide.FrontPageGeolocation._getNearbyList = function (location) {
+VegGuide.FrontPageGeolocation._getNearbyList = function (geoip) {
     /* Sometimes this gets called twice (at least in Firefox) */
     if ( VegGuide.FrontPageGeolocation.fetching ) {
         return;
@@ -30,8 +30,12 @@ VegGuide.FrontPageGeolocation._getNearbyList = function (location) {
 
     VegGuide.FrontPageGeolocation.fetching = 1;
 
+    if ( typeof geoip.location.latitude === "undefined" ) {
+        return;
+    }
+
     var uri = "/entry/near/"
-              + location.coords.latitude + "%2C" + location.coords.longitude
+              + geoip.location.latitude + "%2C" + geoip.location.longitude
               + "/filter/category_id=1;veg_level=2;allow_closed=0";
 
     var req = new HTTP.Request( {
