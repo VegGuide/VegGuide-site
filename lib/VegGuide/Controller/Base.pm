@@ -116,6 +116,18 @@ sub end : Private {
             );
         }
 
+        # Fixes requests for things like
+        # http://www.vegguide.org/region/1454/filter?how_veg;limit=20
+        if ( any { ! defined $params->{$_} } keys %{$params} ) {
+            delete $params->{$_} for grep { ! defined $params->{$_} } keys %{$params};
+            $c->redirect_and_detach(
+                site_uri(
+                    path  => $c->request()->uri()->path(),
+                    query => $params,
+                )
+            );
+        }
+
         if ( any { exists $params->{$_} } @broken_qs_keys ) {
             my $uri = $c->request()->uri();
             $uri->query_param_delete($_) for @broken_qs_keys;
