@@ -35,6 +35,7 @@ server {
     set $cache_dir /var/cache/vegguide;
     set $share_dir /usr/local/share/vegguide;
 
+    error_page 500 $share_dir/static/500.html;
     error_page 503 $share_dir/static/503.html;
 
     location = /debug {
