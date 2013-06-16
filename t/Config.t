@@ -30,8 +30,8 @@ my $is_prod
 
 {
     my %mason_config = VegGuide::Config->MasonConfig();
-    ok( -d $mason_config{comp_root}, 'defines mason comp_root' );
-    ok( -d $mason_config{data_dir},  'defines mason data_dir' );
+    ok( -d $mason_config{interp_args}{comp_root}, 'defines mason comp_root' );
+    ok( -d $mason_config{interp_args}{data_dir},  'defines mason data_dir' );
 }
 
 {
