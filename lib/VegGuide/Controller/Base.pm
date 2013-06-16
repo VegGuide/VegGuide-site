@@ -78,6 +78,9 @@ sub end : Private {
     if (   ( !$c->response()->status() || $c->response()->status() == 200 )
         && !$c->response()->body()
         && !@{ $c->error() || [] } ) {
+
+        $c->response()->content_type( 'text/html; charset=UTF-8' )
+            unless $c->response()->content_type();
         $c->forward( $c->view() );
     }
 
