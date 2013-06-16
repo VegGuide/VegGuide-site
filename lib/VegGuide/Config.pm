@@ -210,7 +210,6 @@ sub MasonConfig {
             File::Spec->catdir( $class->CacheDir(), 'mason', 'web' ),
         error_mode => 'fatal',
         in_package => 'VegGuide::Mason',
-        use_match  => 0,
     );
 
     if ( $class->IsProduction() ) {
@@ -218,7 +217,12 @@ sub MasonConfig {
         $config{static_source_touch_file} = $class->MasonTouchFile();
     }
 
-    return %config;
+    return (
+        interp_args => \%config,
+        globals     => [
+            [ '$c', sub { $_[1] } ],
+        ],
+    );
 }
 
 sub MasonTouchFile {

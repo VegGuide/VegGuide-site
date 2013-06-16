@@ -3,10 +3,9 @@ package VegGuide::View::Mason;
 use strict;
 use warnings;
 
-use parent 'Catalyst::View::Mason';
+use parent 'Catalyst::View::HTML::Mason';
 
 {
-
     package VegGuide::Mason;
 
     use Data::Dumper::Concise;
@@ -33,15 +32,13 @@ use VegGuide::Config;
 
 __PACKAGE__->config( VegGuide::Config->MasonConfig() );
 
-sub new {
-    my $class = shift;
-
-    my $self = $class->SUPER::new(@_);
+sub BUILD {
+    my $self = shift;
 
     VegGuide::Util::chown_files_for_server(
-        $self->template()->files_written() );
+        $self->interp()->files_written() );
 
-    return $self;
+    return;
 }
 
 sub has_template_for_path {
@@ -52,34 +49,6 @@ sub has_template_for_path {
         $self->config()->{comp_root},
         ( grep { defined && length } split /\//, $path ),
     );
-}
-
-# Copied from C::V::Mason so we can just let template->exec die. Normally it
-# returns the error as output (generating a 200 response).
-sub render {
-    my ($self, $c, $component_path, $args) = @_;
-
-    if ($component_path !~ m{^/}) {
-        $component_path = '/' . $component_path;
-    }
-
-    $c->log->debug(qq/Rendering component "$component_path"/) if $c->debug;
-
-    # Set the URL base, context and name of the app as global Mason vars
-    # $base, $c and $name
-    my %default_globals = $self->_default_globals($c);
-    while (my ($key, $val) = each %default_globals) {
-        $self->template->set_global($key => $val);
-    }
-
-    $self->{output} = q//;
-
-    $self->template->exec(
-        $component_path,
-        ref $args eq 'HASH' ? %{$args} : %{ $c->stash },
-    );
-
-    return $self->{output};
 }
 
 1;
