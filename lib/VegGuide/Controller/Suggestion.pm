@@ -16,6 +16,9 @@ sub _set_suggestion : Chained('/') : PathPart('suggestion') : CaptureArgs(1) {
     my $c             = shift;
     my $suggestion_id = shift;
 
+    $c->redirect_and_detach('/')
+        unless $suggestion_id =~ /^[0-9]+$/;
+
     my $suggestion = VegGuide::VendorSuggestion->new(
         vendor_suggestion_id => $suggestion_id );
 

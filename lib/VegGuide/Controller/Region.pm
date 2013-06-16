@@ -28,6 +28,9 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1) {
     my $c           = shift;
     my $location_id = shift;
 
+    $c->redirect_and_detach('/')
+        unless $location_id =~ /^[0-9]+$/;
+
     my $location = VegGuide::Location->new( location_id => $location_id );
 
     $c->redirect_and_detach('/')

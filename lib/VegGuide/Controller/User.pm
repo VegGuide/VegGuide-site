@@ -24,6 +24,9 @@ sub _set_user : Chained('/') : PathPart('user') : CaptureArgs(1) {
     my $c       = shift;
     my $user_id = shift;
 
+    $c->redirect_and_detach('/')
+        unless $user_id =~ /^[0-9]+$/;
+
     my $user = VegGuide::User->new( user_id => $user_id );
 
     $c->redirect_and_detach( site_uri( path => '/', with_host => 1 ) )
