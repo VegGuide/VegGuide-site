@@ -125,12 +125,18 @@ sub debug: Path('/debug') : Args(0) {
     my $self = shift;
     my $c    = shift;
 
+    VegGuide::Exception->throw('Naughty attempt to view debug page')
+        if VegGuide::Config->IsProduction();
+
     $c->stash()->{template} = '/debug';
 }
 
 sub warn : Path('/warn') : Args(0) {
     my $self = shift;
     my $c    = shift;
+
+    VegGuide::Exception->throw('Naughty attempt to put a warning in the logs')
+        if VegGuide::Config->IsProduction();
 
     warn "A warning in the logs\n";
 
