@@ -1216,9 +1216,11 @@ sub weighted_rating {
 
     my $schema = VegGuide::Schema->Connect();
 
+    my $vendor_id = $self->vendor_id() =~ s/[^0-9]//gr;
+
     my $rating = $schema->sqlmaker()->ROUND(
         WEIGHTED_RATING(
-            $self->vendor_id(),
+            $vendor_id,
             $WeightedRatingMinCount,
             $self->AverageRating(),
         ),
@@ -2648,12 +2650,14 @@ sub VendorsWhere {
     elsif ( lc $p{order_by} eq 'distance' ) {
         my $radius = earth_radius( $p{unit} );
 
+        my @lat_long = map { s/[^\-\.0-9]//rg } @{ $p{lat_long} };
+
         my $distance = $schema->sqlmaker()->ROUND(
             GREAT_CIRCLE_DISTANCE(
                 $radius,
                 $schema->Vendor_t()->latitude_c(),
                 $schema->Vendor_t()->longitude_c(),
-                @{ $p{lat_long} },
+                @lat_long,
             ),
             1
         );
