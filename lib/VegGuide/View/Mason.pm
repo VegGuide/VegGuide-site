@@ -54,6 +54,34 @@ sub has_template_for_path {
     );
 }
 
+# Copied from C::V::Mason so we can just let template->exec die. Normally it
+# returns the error as output (generating a 200 response).
+sub render {
+    my ($self, $c, $component_path, $args) = @_;
+
+    if ($component_path !~ m{^/}) {
+        $component_path = '/' . $component_path;
+    }
+
+    $c->log->debug(qq/Rendering component "$component_path"/) if $c->debug;
+
+    # Set the URL base, context and name of the app as global Mason vars
+    # $base, $c and $name
+    my %default_globals = $self->_default_globals($c);
+    while (my ($key, $val) = each %default_globals) {
+        $self->template->set_global($key => $val);
+    }
+
+    $self->{output} = q//;
+
+    $self->template->exec(
+        $component_path,
+        ref $args eq 'HASH' ? %{$args} : %{ $c->stash },
+    );
+
+    return $self->{output};
+}
+
 1;
 
 __END__
