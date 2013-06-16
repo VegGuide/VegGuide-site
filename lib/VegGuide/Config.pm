@@ -143,8 +143,8 @@ sub AlzaboRootDir {
     my %BaseConfig = (
         is_production        => __PACKAGE__->IsProduction(),
         using_frontend_proxy => 1,
-
-        default_view => 'Mason',
+        encoding             => 'UTF-8',
+        default_view         => 'Mason',
 
         session => {
             expires          => ( 60 * 5 ),
