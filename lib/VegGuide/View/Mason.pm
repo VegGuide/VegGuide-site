@@ -46,7 +46,7 @@ sub has_template_for_path {
     my $path = shift;
 
     return -f File::Spec->catfile(
-        $self->config()->{comp_root},
+        $self->config()->{interp_args}{comp_root},
         ( grep { defined && length } split /\//, $path ),
     );
 }
