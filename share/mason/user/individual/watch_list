@@ -41,7 +41,7 @@ my @locations = $locations->all();
 <% VegGuide::Email::_HTMLBody(%p1) %>
 
 <pre>
-<% VegGuide::Email::_TextBody(%p2) | h %>
+<% VegGuide::Email::_PlainBody(%p2) | h %>
 </pre>
 
 <%args>
