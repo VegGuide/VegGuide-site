@@ -245,7 +245,7 @@ sub _search_by_address {
     }
 
     # XXX - this should probably be a user-settable preference as well
-    my $unit = $geocoder->country() eq 'USA' ? 'mile' : 'km';
+    my $unit = $result->country_code() =~ /^(?:US|GB)/ ? 'mile' : 'km';
 
     my $search = VegGuide::Search::Vendor::ByLatLong->new(
         address   => $text,

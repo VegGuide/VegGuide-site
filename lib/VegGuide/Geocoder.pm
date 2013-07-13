@@ -19,20 +19,17 @@ use VegGuide::Validate qw( validate SCALAR_TYPE );
         my $class = shift;
         my %p = validate( @_, $spec );
 
-        my $country = $p{country} // 'USA';
+        my $cctld = $class->_cctld_for_country( country2code( $p{country} )
+                // 'us' );
 
-        $country = 'USA'
-            if $country =~ /^(?:US|United States)/i;
-
-        my $meth = '_' . ( lc $country ) . '_geocode_address';
+        my $meth = '_' . $cctld . '_geocode_address';
         $meth =~ s/ /_/g;
 
         $meth = $class->can($meth) || '_standard_geocode_address';
 
         return bless {
             method  => $meth,
-            country => $country,
-            cctld   => $class->_cctld_for_country($country),
+            cctld   => $cctld
         };
     }
 }
@@ -93,13 +90,7 @@ sub geocode_full_address {
     return VegGuide::Geocoder::Result->new( $geocoder->geocode($address) );
 }
 
-sub country {
-    my $self = shift;
-
-    return $self->{country};
-}
-
-sub _united_states_geocode_address {
+sub _us_geocode_address {
     my $self = shift;
     my %p    = @_;
 
@@ -129,7 +120,7 @@ sub _standard_geocode_address {
     return $address;
 }
 
-sub _japan_geocode_address {
+sub _jp_geocode_address {
     my $self = shift;
     my %p    = @_;
 
@@ -150,7 +141,7 @@ sub _japan_geocode_address {
     );
 }
 
-sub _taiwan_geocode_address {
+sub _tw_geocode_address {
     my $self = shift;
     my %p    = @_;
 
@@ -167,7 +158,7 @@ sub _taiwan_geocode_address {
     );
 }
 
-sub _singapore_geocode_address {
+sub _sg_geocode_address {
     my $self = shift;
     my %p    = @_;
 
