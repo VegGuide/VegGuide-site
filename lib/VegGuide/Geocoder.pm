@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Geo::Coder::Google 0.06;
-use Locale::Country 3.23 qw( country2code );
+use Locale::Country 3.23 qw( code2country country2code );
 use VegGuide::Config;
 use VegGuide::Geocoder::Result;
 use VegGuide::Util qw( string_is_empty );
@@ -29,7 +29,8 @@ use VegGuide::Validate qw( validate SCALAR_TYPE );
 
         return bless {
             method  => $meth,
-            cctld   => $cctld
+            cctld   => $cctld,
+            country => code2country($cctld),
         };
     }
 }
@@ -115,7 +116,7 @@ sub _standard_geocode_address {
 
     my $address = join ', ', grep { !string_is_empty($_) } @p{@pieces};
 
-    $address .= ', ' . $self->country();
+    $address .= ', ' . $self->{country};
 
     return $address;
 }
