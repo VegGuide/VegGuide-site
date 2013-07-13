@@ -826,20 +826,29 @@ sub new_entries_for_subscription {
 
     my $schema = VegGuide::Schema->Connect();
 
+    my @join = $schema->tables( 'Vendor', 'Location' );
+
+    my @where = (
+        [
+            $schema->Vendor_t->location_id_c,
+            'IN', keys %location_ids
+        ],
+        [
+            $schema->Vendor_t->creation_datetime_c,
+            '>', DateTime::Format::MySQL->format_datetime($since)
+        ],
+    );
+
+    return unless $schema->row_count(
+        join  => \@join,
+        where => \@where,
+    );
+
     return $self->cursor(
         $schema->join(
             select => $schema->Vendor_t,
-            join   => [ $schema->tables( 'Vendor', 'Location' ) ],
-            where  => [
-                [
-                    $schema->Vendor_t->location_id_c,
-                    'IN', keys %location_ids
-                ],
-                [
-                    $schema->Vendor_t->creation_datetime_c,
-                    '>', DateTime::Format::MySQL->format_datetime($since)
-                ],
-            ],
+            join   => \@join,
+            where  => \@where,
             order_by => [
                 $schema->Location_t->name_c, 'ASC',
                 $schema->Vendor_t->name_c,   'ASC',
