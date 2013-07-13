@@ -105,7 +105,7 @@ sub address_test_data {
             expect => {
                 lat       => 44.955565,
                 long      => -93.294425,
-                processed => '2600 Emerson Ave S, 55408-1234, USA',
+                processed => '2600 Emerson Ave S, 55408, United States',
             },
         },
         'Australia' => {

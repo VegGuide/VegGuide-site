@@ -19,8 +19,7 @@ use VegGuide::Validate qw( validate SCALAR_TYPE );
         my $class = shift;
         my %p = validate( @_, $spec );
 
-        my $cctld = $class->_cctld_for_country( country2code( $p{country} ) )
-            // 'us';
+        my $cctld = $class->_cctld_for_country( $p{country} ) // 'us';
 
         my $meth = '_' . $cctld . '_geocode_address';
         $meth =~ s/ /_/g;
