@@ -1016,7 +1016,12 @@ unless ($toc) {
       <td>distance</td>
       <td>positive number</td>
       <td>5</td>
-      <td>The search radius in miles or kilometers.</td>
+      <td>
+        The search "radius" in miles or kilometers. This isn't really a
+        radius. Instead, the search is really for a square where each side of
+        the square is <code>distance</code> units long, and each side
+        is <code>distance / 2</code> units away from the center point.
+      </td>
     </tr>
     <tr>
       <td>unit</td>
