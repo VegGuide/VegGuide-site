@@ -298,42 +298,36 @@ server {
     ssl_ciphers RC4:HIGH:!aNULL:!MD5;
     ssl_prefer_server_ciphers on;
 
-    root /usr/lib;
+    root /usr/lib/cgi-bin;
 
     location = / {
-        rewrite  ^  /mailman/listinfo  permanent;
+	rewrite  ^  /mailman/listinfo  permanent;
     }
- 
-    location / {
-        rewrite  ^  /mailman$uri?$args;
-    }
- 
-    location = /mailman/ {
-        rewrite  ^  /mailman/listinfo  permanent;
-    }
-    
-    location /mailman/ {
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_connect_timeout 90;
-        proxy_send_timeout    90;
-        proxy_read_timeout    90;
-        proxy_buffers         32 4k;
 
-        proxy_pass http://127.0.0.1:7777/;
+    location / {
+	rewrite  ^  /mailman$uri?$args;
     }
- 
-    location /cgi-bin {
-        rewrite  ^/cgi-bin(.*)$  $1  permanent;
+
+    location = /mailman/ {
+	rewrite  ^  /mailman/listinfo  permanent;
     }
- 
+
+    location /mailman {
+	fastcgi_split_path_info (^/mailman/[^/]*)(.*)$;
+        include /etc/nginx/fastcgi_params;
+	fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+	fastcgi_param PATH_INFO $fastcgi_path_info;
+	fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
+	fastcgi_intercept_errors on;
+	fastcgi_pass unix:/var/run/fcgiwrap.socket;
+    }
+
     location /images/mailman {
-        alias /var/lib/mailman/icons;
+	alias /var/lib/mailman/icons;
     }
- 
+
     location /pipermail {
-        alias /var/lib/mailman/archives/public;
-        autoindex on;
+	alias /var/lib/mailman/archives/public;
+	autoindex on;
     }
-}    
+}
