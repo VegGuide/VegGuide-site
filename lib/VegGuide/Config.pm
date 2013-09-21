@@ -29,7 +29,7 @@ use Sys::Hostname qw( hostname );
         +VegGuide::Plugin::FixupURI
         +VegGuide::Plugin::ResponseAttributes
         DR::Session
-        Session::State::URI
+        +VegGuide::Plugin::Session::State::URI
         +VegGuide::Plugin::Session::Store::VegGuide
         +VegGuide::Plugin::User
         Cache
