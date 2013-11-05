@@ -174,7 +174,7 @@ sub _excluded_ids {
 }
 
 {
-    my $User = VegGuide::User->new( real_name => 'VegGuide.Org' );
+    my $User = VegGuide::User->new( real_name => 'VegGuide.org' );
 
     sub _update_or_create_vendor {
         my $self      = shift;

@@ -48,7 +48,7 @@ use VegGuide::Email;
     );
     is(
         $email->headers()->get('Reply-To')->value(),
-        q|"VegGuide.Org" <guide@vegguide.org>|,
+        q|"VegGuide.org" <guide@vegguide.org>|,
         'check Reply-To address'
     );
     is(

@@ -7,7 +7,7 @@ February 25, 2012.
 </p>
 
 <p>
-The <a href="http://www.vegguide.org/">VegGuide.Org</a> site has been around
+The <a href="http://www.vegguide.org/">VegGuide.org</a> site has been around
 for almost five years now. Sometimes people ask why we made it, since there
 were already two similar sites in existence at the time. That's a good
 question, so here's the answer.
@@ -121,5 +121,5 @@ some time in the future.
 </p>
 
 <%method page_title>
-Philosophy of VegGuide.Org
+Philosophy of VegGuide.org
 </%method>

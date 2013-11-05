@@ -93,5 +93,5 @@ my $most_populous = VegGuide::Location->ByVendorCount( limit => 20 );
 </%init>
 
 <%method page_title>
-VegGuide.Org Top 20 Lists
+VegGuide.org Top 20 Lists
 </%method>

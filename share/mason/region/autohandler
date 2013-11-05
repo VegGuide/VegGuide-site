@@ -5,7 +5,7 @@ $location
 </%args>
 
 <%method title>
-<% $m->caller_args(1)->{location}->name_with_parent() %> | VegGuide.Org
+<% $m->caller_args(1)->{location}->name_with_parent() %> | VegGuide.org
 </%method>
 
 <%method page_title>

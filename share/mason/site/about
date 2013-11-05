@@ -1,5 +1,5 @@
 <p>
-VegGuide.Org is a project
+VegGuide.org is a project
 of <a href="http://www.exploreveg.org/">Compassionate Action for Animals</a>,
 a Twin Cities, Minnesota animal rights organization, in partnership
 with <a href="http://www.cok.net">Compassion Over
@@ -36,7 +36,7 @@ list</a> before making a feature suggestion.
 
 <p>
 If you want to read a lot more, you can check out
-the <a href="/site/philosophy">philosophy of VegGuide.Org</a>.
+the <a href="/site/philosophy">philosophy of VegGuide.org</a>.
 </p>
 
 <h2>Privacy Policy</h2>
@@ -51,7 +51,7 @@ share your personal info with anyone else.
 <h2>Copyright Details</h2>
 
 <p>
-  <a href="http://www.vegguide.org/" title="Home">VegGuide.Org</a>
+  <a href="http://www.vegguide.org/" title="Home">VegGuide.org</a>
   and its contents are Copyright &copy;
   2003-<% DateTime->now()->year() %>
   <a href="http://www.exploreveg.org/"
@@ -97,7 +97,7 @@ the <a href="http://www.catalystframework.org/">Catalyst MVC framework</a>.
 <h2>History</h2>
 
 <p>
-The first version of VegGuide.Org went live in October of 2002 on
+The first version of VegGuide.org went live in October of 2002 on
 either waste.org or ca4a.org (I just can't remember). However, at this
 time we didn't really announce the guide outside of a small circle of
 users in order to give it some beta testing.
@@ -167,7 +167,7 @@ provided our server and hosting for many years.
 <h2>Support Us</h2>
 
 <p>
- <strong><a href="http://www.exploreveg.org/donate">Make a tax-deductible donation to VegGuide.Org</a>.</strong>
+ <strong><a href="http://www.exploreveg.org/donate">Make a tax-deductible donation to VegGuide.org</a>.</strong>
 </p>
 
 <p>
@@ -179,5 +179,5 @@ Donations go to Compassionate Action for Animals, a 501c3 nonprofit.
 <& /lib/contact-us.mas &>
 
 <%method page_title>
-About VegGuide.Org
+About VegGuide.org
 </%method>

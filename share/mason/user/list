@@ -25,5 +25,5 @@ $search
 </%args>
 
 <%method page_title>
-VegGuide.Org Users
+VegGuide.org Users
 </%method>

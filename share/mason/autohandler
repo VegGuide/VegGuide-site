@@ -75,7 +75,7 @@ is_front_page => 0
 </%attr>
 
 <%method title>
-Vegetarian and Vegan Restaurants, Grocers, Bakeries | VegGuide.Org
+Vegetarian and Vegan Restaurants, Grocers, Bakeries | VegGuide.org
 </%method>
 
 <%method page_schema></%method>

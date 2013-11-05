@@ -1,6 +1,6 @@
 <p>
 This survey is designed to help us learn more about how people use
-VegGuide.Org. This will help guide decisions on future features and
+VegGuide.org. This will help guide decisions on future features and
 changes.
 </p>
 
@@ -25,7 +25,7 @@ form</a>.
   <legend>Survey</legend>
 
   <div class="form-item" id="frequency">
-   <label>How often do you visit VegGuide.Org, on average?</label>
+   <label>How often do you visit VegGuide.org, on average?</label>
    <ul>
     <li>
      <input class="radio" type="radio" name="visit_frequency" value="greater-weekly" id="visit_frequency-1" />
@@ -171,7 +171,7 @@ form</a>.
   </div>
 
   <div class="form-item">
-   <label>Comments about VegGuide.Org?</label>
+   <label>Comments about VegGuide.org?</label>
    <textarea class="long" name="improvements"></textarea>
    <p>
     Feel free to suggest changes to existing features, new features,
@@ -201,5 +201,5 @@ form</a>.
 </&>
 
 <%method page_title>
-VegGuide.Org User Survey
+VegGuide.org User Survey
 </%method>

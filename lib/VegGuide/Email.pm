@@ -14,7 +14,7 @@ use VegGuide::Validate qw( validate SCALAR_TYPE HASHREF_TYPE BOOLEAN_TYPE );
 
 {
     my $from_address
-        = Email::Address->new( 'VegGuide.Org', 'guide@vegguide.org' )
+        = Email::Address->new( 'VegGuide.org', 'guide@vegguide.org' )
         ->format();
 
     my $spec = {

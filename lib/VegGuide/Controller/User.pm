@@ -259,7 +259,7 @@ sub openid_authentication : Local {
     unless ($user) {
         $c->_redirect_with_error(
             error =>
-                'Now you need to create a VegGuide.Org account for your OpenID URL',
+                'Now you need to create a VegGuide.org account for your OpenID URL',
             uri    => '/user/new_user_form',
             params => { openid_uri => $identity->url() },
         );

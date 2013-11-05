@@ -8,7 +8,7 @@
 % } else {
   <div id="logo">
    <a href="/" title="Home"><img class="png-filter" src="/images/vegguide-logo.png"
-                                 width="300" height="50" alt="VegGuide.Org Logo" /></a>
+                                 width="300" height="50" alt="VegGuide.org Logo" /></a>
   </div>
 
   <& sitewide-search.mas &>

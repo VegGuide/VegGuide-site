@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
-<ShortName>VegGuide.Org</ShortName>
-<Description>VegGuide.Org Search</Description>
+<ShortName>VegGuide.org</ShortName>
+<Description>VegGuide.org Search</Description>
 <Image height="16" width="16" type="image/x-icon">http://www.vegguide.org/images/favicon.ico</Image>
 <Url type="text/html" method="get" template="http://www.vegguide.org/site/search?search_text={searchTerms}" />
 </OpenSearchDescription>

@@ -1152,7 +1152,7 @@ sub _as_xml_feed {
 
     my $feed = VegGuide::Feed->new();
 
-    $feed->title( 'VegGuide.Org: ' . $self->name() );
+    $feed->title( 'VegGuide.org: ' . $self->name() );
     $feed->link( region_uri( location => $self, with_host => 1 ) );
 
     $feed->author('Compassionate Action for Animals');
@@ -1383,7 +1383,7 @@ sub _AsXMLFeed {
 
     my $feed = VegGuide::Feed->new();
 
-    $feed->title(q{VegGuide.Org: What's New});
+    $feed->title(q{VegGuide.org: What's New});
     $feed->link(
         uri(
             scheme => 'http', host => VegGuide::Config->CanonicalWebHostname()
@@ -1456,8 +1456,8 @@ sub _DataFeedHandle {
     }
 
     $w->site_channel(
-        'VegGuide.Org Data Feed',
-        'Data feed of all entries (still in business) in the VegGuide.Org system.',
+        'VegGuide.org Data Feed',
+        'Data feed of all entries (still in business) in the VegGuide.org system.',
     );
 
     return $w->fh();

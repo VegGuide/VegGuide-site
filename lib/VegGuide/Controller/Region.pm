@@ -47,7 +47,7 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1) {
 
         $c->response()->alternate_links()->add(
             mime_type => $ct,
-            title => 'VegGuide.Org: Recent Changes for ' . $location->name(),
+            title => 'VegGuide.org: Recent Changes for ' . $location->name(),
             uri   => region_uri(
                 location => $location,
                 path     => 'recent.' . lc $type,

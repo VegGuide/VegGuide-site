@@ -13,7 +13,7 @@ This suggestion was reviewed by <% $user->real_name() %>.
 "<% $comment | h %>"
 % }
 
-Thanks for your contribution to VegGuide.Org.
+Thanks for your contribution to VegGuide.org.
 
 <%args>
 $vendor

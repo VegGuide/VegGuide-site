@@ -252,7 +252,7 @@ sub forgot_password {
 
     VegGuide::Email->Send(
         to       => $self->email_address,
-        subject  => 'Forgot your password for VegGuide.Org?',
+        subject  => 'Forgot your password for VegGuide.org?',
         template => 'forgot-password',
         params   => { uri => $uri },
     );
@@ -797,7 +797,7 @@ sub send_subscription_email {
 
     VegGuide::Email->Send(
         to       => $self->email_address,
-        subject  => 'VegGuide.Org watch list updates',
+        subject  => 'VegGuide.org watch list updates',
         template => 'watch-list',
         params   => \%params,
     );
@@ -1043,7 +1043,7 @@ sub activity_logs {
         select => $schema->User_t()->user_id_c(),
         where  => [
             $schema->User_t()->real_name_c(),
-            'IN', 'VegGuide.Org', 'Admin'
+            'IN', 'VegGuide.org', 'Admin'
         ],
     );
 

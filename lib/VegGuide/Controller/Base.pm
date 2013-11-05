@@ -60,7 +60,7 @@ sub begin : Private {
 
         $response->alternate_links()->add(
             mime_type => $ct,
-            title     => "VegGuide.Org: Sitewide Recent Changes",
+            title     => "VegGuide.org: Sitewide Recent Changes",
             uri       => uri( path => '/site/recent.' . lc $type ),
         );
     }

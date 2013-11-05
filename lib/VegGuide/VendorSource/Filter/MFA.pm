@@ -117,7 +117,7 @@ sub _merge_categories {
 }
 
 {
-    my $User = VegGuide::User->new( real_name => 'VegGuide.Org' );
+    my $User = VegGuide::User->new( real_name => 'VegGuide.org' );
     my $USA  = VegGuide::Location->USA();
     my $NJ   = VegGuide::Location->new(
         name               => 'New Jersey',

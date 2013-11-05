@@ -13,9 +13,9 @@
     </ul>
 
     <ul>
-      <li class="first"><a href="/site/about" title="About VegGuide.Org">About</a></li>
+      <li class="first"><a href="/site/about" title="About VegGuide.org">About</a></li>
       <li><a href="/site/api-docs" title="REST API">REST API</a></li>
-      <li><a href="/site/news" title="VegGuide.Org News">News</a></li>
+      <li><a href="/site/news" title="VegGuide.org News">News</a></li>
       <li><a href="/stats/site" title="Site Statistics">Statistics</a></li>
       <li><a href="/user" title="User Listings">Users</a></li>
       <li><a href="/site/feeds" title="Feeds">Feeds</a></li>
@@ -46,7 +46,7 @@
     <div id="copyright">
       <&| /lib/link/license.mas &><img id="cc-logo" src="//i.creativecommons.org/l/by-sa/3.0/us/88x31.png" alt="Creative Commons License" /></&>
 
-      <a href="http://www.vegguide.org/" title="Home">VegGuide.Org</a>
+      <a href="http://www.vegguide.org/" title="Home">VegGuide.org</a>
       and its contents are Copyright &copy;
       2003-<% DateTime->now()->year() %>
       <a href="http://www.exploreveg.org/" title="Compassionate Action for

@@ -1,5 +1,5 @@
 <p>
-A summary of responses to the first (and maybe only) VegGuide.Org
+A summary of responses to the first (and maybe only) VegGuide.org
 survey in 2008.
 </p>
 
@@ -72,5 +72,5 @@ $total
 </%args>
 
 <%method page_title>
-VegGuide.Org User Survey Summary
+VegGuide.org User Survey Summary
 </%method>

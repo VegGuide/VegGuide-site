@@ -98,7 +98,7 @@ sub location_channel {
     my $description = shift;
 
     $self->{g}->channel(
-        title       => "VegGuide.Org: " . $location->name,
+        title       => "VegGuide.org: " . $location->name,
         link        => region_uri( location => $location, with_host => 1 ),
         description => $description,
         dc          => {

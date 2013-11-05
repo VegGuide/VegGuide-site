@@ -7,7 +7,7 @@ $vendor
 <%method title>
 <& /lib/l10n/vendor-name.mas, vendor => $m->caller_args(1)->{vendor} &>
 | <% $m->caller_args(1)->{vendor}->location()->name_with_parent() %>
-| VegGuide.Org
+| VegGuide.org
 </%method>
 
 <%method page_title>

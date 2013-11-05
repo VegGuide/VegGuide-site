@@ -34,5 +34,5 @@ $pager
 </%args>
 
 <%method page_title>
-VegGuide.Org Site News
+VegGuide.org Site News
 </%method>

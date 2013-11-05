@@ -6420,7 +6420,7 @@ The 2 and 3 subway lines let off half a block away, and the ABCD and 456 lines a
   <description><![CDATA[Vegetarian Asian Restaurant]]></description>
  </item>
  <channel rdf:about='http://houseabsolute.urth.org:3000/region/5'>
-  <title>VegGuide.Org: Manhattan</title>
+  <title>VegGuide.org: Manhattan</title>
   <link>http://houseabsolute.urth.org:3000/region/5</link>
   <description><![CDATA[Data feed of entries for Manhattan, New York City.]]></description>
   <items>
