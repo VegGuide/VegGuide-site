@@ -1152,7 +1152,7 @@ unless ($toc) {
 <p>
   These URIs will show up in other data structures, so understanding their
   document structures is important when coding to this API. All of these URIs
-  include a numeric id, and you are encouraged not to rely on these numbers
+  include a numeric id but you are encouraged to not rely on these numbers
   remaining stable.
 </p>
 
