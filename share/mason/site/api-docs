@@ -512,7 +512,7 @@ unless ($toc) {
       <td>date</td>
       <td>
         This is set when an entry is no longer open. This is just a date
-        with a time in YYYY-MM-DD format, something like "2012-07-09".
+        without a time in YYYY-MM-DD format, something like "2012-07-09".
       </td>
       <td></td>
     </tr>
