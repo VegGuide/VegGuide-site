@@ -718,8 +718,7 @@ unless ($toc) {
         An <a href="#Image">Image data structure</a> for the user. This will
         include two sizes of image. The smaller of the two is limited to
         40x40, and the larger to 100x100. The image data structure will not
-        include user information, since it is always the same to whom the
-        image belongs.
+        include user information.
       </td>
       <td></td>
     </tr>
