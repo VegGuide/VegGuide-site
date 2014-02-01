@@ -4,7 +4,8 @@ The items here are not listed in any particular order.
 
 <ul class="todo">
  <li>
-  Apps for Android and iPhone.
+  Make REST API read/write. The first priority is to allow people to
+  rate/review entries and upload photos.
  </li>
 
  <li>
@@ -24,25 +25,9 @@ The items here are not listed in any particular order.
  </li>
 
  <li>
-  Pull relevant event data from sites like Meetup.com and associate it
-  with regions.
- </li>
-
- <li>
-  It might be useful to allow a set of links to be associated with a region,
-  especially travel guides, local veg groups, etc. The question is how much
-  this overlaps the existing listings, and if it just makes a mess. Of course,
-  lists of links also invite spam.
- </li>
-
- <li>
   "Personal lists" - the ability to create lists of entries with
   arbitrary names ("Favorites in Phoenix", "Best Chinese Ever"). These
   lists could be public or private.
- </li>
-
- <li>
-  Per-entry review feeds.
  </li>
 
  <li>
@@ -148,12 +133,12 @@ free to ignore this, it's just for our reference.
  </li>
 
  <li>
-  Switch to Fey! The goal here is to reduce the number of queries sent
+  Switch to DBIx::Class. The goal here is to reduce the number of queries sent
   to the DBMS, and just have a nicer model in general.
  </li>
 
  <li>
-  Switch to Postgres. Maybe do this while switching to Fey?
+  Switch to Postgres. Maybe do this while switching to DBIC?
  </li>
 
  <li>
