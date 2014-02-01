@@ -9,6 +9,11 @@ The items here are not listed in any particular order.
  </li>
 
  <li>
+  Find a replacement for Google Maps geocoding so we can include lat/long info
+  in REST API responses.
+ </li>
+
+ <li>
   Wiki-ize all data. Let anyone edit but make it easy to rollback changes.
  </li>
 
