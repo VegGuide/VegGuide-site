@@ -13,16 +13,40 @@ VegGuide.FrontPageGeolocation.instrumentPage = function () {
         return;
     }
 
-    if ( ! navigator.geolocation && navigator.geolocation.getCurrentPosition ) {
-        return;
-    }
-
     VegGuide.FrontPageGeolocation.nearby.innerHTML = "<p>Finding nearby restaurants ...</p>";
 
-    geoip2.city( VegGuide.FrontPageGeolocation._getNearbyList );
+    if ( navigator.geolocation ) {
+        navigator.geolocation.getCurrentPosition( VegGuide.FrontPageGeolocation._setNavigatorCoordinates );
+    }
+    else {
+        VegGuide.FrontPageGeolocation.noGeolocation = true;
+    }
+
+    geoip2.omni( VegGuide.FrontPageGeolocation._setGeoIPCoordinates );
+
+    VegGuide.FrontPageGeolocation.timeout =
+        window.setTimeout( VegGuide.FrontPageGeolocation._getNearbyList, 2000 );
 };
 
-VegGuide.FrontPageGeolocation._getNearbyList = function (geoip) {
+VegGuide.FrontPageGeolocation._setNavigatorCoordinates = function (position) {
+    VegGuide.FrontPageGeolocation.geolocation = position;
+
+    if ( VegGuide.FrontPageGeolocation.geoip ) {
+        VegGuide.FrontPageGeolocation._getNearbyList();
+    }
+}
+
+VegGuide.FrontPageGeolocation._setGeoIPCoordinates = function (geoip) {
+    VegGuide.FrontPageGeolocation.geoip = geoip;
+
+    if (  VegGuide.FrontPageGeolocation.noGeolocation || VegGuide.FrontPageGeolocation.geolocation ){
+        VegGuide.FrontPageGeolocation._getNearbyList();
+    }
+}
+
+VegGuide.FrontPageGeolocation._getNearbyList = function () {
+    window.clearTimeout( VegGuide.FrontPageGeolocation.timeout );
+
     /* Sometimes this gets called twice (at least in Firefox) */
     if ( VegGuide.FrontPageGeolocation.fetching ) {
         return;
@@ -30,12 +54,37 @@ VegGuide.FrontPageGeolocation._getNearbyList = function (geoip) {
 
     VegGuide.FrontPageGeolocation.fetching = 1;
 
-    if ( typeof geoip.location.latitude === "undefined" ) {
+    var latitude, longitude;
+
+    var geoip = VegGuide.FrontPageGeolocation.geoip;
+    var geolocation = VegGuide.FrontPageGeolocation.geolocation;
+
+    if ( geoip && geolocation ) {
+        if ( geoip.location.accuracy_radius < ( geolocation.coords.accuracy / 1000 ) ) {
+            latitude = geoip.location.latitude;
+            longitude = geoip.location.longitude;
+        }
+        else {
+            latitude = geolocation.coords.latitude;
+            longitude = geolocation.coords.longitude;
+        }
+    }
+    else if (geoip) {
+        latitude = geoip.location.latitude;
+        longitude = geoip.location.longitude;
+    }
+    else if (geolocation) {
+        latitude = geolocation.coords.latitude;
+        longitude = geolocation.coords.longitude;
+    }
+
+    if ( typeof latitude === "undefined" ) {
+        VegGuide.FrontPageGeolocation.nearby.innerHTML = "<p>Sorry, we can't figure out your location. Did you disable geolocation on your system or deny VegGuide.org permission to locate you?</p>";
         return;
     }
 
     var uri = "/entry/near/"
-              + geoip.location.latitude + "%2C" + geoip.location.longitude
+              + latitude + "%2C" + longitude
               + "/filter/category_id=1;veg_level=2;allow_closed=0";
 
     var req = new HTTP.Request( {
