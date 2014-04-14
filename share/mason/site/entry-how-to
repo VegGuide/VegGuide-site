@@ -1,0 +1,68 @@
+<%method page_title>
+How to Add Entries
+</%method>
+
+<p>
+Make sure the entry is not on the site already. Note that the VegGuide search
+box is finnicky. (For example, a restaurant called "V-Note" will not be found
+if you type in "V Note" without the dash; similar problems if you misspell
+something).
+VegGuide.
+</p>
+
+<p>
+Find the appropriate region to add an entry. In some cases, we already have
+the city in question on the site (Minneapolis, for example). In other cases,
+we might not have the specific city, but we have a corresponding region/metro
+area (for example, Minnetonka, MN would simply be considered part of the
+existing "Twin Cities" region on VegGuide). In other cases, we don't have
+anything, and the business in question is in a city or town that's far from
+existing metro areas (this happens a lot in the Northeast, Midwest and parts
+of Canada). In that case, you'll have to add a new region to the specific
+state or Canadian province in question, and THEN add the business. A good
+gauge is just look at where the town is located on Google maps to see if it's
+part of a metro area, or if it deserves its own separate region, as it's far
+away from any other major town.
+</p>
+
+<p>
+Find the restaurant or business on Google. Many places will have websites or
+FaceBook pages which you can go to, and then get all the important info
+(address, phone number, "about us" description). Some businesses might already
+be closed (Yelp is the most up to date in this regard) and, at that point, the
+business doesn't need to be added to VegGuide.
+</p>
+
+<p>
+<strong>Do not copy copyrightable material from other sites such as Happy Cow,
+Yelp, etc.</strong> Copyrightable material includes descriptions, directions,
+images, and any other narrative text. It does not include facts such as names,
+addresses, phone numbers, website addresses, hours of operation, etc.
+</p>
+
+<p>
+When adding an entry, it is particularly important to put good information
+into the <strong>Summary</strong> field. This should be one sentence (5-15
+words) that clearly describes this business. A good example would be "Chinese
+restaurant with a large selection of mock meat dishes". A bad example would be
+"Chinese restaurant". Do not end the summary field with a period and do not
+write multiple sentences here. Put any additional info in
+the <strong>Description</strong> field.
+</p>
+
+<p>
+You <strong>do not need to mention that a restaurant does (or does not) serve
+meat</strong>. Use the <strong>How Veg?</strong> field for this purpose
+instead.
+</p>
+
+<p>
+It is possible to enter descriptions in both English and the region's native
+language. This will appear as a separate set of Summary & Description fields,
+labeled something like "Basic Info in Spanish" (or whatever language is
+appropriate). If you don't see separate fields for non-English
+text, <strong>do not put both English and another language in the same
+field</strong>. Instead, <a href="mailto:guide@vegguide.org">contact the site
+administrators for help</a>. Tell us what country you're adding entries for
+and we can enable non-English fields for that country.
+</p>
