@@ -62,10 +62,7 @@ share your personal info with anyone else.
 <p>
   All content on this website (including text and images), unless otherwise
   noted, is licensed under a <&| /lib/link/license.mas &>Creative Commons
-  Attribution-Share Alike 3.0 United States License</&>. The
-  site's <a href="/site/source">source code</a> is licensed
-  under <a href="http://opensource.org/licenses/Artistic-2.0">Artistic License
-  2.0</a>.
+  Attribution-Share Alike 3.0 United States License</&>.
 </p>
 
 <h2>Copyright Infringement</h2>
@@ -79,9 +76,10 @@ policy</a> for details on how we handle allegations of copyright infringement.
 <h2>Source Code</h2>
 
 <p>
-The source code for this site is licensed under the Artistic License 2.0, and
-is available from our <a href="/site/source" title="Source Code">source
-repository</a>.
+The source code for this site is licensed under
+the <a href="http://opensource.org/licenses/Artistic-2.0">Artistic License
+2.0</a>, and is available from our <a href="/site/source" title="Source
+Code">source repository</a>.
 </p>
 
 <p>
