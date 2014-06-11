@@ -34,8 +34,7 @@
 % }
 
 <p>
-  VegGuide.org is a community-maintained, world-wide guide to vegetarian and
-  vegan restaurants and shopping.
+  <& /lib/official-description.mas &>
 </p>
 
 <h2>Developers Wanted</h2>

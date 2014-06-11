@@ -110,6 +110,16 @@
 </p>
 
 <p>
+  The official description of the site, as seen on the front page, is:
+
+  <blockquote><& /lib/official-description.mas &></blockquote>
+</p>
+
+<p>
+  Please use this description whenever you need a short summary of the site.
+</p>
+
+<p>
   When naming the site, you can say either "VegGuide" or "VegGuide.org". The
   latter is a bit more cumbersome, but it includes the entire domain name,
   which makes it easier for people to find the site, especially if you're
