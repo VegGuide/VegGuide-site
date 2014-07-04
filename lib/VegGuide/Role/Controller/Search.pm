@@ -111,6 +111,13 @@ sub _extra_search_params {
     return $extra->($c);
 }
 
+my %paging_keys = map { $_ => 1 } qw(
+    order_by
+    sort_order
+    page
+    limit
+);
+
 sub _search_from_request {
     my $self  = shift;
     my $c     = shift;
@@ -118,24 +125,33 @@ sub _search_from_request {
     my $class = shift;
     my $extra = shift;
 
-    my %path_params = $self->_params_from_path_query($path);
+    my %good_keys = (
+        %paging_keys,
+        map { $_ => 1 } $class->SearchKeys(),
+    );
 
-    my %good_keys = map { $_ => 1 } $class->SearchKeys();
+    my %path_params = $self->_params_from_path_query($path);
     if ( any { !$good_keys{$_} } keys %path_params ) {
+        $c->redirect_and_detach( uri( path => '/' ), 301 );
+    }
+
+    my %request_params = %{ $c->request()->parameters() };
+    if ( any { !$good_keys{$_} } keys %request_params ) {
         $c->redirect_and_detach( uri( path => '/' ), 301 );
     }
 
     my %p = (
         %path_params,
-        %{ $c->request()->query_parameters() },
+        %request_params,
         %{ $extra || {} },
     );
 
     $self->_redirect_on_bad_request( $c, $class, %p );
 
-    delete $p{$_} for grep {/^possible/} keys %p;
+    delete $p{$_} for grep { /^possible/ } keys %p;
     delete @p{qw( order_by sort_order page limit )};
     delete $p{'ie-hack'};
+
     # used for forcing a JSON response
     delete $p{'content-type'};
 
