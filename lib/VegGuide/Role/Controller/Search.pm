@@ -125,20 +125,8 @@ sub _search_from_request {
     my $class = shift;
     my $extra = shift;
 
-    my %good_keys = (
-        %paging_keys,
-        map { $_ => 1 } $class->SearchKeys(),
-    );
-
-    my %path_params = $self->_params_from_path_query($path);
-    if ( any { !$good_keys{$_} } keys %path_params ) {
-        $c->redirect_and_detach( uri( path => '/' ), 301 );
-    }
-
+    my %path_params    = $self->_params_from_path_query($path);
     my %request_params = %{ $c->request()->parameters() };
-    if ( any { !$good_keys{$_} } keys %request_params ) {
-        $c->redirect_and_detach( uri( path => '/' ), 301 );
-    }
 
     my %p = (
         %path_params,
@@ -147,6 +135,19 @@ sub _search_from_request {
     );
 
     $self->_redirect_on_bad_request( $c, $class, %p );
+
+    my %good_keys = (
+        %paging_keys,
+        map { $_ => 1 } $class->SearchKeys(),
+    );
+
+    if ( any { !$good_keys{$_} } keys %path_params ) {
+        $c->redirect_and_detach( uri( path => '/' ), 301 );
+    }
+
+    if ( any { !$good_keys{$_} } keys %request_params ) {
+        $c->redirect_and_detach( uri( path => '/' ), 301 );
+    }
 
     delete $p{$_} for grep { /^possible/ } keys %p;
     delete @p{qw( order_by sort_order page limit )};
