@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
+use List::AllUtils qw( any );
 use Scalar::Util qw( looks_like_number );
 use URI::FromHash qw( uri );
 use URI::QueryParam;
@@ -117,9 +118,16 @@ sub _search_from_request {
     my $class = shift;
     my $extra = shift;
 
+    my %path_params = $self->_params_from_path_query($path);
+
+    my %good_keys = map { $_ => 1 } $class->SearchKeys();
+    if ( any { !$good_keys{$_} } keys %path_params ) {
+        $c->redirect_and_detach( uri( path => '/' ), 301 );
+    }
+
     my %p = (
-        $self->_params_from_path_query($path),
-        %{ $c->request()->parameters() },
+        %path_params,
+        %{ $c->request()->query_parameters() },
         %{ $extra || {} },
     );
 
