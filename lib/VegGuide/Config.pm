@@ -24,20 +24,20 @@ use Sys::Hostname qw( hostname );
 
 {
     my @StandardImports = qw(
-        AuthenCookie
         +VegGuide::Plugin::ErrorHandling
         +VegGuide::Plugin::FixupURI
         +VegGuide::Plugin::ResponseAttributes
-        DR::Session
         +VegGuide::Plugin::Session::State::URI
         +VegGuide::Plugin::Session::Store::VegGuide
+        +VegGuide::Plugin::Unicode::Encoding
         +VegGuide::Plugin::User
+        AuthenCookie
         Cache
         Cache::Store::FastMmap
+        DR::Session
         Log::Dispatch
         RedirectAndDetach
         SubRequest
-        Unicode::Encoding
     );
 
     my @Imports;
