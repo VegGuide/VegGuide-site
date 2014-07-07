@@ -121,6 +121,7 @@ my %paging_keys = map { $_ => 1 } qw(
 my %address_keys = map { $_ => 1 } qw(
     address
     distance
+    unit
 );
 
 sub _search_from_request {
