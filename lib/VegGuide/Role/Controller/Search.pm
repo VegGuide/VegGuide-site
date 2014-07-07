@@ -118,6 +118,11 @@ my %paging_keys = map { $_ => 1 } qw(
     limit
 );
 
+my %address_keys = map { $_ => 1 } qw(
+    address
+    distance
+);
+
 sub _search_from_request {
     my $self  = shift;
     my $c     = shift;
@@ -138,6 +143,7 @@ sub _search_from_request {
 
     my %good_keys = (
         %paging_keys,
+        %address_keys,
         map { $_ => 1 } $class->SearchKeys(),
     );
 
