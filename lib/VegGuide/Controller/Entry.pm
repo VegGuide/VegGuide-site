@@ -53,7 +53,7 @@ sub _set_vendor : Chained('/') : PathPart('entry') : CaptureArgs(1) {
     my $vendor_id = shift;
 
     $c->redirect_and_detach('/')
-        unless $vendor_id =~ /^[0-9]+$/;
+        unless $vendor_id && $vendor_id =~ /^[0-9]+$/;
 
     my $vendor = VegGuide::Vendor->new( vendor_id => $vendor_id );
 

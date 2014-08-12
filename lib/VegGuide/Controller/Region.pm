@@ -29,7 +29,7 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1) {
     my $location_id = shift;
 
     $c->redirect_and_detach('/')
-        unless $location_id =~ /^[0-9]+$/;
+        unless $location_id && $location_id =~ /^[0-9]+$/;
 
     my $location = VegGuide::Location->new( location_id => $location_id );
 
@@ -574,8 +574,7 @@ sub new_region_comment_POST : Private {
     $c->redirect_and_detach( region_uri( location => $location ) );
 }
 
-sub _set_comment : Chained('_set_location') : PathPart('comment') :
-    CaptureArgs(1) {
+sub _set_comment : Chained('_set_location') : PathPart('comment') : CaptureArgs(1) {
     my $self    = shift;
     my $c       = shift;
     my $user_id = shift;
