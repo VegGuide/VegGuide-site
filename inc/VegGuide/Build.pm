@@ -22,7 +22,6 @@ my %Requires = (
     'Catalyst'                                 => '5.80007',
     'Catalyst::Action::REST'                   => '0.5',
     'Catalyst::Devel'                          => '0',
-    'Catalyst::Engine::Apache2::MP20'          => '0',
     'Catalyst::Plugin::AuthenCookie'           => '0.01',
     'Catalyst::Plugin::Cache::Store::FastMmap' => '0',
     'Catalyst::Plugin::Log::Dispatch'          => '0.11',
