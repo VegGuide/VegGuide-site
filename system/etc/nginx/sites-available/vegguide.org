@@ -4,8 +4,8 @@ server {
     listen 443 ssl;
     server_name www.vegguide.org;
 
-    ssl_certificate     /etc/ssl/certs/www.vegguide.org-chained.crt;
-    ssl_certificate_key /etc/ssl/private/www.vegguide.org.key;
+    ssl_certificate     /etc/nginx/www.vegguide.org.crt;
+    ssl_certificate_key /etc/nginx/www.vegguide.org.key;
     ssl_ciphers RC4:HIGH:!aNULL:!MD5;
     ssl_prefer_server_ciphers on;
 
@@ -293,8 +293,8 @@ server {
     error_log  /var/log/nginx/error.log;
     access_log /var/log/nginx/access.log;
 
-    ssl_certificate     /etc/ssl/certs/lists.vegguide.org-chained.crt;
-    ssl_certificate_key /etc/ssl/private/lists.vegguide.org.key;
+    ssl_certificate     /etc/nginx/lists.vegguide.org.crt;
+    ssl_certificate_key /etc/nginx/lists.vegguide.org.key;
     ssl_ciphers RC4:HIGH:!aNULL:!MD5;
     ssl_prefer_server_ciphers on;
 
