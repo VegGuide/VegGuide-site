@@ -35,8 +35,18 @@ unless ($toc) {
 <h2>SSL</h2>
 
 <p>
-  All REST API URIs may be accessed via <code>http</code>
-  or <code>https</code>.
+  All REST API URIs should be accessed via SSL. While we have
+  allowed <code>http</code> access in the past, this will probably be disabled
+  in the future. We strongly encourage you to use the <code>https</code>
+  scheme for all API calls.
+</p>
+
+<h2>License</h2>
+
+<p>
+  All data returned by this API is under the same license as the site itself,
+  <&| /lib/link/license.mas &>Creative Commons Attribution-Share Alike 3.0
+  United States License</&>.
 </p>
 
 <h2>API Explorer</h2>
@@ -1265,6 +1275,16 @@ unless ($toc) {
 </p>
 
 <h2>Release History</h2>
+
+<h3>0.0.8 - February 17, 2013</h3>
+
+<ul>
+  <li>
+    Doc updates only. The docs now explicitly advise people to use SSL. We
+    also added a License section to the docs.
+  </li>
+</ul>
+
 
 <h3>0.0.7 - February 17, 2013</h3>
 
