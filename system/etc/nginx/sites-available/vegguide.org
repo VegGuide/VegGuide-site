@@ -6,8 +6,9 @@ server {
 
     ssl_certificate     /etc/nginx/www.vegguide.org.crt;
     ssl_certificate_key /etc/nginx/www.vegguide.org.key;
-    ssl_ciphers RC4:HIGH:!aNULL:!MD5;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     ssl_prefer_server_ciphers on;
+    ssl_ciphers "EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH+aRSA+RC4 EECDH EDH+aRSA RC4 !aNULL !eNULL !LOW !3DES !MD5 !EXP !PSK !SRP !DSS";
 
     error_log  /var/log/nginx/vegguide.org/error.log;
     access_log /var/log/nginx/vegguide.org/access.log;
@@ -295,8 +296,9 @@ server {
 
     ssl_certificate     /etc/nginx/lists.vegguide.org.crt;
     ssl_certificate_key /etc/nginx/lists.vegguide.org.key;
-    ssl_ciphers RC4:HIGH:!aNULL:!MD5;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     ssl_prefer_server_ciphers on;
+    ssl_ciphers "EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH+aRSA+RC4 EECDH EDH+aRSA RC4 !aNULL !eNULL !LOW !3DES !MD5 !EXP !PSK !SRP !DSS";
 
     root /usr/lib/cgi-bin;
 
