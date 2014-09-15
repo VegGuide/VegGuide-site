@@ -5,6 +5,7 @@ use warnings;
 
 use Geo::Coder::Google 0.06;
 use Locale::Country 3.23 qw( code2country country2code );
+use Try::Tiny;
 use VegGuide::Config;
 use VegGuide::Geocoder::Result;
 use VegGuide::Util qw( string_is_empty );
@@ -87,7 +88,16 @@ sub geocode_full_address {
         %region,
     );
 
-    return VegGuide::Geocoder::Result->new( $geocoder->geocode($address) );
+    my $r;
+    try {
+        $r = $geocoder->geocode($address);
+    }
+    catch {
+        die $_ unless $_ =~ /ZERO_RESULTS/;
+    };
+
+    return unless $r;
+    return VegGuide::Geocoder::Result->new($r);
 }
 
 sub _us_geocode_address {
