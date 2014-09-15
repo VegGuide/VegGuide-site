@@ -1,6 +1,6 @@
   <div id="sitewide-search-text-and-form">
     <form id="sitewide-search" action="/site/search">
-      <input id="sitewide-search-input" class="text" type="text" name="search_text" value="<% $search_text | h %>" />
+      <input id="sitewide-search-input" class="text" type="text" name="search_text" value="<% $search_text | h %>" placeholder="name, city, or address" />
       <button class="action-button" type="submit"><% $button | h %></button>
     </form>
   </div>

@@ -7,8 +7,6 @@ if ( typeof VegGuide == "undefined" ) {
 
 VegGuide.SitewideSearch = {};
 
-VegGuide.SitewideSearch._defaultValue = "name, city, or address";
-
 VegGuide.SitewideSearch.instrumentPage = function () {
     var input = $("sitewide-search-input");
 
@@ -17,20 +15,12 @@ VegGuide.SitewideSearch.instrumentPage = function () {
         return;
     }
 
-    if ( input.value == undefined || ! input.value.length ) {
-        input.value = VegGuide.SitewideSearch._defaultValue;
-    }
-
     var help_div = $("sitewide-search-help");
 
     DOM.Events.addListener(
         input,
         "focus",
         function (e) {
-            if ( e.target.value == VegGuide.SitewideSearch._defaultValue ) {
-                e.target.value = "";
-            }
-
             VegGuide.SitewideSearch._positionHelpDiv( e.target, help_div );
             DOM.Element.show(help_div);
         }
