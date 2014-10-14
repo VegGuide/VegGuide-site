@@ -186,6 +186,10 @@ sub _redirect_on_bad_request {
         $c->redirect_and_detach( $uri, 301 );
     }
 
+    if ( $p{limit} && $p{limit} !~ /^[0-9]+$/ ) {
+        $c->redirect_and_detach( q{/}, 301 );
+    }
+
     # Some l33t hacker bot keeps trying to stick links in these
     # parameters
     if ( grep { defined && /^http/ }
