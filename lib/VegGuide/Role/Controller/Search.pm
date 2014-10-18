@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-use List::AllUtils qw( any );
+use List::AllUtils qw( all any );
 use Scalar::Util qw( looks_like_number );
 use URI::FromHash qw( uri );
 use URI::QueryParam;
@@ -194,6 +194,7 @@ sub _redirect_on_bad_request {
     # parameters
     if ( grep { defined && /^http/ }
         @p{ 'order_by', 'sort_order', 'page', 'limit' } ) {
+
         $c->redirect_and_detach( q{/}, 301 );
     }
 
@@ -202,7 +203,17 @@ sub _redirect_on_bad_request {
         $c->redirect_and_detach( q{/}, 301 );
     }
 
-    if ( $class =~ /ByLatLong/ && ! exists $p{address} ) {
+    if ( $class =~ /ByLatLong/ && !exists $p{address} ) {
+        $c->redirect_and_detach( q{/}, 301 );
+    }
+
+    if ( $class =~ /ByLatLong/ && !all { defined $_ && looks_like_number($_) }
+        @p{ 'latitude', 'longitude' } ) {
+
+        $c->redirect_and_detach( q{/}, 301 );
+    }
+
+    if ( $class =~ /ByLatLong/ && ( $p{unit} // q{} ) !~ /^mile|km$/ ) {
         $c->redirect_and_detach( q{/}, 301 );
     }
 

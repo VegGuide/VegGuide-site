@@ -25,6 +25,12 @@ sub list : Path('') {
     my $self = shift;
     my $c    = shift;
 
+    # Request for
+    # /entry/near/47.3706?distance=25;page=;sort_order=ASC;order_by=distance;unit=mile;address=59824;limit=
+    # seem to end up in this sub for some reason.
+    $c->redirect_and_detach( q{/}, 301 )
+        if $c->request()->path() =~ q{/near};
+
     my $search = VegGuide::Search::Vendor::All->new();
 
     my $params = $c->request()->parameters();
