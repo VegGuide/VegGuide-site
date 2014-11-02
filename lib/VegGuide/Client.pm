@@ -11,7 +11,7 @@ use VegGuide::Validate
 
 BEGIN {
     foreach my $meth (
-        qw( show_localized_content encoding show_utf8 preferred_locale )) {
+        qw( show_localized_content encoding preferred_locale )) {
         no strict 'refs';
         *{$meth} = sub { $_[0]->{$meth} };
     }
@@ -46,7 +46,6 @@ sub new {
     }
 
     $self->{encoding} ||= 'utf-8-strict';
-    $self->{show_utf8} = $self->_client_accepts_utf8;
 
     return $self;
 }
@@ -57,7 +56,6 @@ sub new_from_params {
         @_, {
             show_localized_content => { type => BOOLEAN },
             encoding               => { type => SCALAR },
-            show_utf8              => { type => BOOLEAN },
             preferred_locale       => { type => SCALAR },
         },
     );
@@ -77,14 +75,6 @@ sub charset {
     return 'big5' if $self->encoding =~ /^big5/i;
 
     return $self->encoding;
-}
-
-sub encode {
-    my $self = shift;
-
-    return $_[0] if $self->encoding eq 'utf-8-strict';
-
-    return Encode::encode( $self->encoding, $_[0] );
 }
 
 sub decode {
@@ -108,8 +98,7 @@ sub localize_for_location {
 
     return 1
         if $self->{always_localize}
-        || ( $self->show_utf8
-        && $self->accepts_language( $locale->language_code ) );
+        || $self->accepts_language( $locale->language_code );
 }
 
 sub _encoding_for_locale {

@@ -61,7 +61,7 @@
 <p class="summary" itemprop="description">
   <% $vendor->short_description() | h %>
 % if ( $c->client()->show_localized_content() && defined $vendor->localized_short_description() ) {
-  - <% $c->client()->encode( $vendor->localized_short_description() ) | h %>
+  - <% $vendor->localized_short_description() | h %>
 % }
 </p>
 
