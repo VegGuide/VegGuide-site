@@ -1,7 +1,10 @@
 language: perl
 perl:
     - "5.14"
+before_install:
+    - sudo apt-get update
 install:
+    - sudo apt-get install libgmp-dev libmagic-dev
     - perl Build.PL && cpanm -q --notest `./Build modules`
 script:
     - prove -lr -j 4 t/
