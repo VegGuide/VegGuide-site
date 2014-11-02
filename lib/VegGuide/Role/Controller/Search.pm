@@ -203,17 +203,9 @@ sub _redirect_on_bad_request {
         $c->redirect_and_detach( q{/}, 301 );
     }
 
-    if ( $class =~ /ByLatLong/ && !exists $p{address} ) {
-        $c->redirect_and_detach( q{/}, 301 );
-    }
-
     if ( $class =~ /ByLatLong/ && !all { defined $_ && looks_like_number($_) }
         @p{ 'latitude', 'longitude' } ) {
 
-        $c->redirect_and_detach( q{/}, 301 );
-    }
-
-    if ( $class =~ /ByLatLong/ && ( $p{unit} // q{} ) !~ /^mile|km$/ ) {
         $c->redirect_and_detach( q{/}, 301 );
     }
 
