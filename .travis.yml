@@ -1,0 +1,7 @@
+language: perl
+perl:
+    - "5.14"
+install:
+    - perl Build.PL && cpanm -q --notest `./Build modules`
+script:
+    - prove -lr -j 4 t/
