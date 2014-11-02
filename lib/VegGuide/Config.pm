@@ -29,7 +29,6 @@ use Sys::Hostname qw( hostname );
         +VegGuide::Plugin::ResponseAttributes
         +VegGuide::Plugin::Session::State::URI
         +VegGuide::Plugin::Session::Store::VegGuide
-        +VegGuide::Plugin::Unicode::Encoding
         +VegGuide::Plugin::User
         AuthenCookie
         Cache

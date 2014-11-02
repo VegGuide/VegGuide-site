@@ -8,6 +8,7 @@ our $VERSION = '0.01';
 our $REST_VERSION = '0.0.8';
 
 use Catalyst;
+use Catalyst::DispatchType::Regex;
 use DateTime;
 use VegGuide::Client;
 use VegGuide::Config;
