@@ -25,10 +25,8 @@ sub begin : Private {
     my $c    = shift;
 
     $ENV{SERVER_PORT} = $c->engine()->env()->{SERVER_PORT}
-        if $c->engine()
-            && $c->engine->can('env')
-            && $c->engine()->env()
-            && $c->engine()->env()->{SERVER_PORT} != 80;
+        if $c->engine()->env()
+        && $c->engine()->env()->{SERVER_PORT} != 80;
 
     $ENV{SERVER_SCHEME} = $c->engine()->env()->{'psgi.url_scheme'};
 
