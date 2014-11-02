@@ -8,14 +8,14 @@ our $VERSION = '0.01';
 our $REST_VERSION = '0.0.8';
 
 use Catalyst;
+BEGIN { $ENV{CATALYST_NOWARN_DEPRECATE} = 1; }
 use Catalyst::DispatchType::Regex;
+use Catalyst::DispatchType::LocalRegex;
 use DateTime;
 use VegGuide::Client;
 use VegGuide::Config;
 use VegGuide::Request;
 use VegGuide::Response;
-
-use VegGuide::Engine;
 
 use VegGuide::Attribute;
 use VegGuide::Comment;

@@ -125,6 +125,11 @@ sub _finalize_error_with_debug {
         # Don't show body parser in the dump
         $c->req->_clear_body;
 
+        # XXX - Added for VegGuide code
+        local *Alzabo::Runtime::Row::DDS_freeze    = \&ARR_freeze;
+        local *Alzabo::Runtime::Table::DDS_freeze  = \&ART_freeze;
+        local *Alzabo::Runtime::Schema::DDS_freeze = \&ARS_freeze;
+
         my @infos;
         my $i = 0;
         for my $dump ( $c->dump_these ) {
@@ -280,6 +285,29 @@ sub _dump_error_page_element {
     <pre wrap="">%s</pre>
 </div>
 EOF
+}
+
+sub ARR_freeze {
+    my $self = shift;
+
+    return 'row: '
+        . (
+        $self->is_potential()
+        ? 'potential ' . $self->table()->name()
+        : $self->id_as_string()
+        );
+}
+
+sub ART_freeze {
+    my $self = shift;
+
+    return 'table: ' . $self->name();
+}
+
+sub ARS_freeze {
+    my $self = shift;
+
+    return 'schema: ' . $self->name();
 }
 
 1;
