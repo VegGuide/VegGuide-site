@@ -24,7 +24,6 @@ use Sys::Hostname qw( hostname );
 
 {
     my @StandardImports = qw(
-        +VegGuide::Plugin::ErrorHandling
         +VegGuide::Plugin::FixupURI
         +VegGuide::Plugin::ResponseAttributes
         +VegGuide::Plugin::Session::State::URI
@@ -72,7 +71,9 @@ use Sys::Hostname qw( hostname );
 }
 
 {
-    my @Roles = qw( VegGuide::Role::Tabs
+    my @Roles = qw(
+        VegGuide::Role::Tabs
+        VegGuide::Role::Engine::ErrorHandling
     );
 
     sub CatalystRoles {
@@ -187,7 +188,7 @@ sub AlzaboRootDir {
                 __PACKAGE__->ShareDir(),
                 __PACKAGE__->VarLibDir(),
             ],
-            debug => 1,
+#            debug => 1,
         };
     }
 

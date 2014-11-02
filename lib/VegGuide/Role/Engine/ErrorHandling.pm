@@ -1,4 +1,4 @@
-package VegGuide::Plugin::ErrorHandling;
+package VegGuide::Role::Engine::ErrorHandling;
 
 use strict;
 use warnings;
@@ -8,62 +8,33 @@ use Catalyst::Engine ();
 use Data::Dump qw/dump/;
 use HTML::Entities qw( encode_entities );
 use HTTP::Status qw( RC_NOT_FOUND RC_INTERNAL_SERVER_ERROR );
-use MRO::Compat;
-use VegGuide::JSON;
 
-# I'd really rather _not_ copy this whole thing in here, but it's the
-# only way to override how errors are logged. I have to monkey-patch
-# rather than subclassing or else NEXT::finalize() ends up calling the
-# finalize in Catalyst itself before calling finalize() for other
-# plugins (a mess!).
-{
+use Moose::Role;
 
-    package Catalyst;
-    use HTTP::Status qw( RC_NOT_FOUND );
+around finalize => sub {
+    my $orig = shift;
+    my $self = shift;
 
-    no warnings 'redefine';
+    return $self->$orig() if $self->debug();
 
-    sub finalize {
-        my $self = shift;
-
-        for my $error ( @{ $self->error } ) {
-            $self->_log_error($error);
-        }
-
-        # Allow engine to handle finalize flow (for POE)
-        if ( $self->engine->can('finalize') ) {
-            $self->engine->finalize($self);
-        }
-        else {
-
-            $self->finalize_uploads;
-
-            # Error
-            if ( $#{ $self->error } >= 0 ) {
-                $self->finalize_error;
-            }
-
-            $self->finalize_headers;
-
-            # HEAD request
-            if ( $self->request->method eq 'HEAD' ) {
-                $self->response->body('');
-            }
-
-            $self->finalize_body;
-        }
-
-        if ( $self->use_stats ) {
-            my $elapsed = sprintf '%f', $self->stats->elapsed;
-            my $av = $elapsed == 0 ? '??' : sprintf '%.3f', 1 / $elapsed;
-            $self->log->info( "Request took ${elapsed}s ($av/s)\n"
-                    . $self->stats->report
-                    . "\n" );
-        }
-
-        return $self->response->status;
+    for my $error ( @{ $self->error } ) {
+        $self->_log_error($error);
     }
-}
+
+    my $log_class = ref $self->log();
+
+    # Catalyst->finalize always calls $self->log->error for each error. We've
+    # already logged the errors we care about, however. It'd be better to
+    # provide our own log object that did the filtering and formatting we
+    # want, but this seems to be surprisingly complicated, at least from
+    # looking at Catalyst::Plugin::Log::Dispatch.
+    {
+        no strict 'refs';
+        no warnings 'redefine';
+        local *{ $log_class . '::error' } = sub { return; };
+        return $self->$orig();
+    }
+};
 
 sub _log_error {
     my $self  = shift;
@@ -118,23 +89,30 @@ sub finalize_error {
     }
 }
 
-# copied from Catalyst::Engine->finalize_error just so we can set the
-# fucking status. GRRRR!
+# copied from Catalyst::Engine->finalize_error (5.90075) just so we can set
+# the fucking status. GRRRR!
 sub _finalize_error_with_debug {
-    my $self = shift;
-    my $c    = shift;
+    my ( $self, $c ) = @_;
 
     $c->res->content_type('text/html; charset=utf-8');
-    my $name = $c->config->{name} || join( ' ', split( '::', ref $c ) );
+    my $name = ref($c)->config->{name} || join(' ', split('::', ref $c));
+    
+    # Prevent Catalyst::Plugin::Unicode::Encoding from running.
+    # This is a little nasty, but it's the best way to be clean whether or
+    # not the user has an encoding plugin.
+
+    if ($c->can('encoding')) {
+      $c->{encoding} = '';
+    }
 
     my ( $title, $error, $infos );
     if ( $c->debug ) {
 
         # For pretty dumps
         $error = join '', map {
-                  '<p><code class="error">'
-                . encode_entities($_)
-                . '</code></p>'
+                '<p><code class="error">'
+              . encode_entities($_)
+              . '</code></p>'
         } @{ $c->error };
         $error ||= 'No output';
         $error = qq{<pre wrap="">$error</pre>};
@@ -142,30 +120,15 @@ sub _finalize_error_with_debug {
         $name  = "<h1>$name</h1>";
 
         # Don't show context in the dump
-        delete $c->req->{_context};
-        delete $c->res->{_context};
+        $c->res->_clear_context;
 
         # Don't show body parser in the dump
-        delete $c->req->{_body};
-
-        # Don't show response header state in dump
-        delete $c->res->{_finalized_headers};
+        $c->req->_clear_body;
 
         my @infos;
         my $i = 0;
         for my $dump ( $c->dump_these ) {
-            my $name = $dump->[0];
-
-            # stored in there for classes with an anon metaclass.
-            delete $dump->[1]{__MOP__} if ref $dump->[1];
-
-            my $value = encode_entities( dump( $dump->[1] ) );
-            push @infos, sprintf <<"EOF", $name, $value;
-<h2><a href="#" onclick="toggleDump('dump_$i'); return false">%s</a></h2>
-<div id="dump_$i">
-    <pre wrap="">%s</pre>
-</div>
-EOF
+            push @infos, $self->_dump_error_page_element($i, $dump);
             $i++;
         }
         $infos = join "\n", @infos;
@@ -183,6 +146,9 @@ EOF
 (dk) Venligst prov igen senere
 (pl) Prosze sprobowac pozniej
 (pt) Por favor volte mais tarde
+(ru) Попробуйте еще раз позже
+(ua) Спробуйте ще раз пізніше
+(it) Per favore riprova più tardi
 </pre>
 
         $name = '';
@@ -268,7 +234,7 @@ EOF
         }
         /* from http://users.tkk.fi/~tkarvine/linux/doc/pre-wrap/pre-wrap-css3-mozilla-opera-ie.html */
         /* Browser specific (not valid) styles to make preformatted text wrap */
-        pre { 
+        pre {
             white-space: pre-wrap;       /* css-3 */
             white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
             white-space: -pre-wrap;      /* Opera 4-6 */
@@ -286,13 +252,34 @@ EOF
 </body>
 </html>
 
-
-    # Trick IE
+    # Trick IE. Old versions of IE would display their own error page instead
+    # of ours if we'd give it less than 512 bytes.
     $c->res->{body} .= ( ' ' x 512 );
 
+    $c->res->{body} = Encode::encode("UTF-8", $c->res->{body});
+
+    # XXX - this is the only difference from Catalyst 5.90075
     $c->res->status(500)
         unless $c->res->status;
 }
 
+# XXX - copied from Catalyst 5.90075
+sub _dump_error_page_element {
+    my ($self, $i, $element) = @_;
+    my ($name, $val)  = @{ $element };
+
+    # This is fugly, but the metaclass is _HUGE_ and demands waaay too much
+    # scrolling. Suggestions for more pleasant ways to do this welcome.
+    local $val->{'__MOP__'} = "Stringified: "
+        . $val->{'__MOP__'} if ref $val eq 'HASH' && exists $val->{'__MOP__'};
+
+    my $text = encode_entities( dump( $val ));
+    sprintf <<"EOF", $name, $text;
+<h2><a href="#" onclick="toggleDump('dump_$i'); return false">%s</a></h2>
+<div id="dump_$i">
+    <pre wrap="">%s</pre>
+</div>
+EOF
+}
 
 1;

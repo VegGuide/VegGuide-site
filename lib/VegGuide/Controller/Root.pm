@@ -131,6 +131,18 @@ sub debug: Path('/debug') : Args(0) {
     $c->stash()->{template} = '/debug';
 }
 
+sub die : Path('/die') : Args(0) {
+    my $self = shift;
+    my $c    = shift;
+
+    VegGuide::Exception->throw('Naughty attempt to die')
+        if VegGuide::Config->IsProduction();
+
+    CORE::die "A death in the controller family\n";
+
+    $c->detach('index');
+}
+
 sub warn : Path('/warn') : Args(0) {
     my $self = shift;
     my $c    = shift;
@@ -226,10 +238,6 @@ sub home : Path('/home') {
             entity => \@descs,
         );
     }
-}
-
-sub test500 : Local {
-    die "Test 500";
 }
 
 __PACKAGE__->meta()->make_immutable();
