@@ -704,17 +704,11 @@ sub _recent_feed {
     $self->_serve_feed( $c, $feed, $type );
 }
 
-sub data_feed : LocalRegex('^(\d+).rss') {
+sub data_feed : Chained('_set_location') : PathPart('data.rss') : Args(0) {
     my $self = shift;
     my $c    = shift;
 
-    my $location = eval {
-        VegGuide::Location->new(
-            location_id => $c->request()->captures()->[0] );
-    };
-
-    $c->redirect_and_detach('/')
-        unless $location;
+    my $location = $c->stash()->{location};
 
     my $cache_only = $location->descendants_vendor_count()
         > VegGuide::Location->DataFeedDynamicLimit() ? 1 : 0;

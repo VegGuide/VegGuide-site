@@ -26,7 +26,7 @@
 </p>
 
 <p>    
-  <a class="feed" href="<% $base_uri %>.rss"><img src="/images/rss-1-button.gif" /></a></li>
+  <a class="feed" href="<% $base_uri %>/data.rss"><img src="/images/rss-1-button.gif" /></a></li>
 </p>
 
 <%args>
