@@ -34,9 +34,8 @@ sub new {
     );
 
     my $client = VegGuide::Client->new_from_params(
-        show_localized_content => 0,
+        show_localized_content => 1,
         encoding               => 'utf8',
-        show_utf8              => 1,
         preferred_locale       => 'en_US',
     );
 
