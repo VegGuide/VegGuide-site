@@ -112,11 +112,15 @@ server {
         rewrite  ^  /  permanent;
     }
 
+    location ~ ^/region/(\d+)\.rss {
+        set $region_id $1;
+        rewrite ^  /region/$region_id/data.rss permanent;
+    }
+
     location ^~ /location {
         if ( $arg_location_id ~ (\d+) ) {
             set $region_id $1;
             rewrite  ^/location/view\.html         /region/$region_id?             permanent;
-            rewrite  ^/location/$region_id\.rss    /region/$region_id/data.rss?    permanent;
             rewrite  ^/location/data\.rss          /region/$region_id/data.rss?    permanent;
             rewrite  ^/location/most_recent\.rss   /region/$region_id/recent.rss?  permanent;
             rewrite  ^/location/most_recent_vendors\.rss   /region/$region_id/recent.rss?entries_only=1  permanent;
