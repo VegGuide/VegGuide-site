@@ -4,6 +4,8 @@ server {
     listen 443 ssl;
     server_name www.vegguide.org;
 
+    client_max_body_size 25m;
+
     ssl_certificate     /etc/nginx/www.vegguide.org.crt;
     ssl_certificate_key /etc/nginx/www.vegguide.org.key;
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
