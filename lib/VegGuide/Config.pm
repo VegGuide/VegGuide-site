@@ -188,7 +188,6 @@ sub AlzaboRootDir {
                 __PACKAGE__->ShareDir(),
                 __PACKAGE__->VarLibDir(),
             ],
-#            debug => 1,
         };
     }
 
