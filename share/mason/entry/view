@@ -21,7 +21,7 @@
         <div id="phone" itemprop="telephone"><% $vendor->phone() | h %></div>
 % }
 
-% if ( $vendor->home_page() ) {
+% if ( $vendor->home_page() && ! $vendor->is_closed() ) {
         <div id="website">
           <a class="external" rel="nofollow"
              href="<% $vendor->external_uri() | h %>"
