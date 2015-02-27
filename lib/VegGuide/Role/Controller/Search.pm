@@ -27,7 +27,12 @@ sub _set_search_in_stash {
         { $self->_extra_search_params( $c, $config{extra_params} ) },
     );
 
-    return unless $self->_set_search_cursor_params( $c, $search );
+    return
+        unless $self->_set_search_cursor_params(
+        $c,
+        $search,
+        $config{defaults},
+        );
 
     my $stash = $c->stash();
 
@@ -233,9 +238,10 @@ sub _redirect_on_bad_request {
 }
 
 sub _set_search_cursor_params {
-    my $self   = shift;
-    my $c      = shift;
-    my $search = shift;
+    my $self     = shift;
+    my $c        = shift;
+    my $search   = shift;
+    my $defaults = shift || {};
 
     my $params = $c->request()->parameters();
 
@@ -253,6 +259,11 @@ sub _set_search_cursor_params {
         page  => $page,
         limit => $limit,
     );
+
+    if ( $defaults->{order_by} ) {
+        $p{order_by}   = $defaults->{order_by};
+        $p{sort_order} = $defaults->{sort_order};
+    }
 
     for my $k (qw( order_by sort_order )) {
         $p{$k} = $params->{$k}

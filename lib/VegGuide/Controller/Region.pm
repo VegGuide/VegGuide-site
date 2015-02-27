@@ -110,6 +110,10 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1) {
     my %SearchConfig = (
         search_class => 'VegGuide::Search::Vendor::ByLocation',
         extra_params => sub { ( location => $_[0]->stash()->{location} ) },
+        defaults     => {
+            order_by   => 'rating',
+            sort_order => 'desc',
+        },
     );
 
     sub region : Chained('_set_location') : PathPart('') : Args(0) :
