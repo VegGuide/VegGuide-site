@@ -13,6 +13,11 @@ programming for the site, so you can blame him for all the bugs you find.
 </p>
 
 <p>
+If you're part of an organization that would like to join us as a partner,
+please see our <a href="/site/partnership">page on partnership</a>.
+</p>
+
+<p>
 You can help this guide by keeping it up to date.
 % if ( $c->vg_user()->is_guest() ) {
 <a href="/user/new_user_form">Sign up</a> for an account, and you
