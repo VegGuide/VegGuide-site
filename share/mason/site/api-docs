@@ -41,6 +41,20 @@ unless ($toc) {
   scheme for all API calls.
 </p>
 
+<h2>User Agents</h2>
+
+<p>
+  Your code must set the <code>User-Agent</code> header to something. Ideally,
+  you'll set it to something that identifies your code clearly, rather than
+  using a default provided by a library. Something like "My Great App/v0.42"
+  is perfect.
+</p>
+
+<p>
+  <strong>All requests without a <code>User-Agent</code> header will result in
+  a 403 (Forbidden) response!</strong>
+</p>
+
 <h2>License</h2>
 
 <p>
