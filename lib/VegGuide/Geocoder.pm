@@ -5,7 +5,7 @@ use warnings;
 
 BEGIN { $ENV{PERL_LWP_SSL_VERIFY_HOSTNAME} = 0 }
 
-use Geo::Coder::Google 0.14_02;
+use Geo::Coder::Google 0.14;
 use Locale::Country 3.23 qw( code2country country2code );
 use Try::Tiny;
 use VegGuide::Config;
