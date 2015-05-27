@@ -3,6 +3,8 @@ package VegGuide::Geocoder;
 use strict;
 use warnings;
 
+BEGIN { $ENV{PERL_LWP_SSL_VERIFY_HOSTNAME} = 0 }
+
 use Geo::Coder::Google 0.06;
 use Locale::Country 3.23 qw( code2country country2code );
 use Try::Tiny;
