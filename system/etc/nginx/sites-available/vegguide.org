@@ -19,6 +19,10 @@ server {
         rewrite  ^(.*)  http://www.vegguide.org$1  permanent;
     }
 
+    if ( $http_user_agent = "" ) {
+        return 403;
+    }
+
     add_header P3P "policyref=\"http://www.vegguide.org/w3c/p3p.xml\", CP=\"ALL DSP COR CURa ADMa \DEVa TAIa PSAa PSDa OUR IND PHY ONL COM NAV DEM STA\"";
 
     location ^~ /mailman {
