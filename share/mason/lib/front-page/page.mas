@@ -53,12 +53,14 @@
   interested in helping.
 </p>
 
-% if ($news_item) {
+% if (@news_items) {
 <h2>News</h2>
 
-<h3><& /lib/format/date.mas, date => $news_item->creation_datetime_object() &> - <% $news_item->title() | h %></h3>
+%   for my $news (@news_items) {
+<h3><& /lib/format/date.mas, date => $news->creation_datetime_object() &> - <% $news->title() | h %></h3>
 
-<% $news_item->body() %>
+<% $news->body() %>
+%   }
 % }
 
 % if ( VegGuide::Config->IsTest() ) {
@@ -72,7 +74,7 @@
 % }
 
 <%args>
-$news_item
+@news_items
 @columns
 </%args>
 
