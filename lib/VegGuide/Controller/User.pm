@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-use Captcha::reCAPTCHA;
+use Captcha::noCAPTCHA;
 use LWPx::ParanoidAgent;
 use Net::OpenID::Consumer;
 use URI::FromHash qw( uri );
@@ -567,17 +567,18 @@ sub user_DELETE {
     $c->redirect_and_detach('/user');
 }
 
-my $Captcha = Captcha::reCAPTCHA->new();
-
 sub new_user_form : Local {
     my $self = shift;
     my $c    = shift;
 
-    $c->stash()->{captcha_html} = $Captcha->get_html(
-        VegGuide::Config->reCAPTCHAPublicKey(),
-        undef, undef, { theme => 'white' }
+    my $captcha = Captcha::noCAPTCHA->new(
+        {
+            site_key   => VegGuide::Config->reCAPTCHAPublicKey(),
+            secret_key => VegGuide::Config->reCAPTCHAPrivateKey(),
+        },
     );
 
+    $c->stash()->{captcha_html} = $captcha->html;
     $c->stash()->{template} = '/user/new-user-form';
 }
 
@@ -657,23 +658,21 @@ sub users_POST {
     delete $user_data{is_admin}
         unless $c->vg_user()->is_admin();
 
-    my $captcha_result = $Captcha->check_answer(
-        VegGuide::Config->reCAPTCHAPrivateKey(),
-        $c->request()->address(),
-        $c->request()->param('recaptcha_challenge_field'),
-        $c->request()->param('recaptcha_response_field'),
+    my $captcha = Captcha::noCAPTCHA->new(
+        {
+            site_key   => VegGuide::Config->reCAPTCHAPublicKey(),
+            secret_key => VegGuide::Config->reCAPTCHAPrivateKey(),
+        },
     );
 
-    unless ( $captcha_result->{is_valid} ) {
-        my $error = $CaptchaError{ $captcha_result->{error} };
-        unless ($error) {
+    my $ok = $captcha->verify(
+        $c->request()->param('g-recaptcha-response'),
+        $c->request()->address(),
+    );
 
-            # XXX - need to log this!
-            $error = $CaptchaError{generic};
-        }
-
+    unless ($ok) {
         $c->_redirect_with_error(
-            error  => $error,
+            error  => 'Could you be a robot? Captcha check failed.',
             uri    => '/user/new_user_form',
             params => \%user_data,
         );
