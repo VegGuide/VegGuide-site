@@ -5,15 +5,34 @@ use warnings;
 
 use MRO::Compat;
 
-# A broken crawler keeps trying to fetch URIs like
-# /location/data.rss%3flocation_id=196%26include_hours=0
-# Unfortunately, for some reason I cannot match this with mod_rewrite
-# (some escaping weirdness), so we have to handle it on the backend.
 sub prepare_action {
     my $self = shift;
 
-    if ( $self->request()->path() =~ m{^location.+\.rss$} ) {
-        $self->response()->redirect( $self->request()->uri() );
+    # A broken crawler was trying to fetch URIs like
+    # /location/data.rss%3flocation_id=196%26include_hours=0 Unfortunately,
+    # for some reason I cannot match this with mod_rewrite (some escaping
+    # weirdness), so we have to handle it on the backend.
+    if ( $self->request->path =~ /{^location.+\.rss$/ ) {
+        $self->response->redirect( $self->request->uri );
+    }
+
+    # There have been a number of requests for URIs like
+    # http://www.vegguide.org/region/616/filter?sort_order=ASC%3Bpage%3D1%3Border_by%3Dname%3Blimit%3D20. I'm
+    # not sure where they're coming from, but they're easy enough to rewrite
+    # into something correct.
+    my $p = $self->request->params;
+    if ( $p->{sort_order} && $p->{sort_order} =~ /^(ASC|DESC);(.+)$/ ) {
+        my %new_p = (
+            sort_order => $1,
+        );
+        for my $pair ( split /;/, $2 ) {
+            my ( $k, $v ) = split /=/, $pair, 2;
+            $new_p{$k} = $v;
+        }
+
+        my $uri = $self->request->uri;
+        $uri->query_form(%new_p);
+        $self->response->redirect($uri);
     }
 
     return $self->maybe::next::method(@_);
@@ -22,7 +41,7 @@ sub prepare_action {
 sub dispatch {
     my $self = shift;
 
-    return if $self->response()->redirect();
+    return if $self->response->redirect;
 
     return $self->maybe::next::method(@_);
 }
