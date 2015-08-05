@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use MRO::Compat;
+use VegGuide::SiteURI qw( site_uri );
 
 sub prepare_action {
     my $self = shift;
@@ -30,8 +31,11 @@ sub prepare_action {
             $new_p{$k} = $v;
         }
 
-        my $uri = $self->request->uri;
-        $uri->query_form(%new_p);
+        my $uri = site_uri(
+            path      => $self->request->path,
+            query     => \%new_p,
+            with_host => 1,
+        );
         $self->response->redirect($uri);
     }
 
