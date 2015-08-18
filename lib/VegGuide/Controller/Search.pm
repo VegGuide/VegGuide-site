@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-use URI::Escape qw( uri_escape );
+use URI::Escape qw( uri_escape uri_escape_utf8 );
 use VegGuide::Geocoder;
 use VegGuide::Search::Vendor::ByLatLong;
 use VegGuide::Search::Vendor::ByName;
@@ -101,7 +101,7 @@ with 'VegGuide::Role::Controller::Search';
 
         my $search = $c->stash()->{search};
 
-        my $path = '/search/by-address/' . uri_escape( $search->address() );
+        my $path = '/search/by-address/' . uri_escape_utf8( $search->address() );
 
         $self->_search_rest_response( $c, $search, $path );
 
