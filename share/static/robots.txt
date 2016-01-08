@@ -5,3 +5,7 @@ Crawl-Delay: 45
 # Seems to just make up random URIs that don't exist
 User-agent: NextGenSearchBot
 Disallow:/
+
+# Somehow crawls totally broken URIs over and over
+User-agent: SemrushBot
+Disallow: /
