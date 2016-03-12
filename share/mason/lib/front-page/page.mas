@@ -37,22 +37,6 @@
   <& /lib/official-description.mas &>
 </p>
 
-<h2>Developers Wanted</h2>
-
-<p>
-  We're looking for developers to help VegGuide improve. There are a number of
-  projects we have in mind, including the creation of mobile apps using
-  our <a href="/site/api-docs">REST API</a>, improving said API, and adding
-  features to the site. You can also check out
-  the <a href="https://github.com/VegGuide/VegGuide-site">site's source on
-  GitHub</a>. Pull requests are welcome.
-</p>
-
-<p>
-  Please <a href="mailto:guide@vegguide.org">contact us</a> if you're
-  interested in helping.
-</p>
-
 % if (@news_items) {
 <h2>News</h2>
 
