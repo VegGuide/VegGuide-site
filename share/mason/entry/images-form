@@ -29,7 +29,6 @@
       license URL as well.
     </p>
 
-<!--
     <form action="<% entry_uri( vendor => $vendor, path => 'images' ) %>"
           method="post" enctype="multipart/form-data">
 
@@ -50,9 +49,6 @@
      </div>
 
     </form>
--->
-
-    <p><strong>Image uploads are temporarily disabled.</strong></p>
 
     <& /lib/form/copyright.mas &>
 

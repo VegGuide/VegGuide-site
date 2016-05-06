@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use File::LibMagic;
-use Image::Magick;
+use Imager;
 use VegGuide::Exceptions qw( data_validation_error );
 
 use Moose;
@@ -59,32 +59,19 @@ sub resize {
     my $width  = shift;
     my $path   = shift;
 
-    my $img = Image::Magick->new();
-    $img->read( filename => $self->file() );
+    my $img = Imager->new( file => $self->file )
+        or die Imager->errstr;
 
-    my $i_height = $img->get('height');
-    my $i_width  = $img->get('width');
-
-    if (   $height < $i_height
-        || $width < $i_width ) {
-        my $height_r = $height / $i_height;
-        my $width_r  = $width / $i_width;
-
-        my $ratio = $height_r < $width_r ? $height_r : $width_r;
-
-        $img->Scale(
-            height => int( $i_height * $ratio ),
-            width  => int( $i_width * $ratio ),
-        );
-    }
-
-    my $status = $img->write(
-        filename => $path,
-        quality  => $img->get('quality'),
-        type     => 'TrueColor',
+    my $scaled = $img->scale(
+        ypixels => $height,
+        xpixels => $width,
+        type    => 'min',
     );
 
-    die $status if $status;
+    $scaled->write( file => $path )
+        or die $scaled->errstr;
+
+    return;
 }
 
 sub _build_type {
