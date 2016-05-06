@@ -821,6 +821,8 @@ sub images_POST {
     my $self = shift;
     my $c    = shift;
 
+    return;
+
     my $file = $c->request()->upload('image');
 
     my $vendor = $c->stash()->{vendor};
