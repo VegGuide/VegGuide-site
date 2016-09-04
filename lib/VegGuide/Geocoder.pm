@@ -22,17 +22,18 @@ use VegGuide::Validate qw( validate SCALAR_TYPE );
         my $class = shift;
         my %p = validate( @_, $spec );
 
-        my $cctld = $class->_cctld_for_country( $p{country} ) // 'us';
+        my $country_code = $class->_country_code_for_country( $p{country} )
+            // 'us';
 
-        my $meth = '_' . $cctld . '_geocode_address';
+        my $meth = '_' . $country_code . '_geocode_address';
         $meth =~ s/ /_/g;
 
         $meth = $class->can($meth) || '_standard_geocode_address';
 
         return bless {
-            method  => $meth,
-            cctld   => $cctld,
-            country => code2country($cctld),
+            method       => $meth,
+            country_code => $country_code,
+            country      => code2country($country_code),
         };
     }
 }
@@ -42,7 +43,7 @@ use VegGuide::Validate qw( validate SCALAR_TYPE );
         gb => 'uk',
     );
 
-    sub _cctld_for_country {
+    sub _country_code_for_country {
         shift;
         my $country = shift;
 
@@ -81,8 +82,8 @@ sub geocode_full_address {
     my $address = shift;
 
     my %region;
-    $region{region} = $self->{cctld}
-        if $self->{cctld};
+    $region{region} = $self->{country_code}
+        if $self->{country_code};
 
     my $geocoder = Geo::Coder::Google->new(
         apiver => 3,
@@ -148,8 +149,7 @@ sub _jp_geocode_address {
 
     return (
         join ', ',
-        grep { defined }
-            $p{localized_region}, $address
+        grep {defined} $p{localized_region}, $address
     );
 }
 
@@ -165,8 +165,7 @@ sub _tw_geocode_address {
 
     return (
         join ', ',
-        grep { defined }
-            $p{localized_city}, $address
+        grep {defined} $p{localized_city}, $address
     );
 }
 
