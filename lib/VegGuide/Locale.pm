@@ -6,7 +6,7 @@ use warnings;
 use VegGuide::Schema;
 use VegGuide::AlzaboWrapper ( table => VegGuide::Schema->Schema->Locale_t );
 
-use DateTime::Locale;
+use DateTime::Locale 1.05;
 use Encode       ();
 use Encode::Byte ();
 use Encode::CN   ();
@@ -19,37 +19,6 @@ use VegGuide::Validate
     qw( validate validate_with UNDEF SCALAR ARRAYREF BOOLEAN );
 
 __PACKAGE__->_PreloadLocales;
-
-{
-
-    package DateTime::Locale::en_Ghana;
-
-    # guessing Botswana has similar datetime formatting
-    use parent 'DateTime::Locale::en_BW';
-
-    DateTime::Locale->register(
-        id           => 'en_Ghana',
-        en_language  => 'English',
-        en_territory => 'Ghana',
-
-        # Lets this module be reloaded without errors
-        replace => 1,
-    );
-}
-
-{
-
-    package DateTime::Locale::en_Kenya;
-
-    # guessing Botswana has similar datetime formatting
-    use parent 'DateTime::Locale::en_BW';
-
-    DateTime::Locale->register(
-        id           => 'en_Kenya',
-        en_language  => 'English',
-        en_territory => 'Kenya',
-    );
-}
 
 # These objects are singletons, so loading them in the parent process
 # can be a big win by keeping them all in shared memory.
