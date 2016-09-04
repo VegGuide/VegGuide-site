@@ -324,8 +324,11 @@ sub GoogleAPIKey {
 
     return q{} if $ENV{HARNESS_ACTIVE};
 
-    return read_file(
+    my $key = read_file(
         File::Spec->catfile( $class->EtcDir(), 'google-api-key' ) );
+    $key =~ s/^\s+|\s+$//g;
+
+    return $key;
 }
 
 if ( __PACKAGE__->IsProduction() && $ENV{PLACK_ENV} ) {
