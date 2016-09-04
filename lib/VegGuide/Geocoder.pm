@@ -5,7 +5,7 @@ use warnings;
 
 BEGIN { $ENV{PERL_LWP_SSL_VERIFY_HOSTNAME} = 0 }
 
-use Geo::Coder::Google 0.14;
+use Geo::Coder::Google 0.16;
 use Locale::Country 3.23 qw( code2country country2code );
 use Try::Tiny;
 use VegGuide::Config;
@@ -91,13 +91,7 @@ sub geocode_full_address {
         %region,
     );
 
-    my $r;
-    try {
-        $r = $geocoder->geocode($address);
-    }
-    catch {
-        die $_ unless $_ =~ /ZERO_RESULTS/;
-    };
+    my $r = $geocoder->geocode($address);
 
     return unless $r;
     return VegGuide::Geocoder::Result->new($r);
