@@ -117,7 +117,7 @@ sub _standard_geocode_address {
         @pieces = qw( address1 city region );
     }
     else {
-        @pieces = qw( address1 postal_code );
+        @pieces = qw( address1 city postal_code );
     }
 
     my $address = join ', ', grep { !string_is_empty($_) } @p{@pieces};
