@@ -28,6 +28,13 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1) {
     my $c           = shift;
     my $location_id = shift;
 
+    # This happens when the clone "pick a location" form is submitted. We used
+    # to be to match this with a LocalRegex action but recent Catalyst appears
+    # to have changed how that works.
+    if ( $location_id eq 'entry_form' ) {
+        return $self->_redirect_for_entry_form_no_region($c);
+    }
+
     $c->redirect_and_detach('/')
         unless $location_id && $location_id =~ /^[0-9]+$/;
 
@@ -104,6 +111,35 @@ sub _set_location : Chained('/') : PathPart('region') : CaptureArgs(1) {
             id      => 'feeds',
         }
     );
+}
+
+sub _redirect_for_entry_form_no_region {
+    my $self = shift;
+    my $c    = shift;
+
+    my $location_id = $c->request()->param('location_id') || 0;
+
+    my $location = VegGuide::Location->new( location_id => $location_id );
+
+    unless ($location) {
+        $c->_redirect_with_error(
+            error => 'You must pick a region for this new entry.',
+            uri   => uri(
+                path => '/site/clone_entry_form',
+                query =>
+                    { vendor_id => $c->request()->param('cloned_vendor_id') },
+            ),
+        );
+    }
+
+    my $uri = region_uri(
+        location => $location,
+        path     => 'entry_form',
+        query =>
+            { cloned_vendor_id => $c->request()->param('cloned_vendor_id') },
+    );
+
+    $c->redirect_and_detach($uri);
 }
 
 {
@@ -470,36 +506,6 @@ sub entry_form : Chained('_set_location') : PathPart('entry_form') : Args(0) {
         if $cloned_vendor_id;
 
     $c->stash()->{template} = '/region/entry-form';
-}
-
-# This happens when the clone "pick a location" form is submitted.
-sub entry_form_no_region : LocalRegex('^entry_form$') {
-    my $self = shift;
-    my $c    = shift;
-
-    my $location_id = $c->request()->param('location_id') || 0;
-
-    my $location = VegGuide::Location->new( location_id => $location_id );
-
-    unless ($location) {
-        $c->_redirect_with_error(
-            error => 'You must pick a region for this new entry.',
-            uri   => uri(
-                path => '/site/clone_entry_form',
-                query =>
-                    { vendor_id => $c->request()->param('cloned_vendor_id') },
-            ),
-        );
-    }
-
-    my $uri = region_uri(
-        location => $location,
-        path     => 'entry_form',
-        query =>
-            { cloned_vendor_id => $c->request()->param('cloned_vendor_id') },
-    );
-
-    $c->redirect_and_detach($uri);
 }
 
 sub comment_form : Chained('_set_location') : PathPart('comment_form') :
