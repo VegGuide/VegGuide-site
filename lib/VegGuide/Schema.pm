@@ -151,6 +151,8 @@ use Alzabo::MethodMaker (
 
         $schema->connect();
 
+        $schema->driver()->handle()->do(q{SET sql_mode = ''});
+
         $schema->VendorComment_t()
             ->set_prefetch( $schema->VendorComment_t()->columns() );
         $schema->LocationComment_t()
