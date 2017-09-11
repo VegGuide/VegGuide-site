@@ -1,6 +1,11 @@
 # Static files and backend proxy
 server {
     listen 80;
+    server_name vegguide.org www.vegguide.org;
+    return 301 https://$server_name$request_uri;
+}
+
+server {
     listen 443 ssl;
     server_name www.vegguide.org;
 
@@ -329,33 +334,33 @@ server {
     root /usr/lib/cgi-bin;
 
     location = / {
-	rewrite  ^  /mailman/listinfo  permanent;
+        rewrite  ^  /mailman/listinfo  permanent;
     }
 
     location / {
-	rewrite  ^  /mailman$uri?$args;
+        rewrite  ^  /mailman$uri?$args;
     }
 
     location = /mailman/ {
-	rewrite  ^  /mailman/listinfo  permanent;
+        rewrite  ^  /mailman/listinfo  permanent;
     }
 
     location /mailman {
-	fastcgi_split_path_info (^/mailman/[^/]*)(.*)$;
+    fastcgi_split_path_info (^/mailman/[^/]*)(.*)$;
         include /etc/nginx/fastcgi_params;
-	fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-	fastcgi_param PATH_INFO $fastcgi_path_info;
-	fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
-	fastcgi_intercept_errors on;
-	fastcgi_pass unix:/var/run/fcgiwrap.socket;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
+        fastcgi_intercept_errors on;
+        fastcgi_pass unix:/var/run/fcgiwrap.socket;
     }
 
     location /images/mailman {
-	alias /var/lib/mailman/icons;
+        alias /var/lib/mailman/icons;
     }
 
     location /pipermail {
-	alias /var/lib/mailman/archives/public;
-	autoindex on;
+        alias /var/lib/mailman/archives/public;
+        autoindex on;
     }
 }
