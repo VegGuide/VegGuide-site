@@ -86,8 +86,8 @@ sub VarLibDir {
 
     return
           $class->IsProduction() ? '/var/lib/vegguide'
-        : $ENV{HARNESS_ACTIVE}   ? dirname( $INC{'VegGuide/Config.pm'} )
-        . '/../../t/share'
+        : $ENV{HARNESS_ACTIVE}
+        ? dirname( $INC{'VegGuide/Config.pm'} ) . '/../../t/share'
         : File::Spec->catdir(
         __PACKAGE__->_HomeDir(),
         '.vegguide',
@@ -140,10 +140,6 @@ sub AlzaboRootDir {
 }
 
 {
-    my $mysql_pw
-        = __PACKAGE__->IsProduction()
-        ? read_file('/etc/vegguide/mysql-password')
-        : undef;
     my %BaseConfig = (
         is_production        => __PACKAGE__->IsProduction(),
         using_frontend_proxy => 1,
@@ -176,7 +172,11 @@ sub AlzaboRootDir {
 
         dbi => {
             user => 'root',
-            ( __PACKAGE__->IsProduction() ? ( password => $mysql_pw ) : () ),
+            (
+                __PACKAGE__->IsProduction()
+                ? ( password => __PACKAGE__->_MySQLPW() )
+                : ()
+            ),
         },
 
         'Log::Dispatch' => {
@@ -190,7 +190,8 @@ sub AlzaboRootDir {
 
     unless ( __PACKAGE__->IsProduction() ) {
         $BaseConfig{'Plugin::Static::Simple'} = {
-            dirs         => [qw( entry-images images js css api-explorer static w3c )],
+            dirs =>
+                [qw( entry-images images js css api-explorer static w3c )],
             include_path => [
                 __PACKAGE__->ShareDir(),
                 __PACKAGE__->VarLibDir(),
@@ -205,6 +206,13 @@ sub AlzaboRootDir {
     sub DBConnectParams {
         return %{ $BaseConfig{dbi} };
     }
+
+    sub _MySQLPW {
+        return unless __PACKAGE__->IsProduction();
+        my $pw = read_file('/etc/vegguide/mysql-password');
+        chomp $pw;
+        return $pw;
+    }
 }
 
 sub MasonConfig {
@@ -212,8 +220,7 @@ sub MasonConfig {
 
     my %config = (
         comp_root => File::Spec->catdir( $class->ShareDir(), 'mason' ),
-        data_dir =>
-            File::Spec->catdir( $class->CacheDir(), 'mason', 'web' ),
+        data_dir  => File::Spec->catdir( $class->CacheDir(), 'mason', 'web' ),
         error_mode => 'fatal',
         in_package => 'VegGuide::Mason',
     );
