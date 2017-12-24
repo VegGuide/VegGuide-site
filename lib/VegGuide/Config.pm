@@ -140,6 +140,10 @@ sub AlzaboRootDir {
 }
 
 {
+    my $mysql_pw
+        = __PACKAGE__->IsProduction()
+        ? read_file('/etc/vegguide/mysql-password')
+        : undef;
     my %BaseConfig = (
         is_production        => __PACKAGE__->IsProduction(),
         using_frontend_proxy => 1,
@@ -170,7 +174,10 @@ sub AlzaboRootDir {
             mac_secret => VegGuide::Config->MACSecret(),
         },
 
-        dbi => { user => 'root' },
+        dbi => {
+            user => 'root',
+            ( __PACKAGE__->IsProduction() ? ( password => $mysql_pw ) : () ),
+        },
 
         'Log::Dispatch' => {
             class     => 'Screen',

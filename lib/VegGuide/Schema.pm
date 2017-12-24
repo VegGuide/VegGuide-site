@@ -147,7 +147,7 @@ use Alzabo::MethodMaker (
         my %c = VegGuide::Config->DBConnectParams();
 
         $schema->set_user( $c{user} );
-        $schema->set_password( $c{password} );
+        $schema->set_password( $c{password} ) if $c{password};
 
         $schema->connect();
 
