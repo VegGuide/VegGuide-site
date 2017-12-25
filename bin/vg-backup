@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Getopt::Long;
+use Path::Class qw( file );
 use VegGuide::Config;
 
 exit 0
@@ -29,9 +30,17 @@ GetOptions(
 if ($dump) {
     print "Dumping database\n\n" if $verbose;
 
-    system(
-        qw( mysqldump -u root RegVeg --ignore-table RegVeg.Session -r /home/autarch/RegVeg.sql )
-    ) and die 'Cannot execute mysqldump';
+    my $file = file('/etc/vegguide/mysql-password');
+    my $pw;
+    if ( -f $file ) {
+        $pw = $file->slurp;
+        chomp $pw;
+    }
+
+    my @command
+        = qw( mysqldump -u root RegVeg --ignore-table RegVeg.Session -r /home/autarch/RegVeg.sql );
+    push @command, "--password=$pw" if defined $pw;
+    system(@command) and die 'Cannot execute mysqldump';
 }
 
 for my $host (@hosts) {
