@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Database::Migrator::Types qw( Dir );
-use Path::Class qw( dir );
+use Path::Class qw( dir file );
 use Moose;
 
 extends 'Database::Migrator::mysql';
@@ -12,6 +12,15 @@ extends 'Database::Migrator::mysql';
 has '+database' => (
     required => 0,
     default  => 'RegVeg',
+);
+
+has '+password' => (
+    default => sub {
+        return unless -f '/etc/vegguide/mysql-password';
+        my $pw = file('/etc/vegguide/mysql-password')->slurp;
+        chomp $pw;
+        return $pw;
+    }
 );
 
 has '+migration_table' => (
