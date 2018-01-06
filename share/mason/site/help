@@ -566,17 +566,6 @@ href="#editing">adding new entries</a> immediately.
 </p>
 </%def>
 
-<%def .feature_request>
-<h2>Will you add feature X?</h2>
-
-<p>
-Probably. Please see our <a href="/site/todo">todo list</a> first.
-If you want to discuss potential features with other users please join
-the <a href="/mailman/listinfo/community">VegGuide community email
-list</a>.
-</p>
-</%def>
-
 <%def .access>
 <h2>Who can edit what?</h2>
 
