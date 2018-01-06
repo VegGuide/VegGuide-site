@@ -686,40 +686,6 @@ feel free to add it.
 </p>
 </%def>
 
-<%def .who_pays>
-<h2>Who pays for this site?</h2>
-
-<p>
-Our hosting and bandwidth are provided for free
-by <a href="http://tela.com">Tela</a>. We do spend money on advertising and
-promotion, so donations are appreciated.
-</p>
-
-<p>
-If you want to help out, feel free
-to <a href="http://www.exploreveg.org/donate">make a donation</a> to
-Compassionate Action for Animals.
-</p>
-
-</%def>
-
-<%def .browser_support>
-<h2>Why does this site look terrible in my browser?</h2>
-
-<p>
-This site was primarily designed to look good in modern browsers: Firefox,
-Chrome, Safari, Opera, and Internet Explorer (version 7 or newer). Because the
-site is standards-compliant, it should also be usable in text-only browsers.
-</p>
-
-<p>
-If you are using an older version of Internet Explorer or Firefox, the
-site layout may look pretty strange. We recommend upgrading to the
-latest version of <a href="http://www.getfirefox.com/">Firefox</a>
-available, or at least to IE7 if you cannot use Firefox.
-</p>
-</%def>
-
 <%def .browser_localization>
 <h2>You said you have localized content, so why don't I see any?</h2>
 
