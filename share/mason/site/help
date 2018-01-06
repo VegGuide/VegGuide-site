@@ -499,15 +499,6 @@ us know</a>.
 </p>
 </%def>
 
-<%def .love_hate>
-<h2>I love/hate the guide. Where can I discuss that with other users?</h2>
-
-<p>
-The place for this is the <a
-href="/mailman/listinfo/community">VegGuide community email list</a>.
-</p>
-</%def>
-
 <%def .syndicate>
 <h2>Can I use your database content for my website/leaflet/etc.?</h2>
 
@@ -571,7 +562,7 @@ Not right now, we need to make some from the current logo.
 No. We're very, very lazy, and creating the site itself has
 completely exhausted us. That's why we've made it possible for anyone
 to <a href="/user/new_user_form">sign up</a> and start <a
-href="#add_or_edit">adding new entries</a> immediately.
+href="#editing">adding new entries</a> immediately.
 </p>
 </%def>
 
