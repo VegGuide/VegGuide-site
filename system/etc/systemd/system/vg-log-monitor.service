@@ -1,0 +1,7 @@
+[Unit]
+Description=VegGuide log monitor
+Requires=vegguide-starman
+
+[Service]
+Type=simple
+ExecStart=sudo /opt/perl5.14.4-no-threads/bin/perl /opt/perl5.14.4-no-threads/bin/vg-log-monitor
