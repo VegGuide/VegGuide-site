@@ -8,6 +8,6 @@
 	create 640 root adm
 	sharedscripts
 	postrotate
-		restart vegguide-starman > /dev/null
+		systemctl restart vegguide-starman
 	endscript
 }
