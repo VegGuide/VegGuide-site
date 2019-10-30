@@ -13,6 +13,8 @@
 
   <& sitewide-search.mas &>
 
+  <& shutdown-banner.mas &>
+
   <& local-nav.mas &>
 % }
 </div>

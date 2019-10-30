@@ -1,0 +1,106 @@
+<p>
+This site will be shutting down as of Sunday, November 24. Thank you to
+everyone who has contributed to the site as well as to all of our nonprofit
+partners! So long and thanks for all the mock fish.
+</p>
+
+<h2>Why?</h2>
+
+<p>
+VegGuide was created back in 2002 to fill what I (Dave Rolsky, the site
+creator) and several others saw as a gap in online services. There were also
+some other motivations you can
+<a href="/site/philosophy">read about in greater detail if you're
+interested</a>.
+</p>
+
+<p>
+The site did get some traction and did have quite a bit usage, particularly
+from 2008-2015, when the bulk of the entries currently on the site were added.
+</p>
+
+<p>
+However, traffic to the site has been declining for many years, and continues
+to do so. <strong>But even more importantly, contributions to the site have
+also declined, so the data on the site is becoming increasingly stale and out
+of date. My feeling is that the site is probably now a net negative because it
+often directs people to businesses that no longer exist.</strong> This is
+especially true outside of North America, but even in North America most of
+the listings are old and not well-maintained.
+</p>
+
+<p>
+I think there are a number of factors that led to VegGuide becoming much less
+relevant.
+</p>
+
+<p>
+Probably first and foremost is the rise of mobile devices and apps. A huge
+amount of people's internet activity has moved to their phones and apps. We
+never had a full-featured app and we don't have a mobile-friendly web design,
+all of which certainly hurt usage quite a bit.
+</p>
+
+<p>
+In addition, very well-funded commercial entities like Yelp and Google Maps
+have done a better and better job of serving the same niche that we
+serve. When traveling over the last few years I've found Google Maps to be
+quite helpful in finding vegan food, and I turn to it before VegGuide or
+HappyCow more and more.
+</p>
+
+<p>
+My own increasingly limited interest in working on the code behind the site
+didn't help either. The code base uses some technologies that I developed in
+the late 1990s and early 2000s. I really started hating to deal with those
+technology choices over time, but switching off them was quite
+difficult. Also, as I've aged I've also noted that my stamina for working on
+large volunteer coding projects by myself has greatly waned. I still enjoy
+working on hobby projects, but I'm much better at completing smaller
+efforts. Moving VegGuide to a modern technical footing was one of those big
+projects I just couldn't get done.
+</p>
+
+<p>
+That all said, I think it had a good run, and I'm proud of what the site
+accomplished and I think creating it was a net good for animals and the
+movement.
+</p>
+
+<h2>Shutdown Plan</h2>
+
+<p>
+I will continue to renew the domain name. My plan for the domain is to turn it
+into a static site that just does the following:
+</p>
+
+<ul>
+  <li>Documents some of the history and reasoning above.</li>
+  <li>Points people to Google Maps, Yelp, and HappyCow as viable alternatives.</li>
+  <li>
+    Points people to the site's code and a sanitized version of the data in
+    case anyone is interested.
+  </li>
+  <li>
+    To clarify the last point, the sanitized data will be a dump of the
+    database with all private user information expunged, plus the image files
+    associated with entries & users.
+  </li>
+</ul>
+
+<p>
+I will also privately save a full, unsanitized copy of the database in case
+that's ever needed but I will not share that with anyone.
+</p>
+
+<h2>Questions or Concerns?</h2>
+
+<p>
+  <a href="mailto:autarch@urth.org">Send me an email</a> if you'd like.
+</p>
+
+<p>Thank you for your support and interest in VegGuide over the years!</p>
+
+<%method page_title>
+VegGuide.org Is Shutting Down
+</%method>

@@ -283,6 +283,14 @@ a.action-button-medium:visited, a.action-button-small:visited {
     border: 0;
 }
 
+#shutdown {
+    background-color: yellow;
+    color: black;
+    border: 1px solid #333;
+    font-size: 170%;
+    text-align: center;
+}
+
 #tabs {
     font-size: 110%;
     line-height: 1.2;
